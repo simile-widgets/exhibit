@@ -8,9 +8,26 @@ $ python loc-pics-to-ejson.py <url> > output.ejson
 where 'url' is an LOC search results URL returning JSON, e.g.
 
   http://www.loc.gov/pictures/search/?q=&c=100&co=jpd&fo=json
+
+Requires Amara, or else httplib2 and json/simplejson
 '''
 
-from amara.thirdparty import httplib2, json
+try:
+    import httplib2
+except:
+    try:
+        from amara.thirdparty import httplib2
+    except:
+        pass
+
+try:
+    import simplejson as json
+except:
+    try:
+        from amara.thirdparty import json
+    except:
+        pass
+
 import sys
 import re
 
