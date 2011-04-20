@@ -1,0 +1,60 @@
+Rhino
+-----
+ * ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R2.zip
+ * 1.7R2
+ * MPL 1.1
+ * scripted/WEB-INF/lib/js.jar
+
+Env.js
+------
+ * https://github.com/envjs/env-js
+ * 1.2
+ * dual GPLv2/MIT
+ * scripted/lib/env.rhino.js
+
+QUnit
+-----
+ * http://docs.jquery.com/Qunit
+ * ?
+ * dual GPLv2/MIT
+ * scripted/lib/qunit.js
+ * scripted/lib/qunit.css
+
+JSLint
+------
+ * https://code.google.com/p/jslint4java/
+ * 1.4.7
+ * BSD
+ * scripted/WEB-INF/lib/jslint4java.jar
+
+JsDoc-toolkit
+-------------
+ * https://code.google.com/p/jsdoc-toolkit/
+ * 2.4.0
+ * MIT
+ * scripted/tools/jsdoc-toolkit/
+
+YUI Compressor
+--------------
+ * http://developer.yahoo.com/yui/compressor/
+ * 2.4.6
+ * BSD
+ * scripted/tools/yuicompressor/
+
+jscoverage?
+-----------
+ * http://siliconforks.com/jscoverage/faq.html
+
+LAB.js
+------
+ * http://getify.github.com/LABjs/
+ * ?
+ * MIT
+ * scripted/src/lib/LAB.min.js
+
+jQuery
+------
+ * http://jquery.com/
+ * 1.5.2
+ * dual GPLv2/MIT
+ * scripted/src/lib/jquery.min.js
