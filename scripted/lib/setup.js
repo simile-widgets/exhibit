@@ -1,5 +1,6 @@
 /**
  * @fileOverview Testing framework setup.
+ * @seeAlso http://www.loose-bits.com/2011/02/browserless-ajax-testing-with-rhino-and.html
  */
 
 load("lib/env.rhino.js");
