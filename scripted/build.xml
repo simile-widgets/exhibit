@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    | Exhibit 3.0 build tasks
+     --->
+
+<project name="exhibit3" basedir=".">
+  <property name="TOOLS" value="tools"/>
+  <property name="SRC" value="tools"/>
+
+  <taskdef name="jslint"
+           classname="com.googlecode.jslint4java.ant.JSLintTask"
+           classpath="${TOOLS}/jslint4java/jslint4java.jar"
+           />
+
+  <!-- target name="docs" /-->
+
+  <target name="lint">
+    <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
+    <jslint>
+      <formatter type="plain" />
+      <fileset dir="${SRC}" includes="*.js" excludes="lib/*.js" />
+    </jslint>
+  </target>
+
+  <target name="qunit">
+    <!-- the magic starts in lib/test-runner.js -->
+    <java classpath="${TOOLS}/rhino/js.jar"
+          classname="org.mozilla.javascript.tools.shell.Main">
+      <arg line="-opt -1 lib/test-runner.js"/>
+    </java>
+  </target>
+
+  <target name="test" depends="lint,qunit" />
+
+  <!--target name="clean" /-->
+
+</project>

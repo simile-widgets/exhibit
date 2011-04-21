@@ -1,3 +1,6 @@
+Build Tools
+===========
+
 Rhino
 -----
  * ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R2.zip
@@ -24,7 +27,7 @@ JSLint
 ------
  * https://code.google.com/p/jslint4java/
  * 1.4.7
- * BSD
+ * BSD / custom?
  * scripted/tools/jslint4java/jslint4java.jar
 
 JsDoc-toolkit
@@ -45,6 +48,9 @@ jscoverage?
 -----------
  * http://siliconforks.com/jscoverage/faq.html
 
+Software Libraries
+==================
+
 LAB.js
 ------
  * http://getify.github.com/LABjs/
@@ -58,3 +64,9 @@ jQuery
  * 1.5.2
  * dual GPLv2/MIT
  * scripted/src/lib/jquery.min.js
+
+SimileAjax
+----------
+ * http://simile-widgets.org/wiki/SimileAjax
+ * 2.2.1
+ * BSD
