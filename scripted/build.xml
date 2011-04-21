@@ -2,24 +2,38 @@
 
 <!--
     | Exhibit 3.0 build tasks
-     --->
+     -->
 
 <project name="exhibit3" basedir=".">
   <property name="TOOLS" value="tools"/>
-  <property name="SRC" value="tools"/>
+  <property name="SRC" value="src"/>
+  <property name="LIB" value="lib"/>
+  <property name="DOCS" value="docs"/>
+
+  <taskdef name="jsdoctoolkit"
+           classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"
+           classpath="${TOOLS}/jsdoc-toolkit-ant/jsdoc-toolkit-ant-task.jar;${TOOLS}/rhino/js.jar"
+           />
 
   <taskdef name="jslint"
            classname="com.googlecode.jslint4java.ant.JSLintTask"
            classpath="${TOOLS}/jslint4java/jslint4java.jar"
            />
 
-  <!-- target name="docs" /-->
+  <target name="docs">
+    <mkdir dir="${DOCS}"/>
+    <jsdoctoolkit jsdochome="${TOOLS}/jsdoc-toolkit/"
+                  template="jsdoc"
+                  outputdir="${DOCS}/">
+      <fileset dir="${SRC}/" includes="*.js" excludes="lib/*.js" />
+    </jsdoctoolkit>
+  </target>
 
   <target name="lint">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
     <jslint>
       <formatter type="plain" />
-      <fileset dir="${SRC}" includes="*.js" excludes="lib/*.js" />
+      <fileset dir="${SRC}/" includes="*.js" excludes="lib/*.js" />
     </jslint>
   </target>
 
@@ -27,12 +41,16 @@
     <!-- the magic starts in lib/test-runner.js -->
     <java classpath="${TOOLS}/rhino/js.jar"
           classname="org.mozilla.javascript.tools.shell.Main">
-      <arg line="-opt -1 lib/test-runner.js"/>
+      <arg line="-opt -1 ${LIB}/test-runner.js"/>
     </java>
   </target>
 
   <target name="test" depends="lint,qunit" />
 
-  <!--target name="clean" /-->
+  <target name="clean-docs">
+    <delete dir="${DOCS}/" quiet="true"/>
+  </target>
+
+  <target name="clean" depends="clean-docs"/>
 
 </project>

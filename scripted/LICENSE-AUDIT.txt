@@ -30,12 +30,19 @@ JSLint
  * BSD / custom?
  * scripted/tools/jslint4java/jslint4java.jar
 
-JsDoc-toolkit
+JsDoc Toolkit
 -------------
  * https://code.google.com/p/jsdoc-toolkit/
  * 2.4.0
  * MIT
  * scripted/tools/jsdoc-toolkit/
+
+JsDoc Toolkit Ant Task
+----------------------
+ * https://code.google.com/p/jsdoc-toolkit-ant-task/
+ * 1.1.2
+ * Artistic License/GPLv1+
+ * scripted/tools/jsdoc-toolkit-ant/
 
 YUI Compressor
 --------------
