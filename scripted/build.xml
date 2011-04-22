@@ -70,7 +70,8 @@
   <!-- Tests -->
   <target name="lint">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
-    <jslint>
+    <jslint haltOnFailure="false" options="onevar">
+      <predef>Exhibit, jQuery, $$</predef>
       <formatter type="plain" />
       <fileset dir="${src}/" includes="*.js" excludes="lib/*.js" />
     </jslint>

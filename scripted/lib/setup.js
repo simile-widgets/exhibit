@@ -4,17 +4,19 @@
  */
 
 load("lib/env.rhino.js");
-load("lib/qunit.js");
-
-var start = new Date().getTime();
 
 Envjs({
     scriptTypes: {
         "": true,
-        "text/javascript": true
+        "text/javascript": true,
+        "text/envjs": false
     },
     beforeScriptLoad: {
         "sharethis": function(script) {
+            script.src = "";
+            return false;
+        },
+        "gat": function(script) {
             script.src = "";
             return false;
         }
@@ -23,18 +25,20 @@ Envjs({
         "qunit": function() {
             var count = 0, testName;
             console.log("* QUnit test runner loaded.");
-            QUnit.testStart = function(name, testEnvironment) {
-                testName = name;
+            QUnit.testStart = function(name) {
+                testName = name.name;
             };
-            QUnit.log = function(result, message) {
-                message = message.replace(/<\/?.*?>/g, "");
+            QUnit.log = function(obj) {
+                var message = "";
+                if (typeof obj.message === "string") {
+                    message = obj.message.replace(/<\/?.*?>/g, "");
+                }
                 console.log("  * {%s}{%s}[%s] %s",
                             testName, count++,
-                            result ? "PASS" : "FAIL", message);
+                            obj.result ? "PASS" : "FAIL", message);
             };
-            QUnit.done = function(fail, total) {
-                var end = new Date().getTime();
-                var pass = total - fail;
+            QUnit.done = function(obj) {
+                var runtime = obj.runtime / 1000.0;
                 console.log("\n"+
                             "*****************\n" +
                             "* QUnit Results *\n" +
@@ -42,8 +46,7 @@ Envjs({
                             "* PASSED: %s\n" +
                             "* FAILED: %s\n" +
                             "* Completed %s tests total in %s seconds.\n",
-                            pass, fail, total,
-                            parseFloat(end-start) / 1000.0);
+                            obj.passed, obj.failed, obj.total, runtime);
             };
         },
         ".": function(script) {
