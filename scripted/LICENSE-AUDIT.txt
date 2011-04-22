@@ -51,6 +51,13 @@ YUI Compressor
  * BSD
  * scripted/tools/yuicompressor/
 
+YUI Compressor Ant Task
+-----------------------
+ * https://code.google.com/p/javaflight-code/wiki/YuiCompressorAntTask
+ * 0.5
+ * Apache 2.0
+ * scripted/tools/yuicompressor-ant/
+
 jscoverage?
 -----------
  * http://siliconforks.com/jscoverage/faq.html

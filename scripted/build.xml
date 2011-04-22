@@ -5,50 +5,95 @@
      -->
 
 <project name="exhibit3" basedir=".">
-  <property name="TOOLS" value="tools"/>
-  <property name="SRC" value="src"/>
-  <property name="LIB" value="lib"/>
-  <property name="DOCS" value="docs"/>
 
-  <taskdef name="jsdoctoolkit"
-           classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"
-           classpath="${TOOLS}/jsdoc-toolkit-ant/jsdoc-toolkit-ant-task.jar;${TOOLS}/rhino/js.jar"
-           />
+  <property name="tools" value="tools"/>
+  <property name="src" value="src"/>
+  <property name="lib" value="lib"/>
+  <property name="docs" value="docs"/>
+  <property name="build" value="build"/>
+  <property name="dist" value="dist"/>
 
-  <taskdef name="jslint"
-           classname="com.googlecode.jslint4java.ant.JSLintTask"
-           classpath="${TOOLS}/jslint4java/jslint4java.jar"
-           />
+  <taskdef
+     name="yui-compressor"
+     classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
+     classpath="${tools}/yuicompressor-ant/yui-compressor-ant-task.jar;${tools}/rhino/js.jar"
+     />
 
+  <taskdef
+     name="jsdoctoolkit"
+     classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"
+     classpath="${tools}/jsdoc-toolkit-ant/jsdoc-toolkit-ant-task.jar;${tools}/rhino/js.jar"
+     />
+
+  <taskdef
+     name="jslint"
+     classname="com.googlecode.jslint4java.ant.JSLintTask"
+     classpath="${tools}/jslint4java/jslint4java.jar"
+     />
+
+
+
+
+
+  <!-- Code compressor -->
+  <target name="compress">
+    <concat destfile="${build}/exhibit-bundle.js" force="no">
+      <fileset dir="${src}/" includes="*.js" excludes="lib/*.js"/>
+    </concat>
+
+    <yui-compressor
+       munge="true"
+       fromdir="${build}/"
+       todir="${dist}/">
+      <include name="${build}/exhibit-bundle.js"/>
+    </yui-compressor>
+  </target>
+
+
+
+
+  <!-- Documentation generator -->
   <target name="docs">
-    <mkdir dir="${DOCS}"/>
-    <jsdoctoolkit jsdochome="${TOOLS}/jsdoc-toolkit/"
-                  template="jsdoc"
-                  outputdir="${DOCS}/">
-      <fileset dir="${SRC}/" includes="*.js" excludes="lib/*.js" />
+    <mkdir dir="${docs}"/>
+    <jsdoctoolkit
+       jsdochome="${tools}/jsdoc-toolkit/"
+       template="jsdoc"
+       outputdir="${docs}/">
+      <fileset dir="${src}/" includes="*.js" excludes="lib/*.js" />
     </jsdoctoolkit>
   </target>
 
+
+
+
+
+  <!-- Tests -->
   <target name="lint">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
     <jslint>
       <formatter type="plain" />
-      <fileset dir="${SRC}/" includes="*.js" excludes="lib/*.js" />
+      <fileset dir="${src}/" includes="*.js" excludes="lib/*.js" />
     </jslint>
   </target>
 
   <target name="qunit">
     <!-- the magic starts in lib/test-runner.js -->
-    <java classpath="${TOOLS}/rhino/js.jar"
-          classname="org.mozilla.javascript.tools.shell.Main">
-      <arg line="-opt -1 ${LIB}/test-runner.js"/>
+    <java
+       classpath="${tools}/rhino/js.jar"
+       classname="org.mozilla.javascript.tools.shell.Main">
+      <arg line="-opt -1 ${lib}/test-runner.js"/>
     </java>
   </target>
 
   <target name="test" depends="lint,qunit" />
 
+
+
+
+
+  <!-- Cleanup -->
   <target name="clean-docs">
-    <delete dir="${DOCS}/" quiet="true"/>
+    <delete dir="${docs}/" quiet="true"/>
   </target>
 
   <target name="clean" depends="clean-docs"/>
