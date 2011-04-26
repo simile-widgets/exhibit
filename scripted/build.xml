@@ -9,8 +9,9 @@
   <property name="tools" value="tools"/>
   <property name="src" value="src"/>
   <property name="lib" value="lib"/>
-  <property name="docs" value="docs"/>
   <property name="build" value="build"/>
+  <property name="docs" value="${build}/docs"/>
+  <property name="tests" value="${build}/tests"/>
   <property name="dist" value="dist"/>
 
   <taskdef
@@ -78,6 +79,7 @@
   </target>
 
   <target name="qunit">
+    <mkdir dir="${tests}"/>
     <!-- the magic starts in lib/test-runner.js -->
     <java
        classpath="${tools}/rhino/js.jar"
@@ -97,6 +99,10 @@
     <delete dir="${docs}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-docs"/>
+  <target name="clean-tests">
+    <delete dir="${tests}/" quiet="true"/>
+  </target>
+
+  <target name="clean" depends="clean-docs,clean-tests"/>
 
 </project>
