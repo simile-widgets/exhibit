@@ -4,7 +4,6 @@
  */
 
 load("lib/env.rhino.js");
-load("lib/qunit.js");
 load("lib/junit.js");
 
 Envjs({
@@ -46,7 +45,9 @@ Envjs({
                 var message = "";
                 if (typeof obj.message === "string") {
                     message = obj.message.replace(/<\/?.*?>/g, "");
-                    fails.push(message);
+                    if (!obj.result) {
+                        fails.push(message);
+                    }
                 }
                 console.log("  * {%s.%s}{%s}[%s] %s",
                             moduleName, testName, count++,
@@ -71,7 +72,7 @@ Envjs({
                 junitr.moduleDone(obj.name, obj.failed, obj.total);
             };
             QUnit.done = function(obj) {
-                var outfile = '../build/tests/' + moduleName + '.xml';
+                var outfile = '../build/tests/TEST-' + moduleName + '.xml';
                 var runtime = obj.runtime / 1000.0;
                 console.log("\n"+
                             "*****************\n" +
