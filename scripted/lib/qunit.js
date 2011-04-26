@@ -616,16 +616,16 @@ extend(QUnit, {
 		message = '<span class="test-message">' + message + "</span>";
 		expected = escapeHtml(QUnit.jsDump.parse(expected));
 		actual = escapeHtml(QUnit.jsDump.parse(actual));
-		var output = message + '<table><tr class="test-expected"><th>Expected: </th><td><pre>' + expected + '</pre></td></tr>';
+		var output = message + '<table><tr class="test-expected"><th>Expected: </th><td><code>' + expected + '</code></td></tr>';
 		if (actual != expected) {
-			output += '<tr class="test-actual"><th>Result: </th><td><pre>' + actual + '</pre></td></tr>';
-			output += '<tr class="test-diff"><th>Diff: </th><td><pre>' + QUnit.diff(expected, actual) +'</pre></td></tr>';
+			output += '<tr class="test-actual"><th>Result: </th><td><code>' + actual + '</code></td></tr>';
+			output += '<tr class="test-diff"><th>Diff: </th><td><code>' + QUnit.diff(expected, actual) +'</code></td></tr>';
 		}
 		if (!result) {
 			var source = sourceFromStacktrace();
 			if (source) {
 				details.source = source;
-				output += '<tr class="test-source"><th>Source: </th><td><pre>' + source +'</pre></td></tr>';
+				output += '<tr class="test-source"><th>Source: </th><td><code>' + source +'</code></td></tr>';
 			}
 		}
 		output += "</table>";
