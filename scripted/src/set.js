@@ -1,10 +1,12 @@
 Exhibit = {};
 
 /**
- * A basic set (in the mathematical sense) data structure
+ * A basic set (in the mathematical sense) data structure.  Only numerical
+ * or string values can be used.  Any other data type will be considered
+ * equivalent to a generic object.
  *
  * @constructor
- * @param {Array or Exhibit.Set} [a] an initial collection
+ * @param {Array or Exhibit.Set} a An initial collection.
  */
 Exhibit.Set = function(a) {
     this._hash = {};
@@ -21,10 +23,11 @@ Exhibit.Set = function(a) {
 };
 
 /**
- * Adds the given object to this set, assuming there it does not already exist
+ * Adds the given String or Numeric object to this set, assuming it does not
+ * already exist.
  *
- * @param {Object} o the object to add
- * @return {Boolean} true if the object was added, false if not
+ * @param {String or Numeric} o The object to add.
+ * @return {Boolean} True if the object was added, false if not.
  */
 Exhibit.Set.prototype.add = function(o) {
     if (!this._hash.hasOwnProperty(o)) {
@@ -36,9 +39,9 @@ Exhibit.Set.prototype.add = function(o) {
 };
 
 /**
- * Adds each element in the given set to this set
+ * Adds each element in the given set to this set.
  *
- * @param {Exhibit.Set} set the set of elements to add
+ * @param {Exhibit.Set} set The set of elements to add.
  */
 Exhibit.Set.prototype.addSet = function(set) {
     var o;
@@ -50,11 +53,11 @@ Exhibit.Set.prototype.addSet = function(set) {
 };
 
 /**
- * Removes the given element from this set
+ * Removes the given element from this set.
  *
- * @param {Object} o the object to remove
- * @return {Boolean} true if the object was successfully removed,
- *   false otherwise
+ * @param {String or Numeric} o The object to remove.
+ * @return {Boolean} True if the object was successfully removed,
+ *   false otherwise.
  */
 Exhibit.Set.prototype.remove = function(o) {
     if (this._hash.hasOwnProperty(o)) {
@@ -67,9 +70,9 @@ Exhibit.Set.prototype.remove = function(o) {
 
 /**
  * Removes the elements in this set that correspond to the elements in the
- * given set
+ * given set.
  *
- * @param {Exhibit.Set} set the set of elements to remove
+ * @param {Exhibit.Set} set The set of elements to remove.
  */
 Exhibit.Set.prototype.removeSet = function(set) {
     var o;
@@ -82,9 +85,9 @@ Exhibit.Set.prototype.removeSet = function(set) {
 
 /**
  * Removes all elements in this set that are not present in the given set, i.e.
- * modifies this set to the intersection of the two sets
+ * modifies this set to the intersection of the two sets.
  *
- * @param {Exhibit.Set} set the set to intersect
+ * @param {Exhibit.Set} set The set to intersect.
  */
 Exhibit.Set.prototype.retainSet = function(set) {
     var o;
@@ -99,28 +102,28 @@ Exhibit.Set.prototype.retainSet = function(set) {
 };
 
 /**
- * Returns whether or not the given element exists in this set
+ * Returns whether or not the given element exists in this set.
  *
- * @param {Exhibit.Set} o the object to test for
- * @return {Boolean} true if the object is present, false otherwise
+ * @param {String or Numeric} o The object to test for.
+ * @return {Boolean} True if the object is present, false otherwise.
  */
 Exhibit.Set.prototype.contains = function(o) {
     return this._hash.hasOwnProperty(o);
 };
 
 /**
- * Returns the number of elements in this set
+ * Returns the number of elements in this set.
  *
- * @return {Number} the number of elements in this set
+ * @return {Number} The number of elements in this set.
  */
 Exhibit.Set.prototype.size = function() {
     return this._count;
 };
 
 /**
- * Returns the elements of this set as an array
+ * Returns the elements of this set as an array.
  *
- * @return {Array} a new array containing the elements of this set
+ * @return {Array} A new array containing the elements of this set.
  */
 Exhibit.Set.prototype.toArray = function() {
     var o, a = [];
@@ -134,9 +137,9 @@ Exhibit.Set.prototype.toArray = function() {
 
 /**
  * Iterates through the elements of this set, order unspecified, executing the
- * given function on each element until the function returns true
+ * given function on each element until the function returns true.
  *
- * @param {Function} f a function of form f(element)
+ * @param {Function} f A function of form f(element).
  */
 Exhibit.Set.prototype.visit = function(f) {
     var o;
