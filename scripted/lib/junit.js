@@ -61,7 +61,7 @@ JUnitReporter.prototype.moduleDone = function(name, failed, total) {
         if (props.hasOwnProperty(att)) {
             var propEl = this._doc.createElement('property');
             propEl.setAttribute('name', att);
-            propEl.appendChild(this._doc.createTextNode(props[att]));
+            propEl.setAttribute('value', props[att]);
             properties.appendChild(propEl);
         }
     }
@@ -80,14 +80,18 @@ JUnitReporter.prototype.testDone = function(module, name, passed, fails, timer) 
         failuresMsg = fails.join('\n');
     }
     this._cases[module][name] = {
-        'name': name,
-        'classname': '',
+        'name': module,
+        'classname': 'QUnit.' + module + "." + JUnitReporter.classify(name),
         'time': timer,
         'passed': passed
     };
     if (failuresMsg != null) {
         this._cases[module][name]['failure'] = failuresMsg;
     }
+};
+
+JUnitReporter.classify = function(str) {
+    return str.replace(/ /g, '_');
 };
 
 JUnitReporter.date = function() {
