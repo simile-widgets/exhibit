@@ -37,7 +37,7 @@
 
 
   <!-- Code compressor -->
-  <target name="compress">
+  <target name="compress" description="Combine and compress source files">
     <concat destfile="${build}/exhibit-bundle.js" force="no">
       <fileset dir="${src}/" includes="*.js" excludes="lib/*.js"/>
     </concat>
@@ -54,7 +54,7 @@
 
 
   <!-- Documentation generator -->
-  <target name="docs">
+  <target name="docs" description="Generate code documentation">
     <mkdir dir="${docs}"/>
     <jsdoctoolkit
        jsdochome="${tools}/jsdoc-toolkit/"
@@ -88,7 +88,7 @@
     </java>
   </target>
 
-  <target name="test" depends="lint,qunit" />
+  <target name="test" depends="lint,qunit" description="Run all tests"/>
 
 
 
@@ -103,6 +103,6 @@
     <delete dir="${tests}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-docs,clean-tests"/>
+  <target name="clean" depends="clean-docs,clean-tests" description="Remove build artificats"/>
 
 </project>
