@@ -1,12 +1,20 @@
+/**
+ * @author David Huynh
+ * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
+ * @fileOverview Pertaining to the Exhibit.Set datatype.
+ */
+
 Exhibit = {};
 
 /**
  * A basic set (in the mathematical sense) data structure.  Only numerical
- * or string values can be used.  Any other data type will be considered
- * equivalent to a generic object.
+ * or string values can be used.  Any other data type would be considered
+ * equivalent to a generic object and cannot be added.
  *
  * @constructor
- * @param {Array or Exhibit.Set} a An initial collection.
+ * @param {Array|Exhibit.Set} [a] An initial collection.
+ * @example
+ * var set = new Exhibit.Set(['a']);
  */
 Exhibit.Set = function(a) {
     this._hash = {};
@@ -23,14 +31,15 @@ Exhibit.Set = function(a) {
 };
 
 /**
- * Adds the given String or Numeric object to this set, assuming it does not
- * already exist.
+ * Adds the given single String or Number object to this set, assuming it
+ * does not already exist.  Other types will be rejected.
  *
- * @param {String or Numeric} o The object to add.
- * @return {Boolean} True if the object was added, false if not.
+ * @param {String|Number} o The object to add.
+ * @returns {Boolean} True if the object was added, false if not.
  */
 Exhibit.Set.prototype.add = function(o) {
-    if (!this._hash.hasOwnProperty(o)) {
+    if ((typeof o === "number" || typeof o === "string")
+        && !this._hash.hasOwnProperty(o)) {
         this._hash[o] = true;
         this._count++;
         return true;
@@ -53,10 +62,10 @@ Exhibit.Set.prototype.addSet = function(set) {
 };
 
 /**
- * Removes the given element from this set.
+ * Removes the given single element from this set.
  *
- * @param {String or Numeric} o The object to remove.
- * @return {Boolean} True if the object was successfully removed,
+ * @param {String|Number} o The object to remove.
+ * @returns {Boolean} True if the object was successfully removed,
  *   false otherwise.
  */
 Exhibit.Set.prototype.remove = function(o) {
@@ -104,8 +113,8 @@ Exhibit.Set.prototype.retainSet = function(set) {
 /**
  * Returns whether or not the given element exists in this set.
  *
- * @param {String or Numeric} o The object to test for.
- * @return {Boolean} True if the object is present, false otherwise.
+ * @param {String|Number} o The object to test for.
+ * @returns {Boolean} True if the object is present, false otherwise.
  */
 Exhibit.Set.prototype.contains = function(o) {
     return this._hash.hasOwnProperty(o);
@@ -114,7 +123,7 @@ Exhibit.Set.prototype.contains = function(o) {
 /**
  * Returns the number of elements in this set.
  *
- * @return {Number} The number of elements in this set.
+ * @returns {Number} The number of elements in this set.
  */
 Exhibit.Set.prototype.size = function() {
     return this._count;
@@ -123,7 +132,7 @@ Exhibit.Set.prototype.size = function() {
 /**
  * Returns the elements of this set as an array.
  *
- * @return {Array} A new array containing the elements of this set.
+ * @returns {Array} A new array containing the elements of this set.
  */
 Exhibit.Set.prototype.toArray = function() {
     var o, a = [];
