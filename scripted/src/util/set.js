@@ -10,6 +10,7 @@
  * equivalent to a generic object and cannot be added.
  *
  * @constructor
+ * @class Represents a mathematical set.
  * @param {Array|Exhibit.Set} [a] An initial collection.
  * @example
  * var set = new Exhibit.Set(['a']);
