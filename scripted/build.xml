@@ -39,7 +39,7 @@
   <!-- Code compressor -->
   <target name="compress" description="Combine and compress source files">
     <concat destfile="${build}/exhibit-bundle.js" force="no">
-      <fileset dir="${src}/" includes="*.js" excludes="lib/*.js"/>
+      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js"/>
     </concat>
 
     <yui-compressor
@@ -60,7 +60,7 @@
        jsdochome="${tools}/jsdoc-toolkit/"
        template="jsdoc"
        outputdir="${docs}/">
-      <fileset dir="${src}/" includes="*.js" excludes="lib/*.js" />
+      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js" />
     </jsdoctoolkit>
   </target>
 
@@ -74,7 +74,7 @@
     <jslint haltOnFailure="false" options="onevar">
       <predef>Exhibit, jQuery, $$</predef>
       <formatter type="plain" />
-      <fileset dir="${src}/" includes="*.js" excludes="lib/*.js" />
+      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js" />
     </jslint>
   </target>
 
