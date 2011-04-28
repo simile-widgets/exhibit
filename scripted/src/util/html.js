@@ -1,7 +1,7 @@
 /**
  * @author Dvaid Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
- * @ileOverview HTML utility functions
+ * @fileOverview HTML utility functions
  */
 
 /**
