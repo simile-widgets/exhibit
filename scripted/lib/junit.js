@@ -1,15 +1,32 @@
-var JUnitReporter = function() {
+/**
+ * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
+ * @fileOverview Take QUnit output and write out Ant/JUnit XML reports.
+ */
+
+var JUnitReporter = function(pattern) {
+    this._doc = null;
+    this._root = null;
+    this._init();
+    this._suites = {};
+    this._cases = {};
+    this._pattern = pattern;
+};
+
+JUnitReporter.prototype._init = function() {
+    this._doc = null;
     this._doc = JUnitReporter._createDocument();
     this._root = this._doc.createElement('testsuites');
     this._doc.appendChild(this._root);
-    this._suites = {};
-    this._cases = {};
 };
 
 JUnitReporter.prototype.write = function(file) {
     var str = '<?xml version="1.0" encoding="UTF-8"?>\n';
     str += JUnitReporter.serialize(this._doc);
     Envjs.writeToFile(str, Envjs.uri(file));
+};
+
+JUnitReporter.prototype.writeByPattern = function(module) {
+    this.write(this._pattern.replace(/%\(module\)s/g, module));
 };
 
 JUnitReporter.prototype.moduleStart = function(name, start) {
@@ -69,6 +86,8 @@ JUnitReporter.prototype.moduleDone = function(name, failed, total) {
     suite.appendChild(this._doc.createElement('system-out'));
     suite.appendChild(this._doc.createElement('system-err'));
     this._root.appendChild(suite);
+    this.writeByPattern(name);
+    this._init();
 };
 
 JUnitReporter.prototype.testDone = function(module, name, passed, fails, timer) {
@@ -80,7 +99,7 @@ JUnitReporter.prototype.testDone = function(module, name, passed, fails, timer) 
         failuresMsg = fails.join('\n');
     }
     this._cases[module][name] = {
-        'name': module,
+        'name': name,
         'classname': 'QUnit.' + module + "." + JUnitReporter.classify(name),
         'time': timer,
         'passed': passed

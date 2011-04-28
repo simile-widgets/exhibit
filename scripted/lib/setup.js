@@ -39,7 +39,7 @@ Envjs({
             });
             // /end
 
-            var junitr = new JUnitReporter();
+            var junitr = new JUnitReporter('../build/tests/TEST-%(module)s.xml');
 
             QUnit.log = function(obj) {
                 var message = "";
@@ -72,7 +72,6 @@ Envjs({
                 junitr.moduleDone(obj.name, obj.failed, obj.total);
             };
             QUnit.done = function(obj) {
-                var outfile = '../build/tests/TEST-' + moduleName + '.xml';
                 var runtime = obj.runtime / 1000.0;
                 console.log("\n"+
                             "*****************\n" +
@@ -82,8 +81,6 @@ Envjs({
                             "* FAILED: %s\n" +
                             "* Completed %s tests total in %s seconds.\n",
                             obj.passed, obj.failed, obj.total, runtime);
-                junitr.write(outfile);
-                console.log("\nResults written to " + Envjs.uri(outfile) + "\n");
             };
         }
     }
