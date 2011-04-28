@@ -4,8 +4,6 @@
  * @fileOverview Pertaining to the Exhibit.Set datatype.
  */
 
-Exhibit = {};
-
 /**
  * A basic set (in the mathematical sense) data structure.  Only numerical
  * or string values can be used.  Any other data type would be considered
