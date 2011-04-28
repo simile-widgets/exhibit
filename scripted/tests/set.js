@@ -138,3 +138,17 @@ test("visit", function() {
 
     ok((stop in visited), "Visitor function visited stopping member");
 });
+
+test("createIntersection", function() {
+    //expect();
+    var objA = new Exhibit.Set(['a', 'b', 'c']);
+    var objB = new Exhibit.Set(['b', 'c', 'd']);
+    var objC = new Exhibit.Set(['b', 'c']);
+    var objD = new Exhibit.Set(['e']);
+    var objE = new Exhibit.Set(['b', 'c', 'e']);
+    var objF = Exhibit.Set.createIntersection(objA, objB);
+    var objG = Exhibit.Set.createIntersection(objA, objB, objD);
+
+    deepEqual(objF, objC, "Create intersection into new set");
+    deepEqual(objG, objE, "Create intersection into existing set");
+});

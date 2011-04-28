@@ -160,3 +160,31 @@ Exhibit.Set.prototype.visit = function(f) {
         }
     }
 };
+
+/**
+ * Creates a new set based on the intersection of two other sets.
+ *
+ * @static
+ * @param {Exhibit.Set} set1 The first set to intersect
+ * @param {Exhibit.Set} set2 The second set to intersect; order is irrelevant
+ * @param {Exhibit.Set} [result] An optional set to modify by adding each
+ *                               element in the intersection
+ * @returns {Exhibit.Set} Either a new set or the modified set containing
+ *                        the intersection of sets.
+ */
+Exhibit.Set.createIntersection = function(set1, set2, result) {
+    var setA, setB, set = (result) ? result : new Exhibit.Set();
+    if (set1.size() < set2.size()) {
+        setA = set1;
+        setB = set2;
+    } else {
+        setA = set2;
+        setB = set1;
+    }
+    setA.visit(function (v) {
+        if (setB.contains(v)) {
+            set.add(v);
+        }
+    });
+    return set;
+};
