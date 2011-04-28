@@ -1,6 +1,6 @@
 module("Exhibit.Util");
 
-test("Exhibit.Util.round", function() {
+test("round", function() {
     expect(7);
 
     strictEqual(Exhibit.Util.round(10000.4), '10000', "Exhibit.Util.round(10000.4) === '10000'");
