@@ -35,28 +35,62 @@ Exhibit.Util.round = function(n, precision) {
 };
 
 /**
- * Modify String type.
+ * Modify the native String type.
  */
 (function() {
     if (typeof String.prototype.trim === "undefined") {
+        /**
+         * Removes leading and trailing spaces.
+         *
+         * @returns {String} Trimmed string.
+         */
         String.prototype.trim = function() {
             return this.replace(/^\s+|\s+$/g, '');
         };
     }
 
     if (typeof String.prototype.startsWith === "undefined") {
+        /**
+         * Test if a string begins with a prefix.
+         *
+         * @param {String} prefix Prefix to check.
+         * @returns {Boolean} True if string starts with prefix, false if not.
+         */
         String.prototype.startsWith = function(prefix) {
             return this.length >= prefix.length && this.substr(0, prefix.length) === prefix;
         };
     }
 
     if (typeof String.prototype.endsWith === "undefined") {
+        /**
+         * Test if a string ends with a suffix.
+         *
+         * @param {String} suffix Suffix to check.
+         * @returns {Boolean} True if string ends with suffix, false if not.
+         */
         String.prototype.endsWith = function(suffix) {
             return this.length >= suffix.length && this.substr(this.length - suffix.length) === suffix;
         };
     }
 
     if (typeof String.substitute === "undefined") {
+        /**
+         * Interpolate a string with one or several substrings of the form
+         * '%N' where N is an integer with 0 <= N <= 9, with the Nth entry
+         * in an array of objects.  Values of N greater than available
+         * objects or not a number will result in the %N expression being
+         * dropped, not rendered as is.  Use '\%' to escape interpolation.
+         * 
+         * @static
+         * @param {String} s Text containing '%N' substrings.
+         * @param {Array} objects Array of values to interpolate with.
+         * @returns {String} Interpolated string.
+         * @example
+         * var text = 'The %0 and the %1, the %3 jumped over the %2 \%3%5.';
+         * var subs = ['cat', 'fiddle', 'moon', 'cow'];
+         * var news = String.substitute(text, subs);
+         * news === "The cat and the fiddle, the cow jumped over the moon %3.";
+         */
         String.substitute = function(s, objects) {
             var result = "", start = 0, percent, n;
             while (start < s.length - 1) {
@@ -86,10 +120,22 @@ Exhibit.Util.round = function(n, precision) {
 }());
 
 /**
- * Modify Array type.
+ * Modify the native Array type.
  */
 (function() {
     if (typeof Array.prototype.filter === "undefined") {
+        /**
+         * Filter out elements with a filtering function to build a new
+         * array.
+         * 
+         * @param {Function} fun A filtering function of the form
+         *                       function(param, value, index, array) 
+         *                       that returns a boolean value.
+         * @param {Object} [thisp] Any external argument for the function.
+         * @returns {Array} A new array with only the values that make it
+         *                  through the filtering function.
+         * @throws {TypeError} If fun is not a function.
+         */
         Array.prototype.filter = function(fun) {
             var len, res, thisp, i, val;
             len = this.length;
@@ -113,6 +159,18 @@ Exhibit.Util.round = function(n, precision) {
     }
 
     if (typeof Array.prototype.map === "undefined") {
+        /**
+         * Run a function over every entry in an array, building a new
+         * array with the new values.
+         *
+         * @param {Function} f A mapping function of the form
+         *                     function(param, value, index, array) that
+         *                     returns an object suitable for the new array.
+         * @param {Object} thisp Any argument for the function, defaults to
+         *                       the original object array if not given.
+         * @returns {Array} A new array with mapped values.
+         * @throws {TypeError} If f is not a function.
+         */
         Array.prototype.map = function(f, thisp) {
             var res, length, i;
             if (typeof f !== "function") {
@@ -133,6 +191,16 @@ Exhibit.Util.round = function(n, precision) {
     }
 
     if (typeof Array.prototype.forEach === "undefined") {
+        /**
+         * Run a function over every value in an array, modifying the array*
+         * in place instead of building a new array.
+         *
+         * @param {Function} f A mapping function of the form
+         *                     function(param, value, index, array) that
+         *                     returns an object suitable for the new array.
+         * @param {Object} [thisp] Any external argument for the function.
+         * @throws {TypeError} If fun is not a function.
+         */
         Array.prototype.forEach = function(fun) {
             var i, thisp, len = this.length;
             if (typeof fun !== "function") {
