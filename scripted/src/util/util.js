@@ -79,17 +79,18 @@ Exhibit.Util.round = function(n, precision) {
          * '%N' where N is an integer with 0 <= N <= 9, with the Nth entry
          * in an array of objects.  Values of N greater than available
          * objects or not a number will result in the %N expression being
-         * dropped, not rendered as is.  Use '\%' to escape interpolation.
+         * rendered as is.  Use '\\%' to escape interpolation of a percent
+         * character.
          * 
          * @static
          * @param {String} s Text containing '%N' substrings.
          * @param {Array} objects Array of values to interpolate with.
          * @returns {String} Interpolated string.
          * @example
-         * var text = 'The %0 and the %1, the %3 jumped over the %2 \%3%5.';
+         * var text = 'The %0 and the %1, the %3 jumped over the %2 \\%3%5.';
          * var subs = ['cat', 'fiddle', 'moon', 'cow'];
          * var news = String.substitute(text, subs);
-         * news === "The cat and the fiddle, the cow jumped over the moon %3.";
+         * news === "The cat and the fiddle, the cow jumped over the moon %3%5.";
          */
         String.substitute = function(s, objects) {
             var result = "", start = 0, percent, n;
@@ -123,15 +124,42 @@ Exhibit.Util.round = function(n, precision) {
  * Modify the native Array type.
  */
 (function() {
+    if (typeof Array.prototype.indexOf === "undefined") {
+        /**
+         * Returns the index of an element in an array based on strict
+         * equality.  Returns -1 if not found in the array.
+         *
+         * @param {Object} elt Object to search for.
+         * @param {Number} [from] Starting index.
+         * @returns {Number} Index where object can be found.
+         */
+        Array.prototype.indexOf = function(elt) {
+            var len = this.length, from = Number(arguments[1]) || 0;
+            from = (from < 0)
+                ? Math.ceil(from)
+                : Math.floor(from);
+            if (from < 0) {
+                from += len;
+            }
+
+            for (; from < len; from++) {
+                if (typeof this[from] !== "undefined" && this[from] === elt) {
+                    return from;
+                }
+            }
+            return -1;
+        };
+    }
+
     if (typeof Array.prototype.filter === "undefined") {
         /**
          * Filter out elements with a filtering function to build a new
          * array.
          * 
          * @param {Function} fun A filtering function of the form
-         *                       function(param, value, index, array) 
+         *                       function(value, index, array) 
          *                       that returns a boolean value.
-         * @param {Object} [thisp] Any external argument for the function.
+         * @param {Object} [thisp] What 'this' should refer to inside of fun.
          * @returns {Array} A new array with only the values that make it
          *                  through the filtering function.
          * @throws {TypeError} If fun is not a function.
@@ -164,10 +192,9 @@ Exhibit.Util.round = function(n, precision) {
          * array with the new values.
          *
          * @param {Function} f A mapping function of the form
-         *                     function(param, value, index, array) that
+         *                     function(value, index, array) that
          *                     returns an object suitable for the new array.
-         * @param {Object} thisp Any argument for the function, defaults to
-         *                       the original object array if not given.
+         * @param {Object} [thisp] What 'this' should refer to inside of f.
          * @returns {Array} A new array with mapped values.
          * @throws {TypeError} If f is not a function.
          */
@@ -192,13 +219,12 @@ Exhibit.Util.round = function(n, precision) {
 
     if (typeof Array.prototype.forEach === "undefined") {
         /**
-         * Run a function over every value in an array, modifying the array*
-         * in place instead of building a new array.
+         * Run a function over every value in an array, doing something
+         * with the values, but not building a result array.  Returns nothing.
          *
-         * @param {Function} f A mapping function of the form
-         *                     function(param, value, index, array) that
-         *                     returns an object suitable for the new array.
-         * @param {Object} [thisp] Any external argument for the function.
+         * @param {Function} fun A mapping function of the form
+         *                       function(value, index, array).
+         * @param {Object} [thisp] What 'this' should refer to inside fun.
          * @throws {TypeError} If fun is not a function.
          */
         Array.prototype.forEach = function(fun) {
