@@ -14,6 +14,8 @@
   <property name="tests" value="${build}/tests"/>
   <property name="dist" value="dist"/>
 
+  <property name="modules" value=""/>
+
   <taskdef
      name="yui-compressor"
      classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
@@ -84,7 +86,7 @@
     <java
        classpath="${tools}/rhino/js.jar"
        classname="org.mozilla.javascript.tools.shell.Main">
-      <arg line="-opt -1 ${lib}/test-runner.js"/>
+      <arg line="-opt -1 ${lib}/test-runner.js ${modules}"/>
     </java>
   </target>
 

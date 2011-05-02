@@ -29,6 +29,14 @@ request.  If you're contributing a large portion of code, please consider
 contributing testing and documentation to accompany your changes.  We use
 [QUnit][7] for tests and [JsDoc Toolkit][8] for in-code documentation.
 
+To run a limited set of test modules, use:
+
+```
+% ant -Dmodules='[space separated list]' qunit
+```
+
+Look in the tests/ directory's files for module() statements.
+
 Participating
 -------------
 

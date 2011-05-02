@@ -53,3 +53,4 @@ test("map", function() {
     deepEqual(objA.map(fun), objB, "Array map");
     deepEqual(objA.map(fun).map(fun), objC, "Array double map");
 });
+

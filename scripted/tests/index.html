@@ -2,16 +2,15 @@
   <head>
     <title>Exhibit 3.0 Scripted - QUnit Test Suite</title>
     <link rel="stylesheet" href="../lib/qunit.css" type="text/css" />
+    <!-- Test scripts to module names are tracked in pre.js -->
+    <!-- post.js does all of the loading of test modules    -->
+    <script type="text/javascript" src="pre.js"></script>
     <script type="text/javascript" src="../lib/qunit.js"></script>
     <script type="text/javascript" src="../src/exhibit.js"></script>
     <script type="text/javascript" src="../src/util/util.js"></script>
     <script type="text/javascript" src="../src/util/html.js"></script>
     <script type="text/javascript" src="../src/util/set.js"></script>
-    <script type="text/javascript" src="util/util.js"></script>
-    <script type="text/javascript" src="util/array.js"></script>
-    <script type="text/javascript" src="util/string.js"></script>
-    <script type="text/javascript" src="util/html.js"></script>
-    <script type="text/javascript" src="util/set.js"></script>
+    <script type="text/javascript" src="post.js"></script>
   </head>
   <body>
     <h1 id="qunit-header">Exhibit 3.0 Scripted - QUnit Test Suite</h1>
