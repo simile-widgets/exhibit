@@ -9,7 +9,9 @@ var Modules = {
         'Array': 'util/array.js',
         'Exhibit.Set': 'util/set.js',
         'Exhibit.Util': 'util/util.js',
-        'Exhibit.Util.HTML': 'util/html.js'
+        'Exhibit.Util.HTML': 'util/html.js',
+        'Exhibit.DateTime': 'util/date-time.js',
+        'Exhibit.NativeDateUnit': 'util/units.js'
     },
     args: [],
     all: {},
