@@ -35,7 +35,10 @@ Modules.loadScript = function(url) {
     head.appendChild(script);
 };
 
-Modules.loadScript("file://" + Envjs.tmpdir + "qunitargs");
-if (Modules.original !== '') {
+if (typeof Envjs !== "undefined") {
+    Modules.loadScript("file://" + Envjs.tmpdir + "qunitargs");
+}
+
+if (typeof Modules.original !== "undefined" && Modules.original !== '') {
     Modules.args = Modules.original.split('&');
 }
