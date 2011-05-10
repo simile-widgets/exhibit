@@ -84,3 +84,16 @@ SimileAjax
  * http://simile-widgets.org/wiki/SimileAjax
  * 2.2.1
  * BSD
+
+History.js
+----------
+ * https://github.com/balupton/History.js
+ * 1.7.0
+ * BSD
+ * scripted/src/lib/{amplify.store,history.html4,history.adapter.jquery,history}.js
+
+JSON2.js
+--------
+ * https://github.com/douglascrockford/JSON-js
+ * Public Domain
+ * scripted/src/lib/json2.js
