@@ -114,24 +114,24 @@ Exhibit.NativeDateUnit.compare = function(v1, v2) {
 };
 
 /**
- * Returns true if v1 is earlier than v2, false if not.
+ * Returns the earlier object of the two passed in as arguments.
  *
  * @static
  * @param {Date} v1 The first Date object to compare.
  * @param {Date} v2 The second Date object to compare.
- * @returns {Boolean} True if first is strictly earlier than second.
+ * @returns {Date} The earlier of the two arguments.
  */
 Exhibit.NativeDateUnit.earlier = function(v1, v2) {
     return Exhibit.NativeDateUnit.compare(v1, v2) < 0 ? v1 : v2;
 };
 
 /**
- * Returns true if v1 is later than v2, false if not.
+ * Returns the later object of the two passed in as arguments.
  *
  * @static
  * @param {Date} v1 The first Date object to compare.
  * @param {Date} v2 The second Date object to compare.
- * @returns {Boolean} True if first is strictly later than second.
+ * @returns {Date} The later of the two arguments.
  */
 Exhibit.NativeDateUnit.later = function(v1, v2) {
     return Exhibit.NativeDateUnit.compare(v1, v2) > 0 ? v1 : v2;
