@@ -37,5 +37,11 @@ test("removeTimeZoneOffset", function() {
 });
 
 test("getTimezone", function() {
-    // expect();
+    // NB, this is a bit awkward to test; the user's timezone offset is
+    // dependent on the user's location.
+    expect(1);
+
+    var tz = new Date().getTimezoneOffset();
+
+    strictEqual(Exhibit.DateTime.getTimezone(), tz / -60, "Facile timezone test");
 });

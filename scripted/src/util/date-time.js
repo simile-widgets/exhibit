@@ -463,7 +463,10 @@ Exhibit.DateTime.removeTimeZoneOffset = function(date, timeZone) {
 };
 
 /**
- * Returns the timezone of the user's browser.
+ * Returns the timezone of the user's browser.  This is expressed as the
+ * number of hours one would have to add to the local time to equal GMT,
+ * NOT the numbers one would have to add to GMT to equal local time, as
+ * timezones are normally expressed.
  *
  * @returns {Number} The timezone in the user's locale in hours.
  */
