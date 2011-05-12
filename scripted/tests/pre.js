@@ -21,17 +21,8 @@ var Modules = {
 Modules.loadScript = function(url) {
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
-    // @@@ Not ideal.  When Envjs does this right, drop this.
-    if (typeof Envjs !== "undefined") {
-        var prefix = '';
-        if (url.indexOf('file:///') === -1) {
-            prefix += "tests/";
-        }
-        script.text = "load('" + prefix + url + "')";
-    } else {
-        script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', url);
-    }
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', url);
     head.appendChild(script);
 };
 
