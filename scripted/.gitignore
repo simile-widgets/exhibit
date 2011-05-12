@@ -1,2 +1,3 @@
+local.build.properties
 build/*
 dist/*
