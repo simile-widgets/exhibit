@@ -96,7 +96,7 @@
     <java
        classpath="${tools}/rhino/js.jar"
        classname="org.mozilla.javascript.tools.shell.Main">
-      <arg line="-opt -1 ${lib}/coverage-runner.js ${modules}"/>
+      <arg line="-opt -1 ${lib}/coverage-runner.js ${jscoverage.port}"/>
     </java>
     <exec dir="." executable="${jscoverage.dir}/jscoverage-server">
       <arg line="--port=${jscoverage.port} --shutdown"/>

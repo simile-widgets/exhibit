@@ -1,7 +1,9 @@
 /**
  * @fileOverview Initiates Qunit test running.
  */
+
 var args = arguments;
+
 (function(){
     load('lib/test-setup.js');
     console.log("Starting QUnit tests...");
