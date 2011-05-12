@@ -78,11 +78,11 @@
 
 
   <!-- Coverage reporting -->
-  <target name="coverage">
+  <target name="coverage" description="Generate code coverage report">
     <mkdir dir="${instrument}"/>
     <mkdir dir="${coverage}"/>
     <exec dir="." executable="${jscoverage.dir}/jscoverage-server" spawn="true">
-      <arg line="--port=${jscoverage.port} --report-dir=${coverage}"/>
+      <arg line="--port=${jscoverage.port} --report-dir=${coverage} --no-instrument=${instrument}/lib/ --no-instrument=${instrument}/tests/ --no-instrument=${instrument}/src/"/>
     </exec>
     <exec dir="." executable="${jscoverage.dir}/jscoverage">
       <arg line="--no-instrument=lib/ ${src} ${instrument}/src"/>
@@ -138,10 +138,20 @@
     <delete dir="${docs}/" quiet="true"/>
   </target>
 
+  <target name="clean-coverage">
+    <delete dir="${coverage}/" quiet="true"/>
+  </target>
+
+  <target name="clean-instrument">
+    <delete dir="${instrument}/" quiet="true"/>
+  </target>
+
+  <target name="clean-jscoverage" depends="clean-coverage,clean-instrument"/>
+
   <target name="clean-tests">
     <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-docs,clean-tests" description="Remove build artificats"/>
+  <target name="clean" depends="clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
 
 </project>
