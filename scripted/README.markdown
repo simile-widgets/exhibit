@@ -37,6 +37,17 @@ To run a limited set of test modules, use:
 
 Look in the tests/ directory's files for module() statements.
 
+Coverage
+--------
+
+We use [JSCoverage 0.5.1][9] to generate code coverage reports.  If you want
+to run the coverage task, you must install JSCoverage separately and
+supply its location in local.build.properties if it isn't already the
+default (/usr/local/bin).
+
+Mac users, note there is a [bugfix][10] to allow jscoverage-server to
+properly bind to a port and run.
+
 Participating
 -------------
 
@@ -54,3 +65,5 @@ Developers can participate through the following avenues as well:
 [6]: http://help.github.com/pull-requests/
 [7]: http://docs.jquery.com/Qunit
 [8]: https://code.google.com/p/jsdoc-toolkit/wiki/TagReference
+[9]: http://siliconforks.com/jscoverage/
+[10]: http://siliconforks.com/jscoverage/bugs/33
