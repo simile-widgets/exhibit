@@ -25,7 +25,7 @@ Envjs({
     afterScriptLoad: {
         "qunit\.js": function() {
             var count = 0, testName, start, moduleName, fails = [];
-            console.log("* QUnit test runner loaded.");
+            console.log("QUnit test runner loaded.");
 
             var junitr = new JUnitReporter('../build/tests/TEST-%(module)s.xml');
 
@@ -37,9 +37,9 @@ Envjs({
                         fails.push(message);
                     }
                 }
-                console.log("  * {%s.%s}{%s}[%s] %s",
-                            moduleName, testName, count++,
-                            obj.result ? "PASS" : "FAIL", message);
+                console.log(" [%s]{%s.%s}{%s} %s",
+                            obj.result ? "PASS" : "FAIL",
+                            moduleName, testName, count++, message);
             };
             QUnit.begin = function(obj) {
                 // from https://twoguysarguing.wordpress.com/2010/11/26/qunit-cli-running-qunit-with-rhino/
