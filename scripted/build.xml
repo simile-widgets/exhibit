@@ -139,7 +139,7 @@
   </target>
 
   <target name="clean-tests">
-    <delete dir="${tests}/" quiet="true"/>
+    <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
   <target name="clean" depends="clean-docs,clean-tests" description="Remove build artificats"/>
