@@ -8,13 +8,20 @@
 
   <property name="tools" value="tools"/>
   <property name="src" value="src"/>
+  <property name="tests" value="tests"/>
   <property name="lib" value="lib"/>
   <property name="build" value="build"/>
   <property name="docs" value="${build}/docs"/>
-  <property name="tests" value="${build}/tests"/>
+  <property name="testsOutput" value="${build}/tests"/>
+  <property name="instrument" value="${build}/instrument"/>
+  <property name="coverage" value="${build}/coverage"/>
   <property name="dist" value="dist"/>
 
   <property name="modules" value=""/>
+
+  <property name="jscoverage.dir" value="/usr/local/bin"/>
+  <property name="jscoverage.port" value="9876"/>
+  <property file="local.build.properties"/>
 
   <taskdef
      name="yui-compressor"
@@ -70,6 +77,36 @@
 
 
 
+  <!-- Coverage reporting -->
+  <target name="coverage">
+    <mkdir dir="${instrument}"/>
+    <mkdir dir="${coverage}"/>
+    <exec dir="." executable="${jscoverage.dir}/jscoverage-server" spawn="true">
+      <arg line="--port=${jscoverage.port} --report-dir=${coverage}"/>
+    </exec>
+    <exec dir="." executable="${jscoverage.dir}/jscoverage">
+      <arg line="--no-instrument=lib/ ${src} ${instrument}/src"/>
+    </exec>
+    <copy todir="${instrument}/tests">
+      <fileset dir="${tests}"/>
+    </copy>
+    <copy todir="${instrument}/lib">
+      <fileset dir="${lib}"/>
+    </copy>
+    <java
+       classpath="${tools}/rhino/js.jar"
+       classname="org.mozilla.javascript.tools.shell.Main">
+      <arg line="-opt -1 ${lib}/coverage-runner.js ${modules}"/>
+    </java>
+    <exec dir="." executable="${jscoverage.dir}/jscoverage-server">
+      <arg line="--port=${jscoverage.port} --shutdown"/>
+    </exec>
+  </target>
+
+
+
+
+
   <!-- Tests -->
   <target name="lint">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
@@ -81,7 +118,7 @@
   </target>
 
   <target name="qunit">
-    <mkdir dir="${tests}"/>
+    <mkdir dir="${testsOutput}"/>
     <!-- the magic starts in lib/test-runner.js -->
     <java
        classpath="${tools}/rhino/js.jar"

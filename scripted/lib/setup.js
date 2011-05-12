@@ -81,6 +81,10 @@ Envjs({
                             "* FAILED: %s\n" +
                             "* Completed %s tests total in %s seconds.\n",
                             obj.passed, obj.failed, obj.total, runtime);
+                if (typeof window.jscoverage_report) {
+                    console.log("Writing coverage report.");
+                    jscoverage_report();
+                }
             };
         }
     }
