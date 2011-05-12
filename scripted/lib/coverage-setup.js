@@ -3,7 +3,7 @@
  */
 
 load("lib/env.rhino.js");
-
+load("lib/jscoverage-report.js");
 
 Envjs({
     scriptTypes: {
@@ -14,7 +14,7 @@ Envjs({
     afterScriptLoad: {
         "qunit\.js": function() {
             QUnit.done = function(obj) {
-
+                jscoverage_store();
                 console.log("Coverage report written.");
             };
         }

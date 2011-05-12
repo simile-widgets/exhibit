@@ -48,6 +48,15 @@ default (/usr/local/bin).
 Mac users, note there is a [bugfix][10] to allow jscoverage-server to
 properly bind to a port and run.
 
+To generate a coverage report, acquire jscoverage-report.js from the
+[project][11] and place it in lib/, then run:
+
+```
+% ant coverage
+```
+
+You can find the report in build/coverage/.
+
 Participating
 -------------
 
@@ -67,3 +76,4 @@ Developers can participate through the following avenues as well:
 [8]: https://code.google.com/p/jsdoc-toolkit/wiki/TagReference
 [9]: http://siliconforks.com/jscoverage/
 [10]: http://siliconforks.com/jscoverage/bugs/33
+[11]: https://github.com/zepheira/jscoverage-report
