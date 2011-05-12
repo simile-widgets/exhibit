@@ -3,7 +3,7 @@
  */
 var args = arguments;
 (function(){
-    load('lib/setup.js');
+    load('lib/test-setup.js');
     console.log("Starting QUnit tests...");
     // @@@ Passing args to the URL seems broken.  Delete the
     // following when it works the way it should.  See pre.js.

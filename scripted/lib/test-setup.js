@@ -23,21 +23,9 @@ Envjs({
         }
     },
     afterScriptLoad: {
-        "qunit": function() {
+        "qunit\.js": function() {
             var count = 0, testName, start, moduleName, fails = [];
             console.log("* QUnit test runner loaded.");
-
-            // from https://twoguysarguing.wordpress.com/2010/11/26/qunit-cli-running-qunit-with-rhino/
-            var origObjectParser = QUnit.jsDump.parsers.object;
-            QUnit.jsDump.setParser('object', function(obj) {
-                if (typeof obj.rhinoException !== 'undefined') {
-                    return obj.name + " { message: '" + obj.message + "', fileName: '" + obj.fileName + "', lineNumber: " + obj.lineNumber + " }";
-                }
-                else {
-                    return origObjectParser(obj);
-                }
-            });
-            // /end
 
             var junitr = new JUnitReporter('../build/tests/TEST-%(module)s.xml');
 
@@ -53,7 +41,19 @@ Envjs({
                             moduleName, testName, count++,
                             obj.result ? "PASS" : "FAIL", message);
             };
-            QUnit.begin = function(obj) { };
+            QUnit.begin = function(obj) {
+                // from https://twoguysarguing.wordpress.com/2010/11/26/qunit-cli-running-qunit-with-rhino/
+                var origObjectParser = QUnit.jsDump.parsers.object;
+                QUnit.jsDump.setParser('object', function(obj) {
+                    if (typeof obj.rhinoException !== 'undefined') {
+                        return obj.name + " { message: '" + obj.message + "', fileName: '" + obj.fileName + "', lineNumber: " + obj.lineNumber + " }";
+                    }
+                    else {
+                        return origObjectParser(obj);
+                    }
+                });
+                // /end
+            };
             QUnit.moduleStart = function(obj) {
                 moduleName = obj.name;
                 junitr.moduleStart(obj.name, (new Date()).getTime());
@@ -81,10 +81,6 @@ Envjs({
                             "* FAILED: %s\n" +
                             "* Completed %s tests total in %s seconds.\n",
                             obj.passed, obj.failed, obj.total, runtime);
-                if (typeof window.jscoverage_report) {
-                    console.log("Writing coverage report.");
-                    jscoverage_report();
-                }
             };
         }
     }
