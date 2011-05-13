@@ -26,7 +26,7 @@ Modules.loadScript = function(url) {
     head.appendChild(script);
 };
 
-if (typeof Envjs !== "undefined") {
+if (typeof Envjs !== "undefined" && typeof jscoverage_report === "undefined") {
     Modules.loadScript("file://" + Envjs.tmpdir + "qunitargs");
 }
 
