@@ -89,11 +89,14 @@ Exhibit.NativeDateUnit.fromNumber = function(n) {
 /**
  * Compares two Date objects.  If the values of the two are the same, returns
  * 0.  If v1 is earlier than v2, the return value is negative.  If v1 is
- * later than v2, the return value is positive.
+ * later than v2, the return value is positive.  Also compares anything that
+ * can be converted to a Number, assuming the number is measured since epoch.
  *
  * @static
- * @param {Date} v1 First Date object to compare.
- * @param {Date} v2 Second Date object to compare.
+ * @param {Date|String|Number} v1 First Date object or raw time value to
+                                  compare.
+ * @param {Date|String|Number} v2 Second Date object or raw time value to
+                                  compare.
  * @returns {Number} Integer with negative, zero, or positive value depending
  *                   on relative date values.
  */
