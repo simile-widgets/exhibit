@@ -23,6 +23,23 @@
   <property name="jscoverage.port" value="9876"/>
   <property file="local.build.properties"/>
 
+  <condition property="jscoverage.exists">
+    <and>
+      <resourceexists>
+        <file file="${jscoverage.dir}/jscoverage-server"/>
+      </resourceexists>
+      <resourceexists>
+        <file file="${jscoverage.dir}/jscoverage"/>
+      </resourceexists>
+    </and>
+  </condition>
+
+  <condition property="jscoverage.report.exists">
+    <resourceexists>
+      <file file="${lib}/jscoverage-report.js"/>
+    </resourceexists>
+  </condition>
+
   <taskdef
      name="yui-compressor"
      classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
@@ -79,6 +96,10 @@
 
   <!-- Coverage reporting -->
   <target name="coverage" description="Generate code coverage report">
+    <fail unless="${jscoverage.exists}"
+          message="The JSCoverage server and instrumentation programs could not be located, check the jscoverage.dir setting"/>
+    <fail unless="${jscoverage.report.exists}"
+          message="The JSCoverage report script could not be located at lib/jscoverage-report.js"/>
     <mkdir dir="${instrument}"/>
     <mkdir dir="${coverage}"/>
     <exec dir="." executable="${jscoverage.dir}/jscoverage-server" spawn="true">
