@@ -3,23 +3,23 @@ module("String");
 test("endsWith", function() {
     expect(4);
 
-    ok("A".endsWith("A"), "'A'.endsWith('A')");
-    ok("AA".endsWith("A"), "'AA'.endsWith('A')");
-    ok(!"AA".endsWith("B"), "!'AA'.endsWith('B')");
-    ok(!"AA".endsWith("AAA"), "!'AA'.endsWith('AAA')");
+    ok((new String("A")).endsWith("A"), "'A'.endsWith('A')");
+    ok((new String("AA")).endsWith("A"), "'AA'.endsWith('A')");
+    ok(!(new String("AA")).endsWith("B"), "!'AA'.endsWith('B')");
+    ok(!(new String("AA")).endsWith("AAA"), "!'AA'.endsWith('AAA')");
 });
 
 test("startsWith", function() {
     expect(4);
 
-    ok("A".startsWith("A"), "'A'.startsWith('A')");
-    ok("AA".startsWith("A"), "'AA'.startsWith('A')");
-    ok(!"AA".startsWith("B"), "!'AA'.startsWith('B')");
-    ok(!"AA".startsWith("AAA"), "!'AA'.startsWith('AAA')");
+    ok((new String("A")).startsWith("A"), "'A'.startsWith('A')");
+    ok((new String("AA")).startsWith("A"), "'AA'.startsWith('A')");
+    ok(!(new String("AA")).startsWith("B"), "!'AA'.startsWith('B')");
+    ok(!(new String("AA")).startsWith("AAA"), "!'AA'.startsWith('AAA')");
 });
 
 test("substitute", function() {
-//    expect();
+    expect(4);
 
     var text = "The %0 and the %1, the %3 jumped over the %2.";
     var ntext = "The cat and the fiddle";
@@ -36,8 +36,8 @@ test("substitute", function() {
 test("trim", function() {
     expect(4);
 
-    strictEqual("A".trim(), "A", "'A'.trim() === 'A'");
-    strictEqual(" A ".trim(), "A", "' A '.trim() === 'A'");
-    strictEqual("   A".trim(), "A", "'   A'.trim() === 'A'");
-    strictEqual("A   ".trim(), "A", "'A   '.trim() === 'A'");
+    strictEqual((new String("A")).trim(), "A", "'A'.trim() === 'A'");
+    strictEqual((new String(" A ")).trim(), "A", "' A '.trim() === 'A'");
+    strictEqual((new String("   A")).trim(), "A", "'   A'.trim() === 'A'");
+    strictEqual((new String("A   ")).trim(), "A", "'A   '.trim() === 'A'");
 });

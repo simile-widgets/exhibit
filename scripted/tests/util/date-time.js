@@ -39,6 +39,7 @@ test("removeTimeZoneOffset", function() {
 test("getTimezone", function() {
     // NB, this is a bit awkward to test; the user's timezone offset is
     // dependent on the user's location.
+
     expect(1);
 
     var tz = new Date().getTimezoneOffset();

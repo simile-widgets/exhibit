@@ -140,7 +140,8 @@ test("visit", function() {
 });
 
 test("createIntersection", function() {
-    //expect();
+    expect(4);
+
     var objA = new Exhibit.Set(['a', 'b', 'c']);
     var objB = new Exhibit.Set(['b', 'c', 'd']);
     var objC = new Exhibit.Set(['b', 'c']);
@@ -148,7 +149,11 @@ test("createIntersection", function() {
     var objE = new Exhibit.Set(['b', 'c', 'e']);
     var objF = Exhibit.Set.createIntersection(objA, objB);
     var objG = Exhibit.Set.createIntersection(objA, objB, objD);
+    var objH = Exhibit.Set.createIntersection(objB, objA);
+    var objI = Exhibit.Set.createIntersection(objC, objB);
 
     deepEqual(objF, objC, "Create intersection into new set");
     deepEqual(objG, objE, "Create intersection into existing set");
+    deepEqual(objF, objH, "Argument order does not influence outcome");
+    deepEqual(objI, objC, "Smaller first argument set");
 });

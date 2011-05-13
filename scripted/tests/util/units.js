@@ -72,14 +72,16 @@ test("fromNumber", function() {
 });
 
 test("compare", function() {
-    expect(3);
+    expect(5);
 
     var obj = new Date(0);
     var obj2 = new Date(1);
 
-    ok(Exhibit.NativeDateUnit.compare(obj, obj2) < 0, "Exhibit.NativeDateUnit(new Date(0), new Date(1)) < 0"); 
-    ok(Exhibit.NativeDateUnit.compare(obj2, obj) > 0, "Exhibit.NativeDateUnit(new Date(1), new Date(0)) > 0"); 
-    strictEqual(Exhibit.NativeDateUnit.compare(obj, new Date(0)), 0, "Exhibit.NativeDateUnit(new Date(0), new Date(0)) === 0"); 
+    ok(Exhibit.NativeDateUnit.compare(obj, obj2) < 0, "Exhibit.NativeDateUnit.compare(new Date(0), new Date(1)) < 0"); 
+    ok(Exhibit.NativeDateUnit.compare(obj2, obj) > 0, "Exhibit.NativeDateUnit.compare(new Date(1), new Date(0)) > 0"); 
+    strictEqual(Exhibit.NativeDateUnit.compare(obj, new Date(0)), 0, "Exhibit.NativeDateUnit.compare(new Date(0), new Date(0)) === 0"); 
+    ok(Exhibit.NativeDateUnit.compare(0, 1000) < 0, "Exhibit.NativeDateUnit.compare(0, 1) < 0");
+    ok(Exhibit.NativeDateUnit.compare("0", "1000") < 0, "Exhibit.NativeDateUnit.compare('0', '1000') < 0");
 });
 
 test("earlier", function() {
