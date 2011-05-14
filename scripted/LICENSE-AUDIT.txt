@@ -18,7 +18,7 @@ Env.js
 QUnit
 -----
  * http://docs.jquery.com/Qunit
- * ?
+ * [unversioned] 
  * dual GPLv2/MIT
  * scripted/lib/qunit.js
  * scripted/lib/qunit.css
@@ -58,17 +58,13 @@ YUI Compressor Ant Task
  * Apache 2.0
  * scripted/tools/yuicompressor-ant/
 
-jscoverage?
------------
- * http://siliconforks.com/jscoverage/faq.html
-
 Software Libraries
 ==================
 
 LAB.js
 ------
  * http://getify.github.com/LABjs/
- * ?
+ * 1.2.0
  * MIT
  * scripted/src/lib/LAB.min.js
 
@@ -88,7 +84,8 @@ SimileAjax
 History.js
 ----------
  * https://github.com/balupton/History.js
- * 1.7.0
+ * forked at https://github.com/zepheiryan/History.js
+ * https://github.com/zepheiryan/history.js/commit/91a5c5bcd63cb5fc35e786de3a11218ea69e65bc (based on 1.7.0)
  * BSD
  * scripted/src/lib/{amplify.store,history.html4,history.adapter.jquery,history}.js
 
