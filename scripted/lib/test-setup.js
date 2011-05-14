@@ -4,6 +4,7 @@
  */
 
 load("lib/env.rhino.js");
+load("lib/window.js");
 load("lib/junit.js");
 
 Envjs({
@@ -81,6 +82,7 @@ Envjs({
                             "* FAILED: %s\n" +
                             "* Completed %s tests total in %s seconds.\n",
                             obj.passed, obj.failed, obj.total, runtime);
+                window.close();
             };
         }
     }
