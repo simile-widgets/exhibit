@@ -58,18 +58,18 @@ var Exhibit = {
  */
 Exhibit.load = function(post) {
     var i, scr = Exhibit.scripts, lab;
+
     lab = $LAB.setOptions({
         AlwaysPreserveOrder: true,
         UseLocalXHR: false,
         AllowDuplicates: false
     });
+
     for (i = 0; i < scr.length; i++) {
         lab.script("../src/" + scr[i]);
     }
+
     if (typeof post === "function") {
-        post(lab);
-    } else if (typeof post === "string") {
-        post = eval(post);
         post(lab);
     }
 };
