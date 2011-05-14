@@ -18,10 +18,9 @@ Env.js
 QUnit
 -----
  * http://docs.jquery.com/Qunit
- * [unversioned] 
+ * derived from commit 761890a9 (one of two on April 15, 2011)
  * dual GPLv2/MIT
- * scripted/lib/qunit.js
- * scripted/lib/qunit.css
+ * scripted/lib/qunit.{js,css}
 
 JSLint
 ------
