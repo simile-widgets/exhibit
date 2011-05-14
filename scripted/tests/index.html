@@ -4,15 +4,17 @@
     <link rel="stylesheet" href="../lib/qunit.css" type="text/css" />
     <!-- Test scripts to module names are tracked in pre.js -->
     <!-- post.js does all of the loading of test modules    -->
-    <script type="text/javascript" src="pre.js"></script>
-    <script type="text/javascript" src="../lib/qunit.js"></script>
-    <script type="text/javascript" src="../src/exhibit.js"></script>
-    <script type="text/javascript" src="../src/util/util.js"></script>
-    <script type="text/javascript" src="../src/util/html.js"></script>
-    <script type="text/javascript" src="../src/util/set.js"></script>
-    <script type="text/javascript" src="../src/util/date-time.js"></script>
-    <script type="text/javascript" src="../src/util/units.js"></script>
-    <script type="text/javascript" src="post.js"></script>
+    <script type="text/javascript" src="../src/lib/LAB.min.js"></script>
+    <script type="text/javascript">
+      $LAB
+      .script("pre.js")
+      .script("../lib/qunit.js")
+      .script("../src/exhibit.js").wait(function() {
+          Exhibit.load(function(lab) {
+              lab.script("post.js");
+          });
+      });
+    </script>
   </head>
   <body>
     <h1 id="qunit-header">Exhibit 3.0 Scripted - QUnit Test Suite</h1>
