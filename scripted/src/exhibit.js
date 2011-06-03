@@ -31,9 +31,11 @@ var Exhibit = {
     scripts: [
         "lib/jquery.js",
         "lib/json2.js",
+        "lib/amplify.store.js",
         "lib/history.adapter.jquery.js",
         "lib/history.js",
         "lib/history.html4.js",
+        "lib/base64.js",
         "util/util.js",
         "util/html.js",
         "util/set.js",
@@ -66,6 +68,8 @@ Exhibit.load = function(post) {
     });
 
     for (i = 0; i < scr.length; i++) {
+        // @@@ This is a hack.  Using the correct URL is part
+        //     of the game, coming later.
         lab.script("../src/" + scr[i]);
     }
 

@@ -93,3 +93,9 @@ JSON2.js
  * https://github.com/douglascrockford/JSON-js
  * Public Domain
  * scripted/src/lib/json2.js
+
+base64.js
+---------
+ * https://ecmanaut.googlecode.com/svn/trunk/lib/base64.js
+ * Public Domain
+ * scripted/src/lib/base64.js

@@ -121,7 +121,10 @@ Exhibit.Util.round = function(n, precision) {
 }());
 
 /**
- * Modify the native Array type.
+ * Modify the native Array type in older browsers.
+ * If testing coverage fails to run any of these, it's because
+ * the underlying engine already natively implements these methods,
+ * while older browsers do not.
  */
 (function() {
     if (typeof Array.prototype.indexOf === "undefined") {
