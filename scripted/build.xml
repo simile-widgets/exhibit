@@ -12,6 +12,8 @@
   <property name="lib" value="lib"/>
   <property name="build" value="build"/>
   <property name="docs" value="${build}/docs"/>
+  <property name="demos" value="${build}/demos"/>
+  <property name="demosSrc" value="demos"/>
   <property name="testsOutput" value="${build}/tests"/>
   <property name="instrument" value="${build}/instrument"/>
   <property name="coverage" value="${build}/coverage"/>
@@ -75,6 +77,20 @@
       <include name="${build}/exhibit-bundle.js"/>
     </yui-compressor>
   </target>
+
+
+
+
+  <!-- Demo builder -->
+  <target name="demos" description="Build demos">
+    <copy todir="${demos}">
+      <fileset dir="${demosSrc}"/>
+    </copy>
+    <copy todir="${demos}/src">
+      <fileset dir="${src}"/>
+    </copy>
+  </target>
+
 
 
 
@@ -155,6 +171,10 @@
 
 
   <!-- Cleanup -->
+  <target name="clean-demos">
+    <delete dir="${demos}/" quiet="true"/>
+  </target>
+
   <target name="clean-docs">
     <delete dir="${docs}/" quiet="true"/>
   </target>
@@ -173,6 +193,6 @@
     <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
+  <target name="clean" depends="clean-demos,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
 
 </project>
