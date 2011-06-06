@@ -332,6 +332,9 @@ Exhibit.DateTime.roundDownToInterval = function(date, intervalUnit, timeZone, mu
         break;
     case Exhibit.DateTime.DAY:
         clearInDay(date2);
+
+        x = date2.getUTCDate();
+        date2.setUTCDate(x - (x % multiple));
         break;
     case Exhibit.DateTime.WEEK:
         clearInDay(date2);
