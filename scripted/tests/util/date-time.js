@@ -188,7 +188,7 @@ test("roundDownToInterval", function() {
 });
 
 test("roundUpToInterval", function() {
-    //expect(6);
+    expect(5);
 
     var round = Exhibit.DateTime.roundUpToInterval;
 
@@ -206,22 +206,22 @@ test("roundUpToInterval", function() {
     var d_round_day_10 = zero_time(new Date("1993/02/30")).valueOf();
     //var d_round_week_10 = zero_time(new Date("1993/02/23")).valueOf();
     var d_round_month_10 = zero_time(new Date("1993/10/01")).valueOf();
-    var d_round_year_10 = zero_time(new Date("2010/01/01")).valueOf();
+    var d_round_year_10 = zero_time(new Date("2000/01/01")).valueOf();
 
     round(d,Exhibit.DateTime.MILLISECOND,0,10,0);
-    //equal(d_round_mils_10,d.valueOf(),"Millisecond round up");
+    equal(d_round_mils_10,d.valueOf(),"Millisecond round up");
 
     round(d,Exhibit.DateTime.SECOND,0,10,0);
-    //equal(d_round_sec_10,d.valueOf(),"Second round up");
+    equal(d_round_sec_10,d.valueOf(),"Second round up");
 
     round(d,Exhibit.DateTime.MINUTE,0,10,0);
-    //equal(d_round_min_10,d.valueOf(),"Minute round up");
+    equal(d_round_min_10,d.valueOf(),"Minute round up");
 
     round(d,Exhibit.DateTime.HOUR,0,10,0);
-    //equal(d_round_hour_10,d.valueOf(),"Hour round up");
+    equal(d_round_hour_10,d.valueOf(),"Hour round up");
 
     round(d,Exhibit.DateTime.DAY,0,10,0);
-    //equal(d_round_day_10,d.valueOf(),"Day round up");
+    equal(d_round_day_10,d.valueOf(),"Day round up");
 
     //round(d,Exhibit.DateTime.WEEK,0,10,0);
     //equal(d_round_week_10,d.valueOf(),"Week round up");
