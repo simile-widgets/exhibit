@@ -35,7 +35,7 @@ Envjs({
                 if (typeof obj.message === "string") {
                     message = obj.message.replace(/<\/?.*?>/g, "");
                     if (!obj.result) {
-                        fails.push(message);
+                        fails.push(message + ": expected '" + obj.expected + "' but got '" + obj.actual + "'");
                     }
                 }
                 console.log(" [%s]{%s.%s}{%s} %s",
