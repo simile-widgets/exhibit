@@ -6,11 +6,11 @@ Exhibit.Bookmark.generateBookmarkHash = function(state) {
     if (typeof state.data.state === "undefined") {
         return "";
     }
-    return Base64.encode(JSON.stringify(state));
+    return Base64.encode(JSON.stringify(state)).replace(/\//g, '|');
 };
 
 Exhibit.Bookmark.interpretBookmarkHash = function(hash) {
-    return JSON.parse(Base64.decode(hash));
+    return JSON.parse(Base64.decode(hash.replace(/\|/g, '/')));
 };
 
 Exhibit.Bookmark.generateBookmark = function() {
