@@ -1,6 +1,6 @@
 module("Exhibit.DateTime");
 
-zero_time = function(d) {
+var zero_time = function(d) {
     d.setUTCHours(0);
     d.setUTCMinutes(0);
     d.setUTCSeconds(0);
@@ -234,7 +234,7 @@ test("roundUpToInterval", function() {
 });
 
 test("incrementByInterval", function() {
-    // expect();
+    expect(8);
 
     var inc = Exhibit.DateTime.incrementByInterval;
 
