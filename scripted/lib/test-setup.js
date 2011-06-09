@@ -38,9 +38,10 @@ Envjs({
                         fails.push(message + ": expected '" + obj.expected + "' but got '" + obj.actual + "'");
                     }
                 }
-                console.log(" [%s]{%s.%s}{%s} %s",
+                console.log(" [%s]{%s.%s}{%s} (%s->%s) %s",
                             obj.result ? "PASS" : "FAIL",
-                            moduleName, testName, count++, message);
+                            moduleName, testName, count++,
+                            obj.expected, obj.actual, message);
             };
             QUnit.begin = function(obj) {
                 // from https://twoguysarguing.wordpress.com/2010/11/26/qunit-cli-running-qunit-with-rhino/
