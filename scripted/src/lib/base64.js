@@ -41,6 +41,6 @@ var Base64 = (function() {
     return out;
   }
 
-  var tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
   return { encode:encode_base64, decode:decode_base64 };
 })();
