@@ -40,7 +40,8 @@ var Exhibit = {
         "util/html.js",
         "util/set.js",
         "util/date-time.js",
-        "util/units.js"
+        "util/units.js",
+        "util/bookmark.js"
     ]
 };
 
