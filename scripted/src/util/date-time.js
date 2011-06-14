@@ -151,7 +151,6 @@ Exhibit.DateTime.setIso8601Time = function (dateObject, string) {
     var d, hours, mins, secs, ms;
     d = string.match(Exhibit.DateTime._timeRegexp);
     if(!d) {
-        Exhibit.Debug.warn("Invalid time string: " + string);
         return false;
     }
     hours = d[1];
