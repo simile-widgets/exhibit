@@ -31,9 +31,6 @@ Exhibit.Bookmark.generateBookmarkHash = function(state) {
         state.data.state === null) {
         return "";
     }
-    // Other subsystems also examine the hash and will do the wrong
-    // thing if a '/' character is present.  Substitute it and do
-    // the opposite substitution for interpretation.
     return Base64.encode(JSON.stringify(state));
 };
 
@@ -48,7 +45,6 @@ Exhibit.Bookmark.generateBookmarkHash = function(state) {
  * @depends Base64
  */
 Exhibit.Bookmark.interpretBookmarkHash = function(hash) {
-    // See generateBookmarkHash.
     return JSON.parse(Base64.decode(hash));
 };
 
