@@ -23,13 +23,18 @@ Exhibit.Bookmark = {};
  * @depends Base64
  */
 Exhibit.Bookmark.generateBookmarkHash = function(state) {
-    if (typeof state.data.state === "undefined") {
+    if (typeof state === "undefined" ||
+        state === null ||
+        typeof state.data === "undefined" ||
+        state.data === null ||
+        typeof state.data.state === "undefined" ||
+        state.data.state === null) {
         return "";
     }
     // Other subsystems also examine the hash and will do the wrong
     // thing if a '/' character is present.  Substitute it and do
     // the opposite substitution for interpretation.
-    return Base64.encode(JSON.stringify(state.replace(/\//g, '|')));
+    return Base64.encode(JSON.stringify(state));
 };
 
 /**
@@ -44,7 +49,7 @@ Exhibit.Bookmark.generateBookmarkHash = function(state) {
  */
 Exhibit.Bookmark.interpretBookmarkHash = function(hash) {
     // See generateBookmarkHash.
-    return JSON.parse(Base64.decode(hash.replace(/\|/g, '/')));
+    return JSON.parse(Base64.decode(hash));
 };
 
 /**
