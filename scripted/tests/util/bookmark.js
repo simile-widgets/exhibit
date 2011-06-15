@@ -10,27 +10,43 @@ test("generateBookmarkHash", function() {
     equal(Exhibit.Bookmark.generateBookmarkHash({data: null}), '', 'Hash of null data state');
     equal(Exhibit.Bookmark.generateBookmarkHash({data: {state: undefined}}), '', 'Hash of undefined state data');
     equal(Exhibit.Bookmark.generateBookmarkHash({data: {state: {}}}), 'eyJkYXRhIjp7InN0YXRlIjp7fX19', 'Hash of basic state object');
-    equal(Exhibit.Bookmark.generateBookmarkHash({data: {state: {a: '\u00FF'}}}), 'eyJkYXRhIjp7InN0YXRlIjp7ImEiOiL_In19fQ==', 'Hash with no slashes despite normal base64 encoding');
+    equal(Exhibit.Bookmark.generateBookmarkHash({data: {state: {a: '\u00FF'}}}), 'eyJkYXRhIjp7InN0YXRlIjp7ImEiOiL_In19fQ==', 'Hash with non-alphanumeric characters included');
 });
 
 test("interpretBookmarkHash", function() {
-    expect(2);
+    expect(4);
 
     raises(function(){Exhibit.Bookmark.interpretBookmarkHash('');}, 'Empty hash raises parse error');
     deepEqual(Exhibit.Bookmark.interpretBookmarkHash('e30='), {}, 'Empty object hash');
+    deepEqual(Exhibit.Bookmark.interpretBookmarkHash('eyJkYXRhIjp7InN0YXRlIjp7fX19'), {data: {state: {}}}, 'Reverse of hash of basic state object');
+    deepEqual(Exhibit.Bookmark.interpretBookmarkHash('eyJkYXRhIjp7InN0YXRlIjp7ImEiOiL_In19fQ=='), {data: {state: {a: '\u00FF'}}}, 'Reverse of hash with non-alphanumeric characters included');
 });
 
 test("generateBookmark", function() {
-    //expect();
+    // Note this test depends on the browser that runs it.  This is
+    // an integration test, relying on Exhibit.History.
 
-    //Exhibit.Bookmark.generateBookmark()
+    expect(1);
+
+    var location = document.location.href;
+
+    equal(Exhibit.Bookmark.generateBookmark(), location, "Empty history test");
+
+    // Change Exhibit.History state.
+    // Test the resulting bookmark.
 });
 
+/**
 test("implementBookmark", function() {
-    //expect();
+    // Note this test depends on the browser that runs it.  This is
+    // an integration test, relying on Exhibit.History.
 
-    //Exhibit.Bookmark.implementBookmark()
+    // expect();
+
+    // Pass in a hash.
+    // Verify the state of History.getState() corresponds to the hash.
 });
+*/
 
 /**
 test("init", function() {
