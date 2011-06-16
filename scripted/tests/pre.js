@@ -12,6 +12,7 @@ var Modules = {
         'Exhibit.Util.HTML': 'util/html.js',
         'Exhibit.DateTime': 'util/date-time.js',
         'Exhibit.NativeDateUnit': 'util/units.js',
+        'Exhibit.History': 'util/history.js',
         'Exhibit.Bookmark': 'util/bookmark.js'
     },
     args: [],

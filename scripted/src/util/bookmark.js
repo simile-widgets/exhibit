@@ -7,7 +7,12 @@
 /**
  * @namespace Bookmarking the current state of a browsing session.
  */
-Exhibit.Bookmark = {};
+Exhibit.Bookmark = {
+    /**
+     * Whether a bookmark was used at the start or not.
+     */
+    run: false
+};
 
 /**
  * Generate a string that can be used as the hash portion of a URI
@@ -45,18 +50,22 @@ Exhibit.Bookmark.generateBookmarkHash = function(state) {
  * @depends Base64
  */
 Exhibit.Bookmark.interpretBookmarkHash = function(hash) {
-    return JSON.parse(Base64.decode(hash));
+    if (typeof hash === "undefined" || hash === null || hash === "") {
+        return null;
+    } else {
+        return JSON.parse(Base64.decode(hash));
+    }
 };
 
 /**
- * Given the current page state from History.js, make a bookmark URI.
+ * Given the current page state from Exhibit.History, make a bookmark URI.
  *
  * @static
  * @returns {String} The bookmark URI
- * @depends History.js
+ * @depends Exhibit.History
  */
 Exhibit.Bookmark.generateBookmark = function() {
-    var hash = Exhibit.Bookmark.generateBookmarkHash(History.getState());
+    var hash = Exhibit.Bookmark.generateBookmarkHash(Exhibit.History.getState());
     return document.location.href + ((hash === "") ? "": "#" + hash);
 };
 
@@ -66,10 +75,12 @@ Exhibit.Bookmark.generateBookmark = function() {
  * @static
  * @param state {Object} The interpreted bookmark hash as the state
  *                       object History.js uses.
- * @depends History.js
+ * @depends Exhibit.History
  */
 Exhibit.Bookmark.implementBookmark = function(state) {
-    History.replaceState(state.data, state.title, state.url);
+    if (state != null) {
+        Exhibit.History.replaceState(state.data, state.title, state.url);
+    }
 };
 
 /**
@@ -81,9 +92,6 @@ Exhibit.Bookmark.implementBookmark = function(state) {
 Exhibit.Bookmark.init = function() {
     if (document.location.hash.length > 0) {
         Exhibit.Bookmark.implementBookmark(Exhibit.Bookmark.interpretBookmarkHash(document.location.hash.substr(1)));
+        Exhibit.Bookmark.run = true;
     }
 };
-
-$(document).ready(function() {
-    Exhibit.Bookmark.init();
-});

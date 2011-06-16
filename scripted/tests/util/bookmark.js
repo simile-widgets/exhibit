@@ -16,7 +16,7 @@ test("generateBookmarkHash", function() {
 test("interpretBookmarkHash", function() {
     expect(4);
 
-    raises(function(){Exhibit.Bookmark.interpretBookmarkHash('');}, 'Empty hash raises parse error');
+    equal(Exhibit.Bookmark.interpretBookmarkHash(''), null, 'Empty hash returns null');
     deepEqual(Exhibit.Bookmark.interpretBookmarkHash('e30='), {}, 'Empty object hash');
     deepEqual(Exhibit.Bookmark.interpretBookmarkHash('eyJkYXRhIjp7InN0YXRlIjp7fX19'), {data: {state: {}}}, 'Reverse of hash of basic state object');
     deepEqual(Exhibit.Bookmark.interpretBookmarkHash('eyJkYXRhIjp7InN0YXRlIjp7ImEiOiL_In19fQ=='), {data: {state: {a: '\u00FF'}}}, 'Reverse of hash with non-alphanumeric characters included');

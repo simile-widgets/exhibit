@@ -41,6 +41,7 @@ var Exhibit = {
         "util/set.js",
         "util/date-time.js",
         "util/units.js",
+        "util/history.js",
         "util/bookmark.js"
     ]
 };
@@ -73,6 +74,14 @@ Exhibit.load = function(post) {
         //     of the game, coming later.
         lab.script("../src/" + scr[i]);
     }
+
+    // run all init functions
+    /**
+    $(document).ready(function() {
+        Exhibit.Bookmark.init();
+        Exhibit.History.init();
+    });
+    */
 
     if (typeof post === "function") {
         post(lab);
