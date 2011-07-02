@@ -78,7 +78,7 @@ Exhibit.Bookmark.generateBookmark = function() {
  * @depends Exhibit.History
  */
 Exhibit.Bookmark.implementBookmark = function(state) {
-    if (state != null) {
+    if (state !== null) {
         Exhibit.History.replaceState(state.data, state.title, state.url);
     }
 };
