@@ -6,7 +6,6 @@
 var Modules = {
     tests: {
         'String': 'util/string.js',
-        'Array': 'util/array.js',
         'Exhibit.Set': 'util/set.js',
         'Exhibit.Util': 'util/util.js',
         'Exhibit.Util.HTML': 'util/html.js',
