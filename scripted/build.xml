@@ -150,7 +150,7 @@
     <jslint haltOnFailure="false" options="onevar,sub">
       <predef>jQuery, $$</predef>
       <formatter type="plain" />
-      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js" />
+      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js,exhibit.js" />
     </jslint>
   </target>
 
