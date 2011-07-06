@@ -122,7 +122,7 @@ test("parseGregorianDateTime", function() {
     expect(2);
 
     var d = Exhibit.DateTime.parseGregorianDateTime('181 BC');
-    equal(-181,d.getFullYear(),'Parse Gregorian Date/time 1 year');
+    equal(d.getUTCFullYear(), -180, 'Parse Gregorian Date/time 1 year');
 
     var d = zero_time(Exhibit.DateTime.parseGregorianDateTime('1982/04/13'));
     equal(d.valueOf(),zero_time(new Date("1982/04/13")).valueOf(),"Parse Gregorian Date/time 2");

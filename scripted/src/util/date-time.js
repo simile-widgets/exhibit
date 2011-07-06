@@ -232,7 +232,9 @@ Exhibit.DateTime.parseIso8601DateTime = function (string) {
  * Takes a string containing a Gregorian date and time and returns a newly
  * instantiated date object with the parsed date and time information from the
  * string.  If the param is actually an instance of Date instead of a string, 
- * simply returns the given date instead.
+ * simply returns the given date instead.  Note the times are considered UTC
+ * by default, so, e.g., setting a year only may result in a different value
+ * if you subsequently use non-UTC getters.
  *
  * @param {Date|String} o An object, to either return or parse as a string.
  * @returns {Date} The date object.
