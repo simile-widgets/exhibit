@@ -41,6 +41,7 @@ var Exhibit = {
         "util/set.js",
         "util/date-time.js",
         "util/units.js",
+        "util/persistence.js",
         "util/history.js",
         "util/bookmark.js"
     ]
