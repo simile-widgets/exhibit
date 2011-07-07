@@ -14,6 +14,7 @@
   <property name="docs" value="${build}/docs"/>
   <property name="demos" value="${build}/demos"/>
   <property name="bundle" value="${build}/bundle"/>
+  <property name="node" value="${build}/node"/>
   <property name="demosSrc" value="demos"/>
   <property name="testsOutput" value="${build}/tests"/>
   <property name="instrument" value="${build}/instrument"/>
@@ -66,16 +67,41 @@
 
 
   <!-- Code compressor -->
+  <target name="node" description="Combine source files as a Node module">
+    <mkdir dir="${node}"/>
+
+    <concat destfile="${node}/exhibit.js" force="no">
+      <filelist dir="${src}/"
+                files="node/exhibit.js"/>
+      <filelist dir="${src}/"
+                files="util/util.js"/>
+      <fileset dir="${src}/">
+        <exclude name="lib/*.js"/>
+        <exclude name="exhibit.js"/>
+        <exclude name="util/util.js"/>
+        <include name="util/*.js"/>
+        <include name="data/*.js"/>
+      </fileset>
+      <filelist dir="${src}/"
+                files="node/exhibit-post.js"/>
+    </concat>
+  </target>
+
+
+
+
+  <!-- Code compressor -->
   <target name="bundle" description="Combine source files in the right order">
     <mkdir dir="${bundle}"/>
 
-    <concat destfile="${bundle}/exhibit-bundle.js" force="no">
+    <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
       <filelist dir="${src}/"
                 files="exhibit.js"/>
       <filelist dir="${src}/"
                 files="util/util.js"/>
       <fileset dir="${src}/">
         <exclude name="lib/*.js"/>
+        <exclude name="node/*.js"/>
         <exclude name="exhibit.js"/>
         <exclude name="util/util.js"/>
         <include name="**/*.js"/>
@@ -197,8 +223,12 @@
     <delete dir="${docs}/" quiet="true"/>
   </target>
 
+  <target name="clean-node">
+    <delete dir="${node}" quiet="true"/>
+  </target>
+
   <target name="clean-bundle">
-    <delete file="${build}/exhibit-bundle.js" quiet="true"/>
+    <delete dir="${bundle}" quiet="true"/>
   </target>
 
   <target name="clean-compress">
@@ -219,6 +249,6 @@
     <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-demos,clean-bundle,clean-compress,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
+  <target name="clean" depends="clean-demos,clean-node,clean-bundle,clean-compress,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
 
 </project>
