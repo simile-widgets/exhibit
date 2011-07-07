@@ -13,6 +13,7 @@
   <property name="build" value="build"/>
   <property name="docs" value="${build}/docs"/>
   <property name="demos" value="${build}/demos"/>
+  <property name="bundle" value="${build}/bundle"/>
   <property name="demosSrc" value="demos"/>
   <property name="testsOutput" value="${build}/tests"/>
   <property name="instrument" value="${build}/instrument"/>
@@ -65,17 +66,34 @@
 
 
   <!-- Code compressor -->
-  <target name="compress" description="Combine and compress source files">
-    <concat destfile="${build}/exhibit-bundle.js" force="no">
-      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js"/>
+  <target name="bundle" description="Combine source files in the right order">
+    <mkdir dir="${bundle}"/>
+
+    <concat destfile="${bundle}/exhibit-bundle.js" force="no">
+      <filelist dir="${src}/"
+                files="exhibit.js"/>
+      <filelist dir="${src}/"
+                files="util/util.js"/>
+      <fileset dir="${src}/">
+        <exclude name="lib/*.js"/>
+        <exclude name="exhibit.js"/>
+        <exclude name="util/util.js"/>
+        <include name="**/*.js"/>
+      </fileset>
     </concat>
+  </target>
+
+
+
+
+  <!-- Code compressor -->
+  <target name="compress" depends="bundle" description="Compress source files">
+    <mkdir dir="${dist}"/>
 
     <yui-compressor
        munge="true"
-       fromdir="${build}/"
-       todir="${dist}/">
-      <include name="${build}/exhibit-bundle.js"/>
-    </yui-compressor>
+       fromdir="${bundle}/"
+       todir="${dist}/"/>
   </target>
 
 
@@ -179,6 +197,14 @@
     <delete dir="${docs}/" quiet="true"/>
   </target>
 
+  <target name="clean-bundle">
+    <delete file="${build}/exhibit-bundle.js" quiet="true"/>
+  </target>
+
+  <target name="clean-compress">
+    <delete dir="${dist}/" quiet="true"/>
+  </target>
+
   <target name="clean-coverage">
     <delete dir="${coverage}/" quiet="true"/>
   </target>
@@ -193,6 +219,6 @@
     <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-demos,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
+  <target name="clean" depends="clean-demos,clean-bundle,clean-compress,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
 
 </project>
