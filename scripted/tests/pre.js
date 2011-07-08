@@ -13,7 +13,8 @@ var Modules = {
         'Exhibit.NativeDateUnit': 'util/units.js',
         'Exhibit.Persistence': 'util/persistence.js',
         'Exhibit.History': 'util/history.js',
-        'Exhibit.Bookmark': 'util/bookmark.js'
+        'Exhibit.Bookmark': 'util/bookmark.js',
+        'Exhibit.Database': 'data/database.js'
     },
     args: [],
     all: {},

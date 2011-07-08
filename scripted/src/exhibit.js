@@ -43,7 +43,8 @@ var Exhibit = {
         "util/units.js",
         "util/persistence.js",
         "util/history.js",
-        "util/bookmark.js"
+        "util/bookmark.js",
+        "data/database.js"
     ]
 };
 
