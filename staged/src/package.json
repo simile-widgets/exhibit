@@ -1,9 +1,0 @@
-{
-    "name": "exhibit-staged"
-  , "version": "3.0.0"
-  , "private": true
-  , "dependencies": {
-      "express": "2.4.1"
-    , "jade": ">= 0.0.1"
-  }
-}
