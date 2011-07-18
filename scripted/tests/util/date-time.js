@@ -1,47 +1,39 @@
 module("Exhibit.DateTime");
 
-var zero_time = function(d) {
-    d.setUTCHours(0);
-    d.setUTCMinutes(0);
-    d.setUTCSeconds(0);
-    d.setUTCMilliseconds(0);
-    return d;
-};
-
 test("setIso8601Date", function() {
     expect(19);
 
     // Check some gdates
     var d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"2011-05-01");
-    equal(2011,d.getUTCFullYear(),'Date 1 year');
-    equal(4,d.getUTCMonth(),'Date 1 month');
-    equal(1,d.getUTCDate(),'Date 1 day');
+    equal(d.getUTCFullYear(),2011,'Date 1 year');
+    equal(d.getUTCMonth(),4,'Date 1 month');
+    equal(d.getUTCDate(),1,'Date 1 day');
 
     var d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"2011-12-31");
-    equal(2011,d.getUTCFullYear(),'Date 2 year');
-    equal(11,d.getUTCMonth(),'Date 2 month');
-    equal(31,d.getUTCDate(),'Date 2 day');
+    equal(d.getUTCFullYear(),2011,'Date 2 year');
+    equal(d.getUTCMonth(),11,'Date 2 month');
+    equal(d.getUTCDate(),31,'Date 2 day');
 
     var d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"2000-02-29");
-    equal(2000,d.getUTCFullYear(),'Date 3 year');
-    equal(1,d.getUTCMonth(),'Date 3 month');
-    equal(29,d.getUTCDate(),'Date 3 day');
+    equal(d.getUTCFullYear(),2000,'Date 3 year');
+    equal(d.getUTCMonth(),1,'Date 3 month');
+    equal(d.getUTCDate(),29,'Date 3 day');
 
     // Date overflow
     var d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"1999-12-32");
-    equal(2000,d.getUTCFullYear(),'Date 4 year');
-    equal(0,d.getUTCMonth(),'Date 4 month');
-    equal(1,d.getUTCDate(),'Date 4 day');
+    equal(d.getUTCFullYear(),2000,'Date 4 year');
+    equal(d.getUTCMonth(),0,'Date 4 month');
+    equal(d.getUTCDate(),1,'Date 4 day');
 
     var d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"1900-02-29");
-    equal(1900,d.getUTCFullYear(),'Date 5 year');
-    equal(2,d.getUTCMonth(),'Date 5 month');
-    equal(1,d.getUTCDate(),'Date 5 day');
+    equal(d.getUTCFullYear(),1900,'Date 5 year');
+    equal(d.getUTCMonth(),2,'Date 5 month');
+    equal(d.getUTCDate(),1,'Date 5 day');
 
     // ingor unparseable dates should throw
     raises(function(){var d = new Date(); Exhibit.DateTime.setIso8601Date(d,"1968-8-15")},'Date 6 raises');
@@ -56,16 +48,16 @@ test("setIso8601Time", function() {
     // Basic form
     var d = new Date();
     Exhibit.DateTime.setIso8601Time(d,"121928");
-    equal(12,d.getUTCHours(),'Time 1 hours');
-    equal(19,d.getUTCMinutes(),'Time 1 minutes');
-    equal(28,d.getUTCSeconds(),'Time 1 seconds');
+    equal(d.getUTCHours(),12,'Time 1 hours');
+    equal(d.getUTCMinutes(),19,'Time 1 minutes');
+    equal(d.getUTCSeconds(),28,'Time 1 seconds');
 
     // Extended form
     var d = new Date();
     Exhibit.DateTime.setIso8601Time(d,"12:19:28");
-    equal(12,d.getUTCHours(),'Time 2 hours');
-    equal(19,d.getUTCMinutes(),'Time 2 minutes');
-    equal(28,d.getUTCSeconds(),'Time 2 seconds');
+    equal(d.getUTCHours(),12,'Time 2 hours');
+    equal(d.getUTCMinutes(),19,'Time 2 minutes');
+    equal(d.getUTCSeconds(),28,'Time 2 seconds');
 
     // Fractional time
     // until requirements are clearer
@@ -91,22 +83,22 @@ test("setIso8601", function() {
     // Extended form T delimited
     var d = new Date();
     Exhibit.DateTime.setIso8601(d,"2004-08-12T03:33:09Z");
-    equal(3,d.getUTCHours(),'Date/time 1 hours');
-    equal(33,d.getUTCMinutes(),'Date/time 1 minutes');
-    equal(9,d.getUTCSeconds(),'Date/time 1 seconds');
-    equal(2004,d.getUTCFullYear(),'Date/time 1 year');
-    equal(7,d.getUTCMonth(),'Date/time 1 month');
-    equal(12,d.getUTCDate(),'Date/time 1 day');
+    equal(d.getUTCHours(),3,'Date/time 1 hours');
+    equal(d.getUTCMinutes(),33,'Date/time 1 minutes');
+    equal(d.getUTCSeconds(),9,'Date/time 1 seconds');
+    equal(d.getUTCFullYear(),2004,'Date/time 1 year');
+    equal(d.getUTCMonth(),7,'Date/time 1 month');
+    equal(d.getUTCDate(),12,'Date/time 1 day');
 
     // Extended form space delimited
     var d = new Date();
     Exhibit.DateTime.setIso8601(d,"2004-08-12 03:33:09Z");
-    equal(3,d.getUTCHours(),'Date/time 1 hours');
-    equal(33,d.getUTCMinutes(),'Date/time 1 minutes');
-    equal(9,d.getUTCSeconds(),'Date/time 1 seconds');
-    equal(2004,d.getUTCFullYear(),'Date/time 1 year');
-    equal(7,d.getUTCMonth(),'Date/time 1 month');
-    equal(12,d.getUTCDate(),'Date/time 1 day');
+    equal(d.getUTCHours(),3,'Date/time 1 hours');
+    equal(d.getUTCMinutes(),33,'Date/time 1 minutes');
+    equal(d.getUTCSeconds(),9,'Date/time 1 seconds');
+    equal(d.getUTCFullYear(),2004,'Date/time 1 year');
+    equal(d.getUTCMonth(),7,'Date/time 1 month');
+    equal(d.getUTCDate(),12,'Date/time 1 day');
 });
 
 test("parseIso8601DateTime", function() {
@@ -115,7 +107,7 @@ test("parseIso8601DateTime", function() {
     expect(1);
 
     var d = Exhibit.DateTime.parseIso8601DateTime("2004-08-12T03:33:09Z");
-    equal(3,d.getUTCHours(),'Parse Date/time 1 hours');
+    equal(d.getUTCHours(),3,'Parse Date/time 1 hours');
 });
 
 test("parseGregorianDateTime", function() {
@@ -124,8 +116,8 @@ test("parseGregorianDateTime", function() {
     var d = Exhibit.DateTime.parseGregorianDateTime('181 BC');
     equal(d.getUTCFullYear(), -180, 'Parse Gregorian Date/time 1 year');
 
-    var d = zero_time(Exhibit.DateTime.parseGregorianDateTime('1982/04/13'));
-    equal(d.valueOf(),zero_time(new Date("1982/04/13")).valueOf(),"Parse Gregorian Date/time 2");
+    var d = Exhibit.DateTime.zeroTimeUTC(Exhibit.DateTime.parseGregorianDateTime('1982/04/13'));
+    equal(d.valueOf(),Exhibit.DateTime.zeroTimeUTC(new Date("1982/04/13")).valueOf(),"Parse Gregorian Date/time 2");
 });
 
 test("roundDownToInterval", function() {
@@ -144,14 +136,14 @@ test("roundDownToInterval", function() {
     var d_round_sec_10 = new Date("1993/02/23 18:45:00 -00:00").valueOf();
     var d_round_min_10 = new Date("1993/02/23 18:40 -00:00").valueOf();
     var d_round_hour_10 = new Date("1993/02/23 10:00 -00:00").valueOf();
-    var d_round_day_10 = zero_time(new Date("1993/02/20")).valueOf();
-    //var d_round_week_10 = zero_time(new Date("1992/12/13")).valueOf();
-    var d_round_month_10 = zero_time(new Date("1993/01/01")).valueOf();
-    var d_round_year_10 = zero_time(new Date("1990/01/01")).valueOf();
+    var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/20")).valueOf();
+    //var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1992/12/13")).valueOf();
+    var d_round_month_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/01/01")).valueOf();
+    var d_round_year_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1990/01/01")).valueOf();
     // multiple=1 for the big guys
-    var d_round_decade = zero_time(new Date("1990/01/01")).valueOf();
-    var d_round_century = zero_time(new Date("1900/01/01")).valueOf();
-    var d_round_mill = zero_time(new Date("1000/01/01")).valueOf();
+    var d_round_decade = Exhibit.DateTime.zeroTimeUTC(new Date("1990/01/01")).valueOf();
+    var d_round_century = Exhibit.DateTime.zeroTimeUTC(new Date("1900/01/01")).valueOf();
+    var d_round_mill = Exhibit.DateTime.zeroTimeUTC(new Date("1000/01/01")).valueOf();
 
     round(d,Exhibit.DateTime.MILLISECOND,0,10,0);
     equal(d_round_mils_10,d.valueOf(),"Millisecond round down");
@@ -203,10 +195,10 @@ test("roundUpToInterval", function() {
     var d_round_sec_10 = new Date("1993/02/23 18:45:10 -00:00").valueOf();
     var d_round_min_10 = new Date("1993/02/23 18:50 -00:00").valueOf();
     var d_round_hour_10 = new Date("1993/02/23 20:00 -00:00").valueOf();
-    var d_round_day_10 = zero_time(new Date("1993/02/30")).valueOf();
-    //var d_round_week_10 = zero_time(new Date("1993/02/23")).valueOf();
-    var d_round_month_10 = zero_time(new Date("1993/10/01")).valueOf();
-    var d_round_year_10 = zero_time(new Date("2000/01/01")).valueOf();
+    var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/30")).valueOf();
+    //var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/23")).valueOf();
+    var d_round_month_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/10/01")).valueOf();
+    var d_round_year_10 = Exhibit.DateTime.zeroTimeUTC(new Date("2000/01/01")).valueOf();
 
     round(d,Exhibit.DateTime.MILLISECOND,0,10,0);
     equal(d_round_mils_10,d.valueOf(),"Millisecond round up");
