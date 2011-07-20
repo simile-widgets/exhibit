@@ -59,20 +59,6 @@ test("setIso8601Time", function() {
     equal(d.getUTCMinutes(),19,'Time 2 minutes');
     equal(d.getUTCSeconds(),28,'Time 2 seconds');
 
-    // Fractional time
-    // until requirements are clearer
-    //var d = new Date()
-    //Exhibit.DateTime.setIso8601Time(d,"08:29,5")
-    //equal(8,d.getHours())
-    //equal(29,d.getMinutes())
-    //equal(30,d.getSeconds())
-
-    //var d = new Date()
-    //Exhibit.DateTime.setIso8601Time(d,"08:29.5")
-    //equal(8,d.getHours())
-    //equal(29,d.getMinutes())
-    //equal(30,d.getSeconds())
-
     // Unparseable
     raises(function(){var d = new Date(); Exhibit.DateTime.setIso8601Time(d,"34235")},'Time 3 raises');
 });
@@ -146,37 +132,37 @@ test("roundDownToInterval", function() {
     var d_round_mill = Exhibit.DateTime.zeroTimeUTC(new Date("1000/01/01")).valueOf();
 
     round(d,Exhibit.DateTime.MILLISECOND,0,10,0);
-    equal(d_round_mils_10,d.valueOf(),"Millisecond round down");
+    equal(d.valueOf(),d_round_mils_10,"Millisecond round down");
 
     round(d,Exhibit.DateTime.SECOND,0,10,0);
-    equal(d_round_sec_10,d.valueOf(),"Second round down");
+    equal(d.valueOf(),d_round_sec_10,"Second round down");
 
     round(d,Exhibit.DateTime.MINUTE,0,10,0);
-    equal(d_round_min_10,d.valueOf(),"Minute round down");
+    equal(d.valueOf(),d_round_min_10,"Minute round down");
 
     round(d,Exhibit.DateTime.HOUR,0,10,0);
-    equal(d_round_hour_10,d.valueOf(),"Hour round down");
+    equal(d.valueOf(),d_round_hour_10,"Hour round down");
 
     round(d,Exhibit.DateTime.DAY,0,10,0);
-    equal(d_round_day_10,d.valueOf(),"Day round down");
+    equal(d.valueOf(),d_round_day_10,"Day round down");
 
     //round(d,Exhibit.DateTime.WEEK,0,10,0);
-    //equal(d_round_week_10,d.valueOf(),"Week round down");
+    //equal(d.valueOf(),d_round_week_10,"Week round down");
 
     round(d,Exhibit.DateTime.MONTH,0,10,0);
-    equal(d_round_month_10,d.valueOf(),"Month round down");
+    equal(d.valueOf(),d_round_month_10,"Month round down");
 
     round(d,Exhibit.DateTime.YEAR,0,10,0);
-    equal(d_round_year_10,d.valueOf(),"Year round down");
+    equal(d.valueOf(),d_round_year_10,"Year round down");
 
     round(d,Exhibit.DateTime.DECADE,0,0,0);
-    equal(d_round_decade,d.valueOf(),"Decade round down");
+    equal(d.valueOf(),d_round_decade,"Decade round down");
 
     round(d,Exhibit.DateTime.CENTURY,0,0,0);
-    equal(d_round_century,d.valueOf(),"Century round down");
+    equal(d.valueOf(),d_round_century,"Century round down");
 
     round(d,Exhibit.DateTime.MILLENNIUM,0,10,0);
-    equal(d_round_mill,d.valueOf(),"Millennium round down");
+    equal(d.valueOf(),d_round_mill,"Millennium round down");
 });
 
 test("roundUpToInterval", function() {
@@ -201,28 +187,28 @@ test("roundUpToInterval", function() {
     var d_round_year_10 = Exhibit.DateTime.zeroTimeUTC(new Date("2000/01/01")).valueOf();
 
     round(d,Exhibit.DateTime.MILLISECOND,0,10,0);
-    equal(d_round_mils_10,d.valueOf(),"Millisecond round up");
+    equal(d.valueOf(),d_round_mils_10,"Millisecond round up");
 
     round(d,Exhibit.DateTime.SECOND,0,10,0);
-    equal(d_round_sec_10,d.valueOf(),"Second round up");
+    equal(d.valueOf(),d_round_sec_10,"Second round up");
 
     round(d,Exhibit.DateTime.MINUTE,0,10,0);
-    equal(d_round_min_10,d.valueOf(),"Minute round up");
+    equal(d.valueOf(),d_round_min_10,"Minute round up");
 
     round(d,Exhibit.DateTime.HOUR,0,10,0);
-    equal(d_round_hour_10,d.valueOf(),"Hour round up");
+    equal(d.valueOf(),d_round_hour_10,"Hour round up");
 
     round(d,Exhibit.DateTime.DAY,0,10,0);
-    equal(d_round_day_10,d.valueOf(),"Day round up");
+    equal(d.valueOf(),d_round_day_10,"Day round up");
 
     //round(d,Exhibit.DateTime.WEEK,0,10,0);
-    //equal(d_round_week_10,d.valueOf(),"Week round up");
+    //equal(d.valueOf(),d_round_week_10,"Week round up");
 
     round(d,Exhibit.DateTime.MONTH,0,10,0);
-    //equal(d_round_month_10,d.valueOf(),"Month round up");
+    //equal(d.valueOf(),d_round_month_10,"Month round up");
 
     round(d,Exhibit.DateTime.YEAR,0,10,0);
-    //equal(d_round_year_10,d.valueOf(),"Year round up");
+    //equal(d.valueOf(),d_round_year_10,"Year round up");
 });
 
 test("incrementByInterval", function() {
@@ -247,28 +233,28 @@ test("incrementByInterval", function() {
     var d_inc_year = new Date("1994/04/03 19:46:10 -00:00").setMilliseconds(124).valueOf();
 
     inc(d,Exhibit.DateTime.MILLISECOND,0);
-    equal(d_inc_mils,d.valueOf(),"Millisecond increment");
+    equal(d.valueOf(),d_inc_mils,"Millisecond increment");
 
     inc(d,Exhibit.DateTime.SECOND,0);
-    equal(d_inc_sec,d.valueOf(),"Second increment");
+    equal(d.valueOf(),d_inc_sec,"Second increment");
 
     inc(d,Exhibit.DateTime.MINUTE,0);
-    equal(d_inc_min,d.valueOf(),"Minute increment");
+    equal(d.valueOf(),d_inc_min,"Minute increment");
 
     inc(d,Exhibit.DateTime.HOUR,0);
-    equal(d_inc_hour,d.valueOf(),"Hour increment");
+    equal(d.valueOf(),d_inc_hour,"Hour increment");
 
     inc(d,Exhibit.DateTime.DAY,0);
-    equal(d_inc_day,d.valueOf(),"Day increment");
+    equal(d.valueOf(),d_inc_day,"Day increment");
 
     inc(d,Exhibit.DateTime.WEEK,0);
-    equal(d_inc_week,d.valueOf(),"Week increment");
+    equal(d.valueOf(),d_inc_week,"Week increment");
 
     inc(d,Exhibit.DateTime.MONTH,0);
-    equal(d_inc_month,d.valueOf(),"Month increment");
+    equal(d.valueOf(),d_inc_month,"Month increment");
 
     inc(d,Exhibit.DateTime.YEAR,0);
-    equal(d_inc_year,d.valueOf(),"Year increment");
+    equal(d.valueOf(),d_inc_year,"Year increment");
 });
 
 test("removeTimeZoneOffset", function() {
