@@ -146,7 +146,7 @@
        jsdochome="${tools}/jsdoc-toolkit/"
        template="jsdoc"
        outputdir="${docs}/">
-      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js" />
+      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js,node/*.js" />
     </jsdoctoolkit>
   </target>
 
