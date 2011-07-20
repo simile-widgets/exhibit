@@ -478,3 +478,16 @@ Exhibit.DateTime.getTimezone = function() {
     var d = new Date().getTimezoneOffset();
     return d / -60;
 };
+
+/**
+ * Zeros (UTC) all time components of the provided date object.
+ *
+ * @returns {Date} the nodified date object
+ */
+Exhibit.DateTime.zeroTimeUTC = function(date) {
+    date.setUTCHours(0);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+    return date;
+};
