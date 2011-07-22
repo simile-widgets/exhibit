@@ -195,7 +195,9 @@ Exhibit.Collection._initializeBasedCollection = function(collection) {
     collection._update = Exhibit.Collection._basedCollection_update;
     
     $(document).bind('onItemsChanged.exhibit', function(event, coll) {
-        coll._update();
+        if (coll.equals(collection._baseCollection)) {
+            collection._update();
+        }
     });
     
     collection._update();
@@ -340,6 +342,16 @@ Exhibit.Collection.prototype.getID = function() {
  */ 
 Exhibit.Collection.prototype.setItems = function(items) {
     this._items = items;
+};
+
+/**
+ * Compare collections for equality.
+ *
+ * @param {Exhibit.Collection} collection
+ * @returns {Boolean} True if collection is equal to this one.
+ */
+Exhibit.Collection.prototype.equals = function(collection) {
+    return (this.getID() === collection.getID());
 };
 
 /**
