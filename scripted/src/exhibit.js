@@ -48,7 +48,8 @@ var Exhibit = {
         "data/local.js",
         "data/type.js",
         "data/property.js",
-        "data/range-index.js"
+        "data/range-index.js",
+        "data/collection.js"
     ]
 };
 
