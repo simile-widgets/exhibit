@@ -71,6 +71,16 @@ Exhibit.Database._LocalImpl.prototype.createDatabase = function() {
 };
 
 /**
+ * Load an array of data links using registered importers into the database.
+ *
+ * @param {Array} links An array of DOM link elements or string URLs.
+ * @param {Function} fDone A function to call when finished.
+ */
+Exhibit.Database._LocalImpl.prototype.loadLinks = function(links, fDone) {
+    this._loadLinks(links, this, fDone);
+};
+
+/**
  * Load data from the given object into the database.
  *
  * @param {Object} o An object that reflects the Exhibit JSON form.
