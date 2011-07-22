@@ -44,7 +44,11 @@ var Exhibit = {
         "util/persistence.js",
         "util/history.js",
         "util/bookmark.js",
-        "data/database.js"
+        "data/database.js",
+        "data/local.js",
+        "data/type.js",
+        "data/property.js",
+        "data/range-index.js"
     ]
 };
 
