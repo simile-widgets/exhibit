@@ -4,6 +4,12 @@
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
 
+// It would be convenient to have one reliably existant DOM element
+// associated with a Collection so other objects could listen to that
+// element for changes, instead of having globally triggered events
+// that every bound object then has to differentiate between.
+// Convenient enough to create a <div> when none is given?
+
 /**
  * Creates a new object with an identifier and the database it draws from. 
  * 
