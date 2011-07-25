@@ -49,7 +49,14 @@ var Exhibit = {
         "data/type.js",
         "data/property.js",
         "data/range-index.js",
-        "data/collection.js"
+        "data/collection.js",
+        "data/expression.js",
+        "data/expression/collection.js",
+        "data/expression/path.js",
+        "data/expression/constant.js",
+        "data/expression/operator.js",
+        "data/expression/function-call.js",
+        "data/expression/control-call.js"
     ]
 };
 
