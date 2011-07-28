@@ -21,6 +21,7 @@ Exhibit.DateTime.YEAR           = 7; /** @constant */
 Exhibit.DateTime.DECADE         = 8; /** @constant */
 Exhibit.DateTime.CENTURY        = 9; /** @constant */
 Exhibit.DateTime.MILLENNIUM     = 10; /** @constant */
+Exhibit.DateTime.QUARTER        = 11; /** @constant */
 
 Exhibit.DateTime.EPOCH          = -1; /** @constant */
 Exhibit.DateTime.ERA            = -2;
@@ -43,6 +44,7 @@ Exhibit.DateTime.gregorianUnitLengths = [];
     a[d.DAY]         = a[d.HOUR] * 24;
     a[d.WEEK]        = a[d.DAY] * 7;
     a[d.MONTH]       = a[d.DAY] * 31;
+    a[d.QUARTER]     = a[d.MONTH] * 3;
     a[d.YEAR]        = a[d.DAY] * 365;
     a[d.DECADE]      = a[d.YEAR] * 10;
     a[d.CENTURY]     = a[d.YEAR] * 100;
@@ -276,7 +278,7 @@ Exhibit.DateTime.parseGregorianDateTime = function(o) {
 /**
  * Rounds date objects down to the nearest interval or multiple of an interval.
  * This method modifies the given date object, converting it to the given
- * timezone if specified.
+ * timezone if specified.  NB, does not support Exhibit.DateTime.QUARTER.
  * 
  * @param {Date} date The date object to round.
  * @param {Number} intervalUnit A constant, integer index specifying an 
