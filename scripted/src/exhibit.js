@@ -45,10 +45,10 @@ var Exhibit = {
         "util/history.js",
         "util/bookmark.js",
         "data/database.js",
-        "data/local.js",
-        "data/type.js",
-        "data/property.js",
-        "data/range-index.js",
+        "data/database/local.js",
+        "data/database/type.js",
+        "data/database/property.js",
+        "data/database/range-index.js",
         "data/collection.js",
         "data/expression.js",
         "data/expression/collection.js",
@@ -56,7 +56,10 @@ var Exhibit = {
         "data/expression/constant.js",
         "data/expression/operator.js",
         "data/expression/function-call.js",
-        "data/expression/control-call.js"
+        "data/expression/control-call.js",
+        "data/expression/functions.js",
+        "data/expression/controls.js",
+        "data/expression-parser.js"
     ]
 };
 
