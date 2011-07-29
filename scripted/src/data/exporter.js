@@ -32,14 +32,15 @@ Exhibit.Exporter = function(mimeType, label, wrap, wrapOne, exportOne, exportMan
  * @private
  * @constant
  */
-Exhibit.Exporter._registerComponent = "exporter";
+Exhibit.Exporter._registryKey = "exporter";
 
 /**
  * @static
  */
 Exhibit.Exporter._registerComponent = function() {
-    if (!Exhibit.Registry.hasRegistry(Exhibit.Exporter._registerComponent)) {
-        Exhibit.Registry.createRegistry(Exhibit.Exporter._registerComponent);
+    if (!Exhibit.Registry.hasRegistry(Exhibit.Exporter._registryKey)) {
+        Exhibit.Registry.createRegistry(Exhibit.Exporter._registryKey);
+        $(document).trigger("registerExporters.exhibit");
     }
 };
 
@@ -47,8 +48,8 @@ Exhibit.Exporter._registerComponent = function() {
  * @returns {Boolean}
  */
 Exhibit.Exporter.prototype.register = function() {
-    if (!Exhibit.Registry.isRegistered(this._registerComponent, this._mimeType)) {
-        Exhibit.Registry.register(this._registerComponent, this._mimeType, this);
+    if (!Exhibit.Registry.isRegistered(this._registryKey, this._mimeType)) {
+        Exhibit.Registry.register(this._registryKey, this._mimeType, this);
         return true;
     } else {
         return false;
@@ -59,7 +60,7 @@ Exhibit.Exporter.prototype.register = function() {
  *
  */
 Exhibit.Exporter.prototype.dispose = function() {
-    Exhibit.Registry.unregister(this._registerComponent, this._mimeType);
+    Exhibit.Registry.unregister(this._registryKey, this._mimeType);
 };
 
 /**
@@ -112,5 +113,5 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
     return s;
 };
 
-$(document).once("registerComponents.exhibit",
-                 Exhibit.Exporter._registerComponent());
+$(document).one("registerComponents.exhibit",
+                Exhibit.Exporter._registerComponent);

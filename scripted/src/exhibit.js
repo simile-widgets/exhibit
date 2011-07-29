@@ -36,6 +36,7 @@ var Exhibit = {
         "lib/history.js",
         "lib/history.html4.js",
         "lib/base64.js",
+        "registry.js",
         "util/util.js",
         "util/html.js",
         "util/set.js",
@@ -59,7 +60,9 @@ var Exhibit = {
         "data/expression/control-call.js",
         "data/expression/functions.js",
         "data/expression/controls.js",
-        "data/expression-parser.js"
+        "data/expression-parser.js",
+        "data/exporter.js",
+        "data/exporters/bibtex.js"
     ]
 };
 
@@ -97,6 +100,7 @@ Exhibit.load = function(post) {
     $(document).ready(function() {
         Exhibit.Bookmark.init();
         Exhibit.History.init();
+        $(document).trigger("registerComponents.exhibit");
     });
     */
 

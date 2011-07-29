@@ -96,12 +96,12 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, database) {
 Exhibit.Exporter.BibTex._register = function() {
     Exhibit.Exporter.BibTex.exporter = new Exhibit.Exporter(
         "BibTex",
-        Exhibit.10n.exhibitBibTexExporterLabel,
+        Exhibit.l10n.exhibitBibTexExporterLabel,
         Exhibit.Exporter.BibTex.wrap,
         Exhibit.Exporter.BibTex.wrapOne,
         Exhibit.Exporter.BibTex.exportOne
     );
 };
 
-$(document).once("registerExporters.exhibit",
-                 Exhibit.Exporter.BibTex.register);
+$(document).one("registerExporters.exhibit",
+                Exhibit.Exporter.BibTex._register);
