@@ -43,7 +43,7 @@ Exhibit.Exporter.BibTex.wrapOne = function(s) {
  * @returns {String}
  */
 Exhibit.Exporter.BibTex.exportOne = function(itemID, database) {
-    var s = "", type, key, allProperties, i, propertyID, property, values, valueType, strings;
+    var s = "", type, key, allProperties, i, propertyID, property, values, valueType, strings, fn;
 
     type = database.getObject(itemID, "pub-type");
     key = database.getObject(itemID, "key");
@@ -53,6 +53,18 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, database) {
     s += "@" + type + "{" + key + ",\n";
 
     allProperties = database.getAllProperties();
+
+    fn = function(vt, s) {
+        if (vt === "item") {
+            return function(value) {
+                s.push(database.getObject(value, "label"));
+            };
+        } else if (vt === "url") {
+            return function(value) {
+                s.push(Exhibit.Persistence.resolveURL(value));
+            };
+        }
+    };
 
     for (i = 0; i < allProperties.length; i++) {
         propertyID = allProperties[i];
@@ -65,20 +77,11 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, database) {
                          "title" :
                          propertyID) + " = \"";
 
-            if (valueType === "item") {
+            if (valueType === "item" || valueType === "url") {
                 strings = [];
-                values.visit(function(value) {
-                    strings.push(database.getObject(value, "label"));
-                });
+                values.visit(fn(valueType, strings));
             } else {
-                if (valueType === "url") {
-                    strings = [];
-                    values.visit(function(value) {
-                        strings.push(Exhibit.Persistence.resolveURL(value));
-                    });
-                } else {
-                    strings = values.toArray();
-                }
+                strings = values.toArray();
             }
 
             s += strings.join(" and ") + "\",\n";
