@@ -48,8 +48,8 @@ Exhibit.Exporter._registerComponent = function() {
  * @returns {Boolean}
  */
 Exhibit.Exporter.prototype.register = function() {
-    if (!Exhibit.Registry.isRegistered(this._registryKey, this._mimeType)) {
-        Exhibit.Registry.register(this._registryKey, this._mimeType, this);
+    if (!Exhibit.Registry.isRegistered(Exhibit.Exporter._registryKey, this._mimeType)) {
+        Exhibit.Registry.register(Exhibit.Exporter._registryKey, this._mimeType, this);
         return true;
     } else {
         return false;
@@ -60,7 +60,7 @@ Exhibit.Exporter.prototype.register = function() {
  *
  */
 Exhibit.Exporter.prototype.dispose = function() {
-    Exhibit.Registry.unregister(this._registryKey, this._mimeType);
+    Exhibit.Registry.unregister(Exhibit.Exporter._registryKey, this._mimeType);
 };
 
 /**
@@ -80,11 +80,55 @@ Exhibit.Exporter.prototype.getLabel = function() {
 /**
  * @param {String} itemID
  * @param {Exhibit.Database} database
+ * @returns {Object}
+ */
+Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID, database) {
+    var allProperties, fn, i, propertyID, property, values, valueType, item;
+
+    fn = function(vt, s) {
+        if (vt === "item") {
+            return function(value) {
+                s.push(database.getObject(value, "label"));
+            };
+        } else if (vt === "url") {
+            return function(value) {
+                s.push(Exhibit.Persistence.resolveURL(value));
+            };
+        }
+    };
+
+    allProperties = database.getAllProperties();
+    item = {};
+
+    for (i = 0; i < allProperties.length; i++) {
+        propertyID = allProperties[i];
+        property = database.getProperty(propertyID);
+        values = database.getObjects(itemID, propertyID);
+        valueType = property.getValueType();
+
+        if (values.size() > 0) {
+            if (valueType === "item" || valueType === "url") {
+                strings = [];
+                values.visit(fn(valueType, strings));
+            } else {
+                strings = values.toArray();
+            }
+            item[propertyID] = strings;
+        }
+    }
+
+    return item;
+};
+
+/**
+ * @param {String} itemID
+ * @param {Exhibit.Database} database
  * @returns {String}
  */
 Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
     return this._wrap(this._exportOne(itemID,
-                                      database,
+                                      this.exportOneFromDatabase(itemID,
+                                                                 database),
                                       arguments.splice(0, 2)),
                       database,
                       arguments.splice(0, 2));

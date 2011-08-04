@@ -39,54 +39,39 @@ Exhibit.Exporter.BibTex.wrapOne = function(s) {
 
 /**
  * @param {String} itemID
- * @param {Exhibit.Database} database
+ * @param {Object} o
  * @returns {String}
  */
-Exhibit.Exporter.BibTex.exportOne = function(itemID, database) {
-    var s = "", type, key, allProperties, i, propertyID, property, values, valueType, strings, fn;
+Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
+    var type, key, prop, s = "";
 
-    type = database.getObject(itemID, "pub-type");
-    key = database.getObject(itemID, "key");
-    key = (key !== null ? key : itemID);
+    if (o.hasOwnProperty("pub-type")) {
+        type = o["pub-type"];
+    } else if (o.hasOwnProperty("type")) {
+        type = o["type"];
+    }
+
+    if (o.hasOwnProperty("key")) {
+        key = o["key"];
+    } else {
+        key = itemID;
+    }
+
     key = key.replace(/[\s,]/g, "-");
 
     s += "@" + type + "{" + key + ",\n";
 
-    allProperties = database.getAllProperties();
-
-    fn = function(vt, s) {
-        if (vt === "item") {
-            return function(value) {
-                s.push(database.getObject(value, "label"));
-            };
-        } else if (vt === "url") {
-            return function(value) {
-                s.push(Exhibit.Persistence.resolveURL(value));
-            };
-        }
-    };
-
-    for (i = 0; i < allProperties.length; i++) {
-        propertyID = allProperties[i];
-        property = database.getProperty(propertyID);
-        values = database.getObjects(itemID, propertyID);
-        valueType = property.getValueType();
-
-        if (values.size() > 0 && !(Exhibit.Exporter.BibTex._excludeProperties.hasOwnProperty(propertyID))) {
-            s += "\t" + (propertyID === "label" ?
+    for (prop in o) {
+        if (o.hasOwnProperty(prop)) {
+            if (!Exhibit.Exporter.BibTex._excludeProperties.hasOwnProperty(propertyID)) {
+                s += "\t" + (prop === "label" ?
                          "title" :
-                         propertyID) + " = \"";
-
-            if (valueType === "item" || valueType === "url") {
-                strings = [];
-                values.visit(fn(valueType, strings));
-            } else {
-                strings = values.toArray();
+                         prop) + " = \"";
+                s += o[prop].join(" and ") + "\",\n";
             }
-
-            s += strings.join(" and ") + "\",\n";
         }
     }
+
     s += "\torigin = \"" + Exhibit.Persistence.getItemLink(itemID) + "\"\n";
     s += "}\n";
 
