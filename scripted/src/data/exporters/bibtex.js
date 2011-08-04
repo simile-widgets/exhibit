@@ -33,7 +33,7 @@ Exhibit.Exporter.BibTex.wrap = function(s) {
  * @param {String} s
  * @returns {String}
  */
-Exhibit.Exporter.BibTex.wrapOne = function(s) {
+Exhibit.Exporter.BibTex.wrapOne = function(s, first, last) {
     return s + "\n";
 };
 
@@ -83,7 +83,7 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
  */
 Exhibit.Exporter.BibTex._register = function() {
     Exhibit.Exporter.BibTex.exporter = new Exhibit.Exporter(
-        "BibTex",
+        "application/x-bibtex",
         Exhibit.l10n.exhibitBibTexExporterLabel,
         Exhibit.Exporter.BibTex.wrap,
         Exhibit.Exporter.BibTex.wrapOne,
