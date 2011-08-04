@@ -60,7 +60,6 @@ Exhibit.Debug.warn = function(msg) {
  * @param {Exception} e
  * @param {String} msg
  */
-// @@@
 Exhibit.Debug.exception = function(e, msg) {
     var f, params = Exhibit.parseURLParameters();
     if (params.errors === "throw" || Exhibit.params.errors === "throw") {
