@@ -12,8 +12,8 @@
  *    returning a string.
  * @param {Function} wrapOne Function taking at minimum a string, a boolean
  *    for first, and a boolean for last, returning a string.
- * @param {Function} exportOne Function taking at minimum an item identifier
- *    and a database, returning a string.
+ * @param {Function} exportOne Function taking at minimum an item identifier,
+ *    the item itself, and a hash of properties, returning a string.
  * @param {Function} [exportMany] Function taking a set and a database,
  *    returning a string, which overrides the default exportMany that uses
  *    the other three functions in conjunction.
@@ -129,9 +129,8 @@ Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
     return this._wrap(this._exportOne(itemID,
                                       this.exportOneFromDatabase(itemID,
                                                                  database),
-                                      arguments.splice(0, 2)),
-                      database,
-                      arguments.splice(0, 2));
+                                      Exhibit.Exporter._getPropertiesWithValueTypes()),
+                      database);
 };
 
 /**
@@ -140,21 +139,41 @@ Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
  * @returns {String}
  */
 Exhibit.Exporter.prototype.exportMany = function(set, database) {
-    if (typeof this._exportMany !== "undefined") {
+    if (typeof this._exportMany !== "undefined" && typeof this._exportMany === "function") {
         this.exportMany = this._exportMany;
         return this._exportMany(set, database);
     }
 
-    var s = "", self = this, count = 0, size = set.size();
+    var s = "", self = this, count = 0, size = set.size(), props;
+
+    props = Exhibit.Exporter._getPropertiesWithValueTypes();
     set.visit(function(itemID) {
         s += self._wrapOne(self._exportOne(itemID,
-                                           database,
-                                           arguments.splice(0, 2)),
+                                           self.exportOneFromDatabase(itemID, database),
+                                           props),
                            count === 0,
-                           count++ === size - 1,
-                           arguments.splice(0, 2));
+                           count++ === size - 1);
     });
-    return s;
+    return this.wrap(s);
+};
+
+/**
+ * @private
+ * @static
+ * @param {Exhibit.Database} database
+ */
+Exhibit.Exporter._getPropertiesWithValueTypes = function(database) {
+    var properties, i, propertyID, property, valueType, map;
+    map = {};
+    properties = database.getAllProperties();
+    for (i = 0; i < properties.length; i++) {
+        propertyID = properties[i];
+        property = database.getProperty(propertyID);
+        valueType = property.getValueType();
+        map[propertyID] = { "valueType": valueType,
+                            "uri": property.getURI() };
+    }
+    return map;
 };
 
 $(document).one("registerComponents.exhibit",

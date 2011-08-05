@@ -63,7 +63,10 @@ var Exhibit = {
         "data/expression/controls.js",
         "data/expression-parser.js",
         "data/exporter.js",
-        "data/exporters/bibtex.js"
+        "data/exporters/bibtex.js",
+        "data/exporters/tsv.js",
+        "data/exporters/rdf-xml.js",
+        "data/exporters/semantic-wikitext.js"
     ]
 };
 
