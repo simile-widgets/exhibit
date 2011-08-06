@@ -46,6 +46,7 @@ var Exhibit = {
         "util/persistence.js",
         "util/history.js",
         "util/bookmark.js",
+        "util/localization.js",
         "data/database.js",
         "data/database/local.js",
         "data/database/type.js",
@@ -162,6 +163,10 @@ Exhibit.load = function(post) {
         Exhibit.Bookmark.init();
         Exhibit.History.init();
         $(document).trigger("registerComponents.exhibit");
+    });
+
+    $(document).bind("localeSet.exhibit", function(event, data) {
+        lab.script(data[0]);
     });
     */
 
