@@ -67,7 +67,11 @@ var Exhibit = {
         "data/exporters/bibtex.js",
         "data/exporters/tsv.js",
         "data/exporters/rdf-xml.js",
-        "data/exporters/semantic-wikitext.js"
+        "data/exporters/semantic-wikitext.js",
+        "data/importer.js",
+        "data/importers/json.js",
+        "ui/ui.js",
+        "ui/ui-context.js"
     ]
 };
 
