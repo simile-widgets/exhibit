@@ -466,6 +466,10 @@ Exhibit.UI.makeActionLink = function(text, handler) {
         attr("href", "#").
         addClass("exhibit-action");
     
+    // @@@ the SimileAjax method of dealing with handlers involves
+    //     more arguments (elmt, event, layer) than jQuery - some
+    //     of the uses of this particular method do seem to require
+    //     usage of elmt...
     handler2 = function(event) {
         if (typeof $(this).attr("disabled") === "undefined") {
             handler(event);
@@ -796,7 +800,7 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
         document.body.removeChild(dom.elmt);
     };
     /**
-     * @ignore
+     * @ignore Can't get JSDocTK to ignore this one method for some reason.
      */
     dom.open = function() {
         var lens;
@@ -826,7 +830,7 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
  * @static
  * @param {String} relativeUrl
  * @param {String} verticalAlign
- * @returns {}
+ * @returns {Element}
  */
 Exhibit.UI.createTranslucentImage = function(relativeUrl, verticalAlign) {
     return SimileAjax.Graphics.createTranslucentImage(Exhibit.urlPrefix + relativeUrl, verticalAlign);
@@ -837,7 +841,7 @@ Exhibit.UI.createTranslucentImage = function(relativeUrl, verticalAlign) {
  * @static
  * @param {String} relativeUrl
  * @param {String} verticalAlign
- * @returns {}
+ * @returns {Element}
  */
 Exhibit.UI.createTranslucentImageHTML = function(relativeUrl, verticalAlign) {
     return SimileAjax.Graphics.createTranslucentImageHTML(Exhibit.urlPrefix + relativeUrl, verticalAlign);
