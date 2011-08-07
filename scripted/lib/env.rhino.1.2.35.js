@@ -2204,6 +2204,10 @@ Envjs.connection = function(xhr, responseHandler, data){
                             e.toString(), e);
             }
             instream = connection.getErrorStream();
+            if (!binary) {
+                outstream = new java.io.ByteArrayOutputStream();
+                buffer = java.lang.reflect.Array.newInstance(java.lang.Byte.TYPE, 1024);
+            }
         }
 
         while ((length = instream.read(buffer, 0, 1024)) != -1) {
