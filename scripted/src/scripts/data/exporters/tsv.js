@@ -63,7 +63,7 @@ Exhibit.Exporter.TSV.exportOne = function(itemID, o) {
 Exhibit.Exporter.TSV._register = function() {
     Exhibit.Exporter.TSV.exporter = new Exhibit.Exporter(
         "text/tab-separated-values",
-        Exhibit.l10n.exhibitTSVExporterLabel,
+        Exhibit.l10n.tsvExporterLabel,
         Exhibit.Exporter.TSV.wrap,
         Exhibit.Exporter.TSV.wrapOne,
         Exhibit.Exporter.TSV.exportOne

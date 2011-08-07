@@ -84,7 +84,7 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
 Exhibit.Exporter.BibTex._register = function() {
     Exhibit.Exporter.BibTex.exporter = new Exhibit.Exporter(
         "application/x-bibtex",
-        Exhibit.l10n.exhibitBibTexExporterLabel,
+        Exhibit.l10n.exhibitJsonExporterLabel,
         Exhibit.Exporter.BibTex.wrap,
         Exhibit.Exporter.BibTex.wrapOne,
         Exhibit.Exporter.BibTex.exportOne

@@ -100,7 +100,7 @@ Exhibit.Exporter.RDFXML.exportMany = function(set, database) {
 Exhibit.Exporter.RDFXML._register = function() {
     Exhibit.Exporter.RDFXML.exporter = new Exhibit.Exporter(
         "application/rdf+xml",
-        Exhibit.l10n.exhibitRDFXMLExporterLabel,
+        Exhibit.l10n.rdfXmlExporterLabel,
         Exhibit.Exporter.RDFXML.wrap,
         Exhibit.Exporter.RDFXML.wrapOne,
         Exhibit.Exporter.RDFXML.exportOne,

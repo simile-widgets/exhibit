@@ -67,7 +67,7 @@ Exhibit.Exporter.SemanticWikiText.exportOne = function(itemID, o, properties) {
 Exhibit.Exporter.SemanticWikiText._register = function() {
     Exhibit.Exporter.SemanticWikiText.exporter = new Exhibit.Exporter(
         "semantic-mediawiki",
-        Exhibit.l10n.exhibitSemanticWikiTextExporterLabel,
+        Exhibit.l10n.smwExporterLabel,
         Exhibit.Exporter.SemanticWikiText.wrap,
         Exhibit.Exporter.SemanticWikiText.wrapOne,
         Exhibit.Exporter.SemanticWikiText.exportOne
