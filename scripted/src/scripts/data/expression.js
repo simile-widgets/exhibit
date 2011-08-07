@@ -12,6 +12,7 @@ Exhibit.Expression = {};
 /**
  * @class
  * @constructor
+ * @public
  * @param {Exhibit.Expression.Path} rootNode
  */
 Exhibit.Expression._Impl = function(rootNode) {

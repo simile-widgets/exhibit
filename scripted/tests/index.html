@@ -9,7 +9,7 @@
       $LAB
       .script("pre.js")
       .script("../lib/qunit.js")
-      .script("../src/exhibit.js").wait(function() {
+      .script("../src/exhibit-api.js").wait(function() {
           Exhibit.load(function(lab) {
               lab.script("post.js");
           });

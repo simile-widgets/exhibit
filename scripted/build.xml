@@ -70,17 +70,18 @@
   <target name="node" description="Combine source files as a Node module">
     <mkdir dir="${node}"/>
 
-    <concat destfile="${node}/exhibit.js" force="no">
+    <concat destfile="${node}/exhibit-api.js" force="no">
       <filelist dir="${src}/"
                 files="node/exhibit.js"/>
       <filelist dir="${src}/"
-                files="util/util.js"/>
+                files="scripts/util/util.js"/>
       <fileset dir="${src}/">
         <exclude name="lib/*.js"/>
-        <exclude name="exhibit.js"/>
-        <exclude name="util/util.js"/>
-        <include name="util/*.js"/>
-        <include name="data/*.js"/>
+        <exclude name="exhibit-api.js"/>
+        <exclude name="scripts/util/util.js"/>
+        <include name="scripts/util/*.js"/>
+        <include name="scripts/data/*.js"/>
+        <include name="scripts/ui/*.js"/>
       </fileset>
       <filelist dir="${src}/"
                 files="node/exhibit-post.js"/>
@@ -96,14 +97,14 @@
 
     <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
       <filelist dir="${src}/"
-                files="exhibit.js"/>
+                files="exhibit-api.js"/>
       <filelist dir="${src}/"
-                files="util/util.js"/>
+                files="scripts/util/util.js"/>
       <fileset dir="${src}/">
         <exclude name="lib/*.js"/>
-        <exclude name="node/*.js"/>
-        <exclude name="exhibit.js"/>
-        <exclude name="util/util.js"/>
+        <exclude name="scripts/node/*.js"/>
+        <exclude name="exhibit-api.js"/>
+        <exclude name="scripts/util/util.js"/>
         <include name="**/*.js"/>
       </fileset>
     </concat>
@@ -194,7 +195,7 @@
     <jslint haltOnFailure="false" options="onevar,sub,evil">
       <predef>jQuery, $$</predef>
       <formatter type="plain" />
-      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js,exhibit.js" />
+      <fileset dir="${src}" includes="*.js,**/*.js" excludes="lib/*.js,exhibit-api.js" />
     </jslint>
   </target>
 

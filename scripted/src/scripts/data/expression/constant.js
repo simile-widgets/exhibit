@@ -7,6 +7,7 @@
 /**
  * @class
  * @constructor
+ * @public
  * @param {String|Number} value
  * @param {String} valueType
  */

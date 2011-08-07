@@ -277,6 +277,7 @@ Exhibit.Functions["distance"] = {
 
 Exhibit.Functions["min"] = {
     f: function(args) {
+        /** @ignore */
         var returnMe = function (val) { return val; }, min, valueType, i, arg, currentValueType, parser, fn;
         min = Number.POSITIVE_INFINITY;
         valueType = null;

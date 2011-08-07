@@ -7,6 +7,7 @@
 /**
  * @class
  * @constructor
+ * @public
  * @param {String} operator
  * @param {Array} args
  */
@@ -68,53 +69,64 @@ Exhibit.Expression._operators = {
     "+" : {
         argumentType: "number",
         valueType: "number",
+        /** @ignore */
         f: function(a, b) { return a + b; }
     },
     "-" : {
         argumentType: "number",
         valueType: "number",
+        /** @ignore */
         f: function(a, b) { return a - b; }
     },
     "*" : {
         argumentType: "number",
         valueType: "number",
+        /** @ignore */
         f: function(a, b) { return a * b; }
     },
     "/" : {
         argumentType: "number",
         valueType: "number",
+        /** @ignore */
         f: function(a, b) { return a / b; }
     },
     "=" : {
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a === b; }
     },
     "<>" : {
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a !== b; }
     },
     "><" : {
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a !== b; }
     },
     "<" : {
         argumentType: "number",
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a < b; }
     },
     ">" : {
         argumentType: "number",
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a > b; }
     },
     "<=" : {
         argumentType: "number",
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a <= b; }
     },
     ">=" : {
         argumentType: "number",
         valueType: "boolean",
+        /** @ignore */
         f: function(a, b) { return a >= b; }
     }
 };

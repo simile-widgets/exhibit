@@ -7,6 +7,7 @@
 /**
  * @class
  * @constructor
+ * @public
  * @param {String} name
  * @param {Array} args
  */

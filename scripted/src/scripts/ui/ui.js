@@ -223,7 +223,7 @@ Exhibit.UI.createFacetFromDOM = function(elmt, container, uiContext) {
 
 /**
  * @param {String} name
- * @returns {Object
+ * @returns {Object}
  */
 Exhibit.UI.facetClassNameToFacetClass = function(name) {
     if (name !== null && name.length > 0) {
@@ -636,6 +636,9 @@ Exhibit.UI.createPopupMenuDom = function(element) {
     div = $("<div></div>").addClass("exhibit-menu-popup").
         addClass("exhibit-ui-protection");
     
+    /**
+     * @ignore
+     */
     dom = {
         elmt: div,
         close: function() {
@@ -781,10 +784,20 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
             }
         ]
     };
+
+    /**
+     * @ignore
+     */
     dom = SimileAjax.DOM.createDOMFromTemplate(template);
+    /**
+     * @ignore
+     */
     dom.close = function() {
         document.body.removeChild(dom.elmt);
     };
+    /**
+     * @ignore
+     */
     dom.open = function() {
         var lens;
         dom.layer = SimileAjax.WindowManager.pushLayer(function() { dom.close(); }, false);
