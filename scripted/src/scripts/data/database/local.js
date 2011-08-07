@@ -73,10 +73,10 @@ Exhibit.Database._LocalImpl.prototype.createDatabase = function() {
 /**
  * Load an array of data links using registered importers into the database.
  *
- * @param {Array} links An array of DOM link elements or string URLs.
  * @param {Function} fDone A function to call when finished.
  */
-Exhibit.Database._LocalImpl.prototype.loadLinks = function(links, fDone) {
+Exhibit.Database._LocalImpl.prototype.loadLinks = function(fDone) {
+    var links = $("head > link[rel='exhibit/data']");
     this._loadLinks(links, this, fDone);
 };
 
@@ -719,7 +719,7 @@ Exhibit.Database._LocalImpl.prototype.removeAllStatements = function() {
 /**
  * Use registered importers to load a link based on its stated MIME type.
  *
- * @param {Array} links An array of DOM link elements or string URLs.
+ * @param {Array} links An array of DOM link elements.
  * @param {Exhibit.Database} database The database to load into.
  * @param {Function} fDone The function to call when finished loading.
  */
@@ -729,13 +729,13 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
     fNext = function() {
         while (links.length > 0) {
             link = links.shift();
-            type = link.type;
+            type = $(link).attr("type");
             if (type === null || type.length === 0) {
                 type = "application/json";
             }
 
-            importer = Exhibit.importers[type];
-            if (typeof importer !== "undefined") {
+            importer = Exhibit.Importer.getImporter(type);
+            if (typeof importer !== "undefined" && importer !== null) {
                 importer.load(link, database, fNext);
                 return;
             } else {
