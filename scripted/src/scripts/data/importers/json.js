@@ -36,7 +36,6 @@ Exhibit.Importer.ExhibitJSON.parse = function(url, s, callback) {
 Exhibit.Importer.ExhibitJSON._register = function() {
     Exhibit.Importer.ExhibitJSON._importer = new Exhibit.Importer(
         "application/json",
-        Exhibit.l10n.exhibitExhibitJSONImporterLabel,
         Exhibit.Importer.ExhibitJSON.parse
     );
 };

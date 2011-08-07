@@ -10,9 +10,8 @@
  * @param {String} label
  * @param {Function} parse
  */
-Exhibit.Importer = function(mimeType, label, parse) {
+Exhibit.Importer = function(mimeType, parse) {
     this._mimeType = mimeType;
-    this._label = label;
     this._parse = parse;
     this._registered = this.register();
 };
@@ -59,13 +58,6 @@ Exhibit.Importer.prototype.dispose = function() {
  */
 Exhibit.Importer.prototype.isRegistered = function() {
     return this._registered;
-};
-
-/**
- * @returns {String}
- */
-Exhibit.Importer.prototype.getLabel = function() {
-    return this._label;
 };
 
 /**
