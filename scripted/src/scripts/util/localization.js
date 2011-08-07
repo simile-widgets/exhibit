@@ -12,6 +12,7 @@
 Exhibit.Locale = function(locale, url) {
     this._locale = locale;
     this._url = url;
+    Exhibit.Localization.registerLocale(this._locale, this);
 };
 
 /**
@@ -35,7 +36,8 @@ Exhibit.Localization = {
  */
 Exhibit.Localization._registerComponent = function() {
     var i, locale, clientLocales, segments;
-    clientLocales = (navigator.hasOwnProperty("language") ?
+    Exhibit.locales.push(Exhibit.Localization._lastResortLocale);
+    clientLocales = (typeof navigator.language === "string" ?
                      navigator.language :
                      navigator.browserLanguage).split(";");
     for (i = 0; i < clientLocales.length; i++) {
@@ -52,7 +54,7 @@ Exhibit.Localization._registerComponent = function() {
 
     if (!Exhibit.Registry.hasRegistry(Exhibit.Localization._registryKey)) {
         Exhibit.Registry.createRegistry(Exhibit.Localization._registryKey);
-        $(document).trigger('registerLocales.exhibit');
+        $(document).trigger("registerLocales.exhibit");
     }
 };
 
@@ -67,6 +69,7 @@ Exhibit.Localization.registerLocale = function(locale, l10n) {
         Exhibit.Registry.register(Exhibit.Localization._registryKey,
                                   locale,
                                   l10n);
+        $(document).trigger("localeRegistered.exhibit");
         return true;
     } else {
         return false;
@@ -106,7 +109,8 @@ Exhibit.Localization.setLocale = function(locales) {
         locale = locales[i];
         if (Exhibit.Localization.hasLocale(locale)) {
             Exhibit.Localization._currentLocale = locale;
-            $(document).trigger('localeSet.exhibit', [Exhibit.Registry.get(Exhibit.Localization._registryKey, locale).getURL()]);
+            $(document).trigger("localeSet.exhibit",
+                                [Exhibit.Localization.getLocale(locale).getURL()]);
             isSet = true;
             break;
         }
@@ -114,13 +118,14 @@ Exhibit.Localization.setLocale = function(locales) {
 
     if (!isSet && Exhibit.Localization._currentLocale !== Exhibit.Localization._lastResortLocale) {
         Exhibit.Localization._currentLocale = Exhibit.Localization._lastResortLocale;
-        $(document).trigger('localeSet.exhibit', [Exhibit.Registry.get(Exhibit.Localization._registryKey, locale).getURL()]);
+        $(document).trigger("localeSet.exhibit",
+                            [Exhibit.Localization.getLocale(locale).getURL()]);
     }
 };
 
-$(document).one('registerComponents.exhibit',
+$(document).one("registerLocalization.exhibit",
                 Exhibit.Localization._registerComponent);
 
-$(document).bind('localeRegistered.exhibit', function() {
+$(document).bind("localeRegistered.exhibit", function() {
     Exhibit.Localization.setLocale(Exhibit.locales);
 });
