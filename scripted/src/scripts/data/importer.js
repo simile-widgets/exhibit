@@ -7,11 +7,13 @@
  * @class
  * @constructor
  * @param {String} mimeType
+ * @param {String} loadType
  * @param {String} label
  * @param {Function} parse
  */
-Exhibit.Importer = function(mimeType, parse) {
+Exhibit.Importer = function(mimeType, loadType, parse) {
     this._mimeType = mimeType;
+    this._loadType = loadType;
     this._parse = parse;
     this._registered = this.register();
 };
@@ -30,6 +32,15 @@ Exhibit.Importer._registerComponent = function() {
         Exhibit.Registry.createRegistry(Exhibit.Importer._registryKey);
         $(document).trigger("registerImporters.exhibit");
     }
+};
+
+/**
+ * @static
+ * @param {String} mimeType
+ * @returns {Exhibit.Importer}
+ */
+Exhibit.Importer.getImporter = function(mimeType) {
+    return Exhibit.Registry.get(Exhibit.Importer._registryKey, mimeType);
 };
 
 /**
@@ -66,12 +77,12 @@ Exhibit.Importer.prototype.isRegistered = function() {
  * @param {Exhibit.Database} database
  * @param {Function} callback
  */
-Exhibit.Importer.prototype.load = function(type, link, database, callback) {
-    var resolver, url, postLoad, postParse;
-    url = typeof link === "string" ? link : link.href;
-    url = Exhibit.Persistence.resolveURL(link);
+Exhibit.Importer.prototype.load = function(link, database, callback) {
+    var resolver, url, postLoad, postParse, self;
+    url = typeof link === "string" ? link : $(link).attr("href");
+    url = Exhibit.Persistence.resolveURL(url);
 
-    switch(type) {
+    switch(this._loadType) {
     case "babel":
         resolver = this._loadBabel;
         break;
@@ -88,7 +99,8 @@ Exhibit.Importer.prototype.load = function(type, link, database, callback) {
             database.loadData(o, Exhibit.Persistence.getBaseURL(url));
         } catch(e) {
             // @@@ UI for loading data - trigger event?
-            Exhibit.Debug.exception(e, Exhibit.l10n.importer.parseError + url);
+            Exhibit.Debug.exception(e);
+            // , Exhibit.l10n.importer.parseError + url);
         } finally {
             if (typeof callback === "function") {
                 callback();
@@ -96,11 +108,13 @@ Exhibit.Importer.prototype.load = function(type, link, database, callback) {
         }
     };
 
+    self = this;
     postLoad = function(s, textStatus, jqxhr) {
         try {
-            this._parse(url, s, postParse);
+            self._parse(url, s, postParse);
         } catch(e) {
-            Exhibit.Debug.exception(e, Exhibit.l10n.importer.loadError + url);
+            Exhibit.Debug.exception(e);
+            // @@@, Exhibit.l10n.importer.loadError + url);
         }
     };
 
@@ -124,7 +138,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
 
     $.ajax({
         "url": url,
-        "dataType": "json",
+        "dataType": "text",
         "error": fError,
         "success": callback
     });
