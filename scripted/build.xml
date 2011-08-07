@@ -191,7 +191,7 @@
   <!-- Tests -->
   <target name="lint">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
-    <jslint haltOnFailure="false" options="onevar,sub">
+    <jslint haltOnFailure="false" options="onevar,sub,evil">
       <predef>jQuery, $$</predef>
       <formatter type="plain" />
       <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js,exhibit.js" />
