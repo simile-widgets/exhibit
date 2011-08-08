@@ -39,7 +39,9 @@ Exhibit.Localization._registerComponent = function() {
     Exhibit.locales.push(Exhibit.Localization._lastResortLocale);
     clientLocales = (typeof navigator.language === "string" ?
                      navigator.language :
-                     navigator.browserLanguage).split(";");
+                     (typeof navigator.browserLanguage === "string" ?
+                      navigator.browserLanguage :
+                      Exhibit.Localization._lastResortLocale)).split(";");
     for (i = 0; i < clientLocales.length; i++) {
         locale = clientLocales[i];
         if (locale !== Exhibit.Localization._lastResortLocale) {
