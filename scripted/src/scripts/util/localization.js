@@ -128,6 +128,6 @@ Exhibit.Localization.setLocale = function(locales) {
 $(document).one("registerLocalization.exhibit",
                 Exhibit.Localization._registerComponent);
 
-$(document).bind("localeRegistered.exhibit", function() {
+$(document).bind("localesRegistered.exhibit", function() {
     Exhibit.Localization.setLocale(Exhibit.locales);
 });
