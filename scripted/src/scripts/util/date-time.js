@@ -482,9 +482,10 @@ Exhibit.DateTime.getTimezone = function() {
 };
 
 /**
- * Zeros (UTC) all time components of the provided date object.
+ * Zeroes (UTC) all time components of the provided date object.
  *
- * @returns {Date} the nodified date object
+ * @param {Date} date The Date object to modify.
+ * @returns {Date} The modified Date object.
  */
 Exhibit.DateTime.zeroTimeUTC = function(date) {
     date.setUTCHours(0);
