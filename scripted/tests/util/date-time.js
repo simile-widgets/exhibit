@@ -10,26 +10,26 @@ test("setIso8601Date", function() {
     equal(d.getUTCMonth(),4,'Date 1 month');
     equal(d.getUTCDate(),1,'Date 1 day');
 
-    var d = new Date();
+    d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"2011-12-31");
     equal(d.getUTCFullYear(),2011,'Date 2 year');
     equal(d.getUTCMonth(),11,'Date 2 month');
     equal(d.getUTCDate(),31,'Date 2 day');
 
-    var d = new Date();
+    d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"2000-02-29");
     equal(d.getUTCFullYear(),2000,'Date 3 year');
     equal(d.getUTCMonth(),1,'Date 3 month');
     equal(d.getUTCDate(),29,'Date 3 day');
 
     // Date overflow
-    var d = new Date();
+    d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"1999-12-32");
     equal(d.getUTCFullYear(),2000,'Date 4 year');
     equal(d.getUTCMonth(),0,'Date 4 month');
     equal(d.getUTCDate(),1,'Date 4 day');
 
-    var d = new Date();
+    d = new Date();
     Exhibit.DateTime.setIso8601Date(d,"1900-02-29");
     equal(d.getUTCFullYear(),1900,'Date 5 year');
     equal(d.getUTCMonth(),2,'Date 5 month');
@@ -53,7 +53,7 @@ test("setIso8601Time", function() {
     equal(d.getUTCSeconds(),28,'Time 1 seconds');
 
     // Extended form
-    var d = new Date();
+    d = new Date();
     Exhibit.DateTime.setIso8601Time(d,"12:19:28");
     equal(d.getUTCHours(),12,'Time 2 hours');
     equal(d.getUTCMinutes(),19,'Time 2 minutes');
@@ -77,7 +77,7 @@ test("setIso8601", function() {
     equal(d.getUTCDate(),12,'Date/time 1 day');
 
     // Extended form space delimited
-    var d = new Date();
+    d = new Date();
     Exhibit.DateTime.setIso8601(d,"2004-08-12 03:33:09Z");
     equal(d.getUTCHours(),3,'Date/time 1 hours');
     equal(d.getUTCMinutes(),33,'Date/time 1 minutes');
@@ -92,7 +92,7 @@ test("parseIso8601DateTime", function() {
     // so we can keep tests to a minimum to show coverage
     expect(1);
 
-    var d = Exhibit.DateTime.parseIso8601DateTime("2004-08-12T03:33:09Z");
+    d = Exhibit.DateTime.parseIso8601DateTime("2004-08-12T03:33:09Z");
     equal(d.getUTCHours(),3,'Parse Date/time 1 hours');
 });
 
@@ -102,7 +102,7 @@ test("parseGregorianDateTime", function() {
     var d = Exhibit.DateTime.parseGregorianDateTime('181 BC');
     equal(d.getUTCFullYear(), -180, 'Parse Gregorian Date/time 1 year');
 
-    var d = Exhibit.DateTime.zeroTimeUTC(Exhibit.DateTime.parseGregorianDateTime('1982/04/13'));
+    d = Exhibit.DateTime.zeroTimeUTC(Exhibit.DateTime.parseGregorianDateTime('1982/04/13'));
     equal(d.valueOf(),Exhibit.DateTime.zeroTimeUTC(new Date("1982/04/13")).valueOf(),"Parse Gregorian Date/time 2");
 });
 
@@ -112,16 +112,16 @@ test("roundDownToInterval", function() {
     var round = Exhibit.DateTime.roundDownToInterval;
 
     // Start here, then progressively round it down
-    var d = new Date("1993/02/23 18:45:09 -00:00");
+    var d = new Date("1993/02/23 18:45:09 GMT-0000");
     d.setUTCMilliseconds(123);
 
     // Expected round-downs for multiple=10, no offset, sunday as first day of week
-    var mils_date = new Date("1993/02/23 18:45:09 -00:00");
+    var mils_date = new Date("1993/02/23 18:45:09 GMT-0000");
     mils_date.setUTCMilliseconds(120);
     var d_round_mils_10 = mils_date.valueOf();
-    var d_round_sec_10 = new Date("1993/02/23 18:45:00 -00:00").valueOf();
-    var d_round_min_10 = new Date("1993/02/23 18:40 -00:00").valueOf();
-    var d_round_hour_10 = new Date("1993/02/23 10:00 -00:00").valueOf();
+    var d_round_sec_10 = new Date("1993/02/23 18:45:00 GMT-0000").valueOf();
+    var d_round_min_10 = new Date("1993/02/23 18:40 GMT-0000").valueOf();
+    var d_round_hour_10 = new Date("1993/02/23 10:00 GMT-0000").valueOf();
     var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/20")).valueOf();
     //var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1992/12/13")).valueOf();
     var d_round_month_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/01/01")).valueOf();
@@ -171,16 +171,16 @@ test("roundUpToInterval", function() {
     var round = Exhibit.DateTime.roundUpToInterval;
 
     // Start here, then progressively round it up
-    var d = new Date("1993/02/23 18:45:09 -00:00");
+    var d = new Date("1993/02/23 18:45:09 GMT-0000");
     d.setUTCMilliseconds(123);
 
     // Expected round-ups for multiple=10, no offset, sunday as first day of week
-    var mils_date = new Date("1993/02/23 18:45:09 -00:00");
+    var mils_date = new Date("1993/02/23 18:45:09 GMT-0000");
     mils_date.setUTCMilliseconds(130);
     var d_round_mils_10 = mils_date.valueOf();
-    var d_round_sec_10 = new Date("1993/02/23 18:45:10 -00:00").valueOf();
-    var d_round_min_10 = new Date("1993/02/23 18:50 -00:00").valueOf();
-    var d_round_hour_10 = new Date("1993/02/23 20:00 -00:00").valueOf();
+    var d_round_sec_10 = new Date("1993/02/23 18:45:10 GMT-0000").valueOf();
+    var d_round_min_10 = new Date("1993/02/23 18:50 GMT-0000").valueOf();
+    var d_round_hour_10 = new Date("1993/02/23 20:00 GMT-0000").valueOf();
     var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/30")).valueOf();
     //var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/23")).valueOf();
     var d_round_month_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/10/01")).valueOf();
@@ -217,20 +217,20 @@ test("incrementByInterval", function() {
     var inc = Exhibit.DateTime.incrementByInterval;
 
     // Start here, then progressively round it up
-    var d = new Date("1993/02/23 18:45:09 -00:00");
+    var d = new Date("1993/02/23 18:45:09 GMT-0000");
     d.setUTCMilliseconds(123);
 
     // Expected results. Increments are cumulative.
-    var mils_date = new Date("1993/02/23 18:45:09 -00:00");
+    var mils_date = new Date("1993/02/23 18:45:09 GMT-0000");
     mils_date.setUTCMilliseconds(124);
     var d_inc_mils = mils_date.valueOf();
-    var d_inc_sec = new Date("1993/02/23 18:45:10 -00:00").setMilliseconds(124).valueOf();
-    var d_inc_min = new Date("1993/02/23 18:46:10 -00:00").setMilliseconds(124).valueOf();
-    var d_inc_hour = new Date("1993/02/23 19:46:10 -00:00").setMilliseconds(124).valueOf();
-    var d_inc_day = new Date("1993/02/24 19:46:10 -00:00").setMilliseconds(124).valueOf();
-    var d_inc_week = new Date("1993/03/03 19:46:10 -00:00").setMilliseconds(124).valueOf();
-    var d_inc_month = new Date("1993/04/03 19:46:10 -00:00").setMilliseconds(124).valueOf();
-    var d_inc_year = new Date("1994/04/03 19:46:10 -00:00").setMilliseconds(124).valueOf();
+    var d_inc_sec = (new Date("1993/02/23 18:45:10 GMT-0000")).setMilliseconds(124).valueOf();
+    var d_inc_min = new Date("1993/02/23 18:46:10 GMT-0000").setMilliseconds(124).valueOf();
+    var d_inc_hour = new Date("1993/02/23 19:46:10 GMT-0000").setMilliseconds(124).valueOf();
+    var d_inc_day = new Date("1993/02/24 19:46:10 GMT-0000").setMilliseconds(124).valueOf();
+    var d_inc_week = new Date("1993/03/03 19:46:10 GMT-0000").setMilliseconds(124).valueOf();
+    var d_inc_month = new Date("1993/04/03 19:46:10 GMT-0000").setMilliseconds(124).valueOf();
+    var d_inc_year = new Date("1994/04/03 19:46:10 GMT-0000").setMilliseconds(124).valueOf();
 
     inc(d,Exhibit.DateTime.MILLISECOND,0);
     equal(d.valueOf(),d_inc_mils,"Millisecond increment");
