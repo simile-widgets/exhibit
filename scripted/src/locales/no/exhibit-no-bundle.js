@@ -1,5 +1,4 @@
 
-
 /* database-l10n.js */
 if(!("l10n" in Exhibit.Database)){Exhibit.Database.l10n={};
 }Exhibit.Database.l10n.itemType={label:"Objekter",pluralLabel:"Objekter",uri:"http://simile.mit.edu/2006/11/exhibit#Item"};
