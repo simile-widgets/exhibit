@@ -127,7 +127,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
  * @param {Function} callback
  */
 Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
-    var fError, fDone, self;
+    var fError, self;
 
     self = this;
 
