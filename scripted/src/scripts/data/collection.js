@@ -200,7 +200,7 @@ Exhibit.Collection._initializeBasicCollection = function(collection, database) {
 Exhibit.Collection._initializeBasedCollection = function(collection) {
     collection._update = Exhibit.Collection._basedCollection_update;
     
-    $(document).bind('onItemsChanged.exhibit', function(event, coll) {
+    $(document).bind('onItemsChanged.exhibit', function(evt, coll) {
         if (typeof coll !== "undefined" &&
             coll.equals(collection._baseCollection)) {
             collection._update();

@@ -3,11 +3,11 @@
  */
 
 $(document).ready(function() {
-    $(document).bind("localeSet.exhibit", function(event, localeURL) {
+    $(document).bind("localeSet.exhibit", function(evt, localeURL) {
         $LAB.script(localeURL);
     });
 
-    $(document).one("localeLoaded.exhibit", function(event) {
+    $(document).one("localeLoaded.exhibit", function(evt) {
         $(document).trigger("scriptsLoaded.exhibit");
     });
 

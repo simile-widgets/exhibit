@@ -31,7 +31,7 @@ $(document).ready(function() {
         // silent
     }
 
-    $(document).one("scriptsLoaded.exhibit", function(event) {
+    $(document).one("scriptsLoaded.exhibit", function(evt) {
         $(document).trigger("registerComponents.exhibit");
         window.database = Exhibit.Database.create();
         window.database.loadLinks(fDone);
