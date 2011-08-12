@@ -115,7 +115,7 @@ Exhibit.Localization.getLocale = function(locale) {
 Exhibit.Localization.setLocale = function(locales) {
     var i, locale;
 
-    for (i = locales.length - 1; i > 0; i--) {
+    for (i = locales.length - 1; i >= 0; i--) {
         locale = locales[i];
         if (Exhibit.Localization.hasLocale(locale)) {
             Exhibit.Localization._currentLocale = locale;
