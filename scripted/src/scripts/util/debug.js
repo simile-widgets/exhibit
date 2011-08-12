@@ -66,9 +66,9 @@ Exhibit.Debug.exception = function(e, msg) {
         f = function(e2, msg2) {
             throw(e2);
         };
-    } else if (window.hasOwnProperty("console") && window.console.hasOwnProperty("error")) { // FireBug installed
+    } else if (window.hasOwnProperty("console") && typeof window.console.error === "function") { // FireBug installed
         f = function(e2, msg2) {
-            if (msg2 !== null) {
+            if (typeof msg2 !== "undefined" && msg2 !== null) {
                 console.error(msg2 + " %o", e2);
             } else {
                 console.error(e2);
