@@ -145,7 +145,7 @@
                             value = templateNode[attribute];
 
                             if (attribute === "field") {
-                                result[value] = elmt;
+                                result[value] = elmt.get(0);
                             } else if (attribute === "type" &&
                                        elmt.get(0).tagName === "input") {
                                 // do nothing
