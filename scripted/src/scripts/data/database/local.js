@@ -77,7 +77,7 @@ Exhibit.Database._LocalImpl.prototype.createDatabase = function() {
  */
 Exhibit.Database._LocalImpl.prototype.loadLinks = function(fDone) {
     var links = $("head > link[rel='exhibit/data']");
-    this._loadLinks(links, this, fDone);
+    this._loadLinks(links.toArray(), this, fDone);
 };
 
 /**
@@ -87,6 +87,9 @@ Exhibit.Database._LocalImpl.prototype.loadLinks = function(fDone) {
  * @param {String} baseURI The base URI for normalizing URIs in the object.
  */
 Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI) {
+    if (typeof o === "undefined" || o === null) {
+        throw Error("Could not load data.");
+    }
     if (typeof baseURI === "undefined") {
         baseURI = location.href;
     }
