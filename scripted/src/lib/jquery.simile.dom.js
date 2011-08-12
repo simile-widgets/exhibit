@@ -15,7 +15,7 @@
          * @param {Array} except Elements to discount during discovery.
          * @returns {Element}
          */
-        hit: function(x, y, except) {
+        "hit": function(x, y, except) {
             return methods._hit(document.body, x, y, except);
         },
 
@@ -28,7 +28,7 @@
          * @param {Array} except
          * @returns {Element}
          */
-        _hit: function(elmt, x, y, except) {
+        "_hit": function(elmt, x, y, except) {
             var hitNode = null;
             $(elmt).children().each(function(idx, el) {
                 var i, top, left, node, offset;
@@ -94,7 +94,7 @@
          * @param {Object} template The object described above.
          * @returns {Object} Result described above.
          */
-        template: function(template) {
+        "template": function(template) {
             var result = {};
             result.elmt = methods._fromTemplate(template, result, null);
             return result;
@@ -107,8 +107,8 @@
          * @param {Object} result
          * @param {Element} parentElmt
          */
-        _fromTemplate: function(templateNode, result, parentElmt) {
-            var node, elmt, attribute, value, i;
+        "_fromTemplate": function(templateNode, result, parentElmt) {
+            var node, elmt, attribute, value, i, tag;
             if (typeof templateNode !== "undefined") {
                 if (templateNode === null) {
                     return null;
@@ -122,14 +122,15 @@
                 } else {
                     elmt = null;
                     if (templateNode.hasOwnProperty("tag")) {
+                        tag = templateNode.tag;
                         if (typeof parentElmt !== "undefined" &&
                             parentElmt !== null) {
                             if (tag === "input") {
                                 elmt = $("<input type=\"" + templateNode.type + "\" />");
                             } else {
-                                elmt = $(tag);
+                                elmt = $("<" + tag + ">");
                             }
-                            $(parentElmt).append($(tag));
+                            $(parentElmt).append(elmt);
                         }
                     } else {
                         elmt = $(templateNode.elmt);
@@ -176,13 +177,17 @@
          *    hold the id.
          * @returns {Object} The generated object with DOM tree pointers.
          */
-        string: function(root, s, fieldElmts) {
+        "string": function(root, s, fieldElmts) {
             var elmt, dom;
-            
-            elmt = $(root);
-            elm.html(s);
 
-            dom = { elmt: elmt };
+            if (typeof root === "string") {
+                elmt = $("<" + root + ">");
+            } else {
+                elmt = $(root);
+            }
+            elmt.html(s);
+
+            dom = { elmt: elmt.get(0) };
 
             if (typeof fieldElmts === "undefined" || fieldElmts === null) {
                 fieldElmts = {};
@@ -201,7 +206,7 @@
          * @param {Element} elmt
          * @param {Object} fieldElmts
          */
-        _fromString: function(dom, elmt, fieldElmts) {
+        "_fromString": function(dom, elmt, fieldElmts) {
             var id, parentElmt;
             
             id = $(elmt).attr("id");
@@ -217,7 +222,7 @@
                 }
             }
 
-            if ($(elmt + "> *").length > 0) {
+            if ($("> *", elmt).length > 0) {
                 methods._fromStringChildren(dom, elmt, fieldElmts);
             }
         },
@@ -230,7 +235,7 @@
          * @param {Element} elmt
          * @param {Object} fieldElmts
          */
-        _fromStringChildren: function(dom, elmt, fieldElmts) {
+        "_fromStringChildren": function(dom, elmt, fieldElmts) {
             var node, node2;
             node = $(elmt).children(':first');
             while (node.length !== 0) {
@@ -244,11 +249,11 @@
     /**
      * @param {String} method
      */
-    $.fn.simileDOM = function(method) {
+    $.simileDOM = function(method) {
         if (typeof method !== "undefined" &&
             method !== null &&
             typeof method === "string" &&
-            !method.startsWith("_") &&
+            method.indexOf("_") !== 0 &&
             typeof methods[method] !== "undefined") {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else {
