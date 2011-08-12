@@ -79,7 +79,7 @@
             contentWidth = parseInt(contentWidth, 10);
             contentHeight = parseInt(contentHeight, 10);
 
-            bubbleConfig = defaultbubbleConfig;
+            bubbleConfig = defaultBubbleConfig;
             pngTransparencyClassSuffix = pngFail ?
                 "pngNotTranslucent" :
                 "pngTranslucent";
@@ -354,6 +354,9 @@
                     (verticalAlign !== null ? " style=\"vertical-align: " + verticalAlign + ";\"" : "") +
                     " />";
             }
+        },
+        "pngIsTranslucent": function() {
+            return !pngFail;
         }
     };
 
