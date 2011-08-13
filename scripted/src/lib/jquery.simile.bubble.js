@@ -5,9 +5,11 @@
  */
 
 (function($) {
-    var pngFail, defaultBubbleConfig, methods;
+    var pngFail, defaultBubbleConfig, methods, _init;
 
     pngFail = $.browser.msie && Number($.browser.version[0]).valueOf() <= 6;
+
+    _init = false;
 
     defaultBubbleConfig = {
         containerCSSClass:              "simileAjax-bubble-container",
@@ -28,6 +30,14 @@
     };
 
     methods = {
+        "configure": function(options) {
+            var opt;
+            for (opt in options) {
+                if (options.hasOwnProperty(opt)) {
+                    defaultBubbleConfig[opt] = options[opt];
+                }
+            }
+        },
         "createBubbleForContentAndPoint": function(div, pageX, pageY, contentWidth, orientation, maxHeight) {
             if (typeof contentWidth !== "number") {
                 contentWidth = 300;
@@ -367,6 +377,10 @@
             method.indexOf("_") !== 0 &&
             typeof methods[method] !== "undefined") {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === "object" ||
+                   typeof method === "undefined" ||
+                   method === null) {
+            return methods.configure.apply(this, arguments);
         } else {
             $.error("Method " + method + " does not exist on jQuery.simileBubble");
         }
