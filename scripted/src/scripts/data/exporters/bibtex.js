@@ -63,7 +63,7 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
 
     for (prop in o) {
         if (o.hasOwnProperty(prop)) {
-            if (!Exhibit.Exporter.BibTex._excludeProperties.hasOwnProperty(propertyID)) {
+            if (!Exhibit.Exporter.BibTex._excludeProperties.hasOwnProperty(prop)) {
                 s += "\t" + (prop === "label" ?
                          "title" :
                          prop) + " = \"";
@@ -84,7 +84,7 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
 Exhibit.Exporter.BibTex._register = function() {
     Exhibit.Exporter.BibTex.exporter = new Exhibit.Exporter(
         "application/x-bibtex",
-        Exhibit.l10n.exhibitJsonExporterLabel,
+        Exhibit.l10n.bibtexExporterLabel,
         Exhibit.Exporter.BibTex.wrap,
         Exhibit.Exporter.BibTex.wrapOne,
         Exhibit.Exporter.BibTex.exportOne

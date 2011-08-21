@@ -73,7 +73,7 @@ Exhibit.Exporter.RDFXML.exportOne = function(itemID, o, properties, propertyIDTo
             } else if (propertyID !== "uri") {
                 values = o[propertyID];
                 for (j = 0; j < values.length; j++) {
-                    s += "\t<" + propertyString + ">" + value + "</" + propertyString + ">\n";
+                    s += "\t<" + propertyString + ">" + values[j] + "</" + propertyString + ">\n";
                 }
             }
         }
@@ -86,12 +86,30 @@ Exhibit.Exporter.RDFXML.exportOne = function(itemID, o, properties, propertyIDTo
 };
 
 Exhibit.Exporter.RDFXML.exportMany = function(set, database) {
-    var propertyIDToQualifiedName = {}, prefixToBase = {}, s = "";
+    var propertyIDToQualifiedName, prefixToBase, s, self, properties, ps, i, p;
+    propertyIDToQualifiedName = {};
+    prefixToBase = {};
+    s = "";
+    self = this;
     database.getNamespaces(propertyIDToQualifiedName, prefixToBase);
+    properties = {};
+    ps = database.getAllProperties();
+    for (i = 0; i < ps.length; i++) {
+        p = database.getProperty(ps[i]);
+        properties[ps[i]] = {}
+        properties[ps[i]].valueType = p.getValueType();
+        properties[ps[i]].uri = p.getURI();
+    }
     set.visit(function(itemID) {
-        s += this.wrapOne(this.exportOne(itemID, database, propertyIDToQualifiedName, prefixToBase));
+        s += self._wrapOne(self._exportOne(
+            itemID,
+            self.exportOneFromDatabase(itemID, database),
+            properties,
+            propertyIDToQualifiedName,
+            prefixToBase
+        ));
     });
-    return this.wrap(s, prefixToBase);
+    return this._wrap(s, prefixToBase);
 };
 
 /**

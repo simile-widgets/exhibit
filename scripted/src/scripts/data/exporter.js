@@ -129,7 +129,7 @@ Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
     return this._wrap(this._exportOne(itemID,
                                       this.exportOneFromDatabase(itemID,
                                                                  database),
-                                      Exhibit.Exporter._getPropertiesWithValueTypes()),
+                                      Exhibit.Exporter._getPropertiesWithValueTypes(database)),
                       database);
 };
 
@@ -146,7 +146,7 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
 
     var s = "", self = this, count = 0, size = set.size(), props;
 
-    props = Exhibit.Exporter._getPropertiesWithValueTypes();
+    props = Exhibit.Exporter._getPropertiesWithValueTypes(database);
     set.visit(function(itemID) {
         s += self._wrapOne(self._exportOne(itemID,
                                            self.exportOneFromDatabase(itemID, database),
@@ -154,7 +154,7 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
                            count === 0,
                            count++ === size - 1);
     });
-    return this.wrap(s);
+    return this._wrap(s, database);
 };
 
 /**
