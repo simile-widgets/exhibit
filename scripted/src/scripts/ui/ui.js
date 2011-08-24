@@ -115,7 +115,7 @@ Exhibit.UI.createFromDOM = function(elmt, uiContext) {
     case "logo":
         return Exhibit.Logo.createFromDOM(elmt, uiContext);
     case "hiddenContent":
-        elmt.style.display = "none";
+        $(elmt).css("display", "none");
         return null;
     }
     return null;
@@ -409,6 +409,7 @@ Exhibit.UI.showBusyIndicator = function() {
         Exhibit.UI._busyIndicator = Exhibit.UI.createBusyIndicator();
     }
     
+    // @@@ jQuery simplification?
     scrollTop = document.body.hasOwnProperty("scrollTop") ?
         document.body.scrollTop :
         document.body.parentNode.scrollTop;
@@ -420,8 +421,8 @@ Exhibit.UI.showBusyIndicator = function() {
         
     top = Math.floor(scrollTop + height / 3);
     
-    Exhibit.UI._busyIndicator.style.top = top + "px";
-    document.body.appendChild(Exhibit.UI._busyIndicator);
+    $(Exhibit.UI._busyIndicator).css("top", top + "px");
+    $(document.body).append(Exhibit.UI._busyIndicator);
 };
 
 /**
@@ -434,7 +435,7 @@ Exhibit.UI.hideBusyIndicator = function() {
     }
     
     try {
-        document.body.removeChild(Exhibit.UI._busyIndicator);
+        $(Exhibit.UI._busyIndicator).remove();
     } catch(e) {
         // silent
     }
@@ -466,13 +467,10 @@ Exhibit.UI.makeActionLink = function(text, handler) {
         attr("href", "#").
         addClass("exhibit-action");
     
-    // @@@ the SimileAjax method of dealing with handlers involves
-    //     more arguments (elmt, event, layer) than jQuery - some
-    //     of the uses of this particular method do seem to require
-    //     usage of elmt...
-    handler2 = function(event) {
+    handler2 = function(evt) {
         if (typeof $(this).attr("disabled") === "undefined") {
-            handler(event);
+            evt.preventDefault();
+            handler(evt);
         }
     };
 
@@ -519,25 +517,27 @@ Exhibit.UI.makeItemSpan = function(itemID, label, uiContext) {
         attr("href", Exhibit.Persistence.getItemLink(itemID)).
         addClass("exhibit-item");
         
-    handler = function(event) {
+    handler = function(evt) {
         Exhibit.UI.showItemInPopup(itemID, this, uiContext);
+        evt.preventDefault();
+        evt.stopPropagation();
     };
 
     a.bind("click", handler);
 
-    return a;
+    return a.get(0);
 };
 
 /**
  * @static
  * @param {String} label
  * @param {String} valueType
- * @param {Object} layer
+ * @returns {jQuery}
  */
-Exhibit.UI.makeValueSpan = function(label, valueType, layer) {
+Exhibit.UI.makeValueSpan = function(label, valueType) {
     var span, url;
 
-    span = $("<span></span>").addClass("exhibit-value")
+    span = $("<span>").addClass("exhibit-value")
 ;
     if (valueType === "url") {
         url = label;
@@ -556,7 +556,7 @@ Exhibit.UI.makeValueSpan = function(label, valueType, layer) {
         }
         span.html(label);
     }
-    return span;
+    return span.get(0);
 };
 
 /**
@@ -564,7 +564,7 @@ Exhibit.UI.makeValueSpan = function(label, valueType, layer) {
  * @param {Element} elmt
  */
 Exhibit.UI.calculatePopupPosition = function(elmt) {
-    coords = $(elmt).offset();
+    var coords = $(elmt).offset();
     return {
         x: coords.left + Math.round($(elmt).outerWidth() / 2),
         y: coords.top + Math.round($(elmt).outerHeight() / 2)
@@ -572,7 +572,6 @@ Exhibit.UI.calculatePopupPosition = function(elmt) {
 };
 
 /**
- * @@@
  * @static
  * @param {String} itemID
  * @param {Element} elmt
@@ -582,12 +581,12 @@ Exhibit.UI.calculatePopupPosition = function(elmt) {
 Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
     var itemLensDiv, lensOpts;
 
-    SimileAjax.WindowManager.popAllLayers();
-    
+    $(document).trigger("closeAllModeless.exhibit");
+
     opts = opts || {};
     opts.coords = opts.coords || Exhibit.UI.calculatePopupPosition(elmt);
     
-    itemLensDiv = $("<div></div>");
+    itemLensDiv = $("<div>");
 
     lensOpts = {
         inPopup: true,
@@ -604,7 +603,7 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
 
     uiContext.getLensRegistry().createLens(itemID, itemLensDiv, uiContext, lensOpts);
     
-    SimileAjax.Graphics.createBubbleForContentAndPoint(
+    $.simileBubble("createBubbleForContentAndPoint",
         itemLensDiv, 
         opts.coords.x,
         opts.coords.y, 
@@ -620,7 +619,7 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
  * @returns {Element}
  */
 Exhibit.UI.createButton = function(name, handler, className) {
-    var button = $("<button></button>").
+    var button = $("<button>").
         html(name).
         addClass((className || "exhibit-button")).
         addClass("screen");
@@ -629,7 +628,6 @@ Exhibit.UI.createButton = function(name, handler, className) {
 };
 
 /**
- * @@@
  * @static
  * @param {Element} element
  * @returns {Object}
@@ -637,7 +635,8 @@ Exhibit.UI.createButton = function(name, handler, className) {
 Exhibit.UI.createPopupMenuDom = function(element) {
     var div, dom;
 
-    div = $("<div></div>").addClass("exhibit-menu-popup").
+    div = $("<div>").
+        addClass("exhibit-menu-popup").
         addClass("exhibit-ui-protection");
     
     /**
@@ -645,122 +644,133 @@ Exhibit.UI.createPopupMenuDom = function(element) {
      */
     dom = {
         elmt: div,
-        close: function() {
-            document.body.removeChild(this.elmt);
-        },
-        open: function() {
+        open: function(evt) {
             var self, docWidth, docHeight, coords;
             self = this;
-            this.layer = SimileAjax.WindowManager.pushLayer(function() { self.close(); }, true, div);
+            // @@@ exhibit-dialog needs to be set
+            if (typeof evt !== "undefined") {
+                if ($(evt.target).parent(".exhibit-dialog").length > 0) {
+                    dom._dialogParent = $(evt.target).parent(".exhibit-dialog:eq(0)").get(0);
+                }
+                evt.preventDefault();
+            }
                 
-            docWidth = document.body.offsetWidth;
-            docHeight = document.body.offsetHeight;
+            docWidth = $(document.body).width();
+            docHeight = $(document.body).height();
         
-            coords = SimileAjax.DOM.getPageCoordinates(element);
-            div.style.top = (coords.top + element.scrollHeight) + "px";
-            div.style.right = (docWidth - (coords.left + element.scrollWidth)) + "px";
-        
-            document.body.appendChild(this.elmt);
+            coords = $(element).offset();
+            this.elmt.css("top", (coords.top + element.scrollHeight) + "px");
+            this.elmt.css("right", (docWidth - (coords.left + element.scrollWidth)) + "px");
+
+            $(document.body).append(this.elmt);
+            this.elmt.trigger("modelessOpened.exhibit");
+            evt.stopPropagation();
         },
         appendMenuItem: function(label, icon, onClick) {
-            var self, a, div;
+            var self, a, container;
             self = this;
-            a = document.createElement("a");
-            a.className = "exhibit-menu-item";
-            a.href = "#";
-            SimileAjax.WindowManager.registerEvent(a, "click", function(elmt, evt, target) {
-                onClick(elmt, evt, target);
-                SimileAjax.WindowManager.popLayer(self.layer);
-                SimileAjax.DOM.cancelEvent(evt);
-                return false;
-            });
-            
-            div = document.createElement("div");
-            a.appendChild(div);
+            a = $("<a>").
+                attr("href", "#").
+                addClass("exhibit-menu-item").
+                bind("click", function(evt) {
+                    onClick(evt); // elmt, evt, target:being passed a jqevent
+                    dom.close();
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                });
+
+            container = $("<div>");
+            a.append(container);
     
-            div.appendChild(SimileAjax.Graphics.createTranslucentImage(
-                icon !== null ? icon : (Exhibit.urlPrefix + "images/blank-16x16.png")));
+            container.append($.simileBubble("createTranslucentImage",
+                icon !== null ?
+                    icon :
+                    (Exhibit.urlPrefix + "images/blank-16x16.png")));
                 
-            div.appendChild(document.createTextNode(label));
+            container.append(document.createTextNode(label));
             
-            this.elmt.appendChild(a);
+            this.elmt.append(a);
         },
         appendSeparator: function() {
-            var hr = document.createElement("hr");
-            this.elmt.appendChild(hr);
+            this.elmt.append("<hr/>");
         }
     };
+    Exhibit.UI.setupDialog(dom, false);
     return dom;
 };
 
 /**
- * @@@
  * @static
  * @returns {Element}
  */
 Exhibit.UI.createBusyIndicator = function() {
     var urlPrefix, containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv, img;
     urlPrefix = Exhibit.urlPrefix + "images/";
-    containerDiv = document.createElement("div");
-    if (SimileAjax.Graphics.pngIsTranslucent) {
+    containerDiv = $("<div>");
+    if ($.simileBubble("pngIsTranslucent")) {
+        topDiv = $("<div>").css({
+            "height": "33px",
+            "padding-left": "44px",
+            "background": "url(" + urlPrefix + "message-bubble/message-top-left.png) top left no-repeat"
+        });
+        containerDiv.append(topDiv);
         
-        topDiv = document.createElement("div");
-        topDiv.style.height = "33px";
-        topDiv.style.background = "url(" + urlPrefix + "message-bubble/message-top-left.png) top left no-repeat";
-        topDiv.style.paddingLeft = "44px";
-        containerDiv.appendChild(topDiv);
+        topRightDiv = $("<div>").css({
+            "height": "33px",
+            "background": "url(" + urlPrefix + "message-bubble/message-top-right.png) top right no-repeat"
+        });
+        topDiv.append(topRightDiv);
         
-        topRightDiv = document.createElement("div");
-        topRightDiv.style.height = "33px";
-        topRightDiv.style.background = "url(" + urlPrefix + "message-bubble/message-top-right.png) top right no-repeat";
-        topDiv.appendChild(topRightDiv);
+        middleDiv = $("<div>").css({
+            "padding-left": "44px",
+            "background": "url(" + urlPrefix + "message-bubble/message-left.png) top left repeat-y"
+        });
+        containerDiv.append(middleDiv);
         
-        middleDiv = document.createElement("div");
-        middleDiv.style.background = "url(" + urlPrefix + "message-bubble/message-left.png) top left repeat-y";
-        middleDiv.style.paddingLeft = "44px";
-        containerDiv.appendChild(middleDiv);
+        middleRightDiv = $("<div>").css({
+            "padding-right": "44px",
+            "background": "url(" + urlPrefix + "message-bubble/message-right.png) top right repeat-y"
+        });
+        middleDiv.append(middleRightDiv);
         
-        middleRightDiv = document.createElement("div");
-        middleRightDiv.style.background = "url(" + urlPrefix + "message-bubble/message-right.png) top right repeat-y";
-        middleRightDiv.style.paddingRight = "44px";
-        middleDiv.appendChild(middleRightDiv);
+        contentDiv = $("<div>");
+        middleRightDiv.append(contentDiv);
         
-        contentDiv = document.createElement("div");
-        middleRightDiv.appendChild(contentDiv);
+        bottomDiv = $("<div>").css({
+            "height": "55px",
+            "padding-left": "44px",
+            "background": "url(" + urlPrefix + "message-bubble/message-bottom-left.png) bottom left no-repeat"
+        });
+        containerDiv.append(bottomDiv);
         
-        bottomDiv = document.createElement("div");
-        bottomDiv.style.height = "55px";
-        bottomDiv.style.background = "url(" + urlPrefix + "message-bubble/message-bottom-left.png) bottom left no-repeat";
-        bottomDiv.style.paddingLeft = "44px";
-        containerDiv.appendChild(bottomDiv);
-        
-        bottomRightDiv = document.createElement("div");
-        bottomRightDiv.style.height = "55px";
-        bottomRightDiv.style.background = "url(" + urlPrefix + "message-bubble/message-bottom-right.png) bottom right no-repeat";
-        bottomDiv.appendChild(bottomRightDiv);
+        bottomRightDiv = $("<div>").css({
+            "height": "55px",
+            "background": "url(" + urlPrefix + "message-bubble/message-bottom-right.png) bottom right no-repeat"
+        });
+        bottomDiv.append(bottomRightDiv);
     } else {
-        containerDiv.style.border = "2px solid #7777AA";
-        containerDiv.style.padding = "20px";
-        containerDiv.style.background = "white";
-        SimileAjax.Graphics.setOpacity(containerDiv, 90);
+        containerDiv.css({
+            "border": "2px solid #7777AA",
+            "padding": "20px",
+            "background": "white",
+            "opacity": 0.9
+        });
         
-        contentDiv = document.createElement("div");
-        containerDiv.appendChild(contentDiv);
+        contentDiv = $("<div>");
+        containerDiv.append(contentDiv);
     }
+
+    containerDiv.addClass("exhibit-busyIndicator");
+    contentDiv.addClass("exhibit-busyIndicator-content");
     
-    containerDiv.className = "exhibit-busyIndicator";
-    contentDiv.className = "exhibit-busyIndicator-content";
-    
-    img = document.createElement("img");
-    img.src = urlPrefix + "progress-running.gif";
-    contentDiv.appendChild(img);
-    contentDiv.appendChild(document.createTextNode(" " + Exhibit.l10n.busyIndicatorMessage));
+    img = $("<img>").attr("src", urlPrefix + "progress-running.gif");
+    contentDiv.append(img);
+    contentDiv.append(document.createTextNode(" " + Exhibit.l10n.busyIndicatorMessage));
     
     return containerDiv;
 };
 
 /**
- * @@@
  * @static
  * @param {String} itemID
  * @param {Exhibit} exhibit
@@ -792,57 +802,178 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
     /**
      * @ignore
      */
-    dom = SimileAjax.DOM.createDOMFromTemplate(template);
-    /**
-     * @ignore
-     */
-    dom.close = function() {
-        document.body.removeChild(dom.elmt);
-    };
+    dom = $.simileDOM("template", template);
+
+    Exhibit.UI.setupDialog(dom, true);
+
     /**
      * @ignore Can't get JSDocTK to ignore this one method for some reason.
      */
     dom.open = function() {
         var lens;
-        dom.layer = SimileAjax.WindowManager.pushLayer(function() { dom.close(); }, false);
+        $(document).trigger("modalSuperseded.exhibit");
         lens = new Exhibit.Lens(itemID, dom.viewContainer, exhibit, configuration);
         
-        dom.elmt.style.top = (document.body.scrollTop + 100) + "px";
-        document.body.appendChild(dom.elmt);
+        $(dom.elmt).css("top", (document.body.scrollTop + 100) + "px");
+        $(document.body).append(dom.elmt);
         
-        SimileAjax.WindowManager.registerEvent(
-            dom.closeButton, 
-            "click", 
-            function(elmt, evt, target) {
-                SimileAjax.WindowManager.popLayer(dom.layer);
-                SimileAjax.DOM.cancelEvent(evt);
-                return false;
-            }, 
-            dom.layer
-        );
+        $(dom.closeButton).bind("click", function(evt) {
+            dom.close();
+            evt.preventDefault();
+            evt.stopPropagation();
+        });
+        $(dom.elmt).trigger("modalOpened.exhibit");
     };
     
     return dom;
 };
 
 /**
- * @@@
  * @static
  * @param {String} relativeUrl
  * @param {String} verticalAlign
  * @returns {Element}
  */
 Exhibit.UI.createTranslucentImage = function(relativeUrl, verticalAlign) {
-    return SimileAjax.Graphics.createTranslucentImage(Exhibit.urlPrefix + relativeUrl, verticalAlign);
+    return $.simileBubble("createTranslucentImage", Exhibit.urlPrefix + relativeUrl, verticalAlign);
 };
 
 /**
- * @@@
  * @static
  * @param {String} relativeUrl
  * @param {String} verticalAlign
  * @returns {Element}
  */
 Exhibit.UI.createTranslucentImageHTML = function(relativeUrl, verticalAlign) {
-    return SimileAjax.Graphics.createTranslucentImageHTML(Exhibit.urlPrefix + relativeUrl, verticalAlign);
+    return $.simileBubble("createTranslucentImageHTML", Exhibit.urlPrefix + relativeUrl, verticalAlign);
+};
+
+/**
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Element} elmt
+ * @returns {Boolean}
+ */
+Exhibit.UI._clickInElement = function(x, y, elmt) {
+    var offset = $(elmt).offset();
+    var dims = { "w": $(elmt).outerWidth(),
+                 "h": $(elmt).outerHeight() };
+    return (x < offset.left &&
+            x > offset.left + dims.w &&
+            y < offset.top &&
+            y > offset.top + dims.h);
+};
+
+/**
+ * Add the close property to dom, a function taking a jQuery event that
+ * simulates the UI for closing a dialog.  THe dialog can either be modal
+ * (takes over the window focus) or modeless (will be closed if something
+ * other than it is focused).
+ *
+ * This scheme assumes a modeless dialog will never produce a modal dialog
+ * without also closing down.
+ * 
+ * @param {Object} dom An object with pointers into the DOM.
+ * @param {Boolean} modal Whether the dialog is modal or not.
+ * @param {Element} [dialogParent] The element containing the parent dialog.
+ */
+Exhibit.UI.setupDialog = function(dom, modal, dialogParent) {
+    var clickHandler, cancelHandler, cancelAllHandler, createdHandler, i, trap;
+
+    if (typeof parentDialog !== "undefined" && parentDialog !== null) {
+        dom._dialogParent = dialogParent;
+    }
+
+    if (!modal) {
+        dom._dialogDescendants = [];
+        
+        clickHandler = function(evt) {
+            if (!Exhibit.UI._clickInElement(evt.pageX, evt.pageY, dom.elmt)) {
+                trap = false;
+                for (i = 0; i < dom._dialogDescendants; i++) {
+                    trap = trap || Exhibit.UI._clickInElement(evt.pageX, evt.pageY, dom._dialogDescendants[i]);
+                    if (trap) {
+                        break;
+                    }
+                }
+                if (!trap) {
+                    dom.close(evt);
+                }
+            }
+        };
+
+        cancelAllHandler = function(evt) {
+            dom.close(evt);
+        };
+
+        cancelHandler = function(evt) {
+            dom.close(evt);
+        };
+
+        createdHandler = function(evt) {
+            var descendant = evt.target;
+            dom._dialogDescendants.push(descendant);
+            $(descendant).bind("cancelModeless.exhibit", function(evt) {
+                dom._dialogDescendants.splice(dom._dialogDescendants.indexOf(descendant), 1);
+                $(descendant).unbind(evt);
+            });
+        };
+
+        dom.close = function(evt) {
+            if (typeof evt !== "undefined") {
+                if (evt.type !== "cancelAllModeless") {
+                    $(dom.elmt).trigger("cancelModeless.exhibit");
+                }
+            } else {
+                $(dom.elmt).trigger("cancelModeless.exhibit");
+            }
+            $(document.body).unbind("click", clickHandler);
+            $(dom._dialogParent).unbind("cancelModeless.exhibit", cancelHandler);
+            $(document).unbind("cancelAllModeless.exhibit", cancelAllHandler);
+            $(dom.elmt).remove();
+        };
+
+        $(dom.elmt).bind("modelessOpened.exhibit", createdHandler);
+        $(dom.elmt).one("modelessOpened.exhibit", function(evt) {
+            $(document.body).bind("click", clickHandler);
+            $(dom._dialogParent).bind("cancelModeless.exhibit", cancelHandler);
+            $(document).bind("cancellAllModeless.exhibit", cancelAllHandler);
+        });
+    } else {
+        dom._superseded = 0;
+
+        clickHandler = function(evt) {
+            if (dom._superseded === 0 &&
+                !Exhibit.UI._clickInElement(evt.pageX, evt.pageY, dom.elmt)) {
+                evt.preventDefault();
+                evt.stopImmediatePropagation();
+            }
+        };
+
+        closedHandler = function(evt) {
+            dom._superseded--;
+        };
+        
+        supersededHandler = function(evt) {
+            dom._superseded++;
+            // Will be unbound when element issuing this signal removes
+            // itself.
+            $(evt.target).bind("cancelModal.exhibit", closedHandler);
+        };
+
+        // Some UI element or keystroke should bind dom.close now that
+        // it's been setup.
+        dom.close = function(evt) {
+            $(dom.elmt).trigger("cancelModal.exhibit");
+            $(document).trigger("cancelAllModeless.exhibit");
+            $(dom.elmt).remove();
+            $(document.body).unbind("click", clickHandler);
+            $(document).unbind("modalSuperseded.exhibit", supersededHandler);
+        };
+
+        $(dom.elmt).one("modalOpened.exhibit", function() {
+            $(document.body).bind("click", clickHandler);
+            $(document).bind("modalSuperseded.exhibit", supersededHandler);
+        });
+    }
 };
