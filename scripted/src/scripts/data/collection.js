@@ -4,12 +4,6 @@
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
 
-// It would be convenient to have one reliably existant DOM element
-// associated with a Collection so other objects could listen to that
-// element for changes, instead of having globally triggered events
-// that every bound object then has to differentiate between.
-// Convenient enough to create a <div> when none is given?
-
 /**
  * Creates a new object with an identifier and the database it draws from. 
  * 
@@ -21,6 +15,7 @@
 Exhibit.Collection = function(id, database) {
     this._id = id;
     this._database = database;
+    this._elmt = document;
     
     this._facets = [];
     this._updating = false;
@@ -58,7 +53,8 @@ Exhibit.Collection.createAllItemsCollection = function(id, database) {
  */
 Exhibit.Collection.create = function(id, configuration, database) {
     var collection = new Exhibit.Collection(id, database);
-    
+    collection._setElement();
+   
     if (configuration.hasOwnProperty("itemTypes")) {
         collection._itemTypes = configuration.itemTypes;
         collection._update = Exhibit.Collection._typeBasedCollection_update;
@@ -83,7 +79,8 @@ Exhibit.Collection.createFromDOM = function(id, elmt, database) {
     var collection, itemTypes;
 
     collection = new Exhibit.Collection(id, database);
-    
+    collection._setElement(elmt);
+
     itemTypes = Exhibit.getAttribute(elmt, "itemTypes", ",");
     if (itemTypes !== null && itemTypes.length > 0) {
         collection._itemTypes = itemTypes;
@@ -113,6 +110,7 @@ Exhibit.Collection.create2 = function(id, configuration, uiContext) {
     
     if (configuration.hasOwnProperty("expression")) {
         collection = new Exhibit.Collection(id, database);
+        collection._setElement();
         
         collection._expression = Exhibit.ExpressionParser.parse(configuration.expression);
         collection._baseCollection = (configuration.hasOwnProperty("baseCollectionID")) ? 
@@ -151,6 +149,7 @@ Exhibit.Collection.createFromDOM2 = function(id, elmt, uiContext) {
     expressionString = Exhibit.getAttribute(elmt, "expression");
     if (expressionString !== null && expressionString.length > 0) {
         collection = new Exhibit.Collection(id, database);
+        collection._setElement(elmt);
     
         collection._expression = Exhibit.ExpressionParser.parse(expressionString);
         
@@ -200,11 +199,8 @@ Exhibit.Collection._initializeBasicCollection = function(collection, database) {
 Exhibit.Collection._initializeBasedCollection = function(collection) {
     collection._update = Exhibit.Collection._basedCollection_update;
     
-    $(document).bind('onItemsChanged.exhibit', function(evt, coll) {
-        if (typeof coll !== "undefined" &&
-            coll.equals(collection._baseCollection)) {
-            collection._update();
-        }
+    $(this._elmt).bind('onItemsChanged.exhibit', function(evt) {
+        collection._update();
     });
     
     collection._update();
@@ -343,6 +339,33 @@ Exhibit.Collection.prototype.getID = function() {
 };
 
 /**
+ * Create an element to associate with the collection if none
+ * exists.
+ */
+Exhibit.Collection.prototype._setElement = function(el) {
+    if (typeof el === "undefined" || el === null) {
+        collection._elmt = $("<div>")
+            .attr("id", id)
+            .attr("class", "exhibit-collection")
+            .css("display", "none")
+            .appendTo(document.body)
+            .get(0);
+    } else {
+        collection._elmt = el;
+    }
+};
+
+/**
+ * Returns the element, commonly used to bind against, associated with
+ * the collection.
+ * 
+ * @returns {Element}
+ */
+Exhibit.Collection.prototype.getElement = function() {
+    return this._elmt;
+};
+
+/**
  * Explicitly set which items are in this collection.
  *
  * @param {Exhibit.Set} items The collection's items.
@@ -387,8 +410,7 @@ Exhibit.Collection.prototype.addFacet = function(facet) {
     if (facet.hasRestrictions()) {
         this._computeRestrictedItems();
         this._updateFacets();
-        $(document).trigger("onItemsChanged.exhibit",
-                            [{collection: this}]);
+        $(this._elmt).trigger("onItemsChanged.exhibit");
     } else {
         facet.update(this.getRestrictedItems());
     }
@@ -408,8 +430,7 @@ Exhibit.Collection.prototype.removeFacet = function(facet) {
             if (facet.hasRestrictions()) {
                 this._computeRestrictedItems();
                 this._updateFacets();
-                $(document).trigger("onItemsChanged.exhibit",
-                                    [{collection: this}]);
+                $(this._elmt).trigger("onItemsChanged.exhibit");
             }
             break;
         }
@@ -497,8 +518,7 @@ Exhibit.Collection.prototype.onFacetUpdated = function() {
     if (!this._updating) {
         this._computeRestrictedItems();
         this._updateFacets();
-        $(document).trigger("onItemsChanged.exhibit",
-                            [{collection: this}]);
+        $(this._elmt).trigger("onItemsChanged.exhibit");
     }
 };
 
@@ -510,14 +530,12 @@ Exhibit.Collection.prototype.onFacetUpdated = function() {
  * @private
  */
 Exhibit.Collection.prototype._onRootItemsChanged = function() {
-    $(document).trigger("onRootItemsChanged.exhibit",
-                        [{collection: this}]);
+    $(this._elmt).trigger("onRootItemsChanged.exhibit");
     
     this._computeRestrictedItems();
     this._updateFacets();
     
-    $(document).trigger("onItemsChanged.exhibit",
-                        [{collection: this}]);
+    $(this._elmt).trigger("onItemsChanged.exhibit");
 };
 
 /**
