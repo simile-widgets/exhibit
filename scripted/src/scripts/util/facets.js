@@ -1,5 +1,5 @@
 /**
- * @fileOverview
+ * @fileOverview Facet building and interaction utilities.
  * @author David Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */

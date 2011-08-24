@@ -1,5 +1,5 @@
 /**
- * @fileOverview
+ * @fileOverview Default colors for color coders.
  * @author David Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
