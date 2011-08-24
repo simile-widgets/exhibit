@@ -22,6 +22,7 @@
   <property name="dist" value="dist"/>
 
   <property name="modules" value=""/>
+  <property name="lintfile" value=""/>
 
   <property name="jscoverage.dir" value="/usr/local/bin"/>
   <property name="jscoverage.port" value="9876"/>
@@ -183,6 +184,20 @@
     <exec dir="." executable="${jscoverage.dir}/jscoverage-server">
       <arg line="--port=${jscoverage.port} --shutdown"/>
     </exec>
+  </target>
+
+
+
+
+
+  <!-- Mono lint -->
+  <target name="lintone" description="Run lint on one file">
+    <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
+    <jslint haltOnFailure="false" options="onevar,sub,evil">
+      <predef>jQuery, $$</predef>
+      <formatter type="plain" />
+      <fileset dir="." includes="${lintfile}" />
+    </jslint>
   </target>
 
 
