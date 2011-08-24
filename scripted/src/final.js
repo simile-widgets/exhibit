@@ -11,5 +11,10 @@ $(document).ready(function() {
         $(document).trigger("scriptsLoaded.exhibit");
     });
 
+    $(document).one("exhibitConfigured.exhibit", function(evt) {
+        Exhibit.Bookmark.init();
+        Exhibit.History.init();
+    });
+
     $(document).trigger("registerLocalization.exhibit");
 });
