@@ -85,13 +85,11 @@ Exhibit.History.stateListener = function(evt) {
 
     components = fullState.data.components;
     for (key in components) {
-        console.log(key);
         if (components.hasOwnProperty(key)) {
             componentState = components[key].state;
             component = Exhibit.Registry.get(components[key].type, key);
             if (component !== null &&
                 typeof component.importState === "function") {
-                console.log(componentState);
                 component.importState(componentState);
             }
         }
