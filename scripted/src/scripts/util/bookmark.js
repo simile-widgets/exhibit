@@ -9,9 +9,21 @@
  */
 Exhibit.Bookmark = {
     /**
+     * Whether the History system should load the bookmarked state.
+     *
+     * @private
+     */
+    _shouldRun: undefined,
+
+    /**
+     * The bookmark state read in by the bookmarking system.
+     */
+    state: {},
+    
+    /**
      * Whether a bookmark was used at the start or not.
      */
-    run: false
+    run: undefined
 };
 
 /**
@@ -80,7 +92,17 @@ Exhibit.Bookmark.generateBookmark = function() {
 Exhibit.Bookmark.implementBookmark = function(state) {
     if (state !== null) {
         Exhibit.History.replaceState(state.data, state.title, state.url);
+        Exhibit.Bookmark.run = true;
     }
+};
+/**
+ * Answer whether the bookmark system should run or not on the hash
+ * (if there is a hash) in the current URL.
+ *
+ * @returns {Boolean}
+ */
+Exhibit.Bookmark.runBookmark = function() {
+    return Exhibit.Bookmark._shouldRun;
 };
 
 /**
@@ -90,8 +112,24 @@ Exhibit.Bookmark.implementBookmark = function(state) {
  * @static
  */
 Exhibit.Bookmark.init = function() {
-    if (document.location.hash.length > 0) {
-        Exhibit.Bookmark.implementBookmark(Exhibit.Bookmark.interpretBookmarkHash(document.location.hash.substr(1)));
-        Exhibit.Bookmark.run = true;
+    var hash, state;
+    hash = document.location.hash;
+    if (hash.length > 0) {
+        try {
+            state = Exhibit.Bookmark.interpretBookmarkHash(hash.substr(1));
+            if (typeof state === "object" &&
+                state.hasOwnProperty("data") &&
+                state.hasOwnProperty("title") &&
+                state.hasOwnProperty("url")) {
+                Exhibit.Bookmark.state = state;
+                Exhibit.Bookmark._shouldRun = true;
+            } else {
+                Exhibit.Bookmark._shouldRun = false;
+            }
+        } catch (ex) {
+            Exhibit.Bookmark._shouldRun = false;
+        } finally {
+            Exhibit.Bookmark.run = false;
+        }
     }
 };
