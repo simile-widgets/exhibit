@@ -13,8 +13,6 @@ $(document).ready(function() {
     var fDone = function() {
         window.exhibit = Exhibit.create();
         window.exhibit.configureFromDOM();
-        Exhibit.Bookmark.init();
-        Exhibit.History.init();
     };
 
     try {
