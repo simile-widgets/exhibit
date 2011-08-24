@@ -123,13 +123,13 @@
                     elmt = null;
                     if (templateNode.hasOwnProperty("tag")) {
                         tag = templateNode.tag;
+                        if (tag === "input") {
+                            elmt = $("<input type=\"" + templateNode.type + "\" />");
+                        } else {
+                            elmt = $("<" + tag + ">");
+                        }
                         if (typeof parentElmt !== "undefined" &&
                             parentElmt !== null) {
-                            if (tag === "input") {
-                                elmt = $("<input type=\"" + templateNode.type + "\" />");
-                            } else {
-                                elmt = $("<" + tag + ">");
-                            }
                             $(parentElmt).append(elmt);
                         }
                     } else {
