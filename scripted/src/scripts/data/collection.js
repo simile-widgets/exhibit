@@ -15,7 +15,7 @@
 Exhibit.Collection = function(id, database) {
     this._id = id;
     this._database = database;
-    this._elmt = document;
+    this._elmt = null;
     
     this._facets = [];
     this._updating = false;
@@ -344,14 +344,18 @@ Exhibit.Collection.prototype.getID = function() {
  */
 Exhibit.Collection.prototype._setElement = function(el) {
     if (typeof el === "undefined" || el === null) {
-        collection._elmt = $("<div>")
-            .attr("id", id)
-            .attr("class", "exhibit-collection")
-            .css("display", "none")
-            .appendTo(document.body)
-            .get(0);
+        if (this._getID() !== "default") {
+            this._elmt = $("<div>")
+                .attr("id", this.getID())
+                .attr("ex:role", "exhibit-collection")
+                .css("display", "none")
+                .appendTo(document.body)
+                .get(0);
+        } else {
+            this._elmt = document;
+        }
     } else {
-        collection._elmt = el;
+        this._elmt = el;
     }
 };
 
@@ -394,7 +398,7 @@ Exhibit.Collection.prototype.dispose = function() {
     }
 
     this._database = null;
-    
+    this._elmt = null;
     this._items = null;
     this._restrictedItems = null;
 };
