@@ -80,6 +80,22 @@ Exhibit.Registry.componentHandlers = function(component) {
 };
 
 /**
+ * @param {String} component
+ * @returns {Array}
+ */
+Exhibit.Registry.getKeys = function(component) {
+    var hash, key, keys;
+    hash = Exhibit.Registry._registry[component];
+    keys = [];
+    for (key in hash) {
+        if (hash.hasOwnProperty(key)) {
+            keys.push(key);
+        }
+    }
+    return keys;
+};
+
+/**
  * @static
  * @param {String} component
  * @param {String} type
@@ -101,7 +117,12 @@ Exhibit.Registry.get = function(component, type) {
  * @returns {Boolean}
  */
 Exhibit.Registry.unregister = function(component, type) {
+    var c;
     if (Exhibit.Registry.isRegistered(component, type)) {
+        c = Exhibit.Registry.get(component, type);
+        if (typeof c.dispose === "function") {
+            c.dispose();
+        }
         Exhibit.Registry._registry[component][type] = null;
         delete Exhibit.Registry._registry[component][type];
     }
