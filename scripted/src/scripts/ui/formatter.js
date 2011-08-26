@@ -322,7 +322,7 @@ Exhibit.Formatter._URLFormatter.prototype.format = function(value, appender) {
     //if (this._externalIcon !== null) {
     //
     //}
-    appender(a));
+    appender(a);
 };
 
 /**
