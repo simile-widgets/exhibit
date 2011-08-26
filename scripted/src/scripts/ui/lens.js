@@ -305,7 +305,7 @@ Exhibit.Lens._processTemplateElement = function(elmt, isXML, uiContext) {
          */
          
         style = elmt.cssText;
-        if (style !== null && style.length > 0) {
+        if (typeof style !== "undefined" && style !== null && style.length > 0) {
             Exhibit.Lens._processStyle(templateNode, value);
         }
         
@@ -313,7 +313,7 @@ Exhibit.Lens._processTemplateElement = function(elmt, isXML, uiContext) {
         for (h = 0; h < handlers.length; h++) {
             handler = handlers[h];
             code = elmt[handler];
-            if (code !== null) {
+            if (typeof code !== "undefined" && code !== null) {
                 templateNode.handlers.push({ name: handler, code: code });
             }
         }
@@ -585,14 +585,15 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
     children = templateNode.children;
     
     function processChildren() {
-        if (children !== null) {
+        if (typeof children !== "undefined" && children !== null) {
             for (i = 0; i < children.length; i++) {
                 Exhibit.Lens._constructFromLensTemplateNode(roots, rootValueTypes, children[i], elmt, opts);
             }
         }
     }
     
-    if (templateNode.condition !== null) {
+    if (typeof templateNode.condition !== "undefined" &&
+        templateNode.condition !== null) {
         if (templateNode.condition.test === "if-exists") {
             if (!templateNode.condition.expression.testExists(
                     roots,
@@ -610,12 +611,12 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
                     database
                 ).values.contains(true)) {
                 
-                if (children !== null && children.length > 0) {
+                if (typeof children !== "undefined" && children !== null && children.length > 0) {
                     Exhibit.Lens._constructFromLensTemplateNode(
                         roots, rootValueTypes, children[0], parentElmt, opts);
                 }
             } else {
-                if (children !== null && children.length > 1) {
+                if (typeof children !== "undefined" && children !== null && children.length > 1) {
                     Exhibit.Lens._constructFromLensTemplateNode(
                         roots, rootValueTypes, children[1], parentElmt, opts);
                 }
@@ -629,11 +630,12 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
                 database
             ).values;
             
-            if (children !== null) {
+            if (typeof children !== "undefined" && children !== null) {
                 lastChildTemplateNode = null;
                 for (c = 0; c < children.length; c++) {
                     childTemplateNode = children[c];
-                    if (childTemplateNode.condition !== null && 
+                    if (typeof childTemplateNode.condition !== "undefined" &&
+                        childTemplateNode.condition !== null && 
                         childTemplateNode.condition.test === "case") {
                         
                         if (values.contains(childTemplateNode.condition.value)) {
@@ -648,7 +650,8 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
                 }
             }
             
-            if (lastChildTemplateNode !== null) {
+            if (typeof lastChildTemplateNode !== "undefined" &&
+                lastChildTemplateNode !== null) {
                 Exhibit.Lens._constructFromLensTemplateNode(
                     roots, rootValueTypes, lastChildTemplateNode, parentElmt, opts);
             }
@@ -657,7 +660,8 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
     }
     
     elmt = Exhibit.Lens._constructElmtWithAttributes(templateNode, parentElmt, database);
-    if (templateNode.contentAttributes !== null) {
+    if (typeof templateNode.contentAttributes !== "undefined" &&
+        templateNode.contentAttributes !== null) {
         contentAttributes = templateNode.contentAttributes;
         makeAppender = function(vs) {
             return function(v) {
@@ -683,7 +687,8 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
             }
         }
     }
-    if (templateNode.subcontentAttributes !== null) {
+    if (typeof templateNode.subcontentAttributes !== "undefined" &&
+        templateNode.subcontentAttributes !== null) {
         subcontentAttributes = templateNode.subcontentAttributes;
         for (i = 0; i < subcontentAttributes.length; i++) {
             attribute = subcontentAttributes[i];
@@ -719,7 +724,8 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
         }
     }
     itemID = roots["value"];
-    if (templateNode.control !== null) {
+    if (typeof templateNode.control !== "undefined" &&
+        templateNode.control !== null) {
         switch (templateNode.control) {
 
         case "item-link":
@@ -807,14 +813,15 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
             }
             break;
         }
-    } else if (templateNode.content !== null) {
+    } else if (typeof templateNode.content !== "undefined" &&
+               templateNode.content !== null) {
         results = templateNode.content.evaluate(
             roots,
             rootValueTypes,
             "value",
             database
         );
-        if (children !== null) {
+        if (typeof children !== "undefined" && children !== null) {
             rootValueTypes2 = { "value" : results.valueType, "index" : "number" };
             index = 1;
             
@@ -835,13 +842,14 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
         } else {
             Exhibit.Lens._constructDefaultValueList(results.values, results.valueType, elmt, templateNode.uiContext);
         }
-    } else if (templateNode.edit !== null) {
+    } else if (typeof templateNode.edit !== "undefined" &&
+               templateNode.edit !== null) {
         // TODO: handle editType
 
         // process children first, to get access to OPTION children of SELECT elements
         processChildren();
         Exhibit.Lens._constructEditableContent(templateNode, elmt, itemID, uiContext);
-    } else if (children !== null) {
+    } else if (typeof children !== "undefined" && children !== null) {
         for (i = 0; i < children.length; i++) {
             Exhibit.Lens._constructFromLensTemplateNode(roots, rootValueTypes, children[i], elmt, opts);
         }
