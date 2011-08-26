@@ -1,5 +1,5 @@
 /**
- * @fileOverview
+ * @fileOverview Code values along a color gradient.
  * @author David Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
