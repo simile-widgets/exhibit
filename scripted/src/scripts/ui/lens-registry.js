@@ -114,7 +114,7 @@ Exhibit.LensRegistry.prototype.getEditLens = function(itemID, uiContext) {
  * @param {Element} div
  * @param {Exhibit.UIContext} uiContext
  * @param {Object} opts
- * @param {} opts.lensTemplate
+ * @param {Exhibit.Lens} opts.lensTemplate
  * @returns {Exhibit.Lens}
  */
 Exhibit.LensRegistry.prototype.createLens = function(itemID, div, uiContext, opts) {
@@ -139,7 +139,7 @@ Exhibit.LensRegistry.prototype.createLens = function(itemID, div, uiContext, opt
  * @param {Element} div
  * @param {Exhibit.UIContext} uiContext
  * @param {Object} opts
- * @param {} opts.lensTemplate
+ * @param {Exhibit.Lens} opts.lensTemplate
  * @returns {Exhibit.Lens}
  */
 Exhibit.LensRegistry.prototype.createEditLens = function(itemID, div, uiContext, opts) {
@@ -153,7 +153,7 @@ Exhibit.LensRegistry.prototype.createEditLens = function(itemID, div, uiContext,
  * @param {Element} div
  * @param {Exhibit.UIContext} uiContext
  * @param {Object} opts
- * @param {} opts.lensTemplate
+ * @param {Exhibit.Lens} opts.lensTemplate
  * @returns {Exhibit.Lens}
  */
 Exhibit.LensRegistry.prototype.createNormalLens = function(itemID, div, uiContext, opts) {

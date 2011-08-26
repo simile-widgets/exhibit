@@ -156,7 +156,7 @@ Exhibit.Formatter._TextFormatter = function(uiContext) {
  */
 Exhibit.Formatter._TextFormatter.prototype.format = function(value, appender) {
     var span = $("<span>").html(this.formatText(value));
-    appender(span.get(0));
+    appender(span);
 };
 
 /**
@@ -190,7 +190,7 @@ Exhibit.Formatter._BooleanFormatter = function(uiContext) {
  */
 Exhibit.Formatter._BooleanFormatter.prototype.format = function(value, appender) {
     var span = $("<span>").html(this.formatText(value));
-    appender(span.get(0));
+    appender(span);
 };
 
 /**
@@ -286,7 +286,7 @@ Exhibit.Formatter._ImageFormatter.prototype.format = function(value, appender) {
                      ).value);
         }
     }
-    appender(img.get(0));
+    appender(img);
 };
 
 /**
@@ -322,7 +322,7 @@ Exhibit.Formatter._URLFormatter.prototype.format = function(value, appender) {
     //if (this._externalIcon !== null) {
     //
     //}
-    appender(a.get(0));
+    appender(a));
 };
 
 /**
@@ -376,7 +376,7 @@ Exhibit.Formatter._CurrencyFormatter.prototype.format = function(value, appender
     text = this.formatText(value);
     if (value < 0 && this._negativeFormat.red) {
         span = $("<span>").html(text).css("color", "red");
-        appender(span.get(0));
+        appender(span);
     } else {
         appender(document.createTextNode(text));
     }

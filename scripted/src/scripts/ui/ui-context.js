@@ -201,7 +201,7 @@ Exhibit.UIContext.prototype.format = function(value, valueType, appender) {
 };
 
 /**
- * @param {Function} iterator
+ * @param {Exhibit.Set} iterator
  * @param {Number} count
  * @param {String} valueType
  * @param {Function} appender
