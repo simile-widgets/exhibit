@@ -10,7 +10,7 @@ if (!("l10n" in Exhibit.OrderedViewFrame)) {
 Exhibit.OrderedViewFrame.l10n.removeOrderLabel = "Retirer ce critère";
 
 Exhibit.OrderedViewFrame.l10n.sortingControlsTemplate =
-    "Trier par : <span id='ordersSpan'></span>, <a id='thenSortByAction' href='javascript:void' class='exhibit-action' title='Ajouter un item'>puis par...</a>";
+    "Trier par : <span id='ordersSpan'></span>, <a id='thenSortByAction' href='#' class='exhibit-action' title='Ajouter un item'>puis par...</a>";
 
 Exhibit.OrderedViewFrame.l10n.formatSortActionTitle = function(propertyLabel, sortLabel) {
     return "Trier par " + propertyLabel + " (" + sortLabel + ")";

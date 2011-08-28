@@ -10,7 +10,7 @@ if (!("l10n" in Exhibit.OrderedViewFrame)) {
 Exhibit.OrderedViewFrame.l10n.removeOrderLabel = "Fjern denne sorteringsrekkefølgen";
 
 Exhibit.OrderedViewFrame.l10n.sortingControlsTemplate =
-    "sortert etter: <span id='ordersSpan'></span>; <a id='thenSortByAction' href='javascript:void' class='exhibit-action' title='Further sort the items'>then by...</a>";
+    "sortert etter: <span id='ordersSpan'></span>; <a id='thenSortByAction' href='#' class='exhibit-action' title='Further sort the items'>then by...</a>";
 
 Exhibit.OrderedViewFrame.l10n.formatSortActionTitle = function(propertyLabel, sortLabel) {
     return "Sorter etter " + propertyLabel + " (" + sortLabel + ")";

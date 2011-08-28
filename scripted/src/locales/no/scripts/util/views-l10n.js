@@ -11,7 +11,7 @@ Exhibit.ViewUtilities.l10n.unplottableMessageFormatter = function(totalCount, un
     var count = unplottableItems.length;
     
     return String.substitute(
-        "<a class='exhibit-action exhibit-views-unplottableCount' href='javascript:void' id='unplottableCountLink'>%0</a> "+
+        "<a class='exhibit-action exhibit-views-unplottableCount' href='#' id='unplottableCountLink'>%0</a> "+
         "av <class class='exhibit-views-totalCount'>%1</span> kunne ikke vises på kart.",
         [ count == 1 ? (count + " treff") : (count + " treff"), totalCount ]
     );
