@@ -120,9 +120,9 @@ Exhibit.Registry.unregister = function(component, type) {
     var c;
     if (Exhibit.Registry.isRegistered(component, type)) {
         c = Exhibit.Registry.get(component, type);
-        if (typeof c.dispose === "function") {
-            c.dispose();
-        }
+        //if (typeof c.dispose === "function") {
+        //    c.dispose();
+        //}
         Exhibit.Registry._registry[component][type] = null;
         delete Exhibit.Registry._registry[component][type];
     }
