@@ -110,6 +110,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
 
     self = this;
     postLoad = function(s, textStatus, jqxhr) {
+        Exhibit.UI.hideBusyIndicator();
         try {
             self._parse(url, s, postParse);
         } catch(e) {
@@ -118,6 +119,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
         }
     };
 
+    Exhibit.UI.showBusyIndicator();
     resolver(url, database, postLoad);
 };
 

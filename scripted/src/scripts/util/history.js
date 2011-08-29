@@ -80,7 +80,7 @@ Exhibit.History.stateListener = function(evt) {
     fullState = Exhibit.History.getState();
 
     if (fullState.data.lengthy) {
-        $(document).trigger("busyDialogStart.exhibit");
+        Exhibit.UI.showBusyIndicator();
     }
 
     components = fullState.data.components;
@@ -98,7 +98,7 @@ Exhibit.History.stateListener = function(evt) {
     Exhibit.History._state = fullState.data.state || 0;
 
     if (fullState.data.lengthy) {
-        $(document).trigger("busyDialogEnd.exhibit");
+        Exhibit.UI.hideBusyIndicator();
     }
 };
 
