@@ -212,7 +212,20 @@ Exhibit.TabularView._configure = function(view, configuration) {
     }
 
     view._setIdentifier();
-    Exhibit.Registry.register(Exhibit.View._registryKey, view.getID(), view);
+};
+
+/**
+ *
+ */
+Exhibit.TabularView.prototype._register = function() {
+    Exhibit.Registry.register(Exhibit.View._registryKey, this.getID(), this);
+};
+
+/**
+ *
+ */
+Exhibit.TabularView.prototype._unregister = function() {
+    Exhibit.Registry.unregister(Exhibit.View._registryKey, this.getID());
 };
 
 /**
@@ -265,12 +278,15 @@ Exhibit.TabularView.prototype.dispose = function() {
     
     this._dom = null;
     this._div = null;
+    this._unregister();
 };
 
 /**
  *
  */
 Exhibit.TabularView.prototype._initializeUI = function() {
+    this._register();
+
     var self = this;
     
     $(this._div).empty();
@@ -291,6 +307,11 @@ Exhibit.TabularView.prototype._initializeUI = function() {
         $(this._dom.collectionSummaryDiv).hide();
     }
     
+    Exhibit.View.addViewState(
+        this.getID(),
+        this.exportState()
+    );
+
     this._reconstruct();
 };
 
