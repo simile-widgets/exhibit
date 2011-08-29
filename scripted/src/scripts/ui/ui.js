@@ -435,7 +435,7 @@ Exhibit.UI.hideBusyIndicator = function() {
     }
     
     try {
-        $(Exhibit.UI._busyIndicator).remove();
+        Exhibit.UI._busyIndicator.remove();
     } catch(e) {
         // silent
     }
@@ -763,7 +763,7 @@ Exhibit.UI.createBusyIndicator = function() {
     containerDiv.addClass("exhibit-busyIndicator");
     contentDiv.addClass("exhibit-busyIndicator-content");
     
-    img = $("<img>").attr("src", urlPrefix + "progress-running.gif");
+    img = $("<img />").attr("src", urlPrefix + "progress-running.gif");
     contentDiv.append(img);
     contentDiv.append(document.createTextNode(" " + Exhibit.l10n.busyIndicatorMessage));
     
