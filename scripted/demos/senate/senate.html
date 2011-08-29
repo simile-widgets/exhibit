@@ -33,9 +33,9 @@
                 </div>
                 <div id="content-area">
                     <div class="item" ex:role="exhibit-lens" ex:itemTypes="Senator" style="display: none">
-                        <a ex:href-content=".homepage"><span ex:content=".label"></span> (<span ex:content=".party"></span>-<span ex:content=".state"></span>)</a>
-                        <div>Committees: <span ex:content=".committeeMember.label"></span></div>
-                        <div>Bills (yesterday): <span ex:content="!sponsor.description"></span></div>
+                        <h3><a ex:href-content=".homepage"><span ex:content=".label"></span> (<span ex:content=".party"></span>-<span ex:content=".state"></span>)</a></h3>
+                        <div><strong>Committees:</strong> <span ex:content=".committeeMember.label"></span></div>
+                        <span ex:if-exists="!sponsor.description"><div><strong>Bills (yesterday):</strong> <span ex:content="!sponsor.description"></span></div></span>
                     </div>
                     <div class="item" ex:role="exhibit-lens" ex:itemTypes="Bill" style="display: none">
                         <p><span ex:content=".description"></span></p>
@@ -62,7 +62,8 @@
                         <div ex:role="exhibit-view"
                             ex:label="Tiles"
                             ex:paginate="true"
-                            ></div>
+                          ></div>
+                        </div>
                     </div>
                 </div>
             </td>
