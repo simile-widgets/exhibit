@@ -90,6 +90,7 @@ Exhibit.History.stateListener = function(evt) {
             component = Exhibit.Registry.get(components[key].type, key);
             if (component !== null &&
                 typeof component.importState === "function") {
+                // @@@ not every component is immediately available
                 component.importState(componentState);
             }
         }
@@ -98,6 +99,31 @@ Exhibit.History.stateListener = function(evt) {
 
     if (fullState.data.lengthy) {
         $(document).trigger("busyDialogEnd.exhibit");
+    }
+};
+
+/**
+ * Catch up for components that aren't immediately available.
+ *
+ * @param {jQuery.Event} evt
+ * @param {String} type
+ * @param {String} id
+ */
+Exhibit.History.componentStateListener = function(evt, type, id) {
+    var fullState, components, componentState, component;
+    fullState = Exhibit.History.getState();
+    if (fullState !== null) {
+        components = fullState.data.components;
+        if (components.hasOwnProperty(id)) {
+            componentState = components[id].state;
+            component = Exhibit.Registry.get(type, id);
+            if (component !== null &&
+                typeof component.importState === "function") {
+                // @@@ not every component is immediately available
+                // @@@ some components should be considered disposed of
+                component.importState(componentState);
+            }
+        }
     }
 };
 
@@ -172,23 +198,33 @@ Exhibit.History.pushState = function(data, subtitle) {
  * @static
  * @param {Object} data
  * @param {String} subtitle
+ * @param {String} url
  */
 Exhibit.History.replaceState = function(data, subtitle, url) {
-    var title;
+    var title, currentState;
 
     if (Exhibit.History.enabled) {
+        currentState = Exhibit.History.getState();
         title = Exhibit.History._originalTitle;
 
         if (typeof subtitle !== "undefined" &&
             subtitle !== null &&
             subtitle !== "") {
             title += " {" + subtitle + "}";
+        } else {
+            if (typeof currentState.title !== "undefined") {
+                title = Exhibit.History.getState().title;
+            }
         }
 
-        if (typeof url === "undefined" || url === null) {
-            url = Exhibit.History._originalLocation;
+        if (typeof url === "undefined" || url === null &&
+            typeof currentState.url !== "undefined") {
+            url = currentState.url;
         }
         
         History.replaceState(data, title, url);
     }
 };
+
+$(document).bind("importReady.exhibit",
+                 Exhibit.History.componentStateListener);
