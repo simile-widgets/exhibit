@@ -506,8 +506,7 @@ Exhibit.ViewPanel.prototype.exportState = function(state) {
  */
 Exhibit.ViewPanel.prototype.importState = function(state) {
     if (this.stateDiffers(state)) {
-        this._viewIndex = state.viewIndex;
-        this._switchView(this._viewIndex);
+        this._switchView(state.viewIndex);
     }
 };
 
