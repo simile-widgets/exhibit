@@ -159,7 +159,7 @@ Exhibit.History.pushComponentState = function(component, registry, data, subtitl
     state.data.components[component.getID()] = {
         "type": registry,
         "state": data
-    }
+    };
 
     Exhibit.History.pushState(state.data, subtitle);
 };
@@ -217,7 +217,7 @@ Exhibit.History.replaceState = function(data, subtitle, url) {
             }
         }
 
-        if (typeof url === "undefined" || url === null &&
+        if ((typeof url === "undefined" || url === null) &&
             typeof currentState.url !== "undefined") {
             url = currentState.url;
         }
