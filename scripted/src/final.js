@@ -11,6 +11,10 @@ $(document).ready(function() {
         $(document).trigger("scriptsLoaded.exhibit");
     });
 
+    $(document).one("scriptsLoaded.exhibit", function(evt) {
+        $(document).trigger("registerComponents.exhibit");
+    });
+
     $(document).one("exhibitConfigured.exhibit", function(evt) {
         Exhibit.Bookmark.init();
         Exhibit.History.init();

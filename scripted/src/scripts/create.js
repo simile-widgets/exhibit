@@ -30,7 +30,6 @@ $(document).ready(function() {
     }
 
     $(document).one("scriptsLoaded.exhibit", function(evt) {
-        $(document).trigger("registerComponents.exhibit");
         window.database = Exhibit.Database.create();
         window.database.loadLinks(fDone);
     });
