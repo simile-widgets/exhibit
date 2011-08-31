@@ -227,11 +227,10 @@ Exhibit.parseURLParameters = function(url, to, types) {
 Exhibit.load = function() {
     var i, j, k, o, dep, scripts, script, url, paramTypes, scr, docHead, style;
 
-    scr = Exhibit.scripts;
-
     paramTypes = {
         "bundle": Boolean,
         "js": Array,
+        "postLoad": Boolean,
         "css": Array,
         "autoCreate": Boolean,
         "safe": Boolean
@@ -261,6 +260,15 @@ Exhibit.load = function() {
         Exhibit.scripts.push("scripts/create.js");
     }
 
+    if (typeof Exhibit.params.js === "object") {
+        if (Exhibit.params.postLoad) {
+            Exhibit.scripts = Exhibit.scripts.concat(Exhibit.params.js);
+        } else {
+            Exhibit.scripts = Exhibit.params.js.concat(Exhibit.scripts);
+        }
+    };
+
+
     // load styles first
     docHead = document.getElementsByTagName("head")[0];
     for (i = 0; i < Exhibit.styles.length; i++) {
@@ -277,9 +285,15 @@ Exhibit.load = function() {
         AllowDuplicates: false
     });
 
+    scr = Exhibit.scripts;
     for (i = 0; i < scr.length; i++) {
         if (!Exhibit._dependencies.hasOwnProperty(scr[i])) {
-            $LAB.script(Exhibit.urlPrefix + scr[i]);
+            if (scr[i].indexOf("/") === 0 ||
+                (scr[i].indexOf(":") > 0 && scr[i].indexOf("//") > 0)) {
+                    $LAB.script(scr[i]);
+                } else {
+                    $LAB.script(Exhibit.urlPrefix + scr[i]);
+                }
         } else if (Exhibit._dependencies.hasOwnProperty(scr[i])) {
             dep = Exhibit._dependencies[scr[i]].split(".");
             if (dep.length === 1) {
