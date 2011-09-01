@@ -55,7 +55,7 @@ Exhibit.ResizableDivWidget.prototype._initializeUI = function() {
     this._div.innerHTML = 
         "<div></div>" +
         "<div class='exhibit-resizableDivWidget-resizer'>" +
-            Exhibit.UI.createTranslucentImageHTML(Exhibit.urlPrefix + "images/down-arrow.png") +
+            Exhibit.UI.createTranslucentImageHTML("images/down-arrow.png") +
         "</div>";
         
     this._contentDiv = this._div.childNodes[0];
