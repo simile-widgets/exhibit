@@ -361,7 +361,7 @@
                 return "<img src='" + url + "' style=\"" + style + "\" />";
             } else {
                 return "<img src=\"" + url + "\"" +
-                    (verticalAlign !== null ? " style=\"vertical-align: " + verticalAlign + ";\"" : "") +
+                    (typeof verticalAlign !== "undefined" && verticalAlign !== null ? " style=\"vertical-align: " + verticalAlign + ";\"" : "") +
                     " />";
             }
         },
