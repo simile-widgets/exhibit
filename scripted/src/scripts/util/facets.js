@@ -124,11 +124,10 @@ Exhibit.FacetUtilities.constructFacetItem = function(
         "<div class='exhibit-facet-value-inner' id='inner'>" + 
             (   "<div class='exhibit-facet-value-checkbox'>&#160;" +
                     Exhibit.UI.createTranslucentImageHTML(
-                        Exhibit.urlPrefix + 
-                        (   facetHasSelection ?
+                        facetHasSelection ?
                             (selected ? "images/black-check.png" : "images/no-check.png") :
                             "images/no-check-no-border.png"
-                        )) +
+                    ) +
                 "</div>"
             ) +
             "<a class='exhibit-facet-value-link' href='#' id='link'></a>" +
