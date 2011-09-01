@@ -75,7 +75,7 @@ Exhibit.UI.create = function(configuration, elmt, uiContext) {
         case "logo":
             return Exhibit.Logo.create(configuration, elmt, uiContext);
         case "hiddenContent":
-            elmt.style.display = "none";
+            $(elmt).hide();
             return null;
         }
     }
@@ -115,7 +115,7 @@ Exhibit.UI.createFromDOM = function(elmt, uiContext) {
     case "logo":
         return Exhibit.Logo.createFromDOM(elmt, uiContext);
     case "hiddenContent":
-        $(elmt).css("display", "none");
+        $(elmt).hide();
         return null;
     }
     return null;
