@@ -1,0 +1,11 @@
+.celebrity {
+  margin: 1em;
+  padding: 1em;
+  border: solid grey 3px;
+  border-radius: 5px;
+}
+
+.tags {
+  font-size: smaller;
+  color: grey;
+}

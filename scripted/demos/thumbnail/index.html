@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>SIMILE Widgets | Exhibit | Examples | Thumbnail View</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    
+    <link href="tagged-data.js" type="application/json" rel="exhibit/data" />
+    <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/2.2.0/exhibit-api.js -->
+    <script src="../src/exhibit-api.js"></script>
+  </head>
+
+  <body>
+    <div ex:role="exhibit-collection" ex:itemTypes="Celebrity"></div>
+    <table id="frame">
+        <tr>
+            <td id="content">
+                <h1>Tag clouds</h1>
+                <div ex:role="view" ex:viewClass="Thumbnail">
+                  <div class="celebrity" ex:role="exhibit-lens" style="display: none;">
+                    <div ex:content=".label"></div>
+                    <div class="tags" ex:content=".tags"></div>
+                  </div>
+                </div>
+            </td>
+            <td id="sidebar" width="25%">
+               <div ex:role="exhibit-facet"
+                 ex:expression=".tags"
+                 ex:facetClass="Cloud"
+                 ex:facetLabel="Tags"
+                 id="tag-facet"></div>
+            </td>
+        </tr>
+    </table>
+  </body>
+</html>
