@@ -4,7 +4,7 @@
  */
 
 $(document).ready(function() {
-    $(document).one("scriptsLoaded.exhibit", function(event) {
+    $(document).one("scriptsLoaded.exhibit", function(evt) {
         if (Modules.args.length === 0) {
             for (var mod in Modules.tests) {
                 Modules.loadScript(Modules.tests[mod]);
