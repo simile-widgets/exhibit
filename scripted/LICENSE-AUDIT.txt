@@ -63,7 +63,7 @@ Software Libraries
 LAB.js
 ------
  * http://getify.github.com/LABjs/
- * 1.2.0
+ * 2.0.3
  * MIT
  * scripted/src/lib/LAB.min.js
 
