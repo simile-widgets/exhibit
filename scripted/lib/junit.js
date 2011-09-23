@@ -34,6 +34,9 @@ JUnitReporter.prototype.moduleStart = function(name, start) {
 };
 
 JUnitReporter.prototype.moduleDone = function(name, failed, total) {
+    if (typeof this._suites[name] === "undefined") {
+        return;
+    }
     this._suites[name]['tests'] = total;
     this._suites[name]['failures'] = failed;
     this._suites[name]['errors'] = 0;
