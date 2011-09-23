@@ -21,6 +21,15 @@ Envjs({
         "gat": function(script) {
             script.src = "";
             return false;
+        },
+        "exhibit-api\.js": function(script) {
+            // LABjs makes some poor assumptions about what can be
+            // done in Envjs just because it isn't Opera or Firefox,
+            // so masquerade via LABjs' Firefox test.  This should
+            // prevent it from preloading, which interferes with Exhibit
+            // loading.
+            document.documentElement.style.MozAppearance = "";
+            return true;
         }
     },
     afterScriptLoad: {
