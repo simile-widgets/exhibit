@@ -56,11 +56,9 @@ Exhibit.ThumbnailView._settingSpecs = {
 };
 
 /**
- * drop IE hack for now
-Exhibit.ThumbnailView._itemContainerClass = SimileAjax.Platform.browser.isIE ?
-    "exhibit-thumbnailView-itemContainer-IE" :
-    "exhibit-thumbnailView-itemContainer";
-*/
+ * Constant leftover from a now unnecessary IE hack.
+ * @constant
+ */
 Exhibit.ThumbnailView._itemContainerClass = "exhibit-thumbnailView-itemContainer";
 
 /**
@@ -167,7 +165,7 @@ Exhibit.ThumbnailView.prototype._setIdentifier = function() {
 
     // @@@ not very unique
     if (typeof this._id === "undefined" || this._id === null) {
-        this._id = "tile"
+        this._id = "thumbnail"
             + "-"
             + this._uiContext.getCollection().getID();
     }
@@ -272,7 +270,7 @@ Exhibit.ThumbnailView.prototype._reconstructWithFloats = function() {
             groupSortKey
         );
 
-        state.div.appendChild(groupDom.elmt);
+        $(state.div).append(groupDom.elmt);
         state.div = groupDom.contentDiv;
 
         state.groupDoms.push(groupDom);
@@ -293,24 +291,25 @@ Exhibit.ThumbnailView.prototype._reconstructWithFloats = function() {
         }
 
         itemLensDiv = $("<div>");
-        itemLensDiv.addClass(Exhibit.ThumbnailView._itemContainerClass);
+        itemLensDiv.attr("class", Exhibit.ThumbnailView._itemContainerClass);
 
         itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view._uiContext);
         state.itemContainer.append(itemLensDiv);
     };
 
-    this._div.style.display = "none";
+    $(this._div).hide();
 
-    this._dom.bodyDiv.innerHTML = "";
+    $(this._dom.bodyDiv).empty();
     this._orderedViewFrame.reconstruct();
     closeGroups(0);
 
-    this._div.style.display = "block";
+    $(this._div).show();
 };
 
 Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
-    var view = this;
-    var state = {
+    var view, state, closeGroups;
+    view = this;
+    state = {
         div:            this._dom.bodyDiv,
         groupDoms:      [],
         groupCounts:    [],
@@ -318,8 +317,9 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
         columnIndex:    0
     };
 
-    var closeGroups = function(groupLevel) {
-        for (var i = groupLevel; i < state.groupDoms.length; i++) {
+    closeGroups = function(groupLevel) {
+        var i;
+        for (i = groupLevel; i < state.groupDoms.length; i++) {
             state.groupDoms[i].countSpan.innerHTML = state.groupCounts[i];
         }
         state.groupDoms = state.groupDoms.slice(0, groupLevel);
@@ -333,7 +333,7 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
         state.itemContainer = null;
         state.table = null;
         state.columnIndex = 0;
-    }
+    };
 
     this._orderedViewFrame.onNewGroup = function(groupSortKey, keyType, groupLevel) {
         closeGroups(groupLevel);
@@ -343,7 +343,7 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
             groupSortKey
         );
 
-        state.div.appendChild(groupDom.elmt);
+        $(state.div).append(groupDom.elmt);
         state.div = groupDom.contentDiv;
 
         state.groupDoms.push(groupDom);
@@ -353,7 +353,7 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
     this._orderedViewFrame.onNewItem = function(itemID, index) {
         //if (index > 10) return;
 
-        var i, itemLensDiv, ItemLens;
+        var i, td, itemLensDiv, ItemLens;
         if (state.columnIndex >= view._settings.columnCount) {
             state.columnIndex = 0;
         }
@@ -362,29 +362,32 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
             state.table = Exhibit.ThumbnailView.constructTableItemContainer();
             $(state.div).append(state.table);
         }
-        if (state.columnIndex == 0) {
+
+        // one could jQuerify this with just append, but it seems less
+        // precise than this DOM-based method
+        if (state.columnIndex === 0) {
             state.table.insertRow(state.table.rows.length);
         }
-        var td = state.table.rows[state.table.rows.length - 1].insertCell(state.columnIndex++);
+        td = state.table.rows[state.table.rows.length - 1].insertCell(state.columnIndex++);
 
-        for (var i = 0; i < state.groupCounts.length; i++) {
+        for (i = 0; i < state.groupCounts.length; i++) {
             state.groupCounts[i]++;
         }
 
         itemLensDiv = $("<div>");
-        itemLensDiv.addClass(Exhibit.ThumbnailView._itemContainerClass);
+        itemLensDiv.attr("class", Exhibit.ThumbnailView._itemContainerClass);
 
         itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view._uiContext);
         $(td).append(itemLensDiv);
     };
 
-    this._div.style.display = "none";
+    $(this._div).hide();
 
-    this._dom.bodyDiv.innerHTML = "";
+    $(this._dom.bodyDiv).empty();
     this._orderedViewFrame.reconstruct();
     closeGroups(0);
 
-    this._div.style.display = "block";
+    $(this._div).show();
 };
 
 
@@ -494,5 +497,5 @@ Exhibit.ThumbnailView.constructItemContainer = function() {
 Exhibit.ThumbnailView.constructTableItemContainer = function() {
     var table = $("<table>");
     table.addClass("exhibit-thumbnailView-body");
-    return table[0];
+    return table.get(0);
 };
