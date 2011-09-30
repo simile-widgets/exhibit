@@ -23,8 +23,6 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     
     this._settings = {};
     this._dom = null;
-    
-    var self = this;
 };
 
 /**
@@ -103,7 +101,7 @@ Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext
 };
 
 /**
- * @param {Exhibit.CloudFacet}
+ * @param {Exhibit.CloudFacet} facet
  * @param {Object} configuration
  */
 Exhibit.CloudFacet._configure = function(facet, configuration) {
@@ -167,10 +165,9 @@ Exhibit.CloudFacet.prototype.getID = function() {
 Exhibit.CloudFacet.prototype.dispose = function() {
     this._uiContext.getCollection().removeFacet(this);
     
-    this._uiContext.getCollection().removeListener(this._listener);
     this._uiContext = null;
     
-    this._div.innerHTML = "";
+    $(this._div).empty();
     this._div = null;
     this._dom = null;
     
@@ -241,11 +238,12 @@ Exhibit.CloudFacet.prototype.setSelectMissing = function(selected) {
  * @returns {Exhibit.Set}
  */
 Exhibit.CloudFacet.prototype.restrict = function(items) {
+    var set, itemA, i, item, valueToItem, missingItems;
+
     if (this._valueSet.size() === 0 && !this._selectMissing) {
         return items;
     }
     
-    var set, itemA, i, item;
     if (this._expression.isPath()) {
         set = this._expression.getPath().walkBackward(
             this._valueSet, 
@@ -257,7 +255,7 @@ Exhibit.CloudFacet.prototype.restrict = function(items) {
         
         set = new Exhibit.Set();
         
-        var valueToItem = this._valueToItem;
+        valueToItem = this._valueToItem;
         this._valueSet.visit(function(value) {
             if (typeof valueToItem[value] !== "undefined") {
                 itemA = valueToItem[value];
@@ -274,7 +272,7 @@ Exhibit.CloudFacet.prototype.restrict = function(items) {
     if (this._selectMissing) {
         this._buildMaps();
         
-        var missingItems = this._missingItems;
+        missingItems = this._missingItems;
         items.visit(function(item) {
             if (typeof missingItems[item] !== "undefined") {
                 set.add(item);
@@ -297,7 +295,7 @@ Exhibit.CloudFacet.prototype.update = function(items) {
  * @returns {Array}
  */
 Exhibit.CloudFacet.prototype._computeFacet = function(items) {
-    var database, entries, valueType, self, path, facetValueResult, itemSubcollection, value, itemA, count, i, item;
+    var database, entries, valueType, self, path, facetValueResult, itemSubcollection, value, itemA, count, i, item, sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
     database = this._uiContext.getDatabase();
     entries = [];
     valueType = "text";
@@ -319,16 +317,18 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
         
         valueType = this._valueType;
         for (value in this._valueToItem) {
-            itemA = this._valueToItem[value];
-            count = 0;
-            for (i = 0; i < itemA.length; i++) {
-                if (items.contains(itemA[i])) {
-                    count++;
+            if (this._valueToItem.hasOwnProperty(value)) {
+                itemA = this._valueToItem[value];
+                count = 0;
+                for (i = 0; i < itemA.length; i++) {
+                    if (items.contains(itemA[i])) {
+                        count++;
+                    }
                 }
-            }
             
-            if (count >= this._settings.minimumCount || this._valueSet.contains(value)) {
-                entries.push({ value: value, count: count });
+                if (count >= this._settings.minimumCount || this._valueSet.contains(value)) {
+                    entries.push({ value: value, count: count });
+                }
             }
         }
     }
@@ -345,9 +345,9 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
             entry.selected = selection.contains(entry.value);
         }
         
-        var sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
+        sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
         if (typeof this._orderMap !== "undefined") {
-            var orderMap = this._orderMap;
+            orderMap = this._orderMap;
             
             sortValueFunction = function(a, b) {
                 if (typeof orderMap[a.selectionLabel] !== "undefined") {
@@ -370,7 +370,7 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
             };
         }
         
-        var sortFunction = sortValueFunction;
+        sortFunction = sortValueFunction;
         if (this._settings.sortMode === "count") {
             sortFunction = function(a, b) {
                 var c = b.count - a.count;
@@ -378,7 +378,7 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
             };
         }
 
-        var sortDirectionFunction = sortFunction;
+        sortDirectionFunction = sortFunction;
         if (this._settings.sortDirection === "reverse"){
             sortDirectionFunction = function(a, b) {
                 return sortFunction(b, a);
@@ -393,22 +393,25 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
         
         count = 0;
         for (item in this._missingItems) {
-            if (items.contains(item)) {
-                count++;
+            if (this._missingItems.hasOwnProperty(item)) {
+                if (items.contains(item)) {
+                    count++;
+                }
             }
         }
         
         if (count > 0 || this._selectMissing) {
-            span = document.createElement("span");
-            span.innerHTML = (typeof this._settings.missingLabel !== "undefined") ? 
-                this._settings.missingLabel : Exhibit.FacetUtilities.l10n.missingThisField;
-            span.className = "exhibit-facet-value-missingThisField";
+            span = $("<span>");
+            $(span).html((typeof this._settings.missingLabel !== "undefined") ? 
+                this._settings.missingLabel :
+                Exhibit.FacetUtilities.l10n.missingThisField);
+            $(span).attr("class", "exhibit-facet-value-missingThisField");
             
             entries.unshift({
                 value:          null, 
                 count:          count,
                 selected:       this._selectMissing,
-                selectionLabel: span,
+                selectionLabel: $(span).get(0),
                 actionLabel:    Exhibit.FacetUtilities.l10n.missingThisField
             });
         }
@@ -428,8 +431,8 @@ Exhibit.CloudFacet.prototype._notifyCollection = function() {
  *
  */
 Exhibit.CloudFacet.prototype._initializeUI = function() {
-    this._div.innerHTML = "";
-    this._div.className = "exhibit-cloudFacet";
+    $(this._div).empty();
+    $(this._div).attr("class", "exhibit-cloudFacet");
 
     var dom = $.simileDOM("string", this._div,
         ((typeof this._settings.facetLabel !== "undefined") ?
@@ -454,7 +457,7 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
     containerDiv = this._dom.valuesContainer;
     
     $(containerDiv).hide();
-    containerDiv.innerHTML = "";
+    $(containerDiv).empty();
     
     if (entries.length > 0) {
         min = Number.POSITIVE_INFINITY;
@@ -469,27 +472,27 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
         constructValue = function(entry) {
             var onSelect, onSelectOnly, elmt;
             onSelect = function(evt) {
-                    self._filter(entry.value, entry.actionLabel, !(evt.ctrlKey || evt.metaKey));
-                    evt.preventDefault();
-                    evt.stopPropagation();
+                self._filter(entry.value, entry.actionLabel, !(evt.ctrlKey || evt.metaKey));
+                evt.preventDefault();
+                evt.stopPropagation();
             };
             
-            elmt = document.createElement("span");
+            elmt = $("<span>");
             
-            elmt.appendChild(document.createTextNode("\u00A0"));
+            $(elmt).append(document.createTextNode("\u00A0"));
             if (typeof entry.selectionLabel === "string") {
-                elmt.appendChild(document.createTextNode(entry.selectionLabel));
+                $(elmt).append(document.createTextNode(entry.selectionLabel));
             } else {
-                elmt.appendChild(entry.selectionLabel);
+                $(elmt).append(entry.selectionLabel);
             }
-            elmt.appendChild(document.createTextNode("\u00A0"));
+            $(elmt).append(document.createTextNode("\u00A0"));
             
-            elmt.className = entry.selected ? 
-                "exhibit-cloudFacet-value exhibit-cloudFacet-value-selected" :
-                "exhibit-cloudFacet-value";
+            $(elmt).attr("class", entry.selected ? 
+                         "exhibit-cloudFacet-value exhibit-cloudFacet-value-selected" :
+                         "exhibit-cloudFacet-value");
                 
             if (entry.count > min) {
-                elmt.style.fontSize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range)) + "%";
+                $(elmt).css("fontSize", Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range)) + "%");
             }
             
             $(elmt).bind("click", onSelect);
@@ -512,7 +515,7 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
  * @param {Boolean} selectOnly
  */
 Exhibit.CloudFacet.prototype._filter = function(value, label, selectOnly) {
-    var self, selected, select, deselect, oldValues, oldSelectMissing, newValues, newSelectMissing, actionLabel, wasSelected, wasOnlyThingSelected, newRestrictions;
+    var self, selected, select, deselect, oldValues, oldSelectMissing, newValues, newSelectMissing, actionLabel, wasSelected, wasOnlyThingSelected, newRestrictions, facetLabel;
     self = this;
     
     oldValues = new Exhibit.Set(this._valueSet);
@@ -559,7 +562,7 @@ Exhibit.CloudFacet.prototype._filter = function(value, label, selectOnly) {
     
     newRestrictions = { selection: newValues.toArray(), selectMissing: newSelectMissing };
     
-    var facetLabel = (typeof this._settings.facetLabel !== "undefined") ? this._settings.facetLabel : "";
+    facetLabel = (typeof this._settings.facetLabel !== "undefined") ? this._settings.facetLabel : "";
     Exhibit.History.pushComponentState(
         this,
         Exhibit.Facet._registryKey,
@@ -588,14 +591,16 @@ Exhibit.CloudFacet.prototype._clearSelections = function() {
 };
 
 Exhibit.CloudFacet.prototype._buildMaps = function() {
+    var itemToValue, valueToItem, missingItems, valueType, insert, expression, database;
+
     if (typeof this._itemToValue === "undefined") {
-        var itemToValue = {};
-        var valueToItem = {};
-        var missingItems = {};
-        var valueType = "text";
+        itemToValue = {};
+        valueToItem = {};
+        missingItems = {};
+        valueType = "text";
         orderMap = this._orderMap;
         
-        var insert = function(x, y, map) {
+        insert = function(x, y, map) {
             if (typeof map[x] !== "undefined") {
                 map[x].push(y);
             } else {
@@ -603,8 +608,8 @@ Exhibit.CloudFacet.prototype._buildMaps = function() {
             }
         };
         
-        var expression = this._expression;
-        var database = this._uiContext.getDatabase();
+        expression = this._expression;
+        database = this._uiContext.getDatabase();
         
         this._uiContext.getCollection().getAllItems().visit(function(item) {
             var results = expression.evaluateOnItem(item, database);
@@ -659,6 +664,8 @@ Exhibit.CloudFacet.prototype._exportState = function(empty) {
 
 /**
  * @param {Object} state
+ * @param {Boolean} state.selectMissing
+ * @param {Array} state.selection
  */
 Exhibit.CloudFacet.prototype.importState = function(state) {
     if (this.stateDiffers(state)) {
@@ -673,9 +680,11 @@ Exhibit.CloudFacet.prototype.importState = function(state) {
 /**
  * Check if the state being requested for import is any different from the
  * current state.  This is only a worthwhile function to call if the check
- * is always faster than just going through with thei mport.
+ * is always faster than just going through with the import.
  * 
  * @param {Object} state
+ * @param {Boolean} state.selectMissing
+ * @param {Array} state.selection
  */
 Exhibit.CloudFacet.prototype.stateDiffers = function(state) {
     var stateSet, stateStartCount, valueStartCount;
