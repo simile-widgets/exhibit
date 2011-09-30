@@ -69,7 +69,7 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
  */
 Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
     var el = dom.frameDiv;
-    if ($(el.is(":visible")) {
+    if ($(el).is(":visible")) {
         $(el).hide();
         $(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/expand.png");
     } else {
