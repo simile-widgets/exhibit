@@ -609,7 +609,7 @@ Exhibit.ListFacet.prototype._exportState = function(empty) {
 
     return {
         "selection": s,
-        "selectMissing": this._selectMissing
+        "selectMissing": empty ? false : this._selectMissing
     };
 };
 
