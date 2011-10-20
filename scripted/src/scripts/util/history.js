@@ -141,9 +141,7 @@ Exhibit.History.getState = function() {
     }
 };
 
-Exhibit.History.pushComponentState = function(component, registry, data, subtitle, lengthy) {
-    var state = Exhibit.History.getState();
-
+Exhibit.History.setComponentState = function(state, component, registry, data, lengthy) {
     if (typeof state === "undefined" || state === null) {
         state = { "data": { "components": {} } };
     }
@@ -161,6 +159,12 @@ Exhibit.History.pushComponentState = function(component, registry, data, subtitl
         "state": data
     };
 
+    return state;
+};
+
+Exhibit.History.pushComponentState = function(component, registry, data, subtitle, lengthy) {
+    var state = Exhibit.History.getState();
+    Exhibit.History.setComponentState(state, component, registry, data, lengthy);
     Exhibit.History.pushState(state.data, subtitle);
 };
 
