@@ -474,7 +474,7 @@ Exhibit.UI.makeActionLink = function(text, handler) {
         }
     };
 
-    a.bind("click", handler2);
+    $(a).bind("click", handler2);
     
     return a;
 };
