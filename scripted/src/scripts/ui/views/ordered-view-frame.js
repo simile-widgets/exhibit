@@ -881,7 +881,7 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
     headerDiv.className = "exhibit-collectionView-header";
     
     if (showSummary) {
-        dom.collectionSummaryDiv.style.display = "block";
+        $(dom.collectionSummaryDiv).show();
         dom.collectionSummaryWidget = Exhibit.CollectionSummaryWidget.create(
             {},
             dom.collectionSummaryDiv, 
@@ -889,7 +889,7 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
         );
     }
     if (showControls) {
-        dom.controlsDiv.style.display = "block";
+        $(dom.controlsDiv).show();
         dom.groupOptionWidget = Exhibit.OptionWidget.create(
             {   label:      l10n.groupedAsSortedOptionLabel,
                 onToggle:   onGroupToggle

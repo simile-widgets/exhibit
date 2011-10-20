@@ -44,8 +44,8 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
     $(dom.valuesContainer).attr("class", "exhibit-facet-body");
     
     dom.setSelectionCount = function(count) {
-        this.filterCountSpan.innerHTML = count;
-        this.clearSelectionsDiv.style.display = count > 0 ? "block" : "none";
+        $(this.filterCountSpan).html(count);
+        $(this.clearSelectionsDiv).toggle(count > 0);
     };
     $(dom.clearSelectionsDiv).bind("click", onClearAllSelections);
     

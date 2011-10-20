@@ -52,14 +52,14 @@ Exhibit.ResizableDivWidget.prototype.getContentDiv = function() {
 Exhibit.ResizableDivWidget.prototype._initializeUI = function() {
     var self = this;
     
-    this._div.innerHTML = 
+    $(this._div).html(
         "<div></div>" +
         "<div class='exhibit-resizableDivWidget-resizer'>" +
             Exhibit.UI.createTranslucentImageHTML("images/down-arrow.png") +
-        "</div>";
+            "</div>");
         
-    this._contentDiv = this._div.childNodes[0];
-    this._resizerDiv = this._div.childNodes[1];
+    this._contentDiv = $(this._div).children().get(0);
+    this._resizerDiv = $(this._div).children().get(1);
     /**
        @@@ having removed SimileAjax, this needs replacing
     SimileAjax.WindowManager.registerForDragging(
