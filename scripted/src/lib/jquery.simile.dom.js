@@ -145,13 +145,13 @@
                             value = templateNode[attribute];
 
                             if (attribute === "field") {
-                                result[value] = elmt.get(0);
+                                result[value] = elmt;
                             } else if (attribute === "type" &&
                                        elmt.get(0).tagName === "input") {
                                 // do nothing
                             } else if (attribute === "children") {
                                 for (i = 0; i < value.length; i++) {
-                                    methods._fromTemplate(value[i], result, elmt.get(0));
+                                    methods._fromTemplate(value[i], result, elmt);
                                 }
                             } else if (attribute !== "tag" &&
                                        attribute !== "elmt") {
@@ -159,7 +159,7 @@
                             }
                         }
                     }
-                    return elmt.get(0);
+                    return elmt;
                 }
             }
         },
@@ -187,7 +187,7 @@
             }
             elmt.html(s);
 
-            dom = { elmt: elmt.get(0) };
+            dom = { elmt: elmt };
 
             if (typeof fieldElmts === "undefined" || fieldElmts === null) {
                 fieldElmts = {};
@@ -208,7 +208,6 @@
          */
         "_fromString": function(dom, elmt, fieldElmts) {
             var id, parentElmt;
-            
             id = $(elmt).attr("id");
             if (typeof id !== "undefined" && id.length > 0) {
                 $(elmt).removeAttr("id");
@@ -240,7 +239,7 @@
             node = $(elmt).children(':first');
             while (node.length !== 0) {
                 node2 = node.next();
-                methods._fromString(dom, node.get(0), fieldElmts);
+                methods._fromString(dom, node, fieldElmts);
                 node = node2;
             }
         },
