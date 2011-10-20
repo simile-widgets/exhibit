@@ -83,11 +83,12 @@ Exhibit.CollectionSummaryWidget.prototype._initializeUI = function() {
     
     l10n = Exhibit.CollectionSummaryWidget.l10n;
     onClearFilters = function(evt) {
-        self._resetCollection();
         evt.preventDefault();
         evt.stopPropagation();
+        self._resetCollection();
     };
 
+    $(this._div).hide();
     this._allResultsDom = $.simileDOM("string",
         "span", 
         String.substitute(
@@ -105,7 +106,7 @@ Exhibit.CollectionSummaryWidget.prototype._initializeUI = function() {
         }
     );
     this._noResultsDom = $.simileDOM("string",
-        "span", 
+        "span",
         String.substitute(
             l10n.noResultsTemplate,
             [ "exhibit-collectionSummaryWidget-results", "exhibit-collectionSummaryWidget-count" ]
@@ -113,8 +114,9 @@ Exhibit.CollectionSummaryWidget.prototype._initializeUI = function() {
         {   resetActionLink: Exhibit.UI.makeActionLink(l10n.resetFiltersLabel, onClearFilters)
         }
     );
-    
-    $(this._div).empty();
+    $(this._div).append(this._allResultsDom.elmt);
+    $(this._div).append(this._filteredResultsDom.elmt);
+    $(this._div).append(this._noResultsDom.elmt);
     this._reconstruct();
 };
 
@@ -128,11 +130,14 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
     database = this._uiContext.getDatabase();
     dom = this._dom;
 
-    $(this._div).empty();
+    $(this._div).hide();
+    $(this._allResultsDom.elmt).hide();
+    $(this._filteredResultsDom.elmt).hide();
+    $(this._noResultsDom.elmt).hide();
     
     if (originalSize > 0) {
         if (currentSize === 0) {
-            $(this._div).append(this._noResultsDom.elmt);
+            $(this._noResultsDom.elmt).show();
         } else {
             typeIDs = database.getTypeIDs(this._collection.getRestrictedItems()).toArray();
             typeID = typeIDs.length === 1 ? typeIDs[0] : "Item";
@@ -141,17 +146,19 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
                 Exhibit.Database.l10n.labelItemsOfType(currentSize, typeID, database, "exhibit-collectionSummaryWidget-count");
             
             if (currentSize === originalSize) {
-                $(this._div).append(this._allResultsDom.elmt);
+                $(this._allResultsDom.elmt).show();
                 $(this._allResultsDom.resultDescription).empty();
                 $(this._allResultsDom.resultDescription).append(description);
             } else {
-                $(this._div).append(this._filteredResultsDom.elmt);
+                $(this._filteredResultsDom.elmt).show();
                 $(this._filteredResultsDom.resultDescription).empty();
                 $(this._filteredResultsDom.resultDescription).append(description);
                 $(this._filteredResultsDom.originalCountSpan).html(originalSize);
             }
         }
     }
+
+    $(this._div).show();
 };
 
 /**
@@ -159,9 +166,15 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
  */
 Exhibit.CollectionSummaryWidget.prototype._resetCollection = function() {
     var state, collection;
-    state = {};
     collection = this._collection;
-    
+
+    state = this._collection.clearAllRestrictions();
+
+    Exhibit.History.pushState(
+        state.data,
+        Exhibit.CollectionSummaryWidget.l10n.resetActionTitle
+    );
+
     /** @@@ replace this with something that clears all a collection's facets
     SimileAjax.History.addLengthyAction(
         function() { state.restrictions = collection.clearAllRestrictions(); },

@@ -447,17 +447,24 @@ Exhibit.Collection.prototype.removeFacet = function(facet) {
  * @returns {Array} A list of objects returned by clearing restrictions.
  */
 Exhibit.Collection.prototype.clearAllRestrictions = function() {
-    var i, restrictions = [];
+    var i, state;
+    state = Exhibit.History.getState();
     
     this._updating = true;
     for (i = 0; i < this._facets.length; i++) {
-        restrictions.push(this._facets[i].clearAllRestrictions());
+        Exhibit.History.setComponentState(
+            state,
+            this._facets[i],
+            Exhibit.Facet._registryKey,
+            this._facets[i].exportEmptyState(),
+            true
+        );
     }
     this._updating = false;
     
     this.onFacetUpdated();
-    
-    return restrictions;
+
+    return state;
 };
 
 /**
