@@ -276,7 +276,15 @@ Exhibit._Impl.prototype.configure = function(configuration) {
  *                      (defaults to document.body, when none provided)
  */
 Exhibit._Impl.prototype.configureFromDOM = function(root) {
-    var collectionElmts = [], coderElmts = [], coordinatorElmts = [], lensElmts = [], facetElmts = [], otherElmts = [], f, uiContext, i, elmt, id, self, processElmts, exporters, expr, exporter, hash, itemID;
+    var controlPanelElmts, collectionElmts, coderElmts, coordinatorElmts, lensElmts, facetElmts, otherElmts, f, uiContext, i, elmt, id, self, processElmts, exporters, expr, exporter, hash, itemID;
+
+    collectionElmts = [];
+    coderElmts = [];
+    coordinatorElmts = [];
+    lensElmts = [];
+    facetElmts = [];
+    controlPanelElmts = [];
+    otherElmts = [];
 
     f = function(elmt) {
         var role, node;
@@ -339,6 +347,13 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
     processElmts(coderElmts);
     processElmts(lensElmts);
     processElmts(facetElmts);
+
+    //if (controlPanelElmts.length > 0) {
+        processElmts(controlPanelElmts);
+    //} else {
+        // @@@ add a div before the first view?
+    //}
+
     processElmts(otherElmts);
     
     exporters = Exhibit.getAttribute(document.body, "exporters");

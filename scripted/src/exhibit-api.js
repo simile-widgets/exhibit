@@ -126,10 +126,12 @@ var Exhibit = {
         "scripts/ui/views/thumbnail-view.js",
         "scripts/ui/coders/color-coder.js",
         "scripts/ui/coders/default-color-coder.js",
+        "scripts/ui/control-panel.js",
         "scripts/ui/widgets/collection-summary-widget.js",
         "scripts/ui/widgets/option-widget.js",
         "scripts/ui/widgets/resizable-div-widget.js",
         "scripts/ui/widgets/toolbox-widget.js",
+        "scripts/ui/widgets/bookmark-widget.js",
         "locales/manifest.js",
         "final.js"
     ],
@@ -139,6 +141,7 @@ var Exhibit = {
         "styles/exhibit.css",
         "styles/browse-panel.css",
         "styles/lens.css",
+        "styles/control-panel.css",
         "styles/util/facets.css",
         "styles/util/views.css",
         "styles/views/view-panel.css",
@@ -147,6 +150,7 @@ var Exhibit = {
         "styles/views/thumbnail-view.css",
         "styles/widgets/collection-summary-widget.css",
         "styles/widgets/resizable-div-widget.css",
+        "styles/widgets/bookmark-widget.css",
         "styles/widgets/toolbox-widget.css",
         "styles/widgets/legend-widget.css",
         "styles/widgets/option-widget.css"
