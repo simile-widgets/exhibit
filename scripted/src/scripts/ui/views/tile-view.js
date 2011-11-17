@@ -51,7 +51,6 @@ Exhibit.TileView = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.TileView._settingSpecs = {
-    "showToolbox":          { type: "boolean", defaultValue: true }
 };
 
 /**
@@ -192,13 +191,6 @@ Exhibit.TileView.prototype._initializeUI = function() {
         ]
     };
     this._dom = $.simileDOM("template", template);
-    if (this._settings.showToolbox) {
-        this._toolboxWidget = Exhibit.ToolboxWidget.createFromDOM(this._div, this._div, this._uiContext);
-        this._toolboxWidget.getGeneratedHTML = function() {
-            return $(self._dom.bodyDiv).html();
-        };
-    }
-
     this._orderedViewFrame._divHeader = this._dom.headerDiv;
     this._orderedViewFrame._divFooter = this._dom.footerDiv;
     this._orderedViewFrame._generatedContentElmtRetriever = function() {
@@ -270,13 +262,13 @@ Exhibit.TileView.prototype._reconstruct = function() {
         state.contents.append(itemLensItem);
     };
 
-    this._div.style.display = "none";
+    $(this._div).hide();
 
-    this._dom.bodyDiv.innerHTML = "";
+    $(this._dom.bodyDiv).empty();
     this._orderedViewFrame.reconstruct();
     closeGroups(0);
 
-    this._div.style.display = "block";
+    $(this._div).show();
 };
 
 /**

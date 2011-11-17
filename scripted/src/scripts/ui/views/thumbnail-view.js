@@ -51,7 +51,6 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.ThumbnailView._settingSpecs = {
-    "showToolbox":          { type: "boolean", defaultValue: true },
     "columnCount":          { type: "int", defaultValue: -1 }
 };
 
@@ -204,12 +203,6 @@ Exhibit.ThumbnailView.prototype._initializeUI = function() {
         ]
     };
     this._dom = $.simileDOM("template", template);
-    if (this._settings.showToolbox) {
-        this._toolboxWidget = Exhibit.ToolboxWidget.createFromDOM(this._div, this._div, this._uiContext);
-        this._toolboxWidget.getGeneratedHTML = function() {
-            return $(self._dom.bodyDiv).html();
-        };
-    }
 
     this._orderedViewFrame._divHeader = this._dom.headerDiv;
     this._orderedViewFrame._divFooter = this._dom.footerDiv;

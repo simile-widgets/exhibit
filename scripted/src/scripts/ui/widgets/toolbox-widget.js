@@ -15,16 +15,13 @@ Exhibit.ToolboxWidget = function(containerElmt, uiContext) {
     this._uiContext = uiContext;
     this._settings = {};
     this._customExporters = [];
-    
-    this._hovering = false;
-    this._initializeUI();
 };
 
 /**
  * @constant
  */
 Exhibit.ToolboxWidget._settingSpecs = {
-    "itemID": { type: "text" }
+    "itemID": { type: "text" },
 };
 
 /**
@@ -58,7 +55,6 @@ Exhibit.ToolboxWidget.createFromDOM = function(configElmt, containerElmt, uiCont
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.ToolboxWidget._settingSpecs, widget._settings);
     Exhibit.ToolboxWidget._configure(widget, configuration);
     
     widget._initializeUI();
@@ -77,8 +73,6 @@ Exhibit.ToolboxWidget._configure = function(widget, configuration) {
  *
  */
 Exhibit.ToolboxWidget.prototype.dispose = function() {
-    $(this._containerElmt).unbind("mouseover mouseout");
-    
     this._dismiss();
     this._settings = null;
     this._containerElmt = null;
@@ -96,104 +90,23 @@ Exhibit.ToolboxWidget.prototype.addExporter = function(exporter) {
  *
  */
 Exhibit.ToolboxWidget.prototype._initializeUI = function() {
-    var self = this;
-    $(this._containerElmt).bind("mouseover", function(evt) {
-        self._onContainerMouseOver(evt);
-    });
-    $(this._containerElmt).bind("mouseout", function(evt) {
-        self._onContainerMouseOut(evt);
-    });
+    this._makePopup();
+};
+
+Exhibit.ToolboxWidget.prototype._makePopup = function() {
+    var coords, docWidth, docHeight, popup;
+    self = this;
+    
+    popup = $("<div>")
+        .attr("class", "exhibit-toolboxWidget-popup screen");
+
+    this._fillPopup(popup);
+    $(this._containerElmt).append(popup);
+    this._popup = popup;
 };
 
 /**
- * @param {jQuery.Event} evt
- */
-Exhibit.ToolboxWidget.prototype._onContainerMouseOver = function(evt) {
-    var self, coords, docWidth, docHeight, popup;
-    if (!this._hovering) {
-        self = this;
-        coords = $(this._containerElmt).offset();
-        docWidth = $(document.body).width();
-        docHeight = $(document.body).height();
-        
-        popup = $("<div>")
-            .attr("class", "exhibit-toolboxWidget-popup screen")
-            .css("top", coords.top + "px")
-            .css("right", (docWidth - coords.left - $(this._containerElmt).width()) + "px");
-        
-        this._fillPopup(popup.get(0), evt);
-        
-        $(document.body).append(popup);
-        popup.bind("mouseover", function(evt) {
-            self._onPopupMouseOver(evt);
-        });
-        popup.bind("mouseout", function(evt) {
-            self._onPopupMouseOut(evt);
-        });
-        
-        this._popup = popup;
-        this._hovering = true;
-    } else {
-        this._clearTimeout();
-    }
-};
-
-/**
- * @param {jQuery.Event} evt
- */
-Exhibit.ToolboxWidget.prototype._onContainerMouseOut = function(evt) {
-    if (Exhibit.ToolboxWidget._mouseOutsideElmt(evt, this._containerElmt)) {
-        this._setTimeout();
-    }
-};
-
-/**
- * @param {jQuery.Event} evt
- */
-Exhibit.ToolboxWidget.prototype._onPopupMouseOver = function(evt) {
-    this._clearTimeout();
-};
-
-/**
- * @param {jQuery.Event} evt
- */
-Exhibit.ToolboxWidget.prototype._onPopupMouseOut = function(evt) {
-    if (Exhibit.ToolboxWidget._mouseOutsideElmt(evt, this._containerElmt)) {
-        this._setTimeout();
-    }
-};
-
-/**
- *
- */
-Exhibit.ToolboxWidget.prototype._setTimeout = function() {
-    var self = this;
-    this._timer = window.setTimeout(function() {
-        self._onTimeout();
-    }, 200);
-};
-
-/**
- *
- */
-Exhibit.ToolboxWidget.prototype._clearTimeout = function() {
-    if (this._timer) {
-        window.clearTimeout(this._timer);
-        this._timer = null;
-    }
-};
-
-/**
- *
- */
-Exhibit.ToolboxWidget.prototype._onTimeout = function() {
-    this._dismiss();
-    this._hovering = false;
-    this._timer = null;
-};
-
-/**
- * @param {Element} elmt
+ * @param {jQuery} elmt
  * @param {jQuery.Event} evt
  */
 Exhibit.ToolboxWidget.prototype._fillPopup = function(elmt, evt) {
@@ -207,32 +120,6 @@ Exhibit.ToolboxWidget.prototype._fillPopup = function(elmt, evt) {
     });
     
     $(elmt).append(exportImg);
-};
-
-/**
- *
- */
-Exhibit.ToolboxWidget.prototype._dismiss = function() {
-    if (typeof this._popup !== "undefined" && this._popup !== null) {
-        $(this._popup).remove();
-        this._popup = null;
-    }
-};
-
-/**
- * @param {jQuery.Event} evt
- * @param {Element|jQuery} elmt
- * @returns {Boolean}
- * @depends jQuery
- */
-Exhibit.ToolboxWidget._mouseOutsideElmt = function(evt, elmt) {
-    var eventCoords, coords;
-    eventCoords = { "x": evt.pageX, "y": evt.pageY };
-    coords = $(elmt).offset();
-    return (eventCoords.x < coords.left ||
-            eventCoords.x > coords.left + elmt.offsetWidth ||
-            eventCoords.y < coords.top ||
-            eventCoords.y > coords.top + elmt.offsetHeight);
 };
 
 /**
@@ -274,7 +161,8 @@ Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
             exportMany: this.getGeneratedHTML
         });
     }
-    
+
+    /** add a jquery event to handle registering generated html view */
     /*if (generatedContentElmtRetriever !== null) {
         popupDom.appendMenuItem(
             Exhibit.l10n.htmlExporterLabel,
@@ -326,7 +214,7 @@ Exhibit.ToolboxWidget.createExportDialogBox = function(string) {
         $(document.body).append($(dom.elmt));
         $(document).trigger("modalSuperseded.exhibit");
         
-        textarea = dom.textAreaContainer.firstChild;
+        textarea = $(dom.textAreaContainer).children().get(0);
         textarea.select();
         $(dom.closeButton).bind("click", function(evt) {
             dom.close();
