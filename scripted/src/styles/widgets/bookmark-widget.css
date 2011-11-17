@@ -1,0 +1,9 @@
+div.exhibit-bookmarkWidget-popup {
+    display:        inline;
+    text-align:     right;
+}
+
+img.exhibit-bookmarkWidget-button {
+    cursor: pointer;
+    margin: 0px 1px;
+}
