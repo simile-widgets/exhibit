@@ -74,6 +74,8 @@ Exhibit.UI.create = function(configuration, elmt, uiContext) {
             return Exhibit.ViewPanel.create(configuration, elmt, uiContext);
         case "logo":
             return Exhibit.Logo.create(configuration, elmt, uiContext);
+        case "controlPanel":
+            return Exhibit.ControlPanel.create(configuration, elmt, uiContext);
         case "hiddenContent":
             $(elmt).hide();
             return null;
@@ -112,6 +114,8 @@ Exhibit.UI.createFromDOM = function(elmt, uiContext) {
         return Exhibit.UI.createCoderFromDOM(elmt, uiContext);
     case "viewPanel":
         return Exhibit.ViewPanel.createFromDOM(elmt, uiContext);
+    case "controlPanel":
+        return Exhibit.ControlPanel.createFromDOM(elmt, null, uiContext);
     case "logo":
         return Exhibit.Logo.createFromDOM(elmt, uiContext);
     case "hiddenContent":
