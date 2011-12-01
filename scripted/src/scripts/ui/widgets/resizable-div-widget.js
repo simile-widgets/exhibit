@@ -15,6 +15,10 @@ Exhibit.ResizableDivWidget = function(configuration, elmt, uiContext) {
     if (typeof configuration.minHeight === "undefined") {
         configuration.minHeight = 10; // pixels
     }
+    this._dragging = false;
+    this._height = null;
+    this._origin = null;
+    this._ondrag = null;
     
     this._initializeUI();
 };
@@ -60,26 +64,30 @@ Exhibit.ResizableDivWidget.prototype._initializeUI = function() {
         
     this._contentDiv = $(this._div).children().get(0);
     this._resizerDiv = $(this._div).children().get(1);
-    /**
-       @@@ having removed SimileAjax, this needs replacing
-    SimileAjax.WindowManager.registerForDragging(
-        this._resizerDiv,
-        {   onDragStart: function() {
-                this._height = self._contentDiv.offsetHeight;
-            },
-            onDragBy: function(diffX, diffY) {
-                this._height += diffY;
-                self._contentDiv.style.height = Math.max(
-                    self._configuration.minHeight, 
-                    this._height
-                ) + "px";
-            },
-            onDragEnd: function() {
-                if ("onResize" in self._configuration) {
-                    self._configuration["onResize"]();
-                }
+
+    $(this._resizerDiv).bind("mousedown", function(evt) {
+        self._dragging = true;
+        self._height = $(self._contentDiv).height();
+        self._origin = { "x": evt.pageX, "y": evt.pageY };
+
+        self._ondrag = function(evt2) {
+            var height = self._height + evt2.pageY - self._origin.y;
+            evt.preventDefault();
+            evt.stopPropagation();
+            $(self._contentDiv).height(Math.max(
+                height,
+                self._configuration.minHeight
+            ));
+        };
+        $(document).bind("mousemove", self._ondrag);
+
+        self._dragdone = function(evt) {
+            self._dragging = false;
+            $(document).unbind("mousemove", self._ondrag);
+            if (typeof self._configuration.onResize === "function") {
+                self._configuration.onResize();
             }
-        }
-    );
-    */
+        };
+        $(self._resizerDiv).one("mouseup", self._dragdone);
+    });
 };
