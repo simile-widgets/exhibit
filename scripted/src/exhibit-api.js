@@ -40,7 +40,7 @@ var Exhibit = {
     },
 
     _dependencies: {
-        "lib/jquery.js": "$",
+        "lib/jquery-1.7.1.js": "$",
         "lib/json2.js": "JSON",
         "lib/amplify.store.js": "amplify", 
         "lib/base64.js": "Base64"
