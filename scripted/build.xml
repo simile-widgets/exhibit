@@ -193,7 +193,7 @@
   <!-- Mono lint -->
   <target name="lintone" description="Run lint on one file">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
-    <jslint haltOnFailure="false" options="onevar,sub,evil">
+    <jslint haltOnFailure="false" options="evil,sloppy,white,plusplus,browser,nomen,devel">
       <predef>jQuery, $$</predef>
       <formatter type="plain" />
       <fileset dir="." includes="${lintfile}" />
@@ -207,8 +207,8 @@
   <!-- Tests -->
   <target name="lint">
     <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
-    <jslint haltOnFailure="false" options="onevar,sub,evil">
-      <predef>jQuery, $$</predef>
+    <jslint haltOnFailure="false" options="evil,sloppy,white,plusplus,browser,nomen,devel">
+      <predef>jQuery, $$, Exhibit</predef>
       <formatter type="plain" />
       <fileset dir="${src}" includes="*.js,**/*.js" excludes="lib/*.js,exhibit-api.js" />
     </jslint>
