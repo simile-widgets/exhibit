@@ -133,7 +133,7 @@ var Exhibit = {
         "scripts/ui/widgets/toolbox-widget.js",
         "scripts/ui/widgets/bookmark-widget.js",
         "locales/manifest.js",
-        "final.js"
+        "scripts/final.js"
     ],
 
     "styles": [
