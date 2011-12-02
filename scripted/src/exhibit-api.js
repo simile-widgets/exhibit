@@ -58,7 +58,7 @@ var Exhibit = {
      * Scripts Exhibit will load.
      */
     scripts: [
-        "lib/jquery.js",
+        "lib/jquery-1.7.1.js",
         "lib/json2.js",
         "lib/amplify.store.js",
         "lib/history.adapter.jquery.js",
