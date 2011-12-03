@@ -149,9 +149,9 @@ Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
         );
     };
     
-    exporters = Exhibit.Registry.getKeys(Exhibit.Exporter._registryKey);
+    exporters = this._uiContext.getExhibit().getRegistry().getKeys(Exhibit.Exporter._registryKey);
     for (i = 0; i < exporters.length; i++) {
-        makeMenuItem(Exhibit.Registry.get(Exhibit.Exporter._registryKey, exporters[i]));
+        makeMenuItem(this._uiContext.getExhibit().getRegistry().get(Exhibit.Exporter._registryKey, exporters[i]));
     }
     
     if (typeof this.getGeneratedHTML !== "undefined") {

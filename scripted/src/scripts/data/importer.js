@@ -25,11 +25,18 @@ Exhibit.Importer = function(mimeType, loadType, parse) {
 Exhibit.Importer._registryKey = "importer";
 
 /**
- * @static
+ * @private
  */
-Exhibit.Importer._registerComponent = function() {
-    if (!Exhibit.Registry.hasRegistry(Exhibit.Importer._registryKey)) {
-        Exhibit.Registry.createRegistry(Exhibit.Importer._registryKey);
+Exhibit.Importer._registry = null;
+
+/**
+ * @static
+ * @param {Exhibit._Impl} ex
+ */
+Exhibit.Importer._registerComponent = function(evt, reg) {
+    Exhibit.Importer._registry = reg;
+    if (!reg.hasRegistry(Exhibit.Importer._registryKey)) {
+        reg.createRegistry(Exhibit.Importer._registryKey);
         $(document).trigger("registerImporters.exhibit");
     }
 };
@@ -40,17 +47,26 @@ Exhibit.Importer._registerComponent = function() {
  * @returns {Exhibit.Importer}
  */
 Exhibit.Importer.getImporter = function(mimeType) {
-    return Exhibit.Registry.get(Exhibit.Importer._registryKey, mimeType);
+    return Exhibit.Importer._registry.get(
+        Exhibit.Importer._registryKey,
+        mimeType
+    );
 };
 
 /**
  * @returns {Boolean}
  */
 Exhibit.Importer.prototype.register = function() {
-    if (!Exhibit.Registry.isRegistered(Exhibit.Importer._registryKey,
-                                       this._mimeType)) {
-        Exhibit.Registry.register(Exhibit.Importer._registryKey,
-                                  this._mimeType, this);
+    var reg = Exhibit.Importer._registry;
+    if (!reg.isRegistered(
+        Exhibit.Importer._registryKey,
+        this._mimeType
+    )) {
+        reg.register(
+            Exhibit.Importer._registryKey,
+            this._mimeType,
+            this
+        );
         return true;
     } else {
         return false;
@@ -61,7 +77,10 @@ Exhibit.Importer.prototype.register = function() {
  *
  */
 Exhibit.Importer.prototype.dispose = function() {
-    Exhibit.Registry.unregister(Exhibit.Importer._registryKey, this._mimeType);
+    Exhibit.Importer._registry.getRegistry().unregister(
+        Exhibit.Importer._registryKey,
+        this._mimeType
+    );
 };
 
 /**
@@ -165,5 +184,7 @@ Exhibit.Importer.prototype._loadBabel = function(url, database, callback) {
     Exhibit.Importer.prototype._loadJSONP(url);
 };
 
-$(document).one("registerComponents.exhibit",
-                Exhibit.Importer._registerComponent);
+$(document).one(
+    "registerComponents.exhibit",
+    Exhibit.Importer._registerComponent
+);

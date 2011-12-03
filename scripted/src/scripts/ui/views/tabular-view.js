@@ -217,14 +217,21 @@ Exhibit.TabularView._configure = function(view, configuration) {
  *
  */
 Exhibit.TabularView.prototype._register = function() {
-    Exhibit.Registry.register(Exhibit.View._registryKey, this.getID(), this);
+    this._uiContext.getExhibit().getRegistry().register(
+        Exhibit.View._registryKey,
+        this.getID(),
+        this
+    );
 };
 
 /**
  *
  */
 Exhibit.TabularView.prototype._unregister = function() {
-    Exhibit.Registry.unregister(Exhibit.View._registryKey, this.getID());
+    this._uiContext.getExhibit().getRegistry().unregister(
+        Exhibit.View._registryKey,
+        this.getID()
+    );
 };
 
 /**

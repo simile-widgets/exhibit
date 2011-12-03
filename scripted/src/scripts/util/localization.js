@@ -27,6 +27,7 @@ Exhibit.Locale.prototype.getURL = function() {
  */
 Exhibit.Localization = {
     _registryKey: "l10n",
+    _registry: null,
     _lastResortLocale: "en",
     _currentLocale: undefined
 };
@@ -34,9 +35,9 @@ Exhibit.Localization = {
 /**
  * @static
  */
-Exhibit.Localization._registerComponent = function() {
+Exhibit.Localization._registerComponent = function(evt, reg) {
     var i, locale, clientLocales, segments;
-
+    Exhibit.Localization._registry = reg;
     Exhibit.locales.push(Exhibit.Localization._lastResortLocale);
 
     clientLocales = (typeof navigator.language === "string" ?
@@ -68,8 +69,8 @@ Exhibit.Localization._registerComponent = function() {
         }
     }
 
-    if (!Exhibit.Registry.hasRegistry(Exhibit.Localization._registryKey)) {
-        Exhibit.Registry.createRegistry(Exhibit.Localization._registryKey);
+    if (!reg.hasRegistry(Exhibit.Localization._registryKey)) {
+        reg.createRegistry(Exhibit.Localization._registryKey);
         $(document).trigger("registerLocales.exhibit");
     }
 };
@@ -80,11 +81,15 @@ Exhibit.Localization._registerComponent = function() {
  * @returns {Boolean}
  */
 Exhibit.Localization.registerLocale = function(locale, l10n) {
-    if (!Exhibit.Registry.isRegistered(Exhibit.Localization._registryKey,
-                                       locale)) {
-        Exhibit.Registry.register(Exhibit.Localization._registryKey,
-                                  locale,
-                                  l10n);
+    if (!Exhibit.Localization._registry.isRegistered(
+        Exhibit.Localization._registryKey,
+        locale
+    )) {
+        Exhibit.Localization._registry.register(
+            Exhibit.Localization._registryKey,
+            locale,
+            l10n
+        );
         $(document).trigger("localeRegistered.exhibit");
         return true;
     } else {
@@ -97,8 +102,10 @@ Exhibit.Localization.registerLocale = function(locale, l10n) {
  * @returns {Boolean}
  */
 Exhibit.Localization.hasLocale = function(locale) {
-    return Exhibit.Registry.isRegistered(Exhibit.Localization._registryKey,
-                                         locale);
+    return Exhibit.Localization._registry.isRegistered(
+        Exhibit.Localization._registryKey,
+        locale
+    );
 };
 
 /**
@@ -106,7 +113,10 @@ Exhibit.Localization.hasLocale = function(locale) {
  * @returns {Exhibit.Locale}
  */
 Exhibit.Localization.getLocale = function(locale) {
-    return Exhibit.Registry.get(Exhibit.Localization._registryKey, locale);
+    return Exhibit.Localization._registry.get(
+        Exhibit.Localization._registryKey,
+        locale
+    );
 };
 
 /**
@@ -119,16 +129,23 @@ Exhibit.Localization.setLocale = function(locales) {
         locale = locales[i];
         if (Exhibit.Localization.hasLocale(locale)) {
             Exhibit.Localization._currentLocale = locale;
-            $(document).trigger("localeSet.exhibit",
-                                [Exhibit.Localization.getLocale(locale).getURL()]);
+            $(document).trigger(
+                "localeSet.exhibit",
+                [Exhibit.Localization.getLocale(locale).getURL()]
+            );
             break;
         }
     }
 };
 
-$(document).one("registerLocalization.exhibit",
-                Exhibit.Localization._registerComponent);
+$(document).one(
+    "registerLocalization.exhibit",
+    Exhibit.Localization._registerComponent
+);
 
-$(document).bind("localesRegistered.exhibit", function() {
-    Exhibit.Localization.setLocale(Exhibit.locales);
-});
+$(document).bind(
+    "localesRegistered.exhibit",
+    function() {
+        Exhibit.Localization.setLocale(Exhibit.locales);
+    }
+);

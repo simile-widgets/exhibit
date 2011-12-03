@@ -12,13 +12,14 @@ $(document).ready(function() {
     });
 
     $(document).one("scriptsLoaded.exhibit", function(evt) {
-        $(document).trigger("registerComponents.exhibit");
+        $(document).trigger("registerComponents.exhibit", Exhibit.registry);
     });
 
     $(document).one("exhibitConfigured.exhibit", function(evt) {
         Exhibit.Bookmark.init();
-        Exhibit.History.init();
+        Exhibit.History.init(Exhibit.registry);
     });
 
-    $(document).trigger("registerLocalization.exhibit");
+    Exhibit.registry = new Exhibit.Registry();
+    $(document).trigger("registerLocalization.exhibit", Exhibit.registry);
 });

@@ -29,16 +29,25 @@ Exhibit.ViewPanel = function(div, uiContext) {
 };
 
 /**
+ * @private
  * @constant
  */
 Exhibit.ViewPanel._registryKey = "viewPanel";
 
 /**
- *
+ * @private
  */
-Exhibit.ViewPanel._registerComponent = function() {
-    if (!Exhibit.Registry.hasRegistry(Exhibit.ViewPanel._registryKey)) {
-        Exhibit.Registry.createRegistry(Exhibit.ViewPanel._registryKey);
+Exhibit.ViewPanel._registry = null;
+
+/**
+ * @private
+ * @param {jQuery.Event} evt
+ * @param {Exhibit.Registry} reg
+ */
+Exhibit.ViewPanel._registerComponent = function(evt, reg) {
+    Exhibit.ViewPanel._registry = reg;
+    if (!reg.hasRegistry(Exhibit.ViewPanel._registryKey)) {
+        reg.createRegistry(Exhibit.ViewPanel._registryKey);
     }
 };
 
@@ -225,11 +234,11 @@ Exhibit.ViewPanel.prototype._setIdentifier = function() {
  * 
  */
 Exhibit.ViewPanel.prototype.register = function() {
-    if (!Exhibit.Registry.isRegistered(
+    if (!Exhibit.ViewPanel._registry.isRegistered(
         Exhibit.ViewPanel._registryKey,
         this.getID()
     )) {
-        Exhibit.Registry.register(
+        Exhibit.ViewPanel._registry.register(
             Exhibit.ViewPanel._registryKey,
             this.getID(),
             this

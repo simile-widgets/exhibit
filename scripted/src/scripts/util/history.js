@@ -30,19 +30,26 @@ Exhibit.History = {
     /**
      * @private
      */
-    _originalLocation: ""
+    _originalLocation: "",
+    
+    /**
+     * @private
+     */
+    _registry: null
 };
 
 /**
  * @depends History.js
+ * @param {Exhibit.Registry} reg
  */
-Exhibit.History.init = function() {
+Exhibit.History.init = function(reg) {
     var state, types, i, j, keys, component;
 
     if (typeof History !== "undefined" && History.enabled) {
         Exhibit.History.enabled = true;
         Exhibit.History._originalTitle = document.title;
         Exhibit.History._originalLocation = Exhibit.Persistence.getURLWithoutQueryAndHash();
+        Exhibit.History._registry = reg;
 
         $(window).bind("statechange", Exhibit.History.stateListener);
         if (Exhibit.Bookmark.runBookmark()) {
@@ -54,9 +61,9 @@ Exhibit.History.init = function() {
                 state.data.state = Exhibit.History._state;
                 types = [ "facet", "view", "viewPanel" ];
                 for (i = 0; i < types.length; i++) {
-                    keys = Exhibit.Registry.getKeys(types[i]);
+                    keys = reg.getKeys(types[i]);
                     for (j = 0; j < keys.length; j++) {
-                        component = Exhibit.Registry.get(types[i], keys[j]);
+                        component = reg.get(types[i], keys[j]);
                         if (typeof component.exportState === "function") {
                             state.data.components[keys[j]] = {};
                             state.data.components[keys[j]].type = types[i];
@@ -87,7 +94,7 @@ Exhibit.History.stateListener = function(evt) {
     for (key in components) {
         if (components.hasOwnProperty(key)) {
             componentState = components[key].state;
-            component = Exhibit.Registry.get(components[key].type, key);
+            component = Exhibit.History._registry.get(components[key].type, key);
             if (component !== null &&
                 typeof component.importState === "function") {
                 // @@@ not every component is immediately available
@@ -116,7 +123,7 @@ Exhibit.History.componentStateListener = function(evt, type, id) {
         components = fullState.data.components;
         if (components.hasOwnProperty(id)) {
             componentState = components[id].state;
-            component = Exhibit.Registry.get(type, id);
+            component = Exhibit.History._registry.get(type, id);
             if (component !== null &&
                 typeof component.importState === "function") {
                 // @@@ not every component is immediately available

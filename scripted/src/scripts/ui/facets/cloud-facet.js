@@ -123,7 +123,11 @@ Exhibit.CloudFacet._configure = function(facet, configuration) {
     }
 
     facet._setIdentifier();
-    Exhibit.Registry.register(Exhibit.Facet._registryKey, facet.getID(), facet);
+    facet._uiContext.getExhibit().getRegistry().register(
+        Exhibit.Facet._registryKey,
+        facet.getID(),
+        facet
+    );
 };
 
 /**

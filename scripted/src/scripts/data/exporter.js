@@ -35,11 +35,18 @@ Exhibit.Exporter = function(mimeType, label, wrap, wrapOne, exportOne, exportMan
 Exhibit.Exporter._registryKey = "exporter";
 
 /**
- * @static
+ * @private
  */
-Exhibit.Exporter._registerComponent = function() {
-    if (!Exhibit.Registry.hasRegistry(Exhibit.Exporter._registryKey)) {
-        Exhibit.Registry.createRegistry(Exhibit.Exporter._registryKey);
+Exhibit.Exporter._registry = null;
+
+/**
+ * @static
+ * @param {Exhibit._Impl} ex
+ */
+Exhibit.Exporter._registerComponent = function(evt, reg) {
+    Exhibit.Exporter._registry = reg;
+    if (!reg.hasRegistry(Exhibit.Exporter._registryKey)) {
+        reg.createRegistry(Exhibit.Exporter._registryKey);
         $(document).trigger("registerExporters.exhibit");
     }
 };
@@ -48,8 +55,16 @@ Exhibit.Exporter._registerComponent = function() {
  * @returns {Boolean}
  */
 Exhibit.Exporter.prototype.register = function() {
-    if (!Exhibit.Registry.isRegistered(Exhibit.Exporter._registryKey, this._mimeType)) {
-        Exhibit.Registry.register(Exhibit.Exporter._registryKey, this._mimeType, this);
+    var reg = Exhibit.Exporter._registry;
+    if (!reg.isRegistered(
+        Exhibit.Exporter._registryKey,
+        this._mimeType
+    )) {
+        reg.register(
+            Exhibit.Exporter._registryKey,
+            this._mimeType,
+            this
+        );
         return true;
     } else {
         return false;
@@ -60,7 +75,10 @@ Exhibit.Exporter.prototype.register = function() {
  *
  */
 Exhibit.Exporter.prototype.dispose = function() {
-    Exhibit.Registry.unregister(Exhibit.Exporter._registryKey, this._mimeType);
+    Exhibit.Exporter._registry.unregister(
+        Exhibit.Exporter._registryKey,
+        this._mimeType
+    );
 };
 
 /**
@@ -126,11 +144,14 @@ Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID, database) {
  * @returns {String}
  */
 Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
-    return this._wrap(this._exportOne(itemID,
-                                      this.exportOneFromDatabase(itemID,
-                                                                 database),
-                                      Exhibit.Exporter._getPropertiesWithValueTypes(database)),
-                      database);
+    return this._wrap(
+        this._exportOne(
+            itemID,
+            this.exportOneFromDatabase(itemID, database),
+            Exhibit.Exporter._getPropertiesWithValueTypes(database)
+        ),
+        database
+    );
 };
 
 /**
@@ -148,11 +169,15 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
 
     props = Exhibit.Exporter._getPropertiesWithValueTypes(database);
     set.visit(function(itemID) {
-        s += self._wrapOne(self._exportOne(itemID,
-                                           self.exportOneFromDatabase(itemID, database),
-                                           props),
-                           count === 0,
-                           count++ === size - 1);
+        s += self._wrapOne(
+            self._exportOne(
+                itemID,
+                self.exportOneFromDatabase(itemID, database),
+                props)
+            ,
+            count === 0,
+            count++ === size - 1
+        );
     });
     return this._wrap(s, database);
 };
@@ -176,5 +201,7 @@ Exhibit.Exporter._getPropertiesWithValueTypes = function(database) {
     return map;
 };
 
-$(document).one("registerComponents.exhibit",
-                Exhibit.Exporter._registerComponent);
+$(document).one(
+    "registerComponents.exhibit",
+    Exhibit.Exporter._registerComponent
+);

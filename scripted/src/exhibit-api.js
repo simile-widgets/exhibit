@@ -154,7 +154,12 @@ var Exhibit = {
         "styles/widgets/toolbox-widget.css",
         "styles/widgets/legend-widget.css",
         "styles/widgets/option-widget.css"
-    ]
+    ],
+
+    /**
+     * @constant An Exhibit.Registry of locales. A bootstrapper.
+     */
+    registry: null
 };
 
 /*! LAB.js (LABjs :: Loading And Blocking JavaScript)

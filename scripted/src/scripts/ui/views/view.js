@@ -9,16 +9,25 @@
 Exhibit.View = {};
 
 /**
+ * @private
  * @constant
  */
 Exhibit.View._registryKey = "view";
 
 /**
- *
+ * @private
  */
-Exhibit.View._registerComponent = function() {
-    if (!Exhibit.Registry.hasRegistry(Exhibit.View._registryKey)) {
-        Exhibit.Registry.createRegistry(Exhibit.View._registryKey);
+Exhibit.View._registry = null;
+
+/**
+ * @private
+ * @param {jQuery.Event} evt
+ * @param {Exhibit.Registry} reg
+ */
+Exhibit.View._registerComponent = function(evt, reg) {
+    Exhibit.View._registry = reg;
+    if (!reg.hasRegistry(Exhibit.View._registryKey)) {
+        reg.createRegistry(Exhibit.View._registryKey);
     }
 };
 

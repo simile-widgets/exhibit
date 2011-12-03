@@ -5,60 +5,57 @@
 
 /**
  * @namespace
+ * @class
  */
-Exhibit.Registry = {
-    _registry: {},
-    _components: []
+Exhibit.Registry = function() {
+    this._registry = {};
+    this._untyped = {};
+    this._components = [];
 };
 
 /**
- * @static
  * @param {String} component
  * @returns {Boolean}
  */
-Exhibit.Registry.createRegistry = function(component) {
-    Exhibit.Registry._registry[component] = {};
-    Exhibit.Registry._components.push(component);
+Exhibit.Registry.prototype.createRegistry = function(component) {
+    this._registry[component] = {};
+    this._components.push(component);
 };
 
 /**
- * @static
  * @returns {Array}
  */
-Exhibit.Registry.components = function() {
-    return EXhibit.Registry._components;
+Exhibit.Registry.prototype.components = function() {
+    return this._components;
 };
 
 /**
- * @static
  * @param {String} component
  * @returns {Boolean}
  */
-Exhibit.Registry.hasRegistry = function(component) {
-    return Exhibit.Registry._registry.hasOwnProperty(component);
+Exhibit.Registry.prototype.hasRegistry = function(component) {
+    return typeof this._registry[component] !== "undefined";
 };
 
 /**
- * @static
  * @param {String} component
- * @param {String} type
+ * @param {String} id
  * @returns {Boolean}
  */
-Exhibit.Registry.isRegistered = function(component, type) {
-    return (Exhibit.Registry._registry.hasOwnProperty(component) &&
-            Exhibit.Registry._registry[component].hasOwnProperty(type));
+Exhibit.Registry.prototype.isRegistered = function(component, id) {
+    return (this.hasRegistry(component) &&
+            typeof this._registry[component][id] !== "undefined");
 };
 
 /**
- * @static
  * @param {String} component
- * @param {String} type
+ * @param {String} id
  * @param {Object} handler
  * @returns {Boolean}
  */
-Exhibit.Registry.register = function(component, type, handler) {
-    if (!Exhibit.Registry.isRegistered(component, type)) {
-        Exhibit.Registry._registry[component][type] = handler;
+Exhibit.Registry.prototype.register = function(component, id, handler) {
+    if (!this.isRegistered(component, id)) {
+        this._registry[component][id] = handler;
         return true;
     } else {
         return false;
@@ -66,13 +63,12 @@ Exhibit.Registry.register = function(component, type, handler) {
 };
 
 /**
- * @static
  * @param {String} component
  * @returns {Object}
  */
-Exhibit.Registry.componentHandlers = function(component) {
-    if (Exhibit.Registry.hasRegistry(component)) {
-        return Exhibit.Registry._registry[component];
+Exhibit.Registry.prototype.componentHandlers = function(component) {
+    if (this.hasRegistry(component)) {
+        return this._registry[component];
     } else {
         // @@@ throw?
         return null;
@@ -83,9 +79,9 @@ Exhibit.Registry.componentHandlers = function(component) {
  * @param {String} component
  * @returns {Array}
  */
-Exhibit.Registry.getKeys = function(component) {
+Exhibit.Registry.prototype.getKeys = function(component) {
     var hash, key, keys;
-    hash = Exhibit.Registry._registry[component];
+    hash = this._registry[component];
     keys = [];
     for (key in hash) {
         if (hash.hasOwnProperty(key)) {
@@ -96,14 +92,13 @@ Exhibit.Registry.getKeys = function(component) {
 };
 
 /**
- * @static
  * @param {String} component
- * @param {String} type
+ * @param {String} id
  * @returns {Object}
  */
-Exhibit.Registry.get = function(component, type) {
-    if (Exhibit.Registry.isRegistered(component, type)) {
-        return Exhibit.Registry._registry[component][type];
+Exhibit.Registry.prototype.get = function(component, id) {
+    if (this.isRegistered(component, id)) {
+        return this._registry[component][id];
     } else {
         // @@@ or throw?
         return null;
@@ -111,19 +106,18 @@ Exhibit.Registry.get = function(component, type) {
 };
 
 /**
- * @static
  * @param {String} component
- * @param {String} type
+ * @param {String} id
  * @returns {Boolean}
  */
-Exhibit.Registry.unregister = function(component, type) {
+Exhibit.Registry.prototype.unregister = function(component, id) {
     var c;
-    if (Exhibit.Registry.isRegistered(component, type)) {
-        c = Exhibit.Registry.get(component, type);
+    if (this.isRegistered(component, id)) {
+        c = this.get(component, id);
         //if (typeof c.dispose === "function") {
         //    c.dispose();
         //}
-        Exhibit.Registry._registry[component][type] = null;
-        delete Exhibit.Registry._registry[component][type];
+        this._registry[component][id] = null;
+        delete this._registry[component][id];
     }
 };

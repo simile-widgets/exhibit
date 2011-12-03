@@ -146,14 +146,21 @@ Exhibit.ThumbnailView.prototype.dispose = function() {
  *
  */
 Exhibit.ThumbnailView.prototype._register = function() {
-    Exhibit.Registry.register(Exhibit.View._registryKey, this.getID(), this);
+    this._uiContext.getExhibit().getRegistry().register(
+        Exhibit.View._registryKey,
+        this.getID(),
+        this
+    );
 };
 
 /**
  *
  */
 Exhibit.ThumbnailView.prototype._unregister = function() {
-    Exhibit.Registry.unregister(Exhibit.View._registryKey, this.getID());
+    this._uiContext.getExhibit().getRegistry().unregister(
+        Exhibit.View._registryKey,
+        this.getID()
+    );
 };
 
 /**

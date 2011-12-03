@@ -5,6 +5,7 @@
  */
 
 /**
+ * @static
  * @param {Exhibit.Database} database
  * @returns {Exhibit._Impl}
  */
@@ -13,6 +14,7 @@ Exhibit.create = function(database) {
 };
 
 /**
+ * @static
  * @param {Element} elmt
  * @param {String} name
  * @param {String} splitOn
@@ -43,6 +45,7 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
 };
 
 /**
+ * @static
  * @param {Element} elmt
  * @returns {String}
  */
@@ -56,6 +59,7 @@ Exhibit.getRoleAttribute = function(elmt) {
 };
 
 /**
+ * @static
  * @param {Element} elmt
  * @returns {Object}
  */
@@ -74,6 +78,7 @@ Exhibit.getConfigurationFromDOM = function(elmt) {
 };
 
 /**
+ * @static
  * @param {Element} elmt
  * @returns {Object}
  */
@@ -110,7 +115,6 @@ Exhibit._Impl = function(database) {
     this._uiContext = Exhibit.UIContext.createRootContext({}, this);
     this._collectionMap = {};
     this._componentMap= {};
-    
 };
 
 /**
@@ -151,6 +155,13 @@ Exhibit._Impl.prototype.dispose = function() {
  */
 Exhibit._Impl.prototype.getDatabase = function() {
     return this._database;
+};
+
+/**
+ * @returns {Exhibit.Registry}
+ */
+Exhibit._Impl.prototype.getRegistry = function() {
+    return Exhibit.registry;
 };
 
 /**
