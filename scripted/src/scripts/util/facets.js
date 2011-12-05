@@ -150,7 +150,7 @@ Exhibit.FacetUtilities.constructFacetItem = function(
     
     $(dom.elmt).bind("click", onSelectOnly);
     if (facetHasSelection) {
-        $(dom.inner.firstChild).bind("click", onSelect);
+        $(dom.inner).children(':first-child').bind("click", onSelect);
     }
     return dom.elmt;
 };

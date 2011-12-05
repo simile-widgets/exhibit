@@ -468,8 +468,7 @@ Exhibit.ListFacet.prototype._filter = function(value, label, selectOnly) {
     
     oldValues = new Exhibit.Set(this._valueSet);
     oldSelectMissing = this._selectMissing;
-    
-    if (value === null) { // the (missing this field) case
+    if (typeof value === "undefined" || value === null) { // the (missing this field) case
         wasSelected = oldSelectMissing;
         wasOnlyThingSelected = wasSelected && (oldValues.size() === 0);
         
@@ -509,7 +508,7 @@ Exhibit.ListFacet.prototype._filter = function(value, label, selectOnly) {
     }
     
     newRestrictions = { selection: newValues.toArray(), selectMissing: newSelectMissing };
-    
+
     Exhibit.History.pushComponentState(
         this,
         Exhibit.Facet._registryKey,
