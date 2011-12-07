@@ -121,7 +121,7 @@ Exhibit.SizeCoder.prototype.translate = function(key, flags) {
             flags.keys.add(key);
         }
         return this._map[key].size;
-    } else if (key === null) {
+    } else if (typeof key === "undefined" || key === null) {
         if (typeof flags !== "undefined" && flags !== null) {
             flags.missing = true;
         }

@@ -81,7 +81,8 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
     uiContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
     
     view = new Exhibit.TabularView(
-        containerElmt !== null ? containerElmt : configElmt, 
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt, 
         uiContext
     );
     
@@ -92,7 +93,7 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
         labels = Exhibit.getAttribute(configElmt, "columnLabels", ",") || [];
         
         s = Exhibit.getAttribute(configElmt, "columns");
-        if (s !== null && s.length > 0) {
+        if (typeof s !== "undefined" && s !== null && s.length > 0) {
             expressions = Exhibit.ExpressionParser.parseSeveral(s);
         }
         
@@ -108,7 +109,7 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
         }
         
         formats = Exhibit.getAttribute(configElmt, "columnFormats");
-        if (formats !== null && formats.length > 0) {
+        if (typeof formats !== "undefined" && formats !== null && formats.length > 0) {
             index = 0;
             startPosition = 0;
             while (index < view._columns.length && startPosition < formats.length) {
@@ -138,14 +139,14 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
     }
     
     s = Exhibit.getAttribute(configElmt, "rowStyler");
-    if (s !== null && s.length > 0) {
+    if (typeof s !== "undefined" && s !== null && s.length > 0) {
         f = eval(s);
         if (typeof f === "function") {
             view._settings.rowStyler = f;
         }
     }
     s = Exhibit.getAttribute(configElmt, "tableStyler");
-    if (s !== null && s.length > 0) {
+    if (typeof s !== "undefined" && s !== null && s.length > 0) {
         f = eval(s);
         if (typeof f === "function") {
             view._settings.tableStyler = f;
@@ -186,7 +187,7 @@ Exhibit.TabularView._configure = function(view, configuration) {
             expression = Exhibit.ExpressionParser.parse(expr);
             if (expression.isPath()) {
                 path = expression.getPath();
-                if (format !== null && format.length > 0) {
+                if (typeof format !== "undefined" && format !== null && format.length > 0) {
                     format = Exhibit.FormatParser.parse(view._uiContext, format, 0);
                 } else {
                     format = "list";
@@ -381,7 +382,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
         createColumnHeader = function(i) {
             var column, td;
             column = self._columns[i];
-            if (column.label === null) {
+            if (typeof column.label === "undefined" || column.label === null) {
                 column.label = self._getColumnLabel(column.expression);
             }
 
@@ -444,7 +445,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
                         makeAppender(td)
                     );
                     
-                    if (column.styler !== null) {
+                    if (typeof column.styler !== "undefined" && column.styler !== null) {
                         column.styler(item.id, database, td.get(0));
                     }
                 }
@@ -519,7 +520,7 @@ Exhibit.TabularView.prototype._getColumnLabel = function(expression) {
     segment = path.getSegment(path.getSegmentCount() - 1);
     propertyID = segment.property;
     property = database.getProperty(propertyID);
-    if (property !== null) {
+    if (typeof property !== "undefined" && property !== null) {
         return segment.forward ? property.getLabel() : property.getReverseLabel();
     } else {
         return propertyID;
@@ -612,7 +613,7 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
     if (coercedValueType === "number") {
         sortingFunction = numericFunction;
         coersion = function(v) {
-            if (v === null) {
+            if (typeof v === "undefined" || v === null) {
                 return Number.NEGATIVE_INFINITY;
             } else if (typeof v === "number") {
                 return v;
@@ -628,7 +629,7 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
     } else if (coercedValueType === "date") {
         sortingFunction = numericFunction;
         coersion = function(v) {
-            if (v === null) {
+            if (typeof v === "undefined" || v === null) {
                 return Number.NEGATIVE_INFINITY;
             } else if (v instanceof Date) {
                 return v.getTime();
@@ -643,7 +644,7 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
     } else if (coercedValueType === "boolean") {
         sortingFunction = numericFunction;
         coersion = function(v) {
-            if (v === null) {
+            if (typeof v === "undefined" || v === null) {
                 return Number.MAX_VALUE;
             } else if (typeof v === "boolean") {
                 return v ? 1 : 0;
@@ -654,17 +655,17 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
     } else if (coercedValueType === "item") {
         sortingFunction = textFunction;
         coersion = function(v) {
-            if (v === null) {
+            if (typeof v === "undefined" || v === null) {
                 return Exhibit.l10n.missingSortKey;
             } else {
                 var label = database.getObject(v, "label");
-                return (label === null) ? v : label;
+                return (typeof label === "undefined" || label === null) ? v : label;
             }
         };
     } else {
         sortingFunction = textFunction;
         coersion = function(v) {
-            if (v === null) {
+            if (typeof v === "undefined" || v === null) {
                 return Exhibit.l10n.missingSortKey;
             } else {
                 return v.toString();

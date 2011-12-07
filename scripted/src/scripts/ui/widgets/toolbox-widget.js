@@ -51,7 +51,8 @@ Exhibit.ToolboxWidget.createFromDOM = function(configElmt, containerElmt, uiCont
     var configuration, widget;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     widget = new Exhibit.ToolboxWidget(
-        containerElmt !== null ? containerElmt : configElmt, 
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt, 
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     
@@ -163,6 +164,20 @@ Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
     }
 
     /** add a jquery event to handle registering generated html view */
+    /* new
+       var f = function(content) {
+       popupDom.appendMenuItem(
+       Exhibit.l10n.htmlExporterLabel,
+       null,
+       function() {
+       Exhibit.UI.createCopyDialogBox(
+       content
+       ).open();
+       }
+       );
+       };
+       $(document).trigger("registerGeneratedContentExport.exhibit", f);
+     */
     /*if (generatedContentElmtRetriever !== null) {
         popupDom.appendMenuItem(
             Exhibit.l10n.htmlExporterLabel,

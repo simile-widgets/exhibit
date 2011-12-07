@@ -95,7 +95,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     
     parseNumber = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || token.type !== Scanner.NUMBER) {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.NUMBER) {
                 throw new Error("Missing number at position " + makePosition());
             }
             enterSetting(valueType, settingName, token.value);
@@ -104,7 +104,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseInteger = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || token.type !== Scanner.NUMBER) {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.NUMBER) {
                 throw new Error("Missing integer at position " + makePosition());
             }
             enterSetting(valueType, settingName, Math.round(token.value));
@@ -113,7 +113,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseNonnegativeInteger = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || token.type !== Scanner.NUMBER || token.value < 0) {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.NUMBER || token.value < 0) {
                 throw new Error("Missing non-negative integer at position " + makePosition());
             }
             enterSetting(valueType, settingName, Math.round(token.value));
@@ -122,7 +122,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseString = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || token.type !== Scanner.STRING) {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.STRING) {
                 throw new Error("Missing string at position " + makePosition());
             }
             enterSetting(valueType, settingName, token.value);
@@ -131,7 +131,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseURL = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || token.type !== Scanner.URL) {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.URL) {
                 throw new Error("Missing url at position " + makePosition());
             }
             enterSetting(valueType, settingName, token.value);
@@ -140,7 +140,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseExpression = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || token.type !== Scanner.EXPRESSION) {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.EXPRESSION) {
                 throw new Error("Missing expression at position " + makePosition());
             }
             enterSetting(valueType, settingName, token.value);
@@ -149,7 +149,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseExpressionOrString = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
-            if (token === null || (token.type !== Scanner.EXPRESSION && token.type !== Scanner.STRING)) {
+            if (typeof token === "undefined" || token === null || (token.type !== Scanner.EXPRESSION && token.type !== Scanner.STRING)) {
                 throw new Error("Missing expression or string at position " + makePosition());
             }
             enterSetting(valueType, settingName, token.value);
@@ -158,7 +158,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseChoices = function(valueType, settingName, choices) {
         var i;
-        if (token === null || token.type !== Scanner.IDENTIFIER) {
+        if (typeof token === "undefined" || token === null || token.type !== Scanner.IDENTIFIER) {
             throw new Error("Missing option at position " + makePosition());
         }
         for (i = 0; i < choices.length; i++) {
@@ -307,7 +307,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
             next();
             
 
-            if (token === null || token.type !== Scanner.DELIMITER || token.value !== ":") {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.DELIMITER || token.value !== ":") {
                 throw new Error("Missing : at position " + makePosition());
             }
             next();
@@ -315,7 +315,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
             parseSetting(valueType, settingName);
             
 
-            if (token === null || token.type !== Scanner.DELIMITER || token.value !== ";") {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.DELIMITER || token.value !== ";") {
                 break;
             } else {
                 next();
@@ -324,7 +324,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
 
     };
     parseRule = function() {
-        if (token === null || token.type !== Scanner.IDENTIFIER) {
+        if (typeof token === "undefined" || token === null || token.type !== Scanner.IDENTIFIER) {
             throw new Error("Missing value type at position " + makePosition());
         }
         
@@ -338,7 +338,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
             next();
             parseSettingList(valueType);
             
-            if (token === null || token.type !== Scanner.DELIMITER || token.value !== "}") {
+            if (typeof token === "undefined" || token === null || token.type !== Scanner.DELIMITER || token.value !== "}") {
                 throw new Error("Missing } at position " + makePosition());
             }
             next();

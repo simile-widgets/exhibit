@@ -351,12 +351,12 @@ Exhibit.Formatter._CurrencyFormatter = function(uiContext) {
     }
     
     this._symbol = uiContext.getSetting("format/currency/symbol");
-    if (this._symbol === null) {
+    if (typeof this._symbol === "undefined" || this._symbol === null) {
         this._symbol = Exhibit.Formatter.l10n.currencySymbol;
     }
     
     this._symbolPlacement = uiContext.getSetting("format/currency/symbol-placement");
-    if (this._symbolPlacement === null) {
+    if (typeof this._symbolPlacement === "undefined" || this._symbolPlacement === null) {
         this._symbol = Exhibit.Formatter.l10n.currencySymbolPlacement;
     }
     
@@ -456,7 +456,7 @@ Exhibit.Formatter._ItemFormatter.prototype.formatText = function(value) {
         title = this._title.evaluateSingleOnItem(value, database).value;
     }
     
-    if (title === null) {
+    if (typeof title === "undefined" || title === null) {
         title = value;
     }
     
@@ -558,7 +558,7 @@ Exhibit.Formatter._DateFormatter.prototype.format = function(value, appender) {
 Exhibit.Formatter._DateFormatter.prototype.formatText = function(value) {
     var date, text, segments, i, segment;
     date = (value instanceof Date) ? value : Exhibit.DateTime.parseIso8601DateTime(value);
-    if (date === null) {
+    if (typeof date === "undefined" || date === null) {
         return value;
     }
     

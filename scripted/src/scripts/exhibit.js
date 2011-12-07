@@ -25,9 +25,9 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
 
     try {
         value = elmt.getAttribute(name);
-        if (value === null || value.length === 0) {
+        if (typeof value === "undefined" || value === null || value.length === 0) {
             value = elmt.getAttribute("ex:" + name);
-            if (value === null || value.length === 0) {
+            if (typeof value === "undefined" || value === null || value.length === 0) {
                 return null;
             }
         }
@@ -66,7 +66,7 @@ Exhibit.getRoleAttribute = function(elmt) {
 Exhibit.getConfigurationFromDOM = function(elmt) {
     var c, o;
     c = Exhibit.getAttribute(elmt, "configuration");
-    if (c !== null && c.length > 0) {
+    if (typeof c !== "undefined" && c !== null && c.length > 0) {
         try{
             o = eval(c);
             if (typeof o === "object") {
@@ -264,7 +264,7 @@ Exhibit._Impl.prototype.configure = function(configuration) {
         for (i = 0; i < configuration.collections.length; i++) {
             config = configuration.collections[i];
             id = config.id;
-            if (id === null || id.length === 0) {
+            if (typeof id === "undefined" || id === null || id.length === 0) {
                 id = "default";
             }
             this.setCollection(id, Exhibit.Collection.create2(id, config, this._uiContext));
@@ -274,9 +274,9 @@ Exhibit._Impl.prototype.configure = function(configuration) {
         for (i = 0; i < configuration.components.length; i++) {
             config = configuration.components[i];
             component = Exhibit.UI.create(config, config.elmt, this._uiContext);
-            if (component !== null) {
+            if (typeof component !== "undefined" && component !== null) {
                 id = elmt.id;
-                if (id === null || id.length === 0) {
+                if (typeof id === "undefined" || id === null || id.length === 0) {
                     id = "component" + Math.floor(Math.random() * 1000000);
                 }
                 this.setComponent(id, component);
@@ -318,7 +318,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             }
         } else {
             node = elmt.firstChild;
-            while (node !== null) {
+            while (typeof node !== "undefined" && node !== null) {
                 if (node.nodeType === 1) {
                     f(node);
                 }
@@ -332,7 +332,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
     for (i = 0; i < collectionElmts.length; i++) {
         elmt = collectionElmts[i];
         id = elmt.id;
-        if (id === null || id.length === 0) {
+        if (typeof id === "undefined" || id === null || id.length === 0) {
             id = "default";
         }
         this.setCollection(id, Exhibit.Collection.createFromDOM2(id, elmt, uiContext));
@@ -345,9 +345,9 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             elmt = elmts[i];
             try {
                 component = Exhibit.UI.createFromDOM(elmt, uiContext);
-                if (component !== null) {
+                if (typeof component !== "undefined" && component !== null) {
                     id = elmt.id;
-                    if (id === null || id.length === 0) {
+                    if (typeof id === "undefined" || id === null || id.length === 0) {
                         id = "component" + Math.floor(Math.random() * 1000000);
                     }
                     self.setComponent(id, component);
@@ -372,7 +372,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
     processElmts(otherElmts);
     
     exporters = Exhibit.getAttribute(document.body, "exporters");
-    if (exporters !== null) {
+    if (typeof exporters !== "undefined" && exporters !== null) {
         exporters = exporters.split(";");
         for (i = 0; i < exporters.length; i++) {
             expr = exporters[i];

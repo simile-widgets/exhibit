@@ -268,7 +268,7 @@ Exhibit.SettingsUtilities._createBindingsAccessor = function(f, bindingSpecs) {
             accessor = Exhibit.SettingsUtilities._createElementalAccessor(f, bindingSpec);
         }
         
-        if (accessor === null) {
+        if (typeof accessor === "undefined" || accessor === null) {
             if (!bindingSpec.hasOwnProperty("optional") || !bindingSpec.optional) {
                 return null;
             }
@@ -295,7 +295,7 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
     var value, expression, parsers, bindingTypes, bindingNames, separator, i;
     value = f(spec.attributeName);
 
-    if (value === null) {
+    if (typeof value === "undefined" || value === null) {
         return null;
     }
     
@@ -369,7 +369,7 @@ Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
 
     value = f(spec.attributeName);
 
-    if (value === null) {
+    if (typeof value === "undefined" || value === null) {
         return null;
     }
     

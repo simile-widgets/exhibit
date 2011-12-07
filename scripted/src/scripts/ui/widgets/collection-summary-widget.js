@@ -49,7 +49,8 @@ Exhibit.CollectionSummaryWidget.create = function(configuration, containerElmt, 
  */
 Exhibit.CollectionSummaryWidget.createFromDOM = function(configElmt, containerElmt, uiContext) {
     var widget = new Exhibit.CollectionSummaryWidget(
-        containerElmt !== null ? containerElmt : configElmt, 
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt, 
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     widget._initializeUI();

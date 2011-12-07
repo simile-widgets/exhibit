@@ -53,7 +53,9 @@ Exhibit.ControlPanel.createFromDOM = function(configElmt, containerElmt, uiConte
     var configuration, widget;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     widget = new Exhibit.ControlPanel(
-        containerElmt !== null ? containerElmt : configElmt,
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt :
+            configElmt,
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     Exhibit.ControlPanel._configure(widget, configuration);

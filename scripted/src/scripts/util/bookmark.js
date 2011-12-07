@@ -90,7 +90,7 @@ Exhibit.Bookmark.generateBookmark = function() {
  * @depends Exhibit.History
  */
 Exhibit.Bookmark.implementBookmark = function(state) {
-    if (state !== null) {
+    if (typeof state !== "undefined" && state !== null) {
         Exhibit.History.replaceState(state.data, state.title, state.url);
         Exhibit.Bookmark.run = true;
     }

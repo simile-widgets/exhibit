@@ -39,7 +39,8 @@ Exhibit.BookmarkWidget.createFromDOM = function(configElmt, containerElmt, uiCon
     var configuration, widget;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     widget = new Exhibit.BookmarkWidget(
-        containerElmt !== null ? containerElmt : configElmt,
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt,
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     Exhibit.BookmarkWidget._configure(widget, configuration);

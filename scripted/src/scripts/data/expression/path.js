@@ -92,7 +92,7 @@ Exhibit.Expression.Path.prototype.evaluate = function(
     database
 ) {
     var rootName, valueType, collection, root;
-    rootName = this._rootName !== null ?
+    rootName = (typeof this._rootName !== "undefined" && this._rootName !== null) ?
         this._rootName :
         defaultRootName;
     valueType = rootValueTypes.hasOwnProperty(rootName) ?
@@ -182,7 +182,7 @@ Exhibit.Expression.Path.prototype._walkForward = function(collection, database) 
             collection.forEachValue(makeForEach(segment.forward, a, segment));
             if (segment.forward) {
                 property = database.getProperty(segment.property);
-                valueType = property !== null ?
+                valueType = (typeof property !== "undefined" && property !== null) ?
                     property.getValueType() :
                     "text";
             } else {
@@ -193,7 +193,7 @@ Exhibit.Expression.Path.prototype._walkForward = function(collection, database) 
             if (segment.forward) {
                 values = database.getObjectsUnion(collection.getSet(), segment.property);
                 property = database.getProperty(segment.property);
-                valueType = property !== null ?
+                valueType = (typeof property !== "undefined" && property !== null) ?
                     property.getValueType() :
                     "text";
                 collection = new Exhibit.Expression._Collection(values, valueType);
@@ -220,7 +220,7 @@ Exhibit.Expression.Path.prototype._walkBackward = function(collection, filter, d
         var fn = forward ? database.getObjects : database.getSubjects;
         return function(v) {
             fn(v, s.property).visit(function(v2) {
-                if (idx > 0 || filter === null || filter.contains(v2)) {
+                if (idx > 0 || typeof filter === "undefined" || filter === null || filter.contains(v2)) {
                     as.push(v2);
                 }
             });
@@ -233,7 +233,7 @@ Exhibit.Expression.Path.prototype._walkBackward = function(collection, filter, d
             collection.forEachValue(makeForEach(segment.forward, a, segment, i));
             if (segment.forward) {
                 property = database.getProperty(segment.property);
-                valueType = property !== null ?
+                valueType = (typeof property !== "undefined" && property !== null) ?
                     property.getValueType() :
                     "text";
             } else {
@@ -247,7 +247,7 @@ Exhibit.Expression.Path.prototype._walkBackward = function(collection, filter, d
             } else {
                 values = database.getObjectsUnion(collection.getSet(), segment.property, null, i === 0 ? filter : null);
                 property = database.getProperty(segment.property);
-                valueType = property !== null ? property.getValueType() : "text";
+                valueType = (typeof property !== "undefined" && property !== null) ? property.getValueType() : "text";
                 collection = new Exhibit.Expression._Collection(values, valueType);
             }
         }
@@ -292,7 +292,7 @@ Exhibit.Expression.Path.prototype.rangeBackward = function(
                 set = database.getObjectsUnion(set, segment.property, null, i === 0 ? filter : null);
                 
                 property = database.getProperty(segment.property);
-                valueType = property !== null ? property.getValueType() : "text";
+                valueType = (typeof property !== "undefined" && property !== null) ? property.getValueType() : "text";
             }
         }
     }

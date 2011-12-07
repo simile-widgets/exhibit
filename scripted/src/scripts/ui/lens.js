@@ -23,13 +23,13 @@ Exhibit.Lens.prototype._constructDefaultUI = function(itemID, div, uiContext) {
 
     database = uiContext.getDatabase();
     
-    if (Exhibit.Lens._commonProperties === null) {
+    if (typeof Exhibit.Lens._commonProperties === "undefined" || Exhibit.Lens._commonProperties === null) {
         Exhibit.Lens._commonProperties = database.getAllProperties();
     }
     properties = Exhibit.Lens._commonProperties;
     
     label = database.getObject(itemID, "label");
-    label = label !== null ? label : itemID;
+    label = (typeof label !== "undefined" && label !== null) ? label : itemID;
     
     if (Exhibit.params.safe) {
         label = Exhibit.Formatter.encodeAngleBrackets(label);
@@ -320,7 +320,7 @@ Exhibit.Lens._processTemplateElement = function(elmt, isXML, uiContext) {
     }
     
     childNode = elmt.firstChild;
-    if (childNode !== null) {
+    if (typeof childNode !== "undefined" && childNode !== null) {
         templateNode.children = [];
         while (childNode !== null) {
             if ((settings.parseChildTextNodes && childNode.nodeType === 3) || childNode.nodeType === 1) {
@@ -415,7 +415,7 @@ Exhibit.Lens._processTemplateAttribute = function(uiContext, templateNode, setti
             }
             
             if (x > 0) {
-                if (templateNode.contentAttributes === null) {
+                if (typeof templateNode.contentAttributes === "undefined" || templateNode.contentAttributes === null) {
                     templateNode.contentAttributes = [];
                 }
                 templateNode.contentAttributes.push({
@@ -432,7 +432,7 @@ Exhibit.Lens._processTemplateAttribute = function(uiContext, templateNode, setti
                 }
                 
                 if (x > 0) {
-                    if (templateNode.subcontentAttributes === null) {
+                    if (typeof templateNode.subcontentAttributes === "undefined" || templateNode.subcontentAttributes === null) {
                         templateNode.subcontentAttributes = [];
                     }
                     templateNode.subcontentAttributes.push({
@@ -551,7 +551,7 @@ Exhibit.Lens._performConstructFromLensTemplateJob = function(job) {
     
     if (!Exhibit.params.safe) {
         onshow = Exhibit.getAttribute(node, "onshow");
-        if (onshow !== null && onshow.length > 0) {
+        if (typeof onshow !== "undefined" && onshow !== null && onshow.length > 0) {
             try {
                 (new Function(onshow)).call(node);
             } catch (e) {

@@ -48,7 +48,7 @@ Exhibit.UI.create = function(configuration, elmt, uiContext) {
 
     if (configuration.hasOwnProperty("role")) {
         role = configuration.role;
-        if (role !== null && role.startsWith("exhibit-")) {
+        if (typeof role !== "undefined" && role !== null && role.startsWith("exhibit-")) {
             role = role.substr("exhibit-".length);
         }
         
@@ -188,7 +188,7 @@ Exhibit.UI.createViewFromDOM = function(elmt, container, uiContext) {
  * @returns {Object}
  */
 Exhibit.UI.viewClassNameToViewClass = function(name) {
-    if (name !== null && name.length > 0) {
+    if (typeof name !== "undefined" && name !== null && name.length > 0) {
         try {
             return Exhibit.UI._stringToObject(name, "View");
         } catch (e) {
@@ -230,7 +230,7 @@ Exhibit.UI.createFacetFromDOM = function(elmt, container, uiContext) {
  * @returns {Object}
  */
 Exhibit.UI.facetClassNameToFacetClass = function(name) {
-    if (name !== null && name.length > 0) {
+    if (typeof name !== "undefined" && name !== null && name.length > 0) {
         try {
             return Exhibit.UI._stringToObject(name, "Facet");
         } catch (e) {
@@ -270,7 +270,7 @@ Exhibit.UI.createCoderFromDOM = function(elmt, uiContext) {
  * @returns {Object}
  */
 Exhibit.UI.coderClassNameToCoderClass = function(name) {
-    if (name !== null && name.length > 0) {
+    if (typeof name !== "undefined" && name !== null && name.length > 0) {
         try {
             return Exhibit.UI._stringToObject(name, "Coder");
         } catch (e) {
@@ -352,7 +352,7 @@ Exhibit.UI._stringToObject = function(name, suffix) {
  */
 Exhibit.UI.showHelp = function(message, url, target) {
     target = (target) ? target : "_blank";
-    if (url !== null) {
+    if (typeof url !== "undefined" && url !== null) {
         if (window.confirm(message + "\n\n" + Exhibit.l10n.showDocumentationMessage)) {
             window.open(url, target);
         }
@@ -510,9 +510,9 @@ Exhibit.UI.makeItemSpan = function(itemID, label, uiContext) {
 
     database = uiContext.getDatabase();
 
-    if (label === null) {
+    if (typeof label === "undefined" || label === null) {
         label = database.getObject(itemID, "label");
-        if (label === null) {
+        if (typeof label === "undefined" || label === null) {
             label = itemID;
         }
     }
@@ -687,7 +687,7 @@ Exhibit.UI.createPopupMenuDom = function(element) {
             a.append(container);
     
             container.append($.simileBubble("createTranslucentImage",
-                icon !== null ?
+                (typeof icon !== "undefined" && icon !== null) ?
                     icon :
                     (Exhibit.urlPrefix + "images/blank-16x16.png")));
                 

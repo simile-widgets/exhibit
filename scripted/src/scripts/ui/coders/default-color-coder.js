@@ -37,7 +37,7 @@ Exhibit.DefaultColorCoder._nextColor = 0;
  * @depends Exhibit.Coders
  */
 Exhibit.DefaultColorCoder.prototype.translate = function(key, flags) {
-    if (key === null) {
+    if (typeof key === "undefined" || key === null) {
         if (typeof flags !== "undefined" && flags !== null) {
             flags.missing = true;
         }

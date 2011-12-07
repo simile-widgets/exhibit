@@ -50,7 +50,7 @@ Exhibit.UIContext.createRootContext = function(configuration, exhibit) {
     }
     
     formats = Exhibit.getAttribute(document.body, "formats");
-    if (formats !== null && formats.length > 0) {
+    if (typeof formats !== "undefined" && formats !== null && formats.length > 0) {
         Exhibit.FormatParser.parseSeveral(context, formats, 0, {});
     }
     
@@ -91,12 +91,12 @@ Exhibit.UIContext.createFromDOM = function(configElmt, parentUIContext, ignoreLe
     }
     
     id = Exhibit.getAttribute(configElmt, "collectionID");
-    if (id !== null && id.length > 0) {
+    if (typeof id !== "undefined" && id !== null && id.length > 0) {
         context._collection = context._exhibit.getCollection(id);
     }
     
     formats = Exhibit.getAttribute(configElmt, "formats");
-    if (formats !== null && formats.length > 0) {
+    if (typeof formats !== "undefined" && formats !== null && formats.length > 0) {
         Exhibit.FormatParser.parseSeveral(context, formats, 0, {});
     }
     
@@ -293,7 +293,7 @@ Exhibit.UIContext._configure = function(context, configuration, ignoreLenses) {
 Exhibit.UIContext.registerLens = function(configuration, lensRegistry) {
     var template, i;
     template = configuration.templateFile;
-    if (template !== null) {
+    if (typeof template !== "undefined" && template !== null) {
         if (configuration.hasOwnProperty("itemTypes")) {
             for (i = 0; i < configuration.itemTypes.length; i++) {
                 lensRegistry.registerLensForType(template, configuration.itemTypes[i]);
@@ -317,20 +317,20 @@ Exhibit.UIContext.registerLensFromDOM = function(elmt, lensRegistry) {
     template = null;
     
     url = Exhibit.getAttribute(elmt, "templateFile");
-    if (url !== null && url.length > 0) {
+    if (typeof url !== "undefined" && url !== null && url.length > 0) {
         template = url;
     } else {
         id = Exhibit.getAttribute(elmt, "template");
         elmt2 = id && document.getElementById(id);
-        if (elmt2 !== null) {
+        if (typeof elmt2 !== "undefined" && elmt2 !== null) {
             template = elmt2;
         } else {
             template = elmt;
         }
     }
     
-    if (template !== null) {
-        if (itemTypes === null || itemTypes.length === 0 || (itemTypes.length === 1 && itemTypes[0] === "")) {
+    if (typeof template !== "undefined" && template !== null) {
+        if (typeof itemTypes === "undefined" || itemTypes === null || itemTypes.length === 0 || (itemTypes.length === 1 && itemTypes[0] === "")) {
             lensRegistry.registerDefaultLens(template);
         } else {
             for (i = 0; i < itemTypes.length; i++) {
@@ -380,7 +380,7 @@ Exhibit.UIContext.registerLensesFromDOM = function(parentNode, lensRegistry) {
     }
     
     lensSelectorString = Exhibit.getAttribute(parentNode, "lensSelector");
-    if (lensSelectorString !== null && lensSelectorString.length > 0) {
+    if (typeof lensSelectorString !== "undefined" && lensSelectorString !== null && lensSelectorString.length > 0) {
         try {
             lensSelector = eval(lensSelectorString);
             if (typeof lensSelector === "function") {

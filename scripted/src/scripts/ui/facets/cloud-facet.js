@@ -65,7 +65,9 @@ Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
     facet = new Exhibit.CloudFacet(
-        containerElmt !== null ? containerElmt : configElmt, 
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt :
+            configElmt, 
         thisUIContext
     );
     
@@ -73,20 +75,20 @@ Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext
     
     try {
         expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (expressionString !== null && expressionString.length > 0) {
+        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
             facet._expression = Exhibit.ExpressionParser.parse(expressionString);
             facet._expressionString = expressionString;
         }
 
         selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (selection !== null && selection.length > 0) {
+        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
             for (i = 0; i < selection.length; i++) {
                 facet._valueSet.add(selection[i]);
             }
         }
         
         selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (selectMissing !== null && selectMissing.length > 0) {
+        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
             facet._selectMissing = (selectMissing === "true");
         }
     } catch (e) {
@@ -525,7 +527,8 @@ Exhibit.CloudFacet.prototype._filter = function(value, label, selectOnly) {
     oldValues = new Exhibit.Set(this._valueSet);
     oldSelectMissing = this._selectMissing;
     
-    if (value === null) { // the (missing this field) case
+    if (typeof value === "undefined" || value === null) {
+        // the (missing this field) case
         wasSelected = oldSelectMissing;
         wasOnlyThingSelected = wasSelected && (oldValues.size() === 0);
         

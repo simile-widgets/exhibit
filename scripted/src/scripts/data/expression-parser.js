@@ -78,7 +78,7 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
     };
     parseFactor = function() {
         var result = null, identifier, args;
-        if (token === null) {
+        if (typeof token === "undefined" || token === null) {
             throw new Error("Missing factor at end of expression");
         }
         

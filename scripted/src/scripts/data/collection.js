@@ -82,7 +82,7 @@ Exhibit.Collection.createFromDOM = function(id, elmt, database) {
     collection._setElement(elmt);
 
     itemTypes = Exhibit.getAttribute(elmt, "itemTypes", ",");
-    if (itemTypes !== null && itemTypes.length > 0) {
+    if (typeof itemTypes !== "undefined" && itemTypes !== null && itemTypes.length > 0) {
         collection._itemTypes = itemTypes;
         collection._update = Exhibit.Collection._typeBasedCollection_update;
     } else {
@@ -147,14 +147,14 @@ Exhibit.Collection.createFromDOM2 = function(id, elmt, uiContext) {
     database = uiContext.getDatabase();
 
     expressionString = Exhibit.getAttribute(elmt, "expression");
-    if (expressionString !== null && expressionString.length > 0) {
+    if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
         collection = new Exhibit.Collection(id, database);
         collection._setElement(elmt);
     
         collection._expression = Exhibit.ExpressionParser.parse(expressionString);
         
         baseCollectionID = Exhibit.getAttribute(elmt, "baseCollectionID");
-        collection._baseCollection = (baseCollectionID !== null && baseCollectionID.length > 0) ? 
+        collection._baseCollection = (typeof baseCollectionID !== "undefined" && baseCollectionID !== null && baseCollectionID.length > 0) ? 
             uiContext.getExhibit().getCollection(baseCollectionID) : 
             uiContext.getCollection();
             

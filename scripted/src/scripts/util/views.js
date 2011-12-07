@@ -37,7 +37,7 @@ Exhibit.ViewUtilities.openBubbleForItems = function(anchorElmt, arrayOfItemIDs, 
  */
 Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs, uiContext) {
     var ul, i, itemLensDiv, itemLens;
-    if (bubbleElmt === null) {
+    if (typeof bubbleElmt === "undefined" || bubbleElmt === null) {
         bubbleElmt = $("<div>");
     }
     

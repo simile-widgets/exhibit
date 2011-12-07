@@ -51,14 +51,14 @@ Exhibit.Functions["union"] = {
             for (i = 0; i < args.length; i++) {
                 arg = args[i];
                 if (arg.size > 0) {
-                    if (valueType === null) {
+                    if (typeof valueType === "undefined" || valueType === null) {
                         valueType = arg.valueType;
                     }
                     set.addSet(arg.getSet());
                 }
             }
         }
-        return new Exhibit.Expression._Collection(set, valueType !== null ? valueType : "text");
+        return new Exhibit.Expression._Collection(set, (typeof valueType !== "undefined" && valueType !== null) ? valueType : "text");
     }
 };
 
@@ -123,7 +123,7 @@ Exhibit.Functions["add"] = {
         total = 0;
         fn = function() {
             return function(v) {
-                if (v !== null) {
+                if (typeof v !== "undefined" && v !== null) {
                     if (typeof v === "number") {
                         total += v;
                     } else {
@@ -149,7 +149,7 @@ Exhibit.Functions["concat"] = {
         var result = [], i, fn;
         fn = function() {
             return function(v) {
-                if (v !== null) {
+                if (typeof v !== "undefined" && v !== null) {
                     result.push(v);
                 }
             };
@@ -168,7 +168,7 @@ Exhibit.Functions["multiply"] = {
         fn = function() {
             return function(v) {
                 var n;
-                if (v !== null) {
+                if (typeof v !== "undefined" && v !== null) {
                     if (typeof v === "number") {
                         product *= v;
                     } else {
@@ -190,7 +190,7 @@ Exhibit.Functions["multiply"] = {
 
 Exhibit.Functions["date-range"] = {
     _parseDate: function (v) {
-        if (v === null) {
+        if (typeof v === "undefined" || v === null) {
             return Number.NEGATIVE_INFINITY;
         } else if (v instanceof Date) {
             return v.getTime();
@@ -231,7 +231,7 @@ Exhibit.Functions["date-range"] = {
         });
             
         range = this._computeRange(from, to, interval);
-        return new Exhibit.Expression._Collection(range !== null ? [ range ] : [], "number");
+        return new Exhibit.Expression._Collection((typeof range !== "undefined" && range !== null) ? [ range ] : [], "number");
     }
 };
 
@@ -271,7 +271,7 @@ Exhibit.Functions["distance"] = {
         to = new GLatLng( data.lat, data.lng );
         
         range = this._computeDistance(from, to, data.unit, data.round);
-        return new Exhibit.Expression._Collection(range !== null ? [ range ] : [], "number");
+        return new Exhibit.Expression._Collection((typeof range !== "undefined" && range !== null) ? [ range ] : [], "number");
     }
 };
 
@@ -299,7 +299,7 @@ Exhibit.Functions["min"] = {
             arg.forEachValue(fn(parser, currentValueType));
         }
         
-        return new Exhibit.Expression._Collection([ min ], valueType !== null ? valueType : "text");
+        return new Exhibit.Expression._Collection([ min ], (typeof valueType !== "undefined" && valueType !== null) ? valueType : "text");
     }
 };
 
@@ -326,7 +326,7 @@ Exhibit.Functions["max"] = {
             
             arg.forEachValue(fn(parser, c));
         }
-        return new Exhibit.Expression._Collection([ max ],  valueType !== null ? valueType : "text");
+        return new Exhibit.Expression._Collection([ max ], (typeof valueType !== "undefined" && valueType !== null) ? valueType : "text");
     }
 };
 

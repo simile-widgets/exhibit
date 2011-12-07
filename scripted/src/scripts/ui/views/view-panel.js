@@ -137,21 +137,21 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
         if (role === "view") {
             viewClass = Exhibit.TileView;
             viewClassString = Exhibit.getAttribute(this, "viewClass");
-            if (viewClassString !== null && viewClassString.length > 0) {
+            if (typeof viewClassString !== "undefined" && viewClassString !== null && viewClassString.length > 0) {
                 viewClass = Exhibit.UI.viewClassNameToViewClass(viewClassString);
-                if (viewClass === null) {
+                if (typeof viewClass === "undefined" || viewClass === null) {
                     Exhibit.Debug.warn("Unknown viewClass " + viewClassString);
                 }
             }
 
             viewLabel = Exhibit.getAttribute(this, "viewLabel");
-            label = (viewLabel !== null && viewLabel.length > 0) ?
+            label = (typeof viewLabel !== "undefined" && viewLabel !== null && viewLabel.length > 0) ?
                 viewLabel :
                 Exhibit.getAttribute(this, "label");
             tooltip = Exhibit.getAttribute(this, "title");
             id = $(this).attr("id");
                 
-            if (label === null) {
+            if (typeof label === "undefined" || label === null) {
                 if (typeof viewClass.l10n.viewLabel !== "undefined") {
                     label = viewClass.l10n.viewLabel;
                 } else {
@@ -160,7 +160,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
                     label = "[no view label set]";
                 }
             }
-            if (tooltip === null) {
+            if (typeof tooltip === "undefined" || tooltip === null) {
                 if (typeof viewClass.l10n !== "undefined" &&
                     typeof viewClass.l10n.viewTooltip !== "undefined") {
                     tooltip = viewClass.l10n.viewTooltip;
@@ -182,7 +182,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
     });
     
     initialView = Exhibit.getAttribute(div, "initialView");
-    if (initialView !== null && initialView.length > 0) {
+    if (typeof initialView !== "undefined" && initialView !== null && initialView.length > 0) {
         try {
             n = parseInt(initialView, 10);
             if (!isNaN(n)) {
@@ -402,7 +402,7 @@ Exhibit.ViewPanel.getPropertyValuesPairs = function(itemID, propertyEntries, dat
             if (itemValues) {
                 values.visit(function(value) {
                     var label = database.getObject(value, "label");
-                    pair.values.push(label !== null ? label : value);
+                    pair.values.push(typeof label !== "undefined" && label !== null ? label : value);
                 });
             } else {
                 values.visit(function(value) {

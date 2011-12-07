@@ -733,7 +733,7 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
         while (links.length > 0) {
             link = links.shift();
             type = $(link).attr("type");
-            if (type === null || type.length === 0) {
+            if (typeof type === "undefined" || type === null || type.length === 0) {
                 type = "application/json";
             }
 
@@ -746,7 +746,7 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
             }
         }
 
-        if (fDone !== null) {
+        if (typeof fDone !== "undefined" && fDone !== null) {
             fDone();
         }
     };

@@ -237,5 +237,15 @@ Exhibit.History.replaceState = function(data, subtitle, url) {
     }
 };
 
+/**
+ * Pushes an empty state into the history state tracker so the next refresh
+ * will start from scratch.
+ * 
+ * @static
+ */
+Exhibit.History.eraseState = function() {
+    Exhibit.History.pushState({});
+};
+
 $(document).bind("importReady.exhibit",
                  Exhibit.History.componentStateListener);

@@ -207,7 +207,7 @@ Exhibit.DateTime.setIso8601 = function (dateObject, string){
 
         Exhibit.DateTime.setIso8601Time(dateObject, comps[1]); 
     }
-    if (offset === null) {
+    if (typeof offset === "undefined" || offset === null) {
         offset = dateObject.getTimezoneOffset(); // local time zone if no tz info
     }
     dateObject.setTime(dateObject.getTime() + offset * 60000);
@@ -243,7 +243,7 @@ Exhibit.DateTime.parseIso8601DateTime = function (string) {
  */
 Exhibit.DateTime.parseGregorianDateTime = function(o) {
     var s, space, year, suffix, d;
-    if (o === null) {
+    if (typeof o === "undefined" || o === null) {
         return null;
     } else if (o instanceof Date) {
         return o;

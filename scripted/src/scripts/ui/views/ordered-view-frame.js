@@ -69,26 +69,26 @@ Exhibit.OrderedViewFrame.prototype.configure = function(configuration) {
 Exhibit.OrderedViewFrame.prototype.configureFromDOM = function(domConfiguration) {
     var orders, directions, i, possibleOrders, possibleDirections;
     orders = Exhibit.getAttribute(domConfiguration, "orders", ",");
-    if (orders !== null && orders.length > 0) {
+    if (typeof orders !== "undefined" && orders !== null && orders.length > 0) {
         this._orders = [];
         this._configureOrders(orders);
     }
     
     directions = Exhibit.getAttribute(domConfiguration, "directions", ",");
-    if (directions !== null && directions.length > 0 && this._orders !== null) {
+    if (typeof directions !== "undefined" && directions !== null && directions.length > 0 && this._orders !== null) {
         for (i = 0; i < directions.length && i < this._orders.length; i++) {
             this._orders[i].ascending = (directions[i].toLowerCase() !== "descending");
         }
     }
     
     possibleOrders = Exhibit.getAttribute(domConfiguration, "possibleOrders", ",");
-    if (possibleOrders !== null && possibleOrders.length > 0) {
+    if (typeof possibleOrders !== "undefined" && possibleOrders !== null && possibleOrders.length > 0) {
         this._possibleOrders = [];
         this._configurePossibleOrders(possibleOrders);
     }
 
     possibleDirections = Exhibit.getAttribute(domConfiguration, "possibleDirections", ",");
-    if (possibleDirections !== null && possibleDirections.length > 0 && this._possibleOrders !== null) {
+    if (typeof possibleDirections !== "undefined" && possibleDirections !== null && possibleDirections.length > 0 && typeof this._possibleOrders !== "undefined" && this._possibleOrders !== null) {
         for (i = 0; i < possibleDirections.length && i < this._possibleOrders.length; i++) {
             this._possibleOrders[i].ascending = (possibleDirections[i].toLowerCase() !== "descending");
         }
@@ -270,7 +270,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
         buildOrderElmt = function(order, index) {
             var property, label;
             property = database.getProperty(order.property);
-            label = property !== null ?
+            label = (typeof property !== "undefined" && property !== null) ?
                 (order.forward ? property.getPluralLabel() : property.getReversePluralLabel()) :
                 (order.forward ? order.property : "reverse of " + order.property);
                 
@@ -340,7 +340,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         valueType = "text";
         if (order.forward) {
             property = database.getProperty(order.property);
-            valueType = property !== null ? property.getValueType() : "text";
+            valueType = (typeof property !== "undefined" && property !== null) ? property.getValueType() : "text";
         } else {
             valueType = "item";
         }
@@ -397,7 +397,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         if (valueType === "item") {
             values.visit(function(itemID) {
                 var label = database.getObject(itemID, "label");
-                label = label !== null ? label : itemID;
+                label = (typeof label !== "undefined" && label !== null) ? label : itemID;
                 keys.push({ itemID: itemID, display: label });
             });
             
@@ -476,7 +476,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         values.visit(function(value) {
             var sortkey, key;
             sortkey = valueParser(value);
-            if (sortkey !== null) {
+            if (typeof sortKey !== "undefined" && sortkey !== null) {
                 key = keyMap[sortkey];
                 if (!key) {
                     key = { sortkey: sortkey, display: value, values: [], items: new Exhibit.Set() };

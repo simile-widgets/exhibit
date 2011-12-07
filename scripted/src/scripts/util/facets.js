@@ -138,12 +138,12 @@ Exhibit.FacetUtilities.constructFacetItem = function(
     if (typeof label === "string") {
         $(dom.elmt).attr("title", label);
         $(dom.link).html(label);
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(dom.link).css("color", color);
         }
     } else {
         $(dom.link).append(label);
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(label).css("color", color);
         }
     }
@@ -242,12 +242,12 @@ Exhibit.FacetUtilities.constructFlowingFacetItem = function(
     if (typeof label === "string") {
         $(dom.elmt).attr("title", label);
         $(dom.inner).html(label);
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(dom.inner).css("color", color);
         }
     } else {
         $(dom.inner).append(label);
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(label).css("color", color);
         }
     }
@@ -322,12 +322,12 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
     if (typeof label === "string") {
         $(dom.elmt).attr("title", label);
         $(dom.link).append(document.createTextNode(label));
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(dom.link).css("color", color);
         }
     } else {
         $(dom.link).append(label);
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(label).css("color", color);
         }
     }
@@ -413,12 +413,12 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
     if (typeof label === "string") {
         $(dom.elmt).attr("title", label);
         $(dom.inner).append(document.createTextNode(label));
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(dom.inner).css("color", color);
         }
     } else {
         $(dom.inner).append(label);
-        if (color !== null) {
+        if (typeof color !== "undefined" && color !== null) {
             $(label).css("color", color);
         }
     }

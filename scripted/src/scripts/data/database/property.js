@@ -162,7 +162,7 @@ Exhibit.Database.Property.prototype._buildRangeIndex = function() {
     case "date":
         getter = function(item, f) {
             database.getObjects(item, p, null, null).visit(function(value) {
-                if (value !== null && !(value instanceof Date)) {
+                if (typeof value !== "undefined" && value !== null && !(value instanceof Date)) {
                     value = Exhibit.DateTime.parseIso8601DateTime(value);
                 }
                 if (value instanceof Date) {

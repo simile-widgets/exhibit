@@ -74,7 +74,8 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
     facet = new Exhibit.ListFacet(
-        containerElmt !== null ? containerElmt : configElmt, 
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt, 
         thisUIContext
     );
     
@@ -82,20 +83,20 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
     
     try {
         expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (expressionString !== null && expressionString.length > 0) {
+        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
             facet._expression = Exhibit.ExpressionParser.parse(expressionString);
             facet._expressionString = expressionString;
         }
 
         selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (selection !== null && selection.length > 0) {
+        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
             for (i = 0; i < selection.length; i++) {
                 facet._valueSet.add(selection[i]);
             }
         }
         
         selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (selectMissing !== null && selectMissing.length > 0) {
+        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
             facet._selectMissing = (selectMissing === "true");
         }
     } catch (e) {
@@ -133,10 +134,10 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
     
     if (typeof facet._settings.facetLabel === "undefined") {
         facet._settings.facetLabel = "missing ex:facetLabel";
-        if (facet._expression !== null && facet._expression.isPath()) {
+        if (typeof facet._expression !== "undefined" && facet._expression !== null && facet._expression.isPath()) {
             segment = facet._expression.getPath().getLastSegment();
             property = facet._uiContext.getDatabase().getProperty(segment.property);
-            if (property !== null) {
+            if (typeof property !== "undefined" && property !== null) {
                 facet._settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
             }
         }

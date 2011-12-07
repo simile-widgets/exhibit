@@ -145,7 +145,7 @@ Exhibit.ColorCoder.prototype.translate = function(key, flags) {
             flags.keys.add(key);
         }
         return this._map[key].color;
-    } else if (key === null) {
+    } else if (typeof key === "undefined" || key === null) {
         if (flags) {
             flags.missing = true;
         }
