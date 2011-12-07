@@ -360,16 +360,17 @@ Exhibit.ListFacet.prototype._computeFacet = function(items) {
     if (this._settings.showMissing || this._selectMissing) {
         count = this._cache.countItemsMissingValue(items);
         if (count > 0 || this._selectMissing) {
-            span = document.createElement("span");
-            span.innerHTML = (typeof this._settings.missingLabel !== "undefined") ? 
-                this._settings.missingLabel : Exhibit.FacetUtilities.l10n.missingThisField;
-            span.className = "exhibit-facet-value-missingThisField";
+            span = $("<span>")
+                .attr("class", "exhibit-facet-value-missingThisField")
+                .html((typeof this._settings.missingLabel !== "undefined") ? 
+                      this._settings.missingLabel :
+                      Exhibit.FacetUtilities.l10n.missingThisField);
             
             entries.unshift({
                 value:          null, 
                 count:          count,
                 selected:       this._selectMissing,
-                selectionLabel: span,
+                selectionLabel: $(span).get(0),
                 actionLabel:    Exhibit.FacetUtilities.l10n.missingThisField
             });
         }
