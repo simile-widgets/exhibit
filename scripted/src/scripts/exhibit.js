@@ -113,6 +113,8 @@ Exhibit._Impl = function(database) {
             Exhibit.Database.create());
             
     this._uiContext = Exhibit.UIContext.createRootContext({}, this);
+    this._registry = new Exhibit.Registry();
+    $(document).trigger("registerComponents.exhibit", this._registry);
     this._collectionMap = {};
     this._componentMap= {};
 };
@@ -148,6 +150,8 @@ Exhibit._Impl.prototype.dispose = function() {
     this._collectionMap = null;
     this._uiContext = null;
     this._database = null;
+    this._registry.dispose();
+    this._registry = null;
 };
 
 /**
@@ -161,7 +165,7 @@ Exhibit._Impl.prototype.getDatabase = function() {
  * @returns {Exhibit.Registry}
  */
 Exhibit._Impl.prototype.getRegistry = function() {
-    return Exhibit.registry;
+    return this._registry;
 };
 
 /**

@@ -202,6 +202,6 @@ Exhibit.Exporter._getPropertiesWithValueTypes = function(database) {
 };
 
 $(document).one(
-    "registerComponents.exhibit",
+    "registerStaticComponents.exhibit",
     Exhibit.Exporter._registerComponent
 );

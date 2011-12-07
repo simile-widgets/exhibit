@@ -126,8 +126,9 @@ Exhibit.TileView.prototype.dispose = function() {
     this._dom = null;
 
     this._div = null;
-    this._uiContext = null;
     this._unregister();
+    this._uiContext.dispose();
+    this._uiContext = null;
 };
 
 /**

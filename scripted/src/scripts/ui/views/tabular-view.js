@@ -277,6 +277,7 @@ Exhibit.TabularView.prototype.dispose = function() {
     this._collectionSummaryWidget.dispose();
     this._collectionSummaryWidget = null;
     
+    this._unregister();
     this._uiContext.dispose();
     this._uiContext = null;
     
@@ -284,7 +285,6 @@ Exhibit.TabularView.prototype.dispose = function() {
     
     this._dom = null;
     this._div = null;
-    this._unregister();
 };
 
 /**

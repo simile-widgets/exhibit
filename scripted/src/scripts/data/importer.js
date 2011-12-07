@@ -185,6 +185,6 @@ Exhibit.Importer.prototype._loadBabel = function(url, database, callback) {
 };
 
 $(document).one(
-    "registerComponents.exhibit",
+    "registerStaticComponents.exhibit",
     Exhibit.Importer._registerComponent
 );
