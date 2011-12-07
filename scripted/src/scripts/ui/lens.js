@@ -19,7 +19,7 @@ Exhibit.Lens._commonProperties = null;
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.Lens.prototype._constructDefaultUI = function(itemID, div, uiContext) {
-    var database, properties, label, template, dom, pairs, j, pair, tr, tdName, tdValues, m;
+    var database, properties, label, template, dom, pairs, j, pair, tr, tdValues, m;
 
     database = uiContext.getDatabase();
     
@@ -73,15 +73,15 @@ Exhibit.Lens.prototype._constructDefaultUI = function(itemID, div, uiContext) {
     for (j = 0; j < pairs.length; j++) {
         pair = pairs[j];
 
-        tr = $("<tr>");
-        tr.appendTo(dom.propertiesTable);
-        tr = dom.propertiesTable.insertRow(j);
-        tr.attr("class", "exhibit-lens-property");
+        tr = $("<tr>")
+            .appendTo(dom.propertiesTable);
+        tr = $(dom.propertiesTable.get(0).insertRow(j))
+            .attr("class", "exhibit-lens-property");
         
-        tdName = $("<td>");
-        tr.append(tdName);
-        $(tdName).attr("class", "exhibit-lens-property-name");
-        $(tdName).html(pair.propertyLabel + ": ");
+        $("<td>")
+            .appendTo(tr)
+            .attr("class", "exhibit-lens-property-name")
+            .html(pair.propertyLabel + ": ");
         
         tdValues = $("<td>");
         tr.append(tdValues);
