@@ -177,7 +177,7 @@ Exhibit._Impl.prototype.getUIContext = function() {
  */
 Exhibit._Impl.prototype.getCollection = function(id) {
     var collection = this._collectionMap[id];
-    if (collection === null && id === "default") {
+    if ((typeof collection === "undefined" || collection === null) && id === "default") {
         collection = Exhibit.Collection.createAllItemsCollection(id, this._database);
         this.setDefaultCollection(collection);
     }
