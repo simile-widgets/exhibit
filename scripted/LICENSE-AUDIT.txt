@@ -83,10 +83,9 @@ SimileAjax
 History.js
 ----------
  * https://github.com/balupton/History.js
- * forked at https://github.com/zepheiryan/History.js
- * https://github.com/zepheiryan/history.js/commit/91a5c5bcd63cb5fc35e786de3a11218ea69e65bc (based on 1.7.0)
+ * 1.7.1
  * BSD
- * scripted/src/lib/{amplify.store,history.html4,history.adapter.jquery,history}.js
+ * scripted/src/lib/jquery.history.js
 
 JSON2.js
 --------

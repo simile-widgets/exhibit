@@ -42,7 +42,6 @@ var Exhibit = {
     _dependencies: {
         "lib/jquery-1.7.1.js": "$",
         "lib/json2.js": "JSON",
-        "lib/amplify.store.js": "amplify", 
         "lib/base64.js": "Base64"
 // History fails to load correctly in Safari through this mechanism
 //        "lib/history.js": "History.init",
@@ -60,10 +59,7 @@ var Exhibit = {
     scripts: [
         "lib/jquery-1.7.1.js",
         "lib/json2.js",
-        "lib/amplify.store.js",
-        "lib/history.adapter.jquery.js",
-        "lib/history.js",
-        "lib/history.html4.js",
+        "lib/jquery.history.js",
         "lib/base64.js",
         "lib/jquery.simile.dom.js",
         "lib/jquery.simile.bubble.js",
