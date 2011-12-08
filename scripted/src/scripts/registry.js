@@ -44,6 +44,22 @@ Exhibit.Registry.prototype.hasRegistry = function(component) {
     return typeof this._registry[component] !== "undefined";
 };
 
+Exhibit.Registry.prototype.generateIdentifier = function(component) {
+    var branch, key, size;
+    size = 0;
+    branch = this._registry[component];
+    if (typeof branch !== "undefined") {
+        for (key in branch) {
+            if (branch.hasOwnProperty(key)) {
+                size++;
+            }
+        }
+    } else {
+        throw new Error("No such registry for component: " + component);
+    }
+    return size;
+};
+
 /**
  * @param {String} component
  * @param {String} id

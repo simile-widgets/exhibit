@@ -17,6 +17,7 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
     this._settings = {};
 
     this._id = null;
+    this._registered = false;
 
     var view = this;
     this._onItemsChanged = function() {
@@ -80,6 +81,7 @@ Exhibit.ThumbnailView.create = function(configuration, containerElmt, uiContext)
     view._orderedViewFrame.configure(configuration);
     view._setIdentifier();
 
+    view.register();
     view._initializeUI();
     return view;
 };
@@ -111,6 +113,7 @@ Exhibit.ThumbnailView.createFromDOM = function(configElmt, containerElmt, uiCont
     view._orderedViewFrame.configure(configuration);
     view._setIdentifier();
 
+    view.register();
     view._initializeUI();
     return view;
 };
@@ -138,29 +141,31 @@ Exhibit.ThumbnailView.prototype.dispose = function() {
     this._dom = null;
 
     this._div = null;
+    this.unregister();
     this._uiContext = null;
-    this._unregister();
 };
 
 /**
  *
  */
-Exhibit.ThumbnailView.prototype._register = function() {
+Exhibit.ThumbnailView.prototype.register = function() {
     this._uiContext.getExhibit().getRegistry().register(
         Exhibit.View._registryKey,
         this.getID(),
         this
     );
+    this._registered = true;
 };
 
 /**
  *
  */
-Exhibit.ThumbnailView.prototype._unregister = function() {
+Exhibit.ThumbnailView.prototype.unregister = function() {
     this._uiContext.getExhibit().getRegistry().unregister(
         Exhibit.View._registryKey,
         this.getID()
     );
+    this._registered = false;
 };
 
 /**
@@ -169,11 +174,14 @@ Exhibit.ThumbnailView.prototype._unregister = function() {
 Exhibit.ThumbnailView.prototype._setIdentifier = function() {
     this._id = $(this._div).attr("id");
 
-    // @@@ not very unique
     if (typeof this._id === "undefined" || this._id === null) {
         this._id = "thumbnail"
             + "-"
-            + this._uiContext.getCollection().getID();
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.View._registryKey
+            );
     }
 };
 
@@ -190,7 +198,6 @@ Exhibit.ThumbnailView.prototype.getID = function() {
 Exhibit.ThumbnailView.prototype._initializeUI = function() {
     var self, template;
 
-    this._register();
     self = this;
 
     $(this._div).empty();

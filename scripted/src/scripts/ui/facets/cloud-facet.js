@@ -23,6 +23,7 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     
     this._settings = {};
     this._dom = null;
+    this._registered = false;
 };
 
 /**
@@ -125,11 +126,7 @@ Exhibit.CloudFacet._configure = function(facet, configuration) {
     }
 
     facet._setIdentifier();
-    facet._uiContext.getExhibit().getRegistry().register(
-        Exhibit.Facet._registryKey,
-        facet.getID(),
-        facet
-    );
+    facet.register();
 };
 
 /**
@@ -143,16 +140,15 @@ Exhibit.CloudFacet.prototype._setIdentifier = function() {
     self = this;
 
     if (typeof id === "undefined") {
-        // @@@ should this be bothered with?  just warn if the generated ID
-        //     produces a collision that author needs to add their own IDs?
-        /**
-        rank = < number of processed components >
-        */
         id = Exhibit.Facet._registryKey
             + "-"
             + this._expressionString
             + "-"
-            + this._uiContext.getCollection().getID();
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.Facet._registryKey
+            );
     }
 
     this._id = id;
@@ -168,9 +164,37 @@ Exhibit.CloudFacet.prototype.getID = function() {
 /**
  *
  */
+Exhibit.ListFacet.prototype.register = function() {
+    if (this._uiContext.getExhibit().getRegistry().hasRegistry(
+        Exhibit.Facet._registryKey
+    )) {
+        this._uiContext.getExhibit().getRegistry().register(
+            Exhibit.Facet._registryKey,
+            this.getID(),
+            this
+        );
+        this._registered = true;
+    }   
+};
+
+/**
+ *
+ */
+Exhibit.ListFacet.prototype.unregister = function() {
+    this._uiContext.getExhibit().getRegistry().unregister(
+        Exhibit.Facet._registryKey,
+        this.getID()
+    );
+    this._registered = false;
+};
+
+/**
+ *
+ */
 Exhibit.CloudFacet.prototype.dispose = function() {
     this._uiContext.getCollection().removeFacet(this);
     
+    this.unregister();
     this._uiContext = null;
     
     $(this._div).empty();

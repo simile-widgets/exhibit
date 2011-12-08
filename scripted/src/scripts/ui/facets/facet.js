@@ -15,16 +15,10 @@ Exhibit.Facet._registryKey = "facet";
 
 /**
  * @private
- */
-Exhibit.Facet._registry = null;
-
-/**
- * @private
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
  */
 Exhibit.Facet._registerComponent = function(evt, reg) {
-    Exhibit.Facet._registry = reg;
     if (!reg.hasRegistry(Exhibit.Facet._registryKey)) {
         reg.createRegistry(Exhibit.Facet._registryKey);
         $(document).trigger("registerFacets.exhibit");

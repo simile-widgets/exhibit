@@ -116,7 +116,6 @@ Exhibit._Impl = function(database) {
     this._registry = new Exhibit.Registry();
     $(document).trigger("registerComponents.exhibit", this._registry);
     this._collectionMap = {};
-    this._componentMap= {};
 };
 
 /**
@@ -125,15 +124,6 @@ Exhibit._Impl = function(database) {
 Exhibit._Impl.prototype.dispose = function() {
     var id;
 
-    for (id in this._componentMap) {
-        if (this._componentMap.hasOwnProperty(id)) {
-            try{
-                this._componentMap[id].dispose();
-            } catch(ex1) {
-                Exhibit.Debug.exception(ex1, "Failed to dispose component");
-            }
-        }
-    }
     for (id in this._collectionMap) {
         if (this._collectionMap.hasOwnProperty(id)) {
             try {
@@ -146,7 +136,6 @@ Exhibit._Impl.prototype.dispose = function() {
     
     this._uiContext.dispose();
     
-    this._componentMap = null;
     this._collectionMap = null;
     this._uiContext = null;
     this._database = null;
@@ -222,37 +211,7 @@ Exhibit._Impl.prototype.setDefaultCollection = function(c) {
  * @returns {Object}
  */
 Exhibit._Impl.prototype.getComponent = function(id) {
-    return this._componentMap[id];
-};
-
-/**
- * @param {String} id
- * @param {Object} c
- */
-Exhibit._Impl.prototype.setComponent = function(id, c) {
-    if (this._componentMap.hasOwnProperty(id)) {
-        try{
-            this._componentMap[id].dispose();
-        } catch(e) {
-            Exhibit.Debug.exception(e);
-        }
-    }
-    
-    this._componentMap[id] = c;
-};
-
-/**
- * @param {String} id
- */
-Exhibit._Impl.prototype.disposeComponent = function(id) {
-    if (this._componentMap.hasOwnProperty(id)) {
-        try{
-            this._componentMap[id].dispose();
-        } catch(e) {
-            Exhibit.Debug.exception(e);
-        }
-        delete this._componentMap[id];
-    }
+    return this.getRegistry().getID(id);
 };
 
 /**
@@ -274,13 +233,6 @@ Exhibit._Impl.prototype.configure = function(configuration) {
         for (i = 0; i < configuration.components.length; i++) {
             config = configuration.components[i];
             component = Exhibit.UI.create(config, config.elmt, this._uiContext);
-            if (typeof component !== "undefined" && component !== null) {
-                id = elmt.id;
-                if (typeof id === "undefined" || id === null || id.length === 0) {
-                    id = "component" + Math.floor(Math.random() * 1000000);
-                }
-                this.setComponent(id, component);
-            }
         }
     }
 };
@@ -345,13 +297,6 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             elmt = elmts[i];
             try {
                 component = Exhibit.UI.createFromDOM(elmt, uiContext);
-                if (typeof component !== "undefined" && component !== null) {
-                    id = elmt.id;
-                    if (typeof id === "undefined" || id === null || id.length === 0) {
-                        id = "component" + Math.floor(Math.random() * 1000000);
-                    }
-                    self.setComponent(id, component);
-                }
             } catch (ex1) {
                 Exhibit.Debug.exception(ex1);
             }

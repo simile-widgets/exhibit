@@ -18,6 +18,7 @@ Exhibit.TabularView = function(containerElmt, uiContext) {
     this._columns = [];
     this._rowTemplate = null;
     this._id = undefined;
+    this._registered = false;
 
     var view = this;
 
@@ -64,6 +65,8 @@ Exhibit.TabularView.create = function(configuration, containerElmt, uiContext) {
     Exhibit.TabularView._configure(view, configuration);
     
     view._internalValidate();
+    view._setIdentifier();
+    view.register();
     view._initializeUI();
     return view;
 };
@@ -155,6 +158,8 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
         
     Exhibit.TabularView._configure(view, configuration);
     view._internalValidate();
+    view._setIdentifier();
+    view.register();
     view._initializeUI();
     return view;
 };
@@ -210,29 +215,29 @@ Exhibit.TabularView._configure = function(view, configuration) {
     if (typeof configuration.tableStyler !== "undefined") {
         view._settings.tableStyler = configuration.tableStyler;
     }
-
-    view._setIdentifier();
 };
 
 /**
  *
  */
-Exhibit.TabularView.prototype._register = function() {
+Exhibit.TabularView.prototype.register = function() {
     this._uiContext.getExhibit().getRegistry().register(
         Exhibit.View._registryKey,
         this.getID(),
         this
     );
+    this._registered = true;
 };
 
 /**
  *
  */
-Exhibit.TabularView.prototype._unregister = function() {
+Exhibit.TabularView.prototype.unregister = function() {
     this._uiContext.getExhibit().getRegistry().unregister(
         Exhibit.View._registryKey,
         this.getID()
     );
+    this._registered = false;
 };
 
 /**
@@ -278,7 +283,7 @@ Exhibit.TabularView.prototype.dispose = function() {
     this._collectionSummaryWidget.dispose();
     this._collectionSummaryWidget = null;
     
-    this._unregister();
+    this.unregister();
     this._uiContext.dispose();
     this._uiContext = null;
     
@@ -292,8 +297,6 @@ Exhibit.TabularView.prototype.dispose = function() {
  *
  */
 Exhibit.TabularView.prototype._initializeUI = function() {
-    this._register();
-
     var self = this;
     
     $(this._div).empty();
@@ -722,11 +725,14 @@ Exhibit.TabularView.prototype._gotoPage = function(page) {
 Exhibit.TabularView.prototype._setIdentifier = function() {
     this._id = $(this._div).attr("id");
 
-    // @@@ not very unique
     if (typeof this._id === "undefined") {
-        this._id = Exhibit.View._registryKey
+        this._id = "tabular"
             + "-"
-            + "tabular";
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.View._registryKey
+            );
     }
 };
 

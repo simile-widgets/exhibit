@@ -120,6 +120,7 @@ var Exhibit = {
         "scripts/ui/views/tile-view.js",
         "scripts/ui/views/tabular-view.js",
         "scripts/ui/views/thumbnail-view.js",
+        "scripts/ui/coders/coder.js",
         "scripts/ui/coders/color-coder.js",
         "scripts/ui/coders/default-color-coder.js",
         "scripts/ui/control-panel.js",

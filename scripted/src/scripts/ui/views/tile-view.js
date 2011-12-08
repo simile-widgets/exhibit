@@ -16,6 +16,7 @@ Exhibit.TileView = function(containerElmt, uiContext) {
     this._settings = {};
 
     this._id = null;
+    this._registered = false;
     
     var view = this;
 
@@ -71,6 +72,7 @@ Exhibit.TileView.create = function(configuration, containerElmt, uiContext) {
     view._orderedViewFrame.configure(configuration);
     view._setIdentifier();
 
+    view.register();
     view._initializeUI();
     return view;
 };
@@ -100,6 +102,7 @@ Exhibit.TileView.createFromDOM = function(configElmt, containerElmt, uiContext) 
     view._orderedViewFrame.configure(configuration);
     view._setIdentifier();
 
+    view.register();
     view._initializeUI();
     return view;
 };
@@ -126,7 +129,7 @@ Exhibit.TileView.prototype.dispose = function() {
     this._dom = null;
 
     this._div = null;
-    this._unregister();
+    this.unregister();
     this._uiContext.dispose();
     this._uiContext = null;
 };
@@ -134,22 +137,24 @@ Exhibit.TileView.prototype.dispose = function() {
 /**
  *
  */
-Exhibit.TileView.prototype._register = function() {
+Exhibit.TileView.prototype.register = function() {
     this._uiContext.getExhibit().getRegistry().register(
         Exhibit.View._registryKey,
         this.getID(),
         this
     );
+    this._registered = true;
 };
 
 /**
  *
  */
-Exhibit.TileView.prototype._unregister = function() {
+Exhibit.TileView.prototype.unregister = function() {
     this._uiContext.getExhibit().getRegistry().unregister(
         Exhibit.View._registryKey,
         this.getID()
     );
+    this._registered = false;
 };
 
 /**
@@ -158,11 +163,15 @@ Exhibit.TileView.prototype._unregister = function() {
 Exhibit.TileView.prototype._setIdentifier = function() {
     this._id = $(this._div).attr("id");
 
-    // @@@ not very unique
     if (typeof this._id === "undefined" || this._id === null) {
         this._id = "tile"
             + "-"
-            + this._uiContext.getCollection().getID();
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.View._registryKey
+            );
+        
     }
 };
 
@@ -179,7 +188,6 @@ Exhibit.TileView.prototype.getID = function() {
 Exhibit.TileView.prototype._initializeUI = function() {
     var self, template;
 
-    this._register();
     self = this;
     
     $(this._div).empty();

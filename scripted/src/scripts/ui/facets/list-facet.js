@@ -24,6 +24,7 @@ Exhibit.ListFacet = function(containerElmt, uiContext) {
     
     this._settings = {};
     this._dom = null;
+    this._registered = false;
 };
 
 /**
@@ -178,11 +179,7 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
     );
 
     facet._setIdentifier();
-    facet._uiContext.getExhibit().getRegistry().register(
-        Exhibit.Facet._registryKey,
-        facet.getID(),
-        facet
-    );
+    facet.register();
 };
 
 /**
@@ -190,25 +187,19 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
  * non-random, deterministic hash for this component.
  */
 Exhibit.ListFacet.prototype._setIdentifier = function() {
-    var id, self, rank;
+    this._id = $(this._div).attr("id");
 
-    id = $(this._div).attr("id");
-    self = this;
-
-    if (typeof id === "undefined") {
-        // @@@ should this be bothered with?  just warn if the generated ID
-        //     produces a collision that author needs to add their own IDs?
-        /**
-        rank = < number of processed components >
-        */
-        id = Exhibit.Facet._registryKey
+    if (typeof this._id === "undefined") {
+        this._id = Exhibit.Facet._registryKey
             + "-"
             + this._expressionString
             + "-"
-            + this._uiContext.getCollection().getID();
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.Facet._registryKey
+            );
     }
-
-    this._id = id;
 };
 
 /**
@@ -221,11 +212,39 @@ Exhibit.ListFacet.prototype.getID = function() {
 /**
  *
  */
+Exhibit.ListFacet.prototype.register = function() {
+    if (this._uiContext.getExhibit().getRegistry().hasRegistry(
+        Exhibit.Facet._registryKey
+    )) {
+        this._uiContext.getExhibit().getRegistry().register(
+            Exhibit.Facet._registryKey,
+            this.getID(),
+            this
+        );
+        this._registered = true;
+    }   
+};
+
+/**
+ *
+ */
+Exhibit.ListFacet.prototype.unregister = function() {
+    this._uiContext.getExhibit().getRegistry().unregister(
+        Exhibit.Facet._registryKey,
+        this.getID()
+    );
+    this._registered = false;
+};
+
+/**
+ *
+ */
 Exhibit.ListFacet.prototype.dispose = function() {
     this._cache.dispose();
     this._cache = null;
-    
+
     this._uiContext.getCollection().removeFacet(this);
+    this.unregister();
     this._uiContext = null;
     this._colorCoder = null;
     

@@ -14,6 +14,8 @@ Exhibit.ControlPanel = function(elmt, uiContext) {
     this._widgets = [];
     this._div = elmt;
     this._settings = {};
+    this._id = null;
+    this._registered = false;
 };
 
 /**
@@ -27,6 +29,12 @@ Exhibit.ControlPanel._settingSpecs = {
 };
 
 /**
+ * @private
+ * @constant
+ */
+Exhibit.ControlPanel._registryKey = "controlPanel";
+
+/**
  * @static
  * @param {Object} configuration
  * @param {Element} elmt
@@ -34,13 +42,15 @@ Exhibit.ControlPanel._settingSpecs = {
  * @returns {Exhibit.ControlPanel}
  */
 Exhibit.ControlPanel.create = function(configuration, elmt, uiContext) {
-    var widget = new Exhibit.ControlPanel(
+    var panel = new Exhibit.ControlPanel(
         elmt,
         Exhibit.UIContext.create(configuration, uiContext)
     );
-    Exhibit.ControlPanel._configure(widget, configuration);
-    widget._initializeUI();
-    return widget;
+    Exhibit.ControlPanel._configure(panel, configuration);
+    panel._setIdentifier();
+    panel.register();
+    panel._initializeUI();
+    return panel;
 };
 
 /**
@@ -50,31 +60,44 @@ Exhibit.ControlPanel.create = function(configuration, elmt, uiContext) {
  * @returns {Exhibit.Coordinator}
  */
 Exhibit.ControlPanel.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuration, widget;
+    var configuration, panel;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    widget = new Exhibit.ControlPanel(
+    panel = new Exhibit.ControlPanel(
         (typeof containerElmt !== "undefined" && containerElmt !== null) ?
             containerElmt :
             configElmt,
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
-    Exhibit.ControlPanel._configure(widget, configuration);
-    widget._initializeUI();
-    return widget;
+    Exhibit.ControlPanel._configure(panel, configuration);
+    panel._setIdentifier();
+    panel.register();
+    panel._initializeUI();
+    return panel;
 };
 
 /**
  * @static
  * @private
- * @param {Exhibit.ControlPanel} widget
+ * @param {Exhibit.ControlPanel} panel
  * @param {Object} configuration
  */
-Exhibit.ControlPanel._configure = function(widget, configuration) {
+Exhibit.ControlPanel._configure = function(panel, configuration) {
     Exhibit.SettingsUtilities.collectSettings(
         configuration,
         Exhibit.ControlPanel._settingSpecs,
-        widget._settings
+        panel._settings
     );
+};
+
+/**
+ * @private
+ * @param {jQuery.Event} evt
+ * @param {Exhibit.Registry} reg
+ */
+Exhibit.ControlPanel._registerComponent = function(evt, reg) {
+    if (!reg.hasRegistry(Exhibit.ControlPanel._registryKey)) {
+        reg.createRegistry(Exhibit.ControlPanel._registryKey);
+    }
 };
 
 /**
@@ -103,6 +126,50 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
 };
 
 /**
+ *
+ */
+Exhibit.ControlPanel.prototype._setIdentifier = function() {
+    this._id = $(this._div).attr("id");
+    if (typeof this._id === "undefined" || this._id === null) {
+        this._id = Exhibit.ControlPanel._registryKey
+            + "-"
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.ControlPanel._registryKey
+            );
+    }
+};
+
+/**
+ *
+ */
+Exhibit.ControlPanel.prototype.register = function() {
+    if (!this._uiContext.getExhibit().getRegistry().isRegistered(
+        Exhibit.ControlPanel._registryKey,
+        this.getID()
+    )) {
+        this._uiContext.getExhibit().getRegistry().register(
+            Exhibit.ControlPanel._registryKey,
+            this.getID(),
+            this
+        );
+        this._registered = true;
+    }
+};
+
+/**
+ *
+ */
+Exhibit.ControlPanel.prototype.unregister = function() {
+    this._uiContext.getExhibit().getRegistry().unregister(
+        Exhibit.ControlPanel._registryKey,
+        this.getID()
+    );
+    this._registered = false;
+};
+
+/**
  * @returns {jQuery}
  */
 Exhibit.ControlPanel.prototype.getContainer = function() {
@@ -110,9 +177,17 @@ Exhibit.ControlPanel.prototype.getContainer = function() {
 };
 
 /**
+ * @returns {String}
+ */
+Exhibit.ControlPanel.prototype.getID = function() {
+    return this._id;
+};
+
+/**
  *
  */
 Exhibit.ControlPanel.prototype.dispose = function() {
+    this.unregister();
     this._uiContext.dispose();
     this._uiContext = null;
     this._div = null;
@@ -156,3 +231,6 @@ Exhibit.ControlPanel.prototype.reconstruct = function() {
         //this._widgets[i].reconstruct(this);
     }
 };
+
+$(document).one("registerComponents.exhibit",
+                Exhibit.ControlPanel._registerComponent);

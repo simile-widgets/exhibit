@@ -36,16 +36,10 @@ Exhibit.ViewPanel._registryKey = "viewPanel";
 
 /**
  * @private
- */
-Exhibit.ViewPanel._registry = null;
-
-/**
- * @private
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
  */
 Exhibit.ViewPanel._registerComponent = function(evt, reg) {
-    Exhibit.ViewPanel._registry = reg;
     if (!reg.hasRegistry(Exhibit.ViewPanel._registryKey)) {
         reg.createRegistry(Exhibit.ViewPanel._registryKey);
     }
@@ -211,6 +205,7 @@ Exhibit.ViewPanel.prototype.dispose = function() {
     
     $(this._div).empty();
     
+    this.unregister();
     this._uiContext.dispose();
     this._uiContext = null;
     this._div = null;
@@ -222,11 +217,14 @@ Exhibit.ViewPanel.prototype.dispose = function() {
 Exhibit.ViewPanel.prototype._setIdentifier = function() {
     this._id = $(this._div).attr("id");
 
-    if (typeof this._id === "undefined") {
-        // @@@ just warn about supplying an ID if there's a collision?
+    if (typeof this._id === "undefined" || this._id === null) {
         this._id = Exhibit.ViewPanel._registryKey
             + "-"
-            + this._uiContext.getCollection().getID();
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+                Exhibit.ViewPanel._registryKey
+            );
     }
 };
 
@@ -234,19 +232,28 @@ Exhibit.ViewPanel.prototype._setIdentifier = function() {
  * 
  */
 Exhibit.ViewPanel.prototype.register = function() {
-    if (!Exhibit.ViewPanel._registry.isRegistered(
+    if (!this._uiContext.getExhibit().getRegistry().isRegistered(
         Exhibit.ViewPanel._registryKey,
         this.getID()
     )) {
-        Exhibit.ViewPanel._registry.register(
+        this._uiContext.getExhibit().getRegistry().register(
             Exhibit.ViewPanel._registryKey,
             this.getID(),
             this
         );
         this._registered = true;
-    } else {
-        this._registered = false;
     }
+};
+
+/**
+ *
+ */
+Exhibit.ViewPanel.prototype.unregister = function() {
+    this._uiContext.getExhibit().getRegistry().unregister(
+        Exhibit.ViewPanel._registryKey,
+        this.getID()
+    );
+    this._registered = false;
 };
 
 /**
@@ -339,7 +346,6 @@ Exhibit.ViewPanel.prototype._createView = function() {
     
     this._uiContextCache[index] = this._view._uiContext;
 
-    this._uiContext.getExhibit().setComponent(this._viewIDs[index], this._view);
     this._dom.setViewIndex(index);
 };
 
@@ -348,7 +354,7 @@ Exhibit.ViewPanel.prototype._createView = function() {
  */
 Exhibit.ViewPanel.prototype._switchView = function(newIndex) {
     if (this._view) {
-        this._uiContext.getExhibit().disposeComponent(this._viewIDs[this._viewIndex]);
+        this._view.dispose();
         this._view = null;
     }
     this._viewIndex = newIndex;
