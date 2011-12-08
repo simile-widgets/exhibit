@@ -348,7 +348,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             this._showFocusDialogOnItem(itemID);
         }
     }
-    $(document).trigger("exhibitConfigured.exhibit", this.getRegistry());
+    $(document).trigger("exhibitConfigured.exhibit", this);
 };
 
 /**

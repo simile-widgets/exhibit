@@ -15,9 +15,9 @@ $(document).ready(function() {
         $(document).trigger("registerStaticComponents.exhibit", Exhibit.staticRegistry);
     });
 
-    $(document).one("exhibitConfigured.exhibit", function(evt, registry) {
+    $(document).one("exhibitConfigured.exhibit", function(evt, ex) {
         Exhibit.Bookmark.init();
-        Exhibit.History.init(registry);
+        Exhibit.History.init(ex);
     });
 
     Exhibit.staticRegistry = new Exhibit.Registry(true);

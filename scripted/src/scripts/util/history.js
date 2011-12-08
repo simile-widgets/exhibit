@@ -40,16 +40,16 @@ Exhibit.History = {
 
 /**
  * @depends History.js
- * @param {Exhibit.Registry} reg
+ * @param {Exhibit._Impl} ex
  */
-Exhibit.History.init = function(reg) {
+Exhibit.History.init = function(ex) {
     var state, types, i, j, keys, component;
 
     if (typeof History !== "undefined" && History.enabled) {
         Exhibit.History.enabled = true;
         Exhibit.History._originalTitle = document.title;
         Exhibit.History._originalLocation = Exhibit.Persistence.getURLWithoutQueryAndHash();
-        Exhibit.History._registry = reg;
+        Exhibit.History._registry = ex.getRegistry();
 
         $(window).bind("statechange", Exhibit.History.stateListener);
         if (Exhibit.Bookmark.runBookmark()) {
@@ -61,9 +61,9 @@ Exhibit.History.init = function(reg) {
                 state.data.state = Exhibit.History._state;
                 types = [ "facet", "view", "viewPanel" ];
                 for (i = 0; i < types.length; i++) {
-                    keys = reg.getKeys(types[i]);
+                    keys = ex.getRegistry().getKeys(types[i]);
                     for (j = 0; j < keys.length; j++) {
-                        component = reg.get(types[i], keys[j]);
+                        component = ex.getRegistry().get(types[i], keys[j]);
                         if (typeof component.exportState === "function") {
                             state.data.components[keys[j]] = {};
                             state.data.components[keys[j]].type = types[i];
