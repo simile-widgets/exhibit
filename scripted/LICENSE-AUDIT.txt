@@ -25,7 +25,7 @@ QUnit
 JSLint
 ------
  * https://code.google.com/p/jslint4java/
- * 1.4.7
+ * 2.0.1
  * BSD / custom?
  * scripted/tools/jslint4java/jslint4java.jar
 
@@ -70,15 +70,9 @@ LAB.js
 jQuery
 ------
  * http://jquery.com/
- * 1.5.2
+ * 1.7.1
  * dual GPLv2/MIT
  * scripted/src/lib/jquery.min.js
-
-SimileAjax
-----------
- * http://simile-widgets.org/wiki/SimileAjax
- * 2.2.1
- * BSD
 
 History.js
 ----------
