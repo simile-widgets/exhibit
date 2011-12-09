@@ -48,7 +48,7 @@
   <taskdef
      name="yui-compressor"
      classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
-     classpath="${tools}/yuicompressor-ant/yui-compressor-ant-task.jar;${tools}/rhino/js.jar"
+     classpath="${tools}/yuicompressor-ant/yui-compressor-ant-task.jar;${tools}/yuicompressor/yuicompressor.jar"
      />
 
   <taskdef
@@ -102,6 +102,10 @@
       <filelist dir="${src}/"
                 files="scripts/util/util.js"/>
       <fileset dir="${src}/">
+        <exclude name="images/*"/>
+        <exclude name="styles/*"/>
+        <exclude name="extensions/*"/>
+        <exclude name="locales/**/*"/>
         <exclude name="lib/*.js"/>
         <exclude name="scripts/node/*.js"/>
         <exclude name="exhibit-api.js"/>
@@ -121,7 +125,9 @@
     <yui-compressor
        munge="true"
        fromdir="${bundle}/"
-       todir="${dist}/"/>
+       todir="${dist}/">
+      <include name="*.js"/>
+    </yui-compressor>
   </target>
 
 
