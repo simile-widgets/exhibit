@@ -35,7 +35,13 @@ Exhibit.History = {
     /**
      * @private
      */
-    _registry: null
+    _registry: null,
+
+    /**
+     * @private
+     * @constant
+     */
+    _activeTypes: [ "facet", "view", "viewPanel" ]
 };
 
 /**
@@ -55,26 +61,36 @@ Exhibit.History.init = function(ex) {
         if (Exhibit.Bookmark.runBookmark()) {
             Exhibit.Bookmark.implementBookmark(Exhibit.Bookmark.state);
         } else {
-            state = Exhibit.History.getState();
-            if (typeof state.data.components === "undefined") {
-                state.data.components = {};
-                state.data.state = Exhibit.History._state;
-                types = [ "facet", "view", "viewPanel" ];
-                for (i = 0; i < types.length; i++) {
-                    keys = ex.getRegistry().getKeys(types[i]);
-                    for (j = 0; j < keys.length; j++) {
-                        component = ex.getRegistry().get(types[i], keys[j]);
-                        if (typeof component.exportState === "function") {
-                            state.data.components[keys[j]] = {};
-                            state.data.components[keys[j]].type = types[i];
-                            state.data.components[keys[j]].state = component.exportState();
-                        }
-                    }
-                }
-                Exhibit.History.replaceState(state.data);
-            }
+            Exhibit.History._processEmptyState();
             Exhibit.History.stateListener();
         }
+    }
+};
+
+/**
+ * @private
+ * @static
+ */
+Exhibit.History._processEmptyState = function() {
+    var state, types, reg, keys, component, i;
+    types = Exhibit.History._activeTypes;
+    reg = Exhibit.History._registry;
+    state = Exhibit.History.getState();
+    if (typeof state.data.components === "undefined") {
+        state.data.components = {};
+        state.data.state = Exhibit.History._state;
+        for (i = 0; i < types.length; i++) {
+            keys = reg.getKeys(types[i]);
+            for (j = 0; j < keys.length; j++) {
+                component = reg.get(types[i], keys[j]);
+                if (typeof component.exportState === "function") {
+                    state.data.components[keys[j]] = {};
+                    state.data.components[keys[j]].type = types[i];
+                    state.data.components[keys[j]].state = component.exportState();
+                }
+            }
+        }
+        Exhibit.History.replaceState(state.data);
     }
 };
 
