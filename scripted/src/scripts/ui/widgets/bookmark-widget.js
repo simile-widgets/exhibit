@@ -69,6 +69,9 @@ Exhibit.BookmarkWidget.prototype._initializeUI = function() {
     this._popup = popup;
 };
 
+/**
+ * @param {jQuery} popup
+ */
 Exhibit.BookmarkWidget.prototype._fillPopup = function(popup) {
     var self, img;
 
