@@ -175,12 +175,4 @@ Exhibit.CollectionSummaryWidget.prototype._resetCollection = function() {
         state.data,
         Exhibit.CollectionSummaryWidget.l10n.resetActionTitle
     );
-
-    /** @@@ replace this with something that clears all a collection's facets
-    SimileAjax.History.addLengthyAction(
-        function() { state.restrictions = collection.clearAllRestrictions(); },
-        function() { collection.applyRestrictions(state.restrictions); },
-        Exhibit.CollectionSummaryWidget.l10n.resetActionTitle
-    );
-    */
 };
