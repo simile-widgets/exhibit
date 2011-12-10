@@ -161,7 +161,7 @@ Exhibit.UIContext.prototype.getLensRegistry = function() {
  * @returns {String|Number|Boolean|Object}
  */
 Exhibit.UIContext.prototype.getSetting = function(name) {
-    return this._settings.hasOwnProperty(name) ? 
+    return typeof this._settings[name] !== "undefined" ? 
         this._settings[name] : 
         (this._parent !== null ? this._parent.getSetting(name) : undefined);
 };
@@ -191,7 +191,7 @@ Exhibit.UIContext.prototype.putSetting = function(name, value) {
  */
 Exhibit.UIContext.prototype.format = function(value, valueType, appender) {
     var f;
-    if (this._formatters.hasOwnProperty(valueType)) {
+    if (typeof this._formatters[valueType] !== "undefined") {
         f = this._formatters[valueType];
     } else {
         f = this._formatters[valueType] = 
@@ -266,11 +266,11 @@ Exhibit.UIContext._createWithParent = function(parent) {
 Exhibit.UIContext._configure = function(context, configuration, ignoreLenses) {
     Exhibit.UIContext.registerLenses(configuration, context.getLensRegistry());
     
-    if (configuration.hasOwnProperty("collectionID")) {
+    if (typeof configuration["collectionID"] !== "undefined") {
         context._collection = context._exhibit.getCollection(configuration.collectionID);
     }
     
-    if (configuration.hasOwnProperty("formats")) {
+    if (typeof configuration["formats"] !== "undefined") {
         Exhibit.FormatParser.parseSeveral(context, configuration.formats, 0, {});
     }
     
@@ -294,7 +294,7 @@ Exhibit.UIContext.registerLens = function(configuration, lensRegistry) {
     var template, i;
     template = configuration.templateFile;
     if (typeof template !== "undefined" && template !== null) {
-        if (configuration.hasOwnProperty("itemTypes")) {
+        if (typeof configuration["itemTypes"] !== "undefined") {
             for (i = 0; i < configuration.itemTypes.length; i++) {
                 lensRegistry.registerLensForType(template, configuration.itemTypes[i]);
             }
@@ -346,12 +346,12 @@ Exhibit.UIContext.registerLensFromDOM = function(elmt, lensRegistry) {
  */
 Exhibit.UIContext.registerLenses = function(configuration, lensRegistry) {
     var i, lensSelector;
-    if (configuration.hasOwnProperty("lenses")) {
+    if (typeof configuration["lenses"] !== "undefined") {
         for (i = 0; i < configuration.lenses.length; i++) {
             Exhibit.UIContext.registerLens(configuration.lenses[i], lensRegistry);
         }
     }
-    if (configuration.hasOwnProperty("lensSelector")) {
+    if (typeof configuration["lensSelector"] !== "undefined") {
         lensSelector = configuration.lensSelector;
         if (typeof lensSelector === "function") {
             lensRegistry.addLensSelector(lensSelector);

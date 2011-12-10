@@ -95,12 +95,12 @@ Exhibit.Expression.Path.prototype.evaluate = function(
     rootName = (typeof this._rootName !== "undefined" && this._rootName !== null) ?
         this._rootName :
         defaultRootName;
-    valueType = rootValueTypes.hasOwnProperty(rootName) ?
+    valueType = typeof rootValueTypes[rootName] !== "undefined" ?
         rootValueTypes[rootName] :
         "text";
     
     collection = null;
-    if (roots.hasOwnProperty(rootName)) {
+    if (typeof roots[rootName] !== "undefined") {
         root = roots[rootName];
         if (root instanceof Exhibit.Set || root instanceof Array) {
             collection = new Exhibit.Expression._Collection(root, valueType);

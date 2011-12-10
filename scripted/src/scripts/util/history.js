@@ -121,7 +121,7 @@ Exhibit.History.componentStateListener = function(evt, type, id) {
     fullState = Exhibit.History.getState();
     if (fullState !== null) {
         components = fullState.data.components;
-        if (components.hasOwnProperty(id)) {
+        if (typeof components[id] !== "undefined") {
             componentState = components[id].state;
             component = Exhibit.History._registry.get(type, id);
             if (component !== null &&
@@ -153,10 +153,10 @@ Exhibit.History.setComponentState = function(state, component, registry, data, l
         state = { "data": { "components": {} } };
     }
 
-    if (!state.hasOwnProperty("data")) {
+    if (typeof state["data"] === "undefined") {
         state.data = { "components": {} };
     }
-    if (!state.data.hasOwnProperty("components")) {
+    if (typeof state.data["components"] === "undefined") {
         state.data.components = {};
     }
 

@@ -118,9 +118,9 @@ Exhibit.Bookmark.init = function() {
         try {
             state = Exhibit.Bookmark.interpretBookmarkHash(hash.substr(1));
             if (typeof state === "object" &&
-                state.hasOwnProperty("data") &&
-                state.hasOwnProperty("title") &&
-                state.hasOwnProperty("url")) {
+                typeof state["data"] !== "undefined" &&
+                typeof state["title"] !== "undefined" &&
+                typeof state["url"] !== "undefined") {
                 Exhibit.Bookmark.state = state;
                 Exhibit.Bookmark._shouldRun = true;
             } else {

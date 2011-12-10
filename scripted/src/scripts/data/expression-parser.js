@@ -98,7 +98,7 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
             identifier = token.value;
             next();
             
-            if (Exhibit.Controls.hasOwnProperty(identifier)) {
+            if (typeof Exhibit.Controls[identifier] !== "undefined") {
                 if (token !== null && token.type === Scanner.DELIMITER && token.value === "(") {
                     next();
                     

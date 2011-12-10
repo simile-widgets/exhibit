@@ -41,7 +41,7 @@ Exhibit.Exporter.SemanticWikiText.exportOne = function(itemID, o, properties) {
     s += uri + "\n";
 
     for (prop in o) {
-        if (o.hasOwnProperty(prop) && properties.hasOwnProperty(prop)) {
+        if (o.hasOwnProperty(prop) && typeof properties[prop] !== "undefined") {
             valueType = properties[prop].valueType;
             values = o[prop];
             if (valueType === "item") {

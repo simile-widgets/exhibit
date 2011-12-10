@@ -55,7 +55,7 @@ Exhibit.Collection.create = function(id, configuration, database) {
     var collection = new Exhibit.Collection(id, database);
     collection._setElement();
    
-    if (configuration.hasOwnProperty("itemTypes")) {
+    if (typeof configuration["itemTypes"] !== "undefined") {
         collection._itemTypes = configuration.itemTypes;
         collection._update = Exhibit.Collection._typeBasedCollection_update;
     } else {
@@ -108,16 +108,16 @@ Exhibit.Collection.create2 = function(id, configuration, uiContext) {
 
     database = uiContext.getDatabase();
     
-    if (configuration.hasOwnProperty("expression")) {
+    if (typeof configuration["expression"] !== "undefined") {
         collection = new Exhibit.Collection(id, database);
         collection._setElement();
         
         collection._expression = Exhibit.ExpressionParser.parse(configuration.expression);
-        collection._baseCollection = (configuration.hasOwnProperty("baseCollectionID")) ? 
+        collection._baseCollection = (typeof configuration["baseCollectionID"] !== "undefined") ? 
             uiContext.getExhibit().getCollection(configuration.baseCollectionID) : 
             uiContext.getCollection();
             
-        collection._restrictBaseCollection = (configuration.hasOwnProperty("restrictBaseCollection")) ? 
+        collection._restrictBaseCollection = (typeof configuration["restrictBaseCollection"] !== "undefined") ? 
             configuration.restrictBaseCollection : false;
             
         if (collection._restrictBaseCollection) {
@@ -392,7 +392,7 @@ Exhibit.Collection.prototype.equals = function(collection) {
  * Handle removing the collection from the local context.
  */
 Exhibit.Collection.prototype.dispose = function() {
-    if (this.hasOwnProperty("_baseCollection")) {
+    if (typeof this["_baseCollection"] !== "undefined") {
         this._baseCollection = null;
         this._expression = null;
     }

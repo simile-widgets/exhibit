@@ -93,13 +93,13 @@ Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI) {
     if (typeof baseURI === "undefined") {
         baseURI = location.href;
     }
-    if (o.hasOwnProperty("types")) {
+    if (typeof o["types"] !== "undefined") {
         this.loadTypes(o.types, baseURI);
     }
-    if (o.hasOwnProperty("properties")) {
+    if (typeof o["properties"] !== "undefined") {
         this.loadProperties(o.properties, baseURI);
     }
-    if (o.hasOwnProperty("items")) {
+    if (typeof o["items"] !== "undefined") {
         this.loadItems(o.items, baseURI);
     }
 };
@@ -126,7 +126,7 @@ Exhibit.Database._LocalImpl.prototype.loadTypes = function(typeEntries, baseURI)
                 if (typeof typeID === "string") {
                     typeEntry = typeEntries[typeID];
                     if (typeof typeEntry === "object") {
-                        if (this._types.hasOwnProperty(typeID)) {
+                        if (typeof this._types[typeID] !== "undefined") {
                             type = this._types[typeID];
                         } else {
                             type = new Exhibit.Database.Type(typeID);
@@ -139,11 +139,11 @@ Exhibit.Database._LocalImpl.prototype.loadTypes = function(typeEntries, baseURI)
                             }
                         }
                         
-                        if (!type._custom.hasOwnProperty("uri")) {
+                        if (typeof type._custom["uri"] === "undefined") {
                             type._custom["uri"] = baseURI + "type#" + encodeURIComponent(typeID);
                         }
                         
-                        if (!type._custom.hasOwnProperty("label")) {
+                        if (typeof type._custom["label"] === "undefined") {
                             type._custom["label"] = typeID;
                         }
                     }
@@ -180,46 +180,46 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
                 if (typeof propertyID === "string") {
                     propertyEntry = propertyEntries[propertyID];
                     if (typeof propertyEntry === "object") {
-                        if (this._properties.hasOwnProperty(propertyID)) {
+                        if (typeof this._properties[propertyID] !== "undefined") {
                             property = this._properties[propertyID];
                         } else {
                             property = new Exhibit.Database.Property(propertyID, this);
                             this._properties[propertyID] = property;
                         }
             
-                        property._uri = propertyEntry.hasOwnProperty("uri") ?
+                        property._uri = typeof propertyEntry["uri"] !== "undefined" ?
                             propertyEntry.uri :
                             (baseURI + "property#" + encodeURIComponent(propertyID));
 
-                        property._valueType = propertyEntry.hasOwnProperty("valueType") ?
+                        property._valueType = typeof propertyEntry["valueType"] !== "undefined" ?
                             propertyEntry.valueType :
                             "text";
             
-                        property._label = propertyEntry.hasOwnProperty("label") ?
+                        property._label = typeof propertyEntry["label"] !== "undefined" ?
                             propertyEntry.label :
                             propertyID;
 
-                        property._pluralLabel = propertyEntry.hasOwnProperty("pluralLabel") ?
+                        property._pluralLabel = typeof propertyEntry["pluralLabel"] !== "undefined" ?
                             propertyEntry.pluralLabel :
                             property._label;
             
-                        property._reverseLabel = propertyEntry.hasOwnProperty("reverseLabel") ?
+                        property._reverseLabel = typeof propertyEntry["reverseLabel"] !== "undefined" ?
                             propertyEntry.reverseLabel :
                             ("!" + property._label);
 
-                        property._reversePluralLabel = propertyEntry.hasOwnProperty("reversePluralLabel") ?
+                        property._reversePluralLabel = typeof propertyEntry["reversePluralLabel"] !== "undefined" ?
                             propertyEntry.reversePluralLabel :
                             ("!" + property._pluralLabel);
             
-                        property._groupingLabel = propertyEntry.hasOwnProperty("groupingLabel") ?
+                        property._groupingLabel = typeof propertyEntry["groupingLabel"] !== "undefined" ?
                             propertyEntry.groupingLabel :
                             property._label;
 
-                        property._reverseGroupingLabel = propertyEntry.hasOwnProperty("reverseGroupingLabel") ?
+                        property._reverseGroupingLabel = typeof propertyEntry["reverseGroupingLabel"] !== "undefined" ?
                             propertyEntry.reverseGroupingLabel :
                             property._reverseLabel;
             
-                        if (propertyEntry.hasOwnProperty("origin")) {
+                        if (typeof propertyEntry["origin"] !== "undefined") {
                             property._origin = propertyEntry.origin;
                         }
                     }
@@ -283,7 +283,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
  * @returns {Exhibit.Database.Type} The corresponding database type.
  */
 Exhibit.Database._LocalImpl.prototype.getType = function(typeID) {
-    return this._types.hasOwnProperty(typeID) ?
+    return typeof this._types[typeID] ?
         this._types[typeID] :
         null;
 };
@@ -296,7 +296,7 @@ Exhibit.Database._LocalImpl.prototype.getType = function(typeID) {
  * @returns {Exhibit.Database._Property} The corresponding database property.
  */
 Exhibit.Database._LocalImpl.prototype.getProperty = function(propertyID) {
-    return this._properties.hasOwnProperty(propertyID) ?
+    return typeof this._properties[propertyID] !== "undefined" ?
         this._properties[propertyID] :
         null;
 };
@@ -764,14 +764,14 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
 Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunction, baseURI) {
     var id, label, uri, type, isArray, p, v, j;
 
-    if (!itemEntry.hasOwnProperty("label") &&
-        !itemEntry.hasOwnProperty("id")) {
+    if (typeof itemEntry["label"] === "undefined" &&
+        typeof itemEntry["id"] === "undefined") {
         Exhibit.Debug.warn("Item entry has no label and no id: " +
                            JSON.toJSONString(itemEntry));
 	    itemEntry.label = "item" + Math.ceil(Math.random()*1000000);
     }
     
-    if (!itemEntry.hasOwnProperty("label")) {
+    if (typeof itemEntry["label"] === "undefined") {
         id = itemEntry.id;
         if (!this._items.contains(id)) {
             Exhibit.Debug.warn("Cannot add new item containing no label: " +
@@ -779,13 +779,13 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
         }
     } else {
         label = itemEntry.label;
-        id = itemEntry.hasOwnProperty("id") ?
+        id = typeof itemEntry["id"] !== "undefined" ?
             itemEntry.id :
             label;
-        uri = itemEntry.hasOwnProperty("uri") ?
+        uri = typeof itemEntry["uri"] !== "undefined" ?
             itemEntry.uri :
             (baseURI + "item#" + encodeURIComponent(id));
-        type = itemEntry.hasOwnProperty("type") ?
+        type = typeof itemEntry["type"] !== "undefined" ?
             itemEntry.type :
             "Item";
                 
@@ -851,7 +851,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
  */
 Exhibit.Database._LocalImpl.prototype._ensureTypeExists = function(typeID, baseURI) {
     var type;
-    if (!this._types.hasOwnProperty(typeID)) {
+    if (typeof this._types[typeID] === "undefined") {
         type = new Exhibit.Database.Type(typeID);
         
         type._custom["uri"] = baseURI + "type#" + encodeURIComponent(typeID);
@@ -871,7 +871,7 @@ Exhibit.Database._LocalImpl.prototype._ensureTypeExists = function(typeID, baseU
  */
 Exhibit.Database._LocalImpl.prototype._ensurePropertyExists = function(propertyID, baseURI) {
     var property;
-    if (!this._properties.hasOwnProperty(propertyID)) {
+    if (typeof this._properties[propertyID] === "undefined") {
         property = new Exhibit.Database.Property(propertyID, this);
         
         property._uri = baseURI + "property#" + encodeURIComponent(propertyID);

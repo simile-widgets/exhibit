@@ -48,11 +48,11 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
         if (specs.hasOwnProperty(field)) {
             spec = specs[field];
             name = field;
-            if (spec.hasOwnProperty("name")) {
+            if (typeof spec["name"] !== "undefined") {
                 name = spec.name;
             }
-            if (!(settings.hasOwnProperty(name)) &&
-                spec.hasOwnProperty("defaultValue")) {
+            if (typeof settings[name] === "undefined" &&
+                typeof spec["defaultValue"] !== "undefined") {
                 settings[name] = spec.defaultValue;
             }
         
@@ -62,19 +62,19 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
                     value = value.trim();
                     if (value.length > 0) {
                         type = "text";
-                        if (spec.hasOwnProperty("type")) {
+                        if (typeof spec["type"] !== "undefined") {
                             type = spec.type;
                         }
         
                         dimensions = 1;
-                        if (spec.hasOwnProperty("dimensions")) {
+                        if (typeof spec["dimensions"] !== "undefined") {
                             dimensions = spec.dimensions;
                         }
         
                         try {
                             if (dimensions > 1) {
                                 separator = ",";
-                                if (spec.hasOwnProperty("separator")) {
+                                if (typeof spec["separator"] !== "undefined") {
                                     separator = spec.separator;
                                 }
                     
@@ -210,9 +210,9 @@ Exhibit.SettingsUtilities._internalCreateAccessors = function(f, specs, accessor
 
     createOneAccessor = function(spec2) {
         isTuple = false;
-        if (spec2.hasOwnProperty("bindings")) {
+        if (typeof spec2["bindings"] !== "undefined") {
             return Exhibit.SettingsUtilities._createBindingsAccessor(f, spec2.bindings);
-        } else if (spec2.hasOwnProperty("bindingNames")) {
+        } else if (typeof spec2["bindingNames"] !== "undefined") {
             isTuple = true;
             return Exhibit.SettingsUtilities._createTupleAccessor(f, spec2);
         } else {
@@ -227,7 +227,7 @@ Exhibit.SettingsUtilities._internalCreateAccessors = function(f, specs, accessor
             accessor = null;
             isTuple = false;
 
-            if (spec.hasOwnProperty("alternatives")) {
+            if (typeof spec["alternatives"] !== "undefined") {
                 alternatives = spec.alternatives;
                 for (i = 0; i < alternatives.length; i++) {
                     accessor = createOneAccessor(alternatives[i]);
@@ -241,7 +241,7 @@ Exhibit.SettingsUtilities._internalCreateAccessors = function(f, specs, accessor
         
             if (accessor !== null) {
                 accessors[accessorName] = accessor;
-            } else if (!accessors.hasOwnProperty(accessorName)) {
+            } else if (typeof accessors[accessorName] === "undefined") {
                 accessors[accessorName] = noop;
             }
         }
@@ -261,7 +261,7 @@ Exhibit.SettingsUtilities._createBindingsAccessor = function(f, bindingSpecs) {
         accessor = null;
         isTuple = false;
         
-        if (bindingSpec.hasOwnProperty("bindingNames")) {
+        if (typeof bindingSpec["bindingNames"] !== "undefined") {
             isTuple = true;
             accessor = Exhibit.SettingsUtilities._createTupleAccessor(f, bindingSpec);
         } else {
@@ -269,7 +269,7 @@ Exhibit.SettingsUtilities._createBindingsAccessor = function(f, bindingSpecs) {
         }
         
         if (typeof accessor === "undefined" || accessor === null) {
-            if (!bindingSpec.hasOwnProperty("optional") || !bindingSpec.optional) {
+            if (typeof bindingSpec["optional"] === "undefined" || !bindingSpec.optional) {
                 return null;
             }
         } else {
@@ -318,7 +318,7 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
         bindingNames = spec.bindingNames;
         separator = ",";
 
-        if (spec.hasOwnProperty("separator")) {
+        if (typeof spec["separator"] !== "undefined") {
             separator = spec.separator;
         }
         
@@ -382,7 +382,7 @@ Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
     
     bindingType = "text";
 
-    if (spec.hasOwnProperty("type")) {
+    if (typeof spec["type"] !== "undefined") {
         bindingType = spec.type;
     }
 

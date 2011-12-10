@@ -24,7 +24,7 @@ Exhibit.UI = {
  */
 Exhibit.UI.registerComponent = function(name, comp) {
     var msg = "Cannot register component " + name + " -- ";
-    if (Exhibit.UI.componentMap.hasOwnProperty(name)) {
+    if (typeof Exhibit.UI.componentMap[name] !== "undefined") {
         Exhibit.Debug.warn(msg + 'another component has taken that name');
     } else if (!comp) {
         Exhibit.Debug.warn(msg + 'no component object provided');
@@ -46,13 +46,13 @@ Exhibit.UI.registerComponent = function(name, comp) {
 Exhibit.UI.create = function(configuration, elmt, uiContext) {
     var role, createFunc;
 
-    if (configuration.hasOwnProperty("role")) {
+    if (typeof configuration["role"] !== "undefined") {
         role = configuration.role;
         if (typeof role !== "undefined" && role !== null && role.startsWith("exhibit-")) {
             role = role.substr("exhibit-".length);
         }
         
-        if (Exhibit.UI.componentMap.hasOwnProperty(role)) {
+        if (typeof Exhibit.UI.componentMap[role] !== "undefined") {
             createFunc = Exhibit.UI.componentMap[role].create;
             return createFunc(configuration, elmt, uiContext);
         }
@@ -94,7 +94,7 @@ Exhibit.UI.createFromDOM = function(elmt, uiContext) {
 
     role = Exhibit.getRoleAttribute(elmt);
     
-    if (Exhibit.UI.componentMap.hasOwnProperty(role)) {
+    if (typeof Exhibit.UI.componentMap[role] !== "undefined") {
         createFromDOMFunc = Exhibit.UI.componentMap[role].createFromDOM;
         return createFromDOMFunc(elmt, uiContext);
     }
@@ -163,7 +163,7 @@ Exhibit.UI.generateCreationMethods = function(constructor) {
  * @returns {Object}
  */
 Exhibit.UI.createView = function(configuration, elmt, uiContext) {
-    var viewClass = configuration.hasOwnProperty("viewClass") ?
+    var viewClass = typeof configuration["viewClass"] !== "undefined" ?
         configuration.viewClass :
         Exhibit.TileView;
     if (typeof viewClass === "string") {
@@ -205,7 +205,7 @@ Exhibit.UI.viewClassNameToViewClass = function(name) {
  * @returns {Object}
  */
 Exhibit.UI.createFacet = function(configuration, elmt, uiContext) {
-    var facetClass = configuration.hasOwnProperty("facetClass") ?
+    var facetClass = typeof configuration["facetClass"] !== "undefined" ?
         configuration.facetClass :
         Exhibit.ListFacet;
     if (typeof facetClass === "string") {
@@ -246,7 +246,7 @@ Exhibit.UI.facetClassNameToFacetClass = function(name) {
  * @returns {Object}
  */
 Exhibit.UI.createCoder = function(configuration, uiContext) {
-    var coderClass = configuration.hasOwnProperty("coderClass") ?
+    var coderClass = typeof configuration["coderClass"] !== "undefined" ?
         configuration.coderClass :
         Exhibit.ColorCoder;
     if (typeof coderClass === "string") {
@@ -414,12 +414,12 @@ Exhibit.UI.showBusyIndicator = function() {
     }
     
     // @@@ jQuery simplification?
-    scrollTop = document.body.hasOwnProperty("scrollTop") ?
+    scrollTop = typeof document.body["scrollTop"] !== "undefined" ?
         document.body.scrollTop :
         document.body.parentNode.scrollTop;
-    height = window.hasOwnProperty("innerHeight") ?
+    height = typeof window["innerHeight"] !== "undefined" ?
         window.innerHeight :
-        (document.body.hasOwnProperty("clientHeight") ?
+        (typeof document.body["clientHeight"] !== "undefined" ?
             document.body.clientHeight :
             document.body.parentNode.clientHeight);
         

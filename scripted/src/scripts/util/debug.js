@@ -17,8 +17,8 @@ Exhibit.Debug = {
  */
 Exhibit.Debug.log = function(msg) {
     var f;
-    if (window.hasOwnProperty("console") &&
-        window.console.hasOwnProperty("log")) {
+    if (typeof window["console"] !== "undefined" &&
+        typeof window.console["log"] === "function") {
         f = function(msg2) {
             console.log(msg2);
         };
@@ -39,8 +39,8 @@ Exhibit.Debug.log = function(msg) {
  */
 Exhibit.Debug.warn = function(msg) {
     var f;
-    if (window.hasOwnProperty("console") &&
-        window.console.hasOwnProperty("warn")) {
+    if (typeof window["console"] !== "undefined" &&
+        typeof window.console["warn"] === "function") {
         f = function(msg2) {
             console.warn(msg2);
         };
@@ -66,7 +66,8 @@ Exhibit.Debug.exception = function(e, msg) {
         f = function(e2, msg2) {
             throw(e2);
         };
-    } else if (window.hasOwnProperty("console") && typeof window.console.error === "function") { // FireBug installed
+    } else if (typeof window["console"] !== "undefined" &&
+               typeof window.console["error"] === "function") {
         f = function(e2, msg2) {
             if (typeof msg2 !== "undefined" && msg2 !== null) {
                 console.error(msg2 + " %o", e2);
@@ -78,7 +79,7 @@ Exhibit.Debug.exception = function(e, msg) {
     } else {
         f = function(e2, msg2) {
             if (!Exhibit.Debug.silent) {
-                alert("Caught exception: " + msg2 + "\n\nDetails: " + (e2.hasOwnProperty("description") ? e2.description : e2));
+                alert("Caught exception: " + msg2 + "\n\nDetails: " + (typeof e2["description"] !== "undefined" ? e2.description : e2));
             }
             throw(e2); // do not hide from browser's native debugging features
         };

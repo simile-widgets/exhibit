@@ -45,13 +45,13 @@ Exhibit.Exporter.BibTex.wrapOne = function(s, first, last) {
 Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
     var type, key, prop, s = "";
 
-    if (o.hasOwnProperty("pub-type")) {
+    if (typeof o["pub-type"] !== "undefined") {
         type = o["pub-type"];
-    } else if (o.hasOwnProperty("type")) {
+    } else if (typeof o["type"] !== "undefined") {
         type = o["type"];
     }
 
-    if (o.hasOwnProperty("key")) {
+    if (typeof o["key"] !== "undefined") {
         key = o["key"];
     } else {
         key = itemID;
@@ -63,7 +63,7 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
 
     for (prop in o) {
         if (o.hasOwnProperty(prop)) {
-            if (!Exhibit.Exporter.BibTex._excludeProperties.hasOwnProperty(prop)) {
+            if (typeof Exhibit.Exporter.BibTex._excludeProperties[prop] === "undefined") {
                 s += "\t" + (prop === "label" ?
                          "title" :
                          prop) + " = \"";

@@ -205,7 +205,7 @@ Exhibit.Functions["date-range"] = {
     _computeRange: function(from, to, interval) {
         var range = to - from;
         if (isFinite(range)) {
-            if (Exhibit.DateTime.hasOwnProperty(interval.toUpperCase())) {
+            if (typeof Exhibit.DateTime[interval.toUpperCase()] !== "undefined") {
                 range = Math.round(range / Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime[interval.toUpperCase()]]);
             }
             return range;
@@ -246,7 +246,7 @@ Exhibit.Functions["distance"] = {
             roundTo = 1;
         }
         if (isFinite(range)) {
-            if (this._units.hasOwnProperty(unit)) {
+            if (typeof this._units[unit] !== "undefined") {
                 range = range / this._units[unit];
             }
             return Exhibit.Util.round(range, roundTo);

@@ -108,7 +108,7 @@ Exhibit.extractOptionsFromElement = function(elmt) {
 Exhibit._Impl = function(database) {
     this._database = (database !== null && typeof database !== "undefined") ? 
         database : 
-        (window.hasOwnProperty("database") ?
+        (typeof window["database"] !== "undefined" ?
             window.database :
             Exhibit.Database.create());
             
@@ -189,7 +189,7 @@ Exhibit._Impl.prototype.getDefaultCollection = function() {
  * @param {Exhibit.Collection} c
  */
 Exhibit._Impl.prototype.setCollection = function(id, c) {
-    if (this._collectionMap.hasOwnProperty(id)) {
+    if (typeof this._collectionMap[id] !== "undefined") {
         try{
             this._collectionMap[id].dispose();
         } catch(e) {
@@ -219,7 +219,7 @@ Exhibit._Impl.prototype.getComponent = function(id) {
  */
 Exhibit._Impl.prototype.configure = function(configuration) {
     var i, config, id;
-    if (configuration.hasOwnProperty("collections")) {
+    if (typeof configuration["collections"] !== "undefined") {
         for (i = 0; i < configuration.collections.length; i++) {
             config = configuration.collections[i];
             id = config.id;
@@ -229,7 +229,7 @@ Exhibit._Impl.prototype.configure = function(configuration) {
             this.setCollection(id, Exhibit.Collection.create2(id, config, this._uiContext));
         }
     }
-    if (configuration.hasOwnProperty("components")) {
+    if (typeof configuration["components"] !== "undefined") {
         for (i = 0; i < configuration.components.length; i++) {
             config = configuration.components[i];
             component = Exhibit.UI.create(config, config.elmt, this._uiContext);

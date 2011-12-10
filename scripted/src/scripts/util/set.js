@@ -38,7 +38,7 @@ Exhibit.Set = function(a) {
  */
 Exhibit.Set.prototype.add = function(o) {
     if ((typeof o === "number" || typeof o === "string")
-        && !this._hash.hasOwnProperty(o)) {
+        && typeof this._hash[o] === "undefined") {
         this._hash[o] = true;
         this._count++;
         return true;
@@ -68,7 +68,7 @@ Exhibit.Set.prototype.addSet = function(set) {
  *   false otherwise.
  */
 Exhibit.Set.prototype.remove = function(o) {
-    if (this._hash.hasOwnProperty(o)) {
+    if (typeof this._hash[o] !== "undefined") {
         delete this._hash[o];
         this._count--;
         return true;
@@ -116,7 +116,7 @@ Exhibit.Set.prototype.retainSet = function(set) {
  * @returns {Boolean} True if the object is present, false otherwise.
  */
 Exhibit.Set.prototype.contains = function(o) {
-    return this._hash.hasOwnProperty(o);
+    return typeof this._hash[o] !== "undefined";
 };
 
 /**

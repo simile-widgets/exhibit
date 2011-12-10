@@ -35,7 +35,7 @@ Exhibit.Expression._FunctionCall.prototype.evaluate = function(
         args.push(this._args[i].evaluate(roots, rootValueTypes, defaultRootName, database));
     }
     
-    if (Exhibit.Functions.hasOwnProperty(this._name)) {
+    if (typeof Exhibit.Functions[this._name] !== "undefined") {
         return Exhibit.Functions[this._name].f(args);
     } else {
         throw new Error("No such function named " + this._name);

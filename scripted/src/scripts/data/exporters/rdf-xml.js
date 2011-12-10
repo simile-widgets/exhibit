@@ -56,9 +56,9 @@ Exhibit.Exporter.RDFXML.exportOne = function(itemID, o, properties, propertyIDTo
     s += "<rdf:Description rdf:about=\"" + uri + "\">\n";
 
     for (propertyID in o) {
-        if (o.hasOwnProperty(propertyID) && properties.hasOwnProperty(propertyID)) {
+        if (o.hasOwnProperty(propertyID) && typeof properties[propertyID] !== "undefined") {
             valueType = properties[propertyID].valueType;
-            if (propertyIDToQualifiedName.hasOwnProperty(propertyID)) {
+            if (typeof propertyIDToQualifiedName[propertyID] !== "undefined") {
                 qname = propertyIDToQualifiedName[propertyID];
                 propertyString = qname.prefix + ":" + qname.localName;
             } else {
