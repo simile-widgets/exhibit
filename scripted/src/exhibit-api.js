@@ -129,6 +129,7 @@ var Exhibit = {
         "scripts/ui/widgets/resizable-div-widget.js",
         "scripts/ui/widgets/toolbox-widget.js",
         "scripts/ui/widgets/bookmark-widget.js",
+        "scripts/ui/widgets/reset-history-widget.js",
         "locales/manifest.js",
         "scripts/final.js"
     ],
@@ -150,7 +151,8 @@ var Exhibit = {
         "styles/widgets/bookmark-widget.css",
         "styles/widgets/toolbox-widget.css",
         "styles/widgets/legend-widget.css",
-        "styles/widgets/option-widget.css"
+        "styles/widgets/option-widget.css",
+        "styles/widgets/reset-history-widget.css"
     ],
 
     /**

@@ -25,6 +25,7 @@ Exhibit.ControlPanel = function(elmt, uiContext) {
 Exhibit.ControlPanel._settingSpecs = {
     "showToolbox":          { type: "boolean", defaultValue: true },
     "showBookmark":         { type: "boolean", defaultValue: true },
+    "developerMode":        { type: "boolean", defaultvalue: false },
     "hoverReveal":          { type: "boolean", defaultValue: false }
 };
 
@@ -68,7 +69,7 @@ Exhibit.ControlPanel.createFromDOM = function(configElmt, containerElmt, uiConte
             configElmt,
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
-    Exhibit.ControlPanel._configure(panel, configuration);
+    Exhibit.ControlPanel._configureFromDOM(panel, configuration);
     panel._setIdentifier();
     panel.register();
     panel._initializeUI();
@@ -90,6 +91,20 @@ Exhibit.ControlPanel._configure = function(panel, configuration) {
 };
 
 /**
+ * @static
+ * @private
+ * @param {Exhibit.ControlPanel} panel
+ * @param {Object} configuration
+ */
+Exhibit.ControlPanel._configureFromDOM = function(panel, configuration) {
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(
+        panel._div,
+        Exhibit.ControlPanel._settingSpecs,
+        panel._settings
+    );
+};
+
+/**
  * @private
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
@@ -104,22 +119,30 @@ Exhibit.ControlPanel._registerComponent = function(evt, reg) {
  * @private
  */
 Exhibit.ControlPanel.prototype._initializeUI = function() {
-    var toolbox, bookmark;
+    var widget;
     if (this._settings.showToolbox) {
-        toolbox = Exhibit.ToolboxWidget.create(
+        widget = Exhibit.ToolboxWidget.create(
             { "hoverReveal": this._settings.hoverReveal },
             this.getContainer(),
             this._uiContext
         );
-        this.addWidget(toolbox);
+        this.addWidget(widget);
     }
     if (this._settings.showBookmark) {
-        bookmark = Exhibit.BookmarkWidget.create(
+        widget = Exhibit.BookmarkWidget.create(
             { "hoverReveal": this._settings.hoverReveal },
             this.getContainer(),
             this._uiContext
         );
-        this.addWidget(bookmark);
+        this.addWidget(widget);
+    }
+    if (this._settings.developerMode) {
+        widget = Exhibit.ResetHistoryWidget.create(
+            { },
+            this.getContainer(),
+            this._uiContext
+        );
+        this.addWidget(widget);
     }
     $(this.getContainer()).addClass("exhibit-controlPanel");
     this.reconstruct();
