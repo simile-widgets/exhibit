@@ -17,6 +17,8 @@ Exhibit.TileView = function(containerElmt, uiContext) {
 
     this._id = null;
     this._registered = false;
+    this._label = null;
+    this._viewPanel = null;
     
     var view = this;
 
@@ -46,13 +48,21 @@ Exhibit.TileView = function(containerElmt, uiContext) {
             true
         );
     };
+
+    this._generator = {
+        "getLabel": function() {
+            return view.getLabel();
+        },
+        "getContent": function() {
+            return $(view._dom.bodyDiv).html()
+        }
+    };
 };
 
 /**
  * @constant
  */
-Exhibit.TileView._settingSpecs = {
-};
+Exhibit.TileView._settingSpecs = { };
 
 /**
  * @param {Object} configuration
@@ -108,6 +118,27 @@ Exhibit.TileView.createFromDOM = function(configElmt, containerElmt, uiContext) 
 };
 
 /**
+ * @param {String} label
+ */
+Exhibit.TileView.prototype.setLabel = function(label) {
+    this._label = label;
+};
+
+/**
+ * @returns {String}
+ */
+Exhibit.TileView.prototype.getLabel = function() {
+    return this._label;
+};
+
+/**
+ * @param {Exhibit.ViewPanel} panel
+ */
+Exhibit.TileView.prototype.setViewPanel = function(panel) {
+    this._viewPanel = panel;
+};
+
+/**
  *
  */
 Exhibit.TileView.prototype.dispose = function() {
@@ -119,10 +150,7 @@ Exhibit.TileView.prototype.dispose = function() {
 
     $(this._div).empty();
 
-    if (this._toolboxWidget) {
-        this._toolboxWidget.dispose();
-        this._toolboxWidget = null;
-    }
+    this._viewPanel = null;
     
     this._orderedViewFrame.dispose();
     this._orderedViewFrame = null;
@@ -143,6 +171,7 @@ Exhibit.TileView.prototype.register = function() {
         this.getID(),
         this
     );
+    $(document).trigger("addGenerator.exhibit", this.getGenerator());
     this._registered = true;
 };
 
@@ -154,7 +183,15 @@ Exhibit.TileView.prototype.unregister = function() {
         Exhibit.View._registryKey,
         this.getID()
     );
+    $(document).trigger("removeGenerator.exhibit", this.getGenerator());
     this._registered = false;
+};
+
+/**
+ * @returns {Object}
+ */
+Exhibit.TileView.prototype.getGenerator = function() {
+    return this._generator;
 };
 
 /**
@@ -209,9 +246,6 @@ Exhibit.TileView.prototype._initializeUI = function() {
     this._dom = $.simileDOM("template", template);
     this._orderedViewFrame._divHeader = this._dom.headerDiv;
     this._orderedViewFrame._divFooter = this._dom.footerDiv;
-    this._orderedViewFrame._generatedContentElmtRetriever = function() {
-        return self._dom.bodyDiv;
-    };
     this._orderedViewFrame.initializeUI();
 
     Exhibit.View.addViewState(

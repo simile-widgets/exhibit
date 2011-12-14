@@ -11,10 +11,27 @@
  * @param {Exhibit.UIContext} uiContext
  */ 
 Exhibit.ToolboxWidget = function(containerElmt, uiContext) {
+    var self = this;
+    this._popup = null;
     this._containerElmt = containerElmt;
     this._uiContext = uiContext;
     this._settings = {};
     this._customExporters = [];
+    this._generators = [];
+    this._addGeneratorListener = function(evt, generator) {
+        self._generators.push(generator);
+    };
+    this._removeGeneratorListener = function(evt, generator) {
+        var i;
+        for (i = 0; i < self._generators.length; i++) {
+            if (self._generators[i] === generator) {
+                self._generators.splice(i, 1);
+                break;
+            }
+        }
+    };
+    $(document).bind("addGenerator.exhibit", this._addGeneratorListener);
+    $(document).bind("removeGenerator.exhibit", this._removeGeneratorListener);
 };
 
 /**
@@ -74,10 +91,13 @@ Exhibit.ToolboxWidget._configure = function(widget, configuration) {
  *
  */
 Exhibit.ToolboxWidget.prototype.dispose = function() {
-    this._dismiss();
+    $(document).unbind("addGenerators.exhibit", this._addGeneratorListener);
+    $(document).unbind("removeGenerators.exhibit", this._removeGeneratorListener);
+    this._popup = null;
     this._settings = null;
     this._containerElmt = null;
     this._uiContext = null;
+    this._generators = null;
 };
 
 /**
@@ -150,47 +170,33 @@ Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
         );
     };
     
-    exporters = this._uiContext.getExhibit().getRegistry().getKeys(Exhibit.Exporter._registryKey);
+    exporters = Exhibit.staticRegistry.getKeys(Exhibit.Exporter._registryKey);
     for (i = 0; i < exporters.length; i++) {
-        makeMenuItem(this._uiContext.getExhibit().getRegistry().get(Exhibit.Exporter._registryKey, exporters[i]));
+        makeMenuItem(Exhibit.staticRegistry.get(
+            Exhibit.Exporter._registryKey,
+            exporters[i]
+        ));
     }
     
-    if (typeof this.getGeneratedHTML !== "undefined") {
-        makeMenuItem({ 
-            getLabel:   function() { return Exhibit.l10n.htmlExporterLabel; },
-            exportOne:  this.getGeneratedHTML,
-            exportMany: this.getGeneratedHTML
-        });
+    if (this._generators.length > 0) {
+        for (i = 0; i < this._generators.length; i++) {
+            generator = this._generators[i];
+            makeMenuItem({
+                getLabel: function() {
+                    return Exhibit.l10n.htmlExporterLabel
+                        + " "
+                        + generator.getLabel();
+                },
+                exportOne: function() {
+                    return generator.getContent();
+                },
+                exportMany: function() {
+                    return generator.getContent();
+                }
+            });
+        }
     }
 
-    /** add a jquery event to handle registering generated html view */
-    /* new
-       var f = function(content) {
-       popupDom.appendMenuItem(
-       Exhibit.l10n.htmlExporterLabel,
-       null,
-       function() {
-       Exhibit.UI.createCopyDialogBox(
-       content
-       ).open();
-       }
-       );
-       };
-       $(document).trigger("registerGeneratedContentExport.exhibit", f);
-     */
-    /*if (generatedContentElmtRetriever !== null) {
-        popupDom.appendMenuItem(
-            Exhibit.l10n.htmlExporterLabel,
-            null,
-            function() {
-                Exhibit.UI.createCopyDialogBox(
-                    generatedContentElmtRetriever().innerHTML
-                        //.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\&/g, "&amp;")
-                ).open();
-            }
-        );
-    }*/
-    
     popupDom.open(evt);
 };
 

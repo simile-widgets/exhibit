@@ -17,8 +17,11 @@ Exhibit.TabularView = function(containerElmt, uiContext) {
     this._settings = { rowStyler: null, tableStyler: null, indexMap: {} };
     this._columns = [];
     this._rowTemplate = null;
+    this._dom = null;
     this._id = undefined;
     this._registered = false;
+    this._label = null;
+    this._viewPanel = null;
 
     var view = this;
 
@@ -31,6 +34,15 @@ Exhibit.TabularView = function(containerElmt, uiContext) {
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
+
+    this._generator = {
+        "getLabel": function() {
+            return view.getLabel();
+        },
+        "getContent": function() {
+            return $(view._dom.bodyDiv).html();
+        }
+    };
 };
 
 /**
@@ -226,6 +238,7 @@ Exhibit.TabularView.prototype.register = function() {
         this.getID(),
         this
     );
+    $(document).trigger("addGenerator.exhibit", this.getGenerator());
     this._registered = true;
 };
 
@@ -237,6 +250,7 @@ Exhibit.TabularView.prototype.unregister = function() {
         Exhibit.View._registryKey,
         this.getID()
     );
+    $(document).trigger("removeGenerator.exhibit", this.getGenerator());
     this._registered = false;
 };
 
@@ -267,6 +281,27 @@ Exhibit.TabularView.prototype._internalValidate = function() {
 };
 
 /**
+ * @param {String} label
+ */
+Exhibit.TabularView.prototype.setLabel = function(label) {
+    this._label = label;
+};
+
+/**
+ * @returns {String}
+ */
+Exhibit.TabularView.prototype.getLabel = function() {
+    return this._label;
+};
+
+/**
+ * @param {Exhibit.ViewPanel} panel
+ */
+Exhibit.TabularView.prototype.setViewPanel = function(panel) {
+    this._viewPanel = panel;
+};
+
+/**
  *
  */
 Exhibit.TabularView.prototype.dispose = function() {
@@ -275,13 +310,10 @@ Exhibit.TabularView.prototype.dispose = function() {
         this._onItemsChanged
     );
 
-    if (this._toolboxWidget) {
-        this._toolboxWidget.dispose();
-        this._toolboxWidget = null;
-    }
-    
     this._collectionSummaryWidget.dispose();
     this._collectionSummaryWidget = null;
+
+    this._viewPanel = null;
     
     this.unregister();
     this._uiContext.dispose();
@@ -717,6 +749,13 @@ Exhibit.TabularView.prototype._gotoPage = function(page) {
         Exhibit.OrderedViewFrame.l10n.makePagingActionTitle(page),
         true
     );
+};
+
+/**
+ * @returns {Object}
+ */
+Exhibit.TabularView.prototype.getGenerator = function() {
+    return this._generator;
 };
 
 /**

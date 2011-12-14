@@ -18,6 +18,8 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
 
     this._id = null;
     this._registered = false;
+    this._label = null;
+    this._viewPanel = null;
 
     var view = this;
     this._onItemsChanged = function() {
@@ -45,6 +47,15 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
             title,
             true
         );
+    };
+
+    this._generator = {
+        "getLabel": function() {
+            return view.getLabel();
+        },
+        "getContent": function() {
+            return $(view._dom.bodyDiv).html();
+        }
     };
 };
 
@@ -119,6 +130,27 @@ Exhibit.ThumbnailView.createFromDOM = function(configElmt, containerElmt, uiCont
 };
 
 /**
+ * @param {String} label
+ */
+Exhibit.ThumbnailView.prototype.setLabel = function(label) {
+    this._label = label;
+};
+
+/**
+ * @returns {String}
+ */
+Exhibit.ThumbnailView.prototype.getLabel = function() {
+    return this._label;
+};
+
+/**
+ * @param {Exhibit.ViewPanel} panel
+ */
+Exhibit.ThumbnailView.prototype.setViewPanel = function(panel) {
+    this._viewPanel = panel;
+};
+
+/**
  *
  */
 Exhibit.ThumbnailView.prototype.dispose = function() {
@@ -129,10 +161,8 @@ Exhibit.ThumbnailView.prototype.dispose = function() {
     );
 
     $(this._div).empty();
-    if (this._toolboxWidget) {
-        this._toolboxWidget.dispose();
-        this._toolboxWidget = null;
-    }
+
+    this._viewPanel = null;
 
     this._orderedViewFrame.dispose();
     this._orderedViewFrame = null;
@@ -154,6 +184,7 @@ Exhibit.ThumbnailView.prototype.register = function() {
         this.getID(),
         this
     );
+    $(document).trigger("addGenerator.exhibit", this.getGenerator());
     this._registered = true;
 };
 
@@ -165,7 +196,15 @@ Exhibit.ThumbnailView.prototype.unregister = function() {
         Exhibit.View._registryKey,
         this.getID()
     );
+    $(document).trigger("removeGenerator.exhibit", this.getGenerator());
     this._registered = false;
+};
+
+/**
+ * @returns {Object}
+ */
+Exhibit.ThumbnailView.prototype.getGenerator = function() {
+    return this._generator;
 };
 
 /**

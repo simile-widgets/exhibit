@@ -38,8 +38,10 @@ Exhibit.View.addViewState = function(id, state) {
             };
             Exhibit.History.replaceState(fullState.data);
         } else {
-            $(document).trigger("importReady.exhibit",
-                                [Exhibit.View._registryKey, id]);
+            $(document).trigger(
+                "importReady.exhibit",
+                [Exhibit.View._registryKey, id]
+            );
         }
     }
 };
