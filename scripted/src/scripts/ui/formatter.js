@@ -21,7 +21,7 @@ Exhibit.Formatter = {
 
 /**
  * @static
- * @param {Element} parentElmt
+ * @param {jQuery} parentElmt
  * @param {Number} count
  * @param {Exhibit.UIContext} uiContext
  * @returns {Function}
@@ -45,10 +45,10 @@ Exhibit.Formatter.createListDelimiter = function(parentElmt, count, uiContext) {
     f = function() {
         if (f.index > 0 && f.index < count) {
             if (count > 2) {
-                parentElmt.appendChild(document.createTextNode(
+                $(parentElmt).append(document.createTextNode(
                 (f.index === count - 1) ? lastSeparator : separator));
             } else {
-                parentElmt.appendChild(document.createTextNode(pairSeparator));
+                $(parentElmt).append(document.createTextNode(pairSeparator));
             }
         }
         f.index++;

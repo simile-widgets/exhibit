@@ -289,7 +289,7 @@ Exhibit.TileView.prototype._reconstruct = function() {
 
         var groupDom = Exhibit.TileView.constructGroup(groupLevel, groupSortKey);
 
-        state.div.appendChild(groupDom.elmt);
+        $(state.div).append(groupDom.elmt);
         state.div = groupDom.contentDiv;
 
         state.groupDoms.push(groupDom);
