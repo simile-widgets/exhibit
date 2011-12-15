@@ -101,7 +101,6 @@ var Exhibit = {
         "scripts/data/exporters/tsv.js",
         "scripts/data/exporters/rdf-xml.js",
         "scripts/data/exporters/semantic-wikitext.js",
-        "scripts/data/exporters/bookmark.js",
         "scripts/data/importer.js",
         "scripts/data/importers/json.js",
         "scripts/ui/ui.js",
