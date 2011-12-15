@@ -274,7 +274,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
                 if (node.nodeType === 1) {
                     f(node);
                 }
-                node=node.nextSibling;
+                node = node.nextSibling;
             }
         }
     };

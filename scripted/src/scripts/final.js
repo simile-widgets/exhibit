@@ -7,6 +7,11 @@ $(document).ready(function() {
         $LAB.script(localeURL);
     });
 
+    $(document).bind("error.exhibit", function(evt, msg) {
+        Exhibit.UI.hideBusyIndicator();
+        alert(msg);
+    });
+
     $(document).one("localeLoaded.exhibit", function(evt) {
         $(document).trigger("scriptsLoaded.exhibit");
     });

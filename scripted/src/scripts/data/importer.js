@@ -54,6 +54,15 @@ Exhibit.Importer.getImporter = function(mimeType) {
 };
 
 /**
+ * @static
+ * @string {String} url
+ * @returns {Boolean}
+ */
+Exhibit.Importer.checkFileURL = function(url) {
+    return url.startsWith("file:");
+};
+
+/**
  * @returns {Boolean}
  */
 Exhibit.Importer.prototype.register = function() {
@@ -153,8 +162,13 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
     self = this;
 
     fError = function(jqxhr, textStatus, e) {
-        // @@@ handle UI for load error - trigger event?
-        callback();
+        var msg;
+        if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
+            msg = "Failed to access " + url + ", possibly because the file is missing or because you are accessing your files via filesystem instead of a webserver while using Chrome or IE.  Use a different browser or move your files onto a webserver.";
+        } else {
+            msg = "Failed to access " + url + " (HTTP " + jqxhr.status + ")";
+        }
+        $(document).trigger("error.exhibit", msg);
     };
 
     $.ajax({
