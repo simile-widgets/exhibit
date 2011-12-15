@@ -934,6 +934,7 @@ Exhibit.UI.setupDialog = function(dom, modal, dialogParent) {
             $(document.body).unbind("click", clickHandler);
             $(dom._dialogParent).unbind("cancelModeless.exhibit", cancelHandler);
             $(document).unbind("cancelAllModeless.exhibit", cancelAllHandler);
+            $(dom.elmt).trigger("closed.exhibit");
             $(dom.elmt).remove();
         };
 

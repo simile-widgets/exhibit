@@ -16,6 +16,7 @@ Exhibit.ToolboxWidget = function(containerElmt, uiContext) {
     this._containerElmt = containerElmt;
     this._uiContext = uiContext;
     this._settings = {};
+    this._controlPanel = null;
     this._customExporters = [];
     this._generators = [];
     this._addGeneratorListener = function(evt, generator) {
@@ -90,6 +91,13 @@ Exhibit.ToolboxWidget._configure = function(widget, configuration) {
 /**
  *
  */
+Exhibit.ToolboxWidget.prototype.dismiss = function() {
+    this._controlPanel.childClosed();
+};
+
+/**
+ *
+ */
 Exhibit.ToolboxWidget.prototype.dispose = function() {
     $(document).unbind("addGenerators.exhibit", this._addGeneratorListener);
     $(document).unbind("removeGenerators.exhibit", this._removeGeneratorListener);
@@ -98,6 +106,13 @@ Exhibit.ToolboxWidget.prototype.dispose = function() {
     this._containerElmt = null;
     this._uiContext = null;
     this._generators = null;
+};
+
+/**
+ * @param {Exhibit.ControlPanel} panel
+ */
+Exhibit.ToolboxWidget.prototype.setControlPanel = function(panel) {
+    this._controlPanel = panel;
 };
 
 /**
@@ -149,7 +164,10 @@ Exhibit.ToolboxWidget.prototype._fillPopup = function(elmt, evt) {
  */
 Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
     var self, popupDom, makeMenuItem, exporters, i;
+
     self = this;
+    self._controlPanel.childOpened();
+
     popupDom = Exhibit.UI.createPopupMenuDom(elmt);
     
     makeMenuItem = function(exporter) {
@@ -196,7 +214,9 @@ Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
             });
         }
     }
-
+    $(popupDom.elmt).one("closed.exhibit", function(evt) {
+        self.dismiss();
+    });
     popupDom.open(evt);
 };
 

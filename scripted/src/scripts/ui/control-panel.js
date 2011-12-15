@@ -14,8 +14,10 @@ Exhibit.ControlPanel = function(elmt, uiContext) {
     this._widgets = [];
     this._div = elmt;
     this._settings = {};
+    this._hovering = false;
     this._id = null;
     this._registered = false;
+    this._childOpen = false;
 };
 
 /**
@@ -116,13 +118,47 @@ Exhibit.ControlPanel._registerComponent = function(evt, reg) {
 };
 
 /**
+ * @static
+ * @param {jQuery.Event} evt
+ * @param {jQuery} elmt
+ */
+Exhibit.ControlPanel.mouseOutsideElmt = function(evt, elmt) {
+    var coords = $(elmt).offset();
+    return (
+        evt.pageX < coords.left
+            || evt.pageX > coords.left + $(elmt).outerWidth()
+            || evt.pageY < coords.top
+            || evt.pageY > coords.top + $(elmt).outerHeight()
+    );
+};
+
+/**
  * @private
  */
 Exhibit.ControlPanel.prototype._initializeUI = function() {
-    var widget;
+    var widget, self;
+    self = this;
+    if (this._settings.hoverReveal) {
+        $(this.getContainer()).fadeTo(1, 0);
+        $(this.getContainer()).bind("mouseover", function(evt) {
+            self._hovering = true;
+            $(this).fadeTo("fast", 1);
+        });
+        $(document.body).bind("mousemove", function(evt) {
+            if (self._hovering
+                && !self._childOpen
+                && Exhibit.ControlPanel.mouseOutsideElmt(
+                    evt,
+                    self.getContainer()
+                )) {
+                self._hovering = false;
+                $(self.getContainer()).fadeTo("fast", 0);
+            }
+        });
+    }
     if (this._settings.showToolbox) {
         widget = Exhibit.ToolboxWidget.create(
-            { "hoverReveal": this._settings.hoverReveal },
+            { },
             this.getContainer(),
             this._uiContext
         );
@@ -130,7 +166,7 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
     }
     if (this._settings.showBookmark) {
         widget = Exhibit.BookmarkWidget.create(
-            { "hoverReveal": this._settings.hoverReveal },
+            { },
             this.getContainer(),
             this._uiContext
         );
@@ -209,6 +245,20 @@ Exhibit.ControlPanel.prototype.getID = function() {
 /**
  *
  */
+Exhibit.ControlPanel.prototype.childOpened = function() {
+    this._childOpen = true;
+};
+
+/**
+ *
+ */
+Exhibit.ControlPanel.prototype.childClosed = function() {
+    this._childOpen = false;
+};
+
+/**
+ *
+ */
 Exhibit.ControlPanel.prototype.dispose = function() {
     this.unregister();
     this._uiContext.dispose();
@@ -223,6 +273,9 @@ Exhibit.ControlPanel.prototype.dispose = function() {
  */
 Exhibit.ControlPanel.prototype.addWidget = function(widget) {
     this._widgets.push(widget);
+    if (typeof widget.setControlPanel === "function") {
+        widget.setControlPanel(this);
+    }
     this.reconstruct();
 };
 

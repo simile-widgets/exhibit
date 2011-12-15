@@ -15,6 +15,7 @@ Exhibit.BookmarkWidget = function(elmt, uiContext) {
     this._uiContext = uiContext;
     this._div = elmt;
     this._settings = {};
+    this._controlPanel = null;
     this._popup = null;
 };
 
@@ -92,11 +93,15 @@ Exhibit.BookmarkWidget.prototype._fillPopup = function(popup) {
 Exhibit.BookmarkWidget.prototype._showBookmark = function(elmt, evt) {
     var self, popupDom, el;
     self = this;
+    self._controlPanel.childOpened();
     popupDom = Exhibit.UI.createPopupMenuDom(elmt);
     el = $('<input type="text" />').
         attr("value", Exhibit.Bookmark.generateBookmark()).
         attr("size", 40);
     $(popupDom.elmt).append($(el));
+    $(popupDom.elmt).one("closed.exhibit", function(evt) {
+        self.dismiss();
+    });
     popupDom.open(evt);
     $(el).get(0).select();
 };
@@ -116,4 +121,18 @@ Exhibit.BookmarkWidget.prototype.dispose = function() {
     this._uiContext = null;
     this._div = null;
     this._settings = null;
+};
+
+/**
+ * @param {Exhibit.ControlPanel} panel
+ */
+Exhibit.BookmarkWidget.prototype.setControlPanel = function(panel) {
+    this._controlPanel = panel;
+};
+
+/**
+ *
+ */
+Exhibit.BookmarkWidget.prototype.dismiss = function() {
+    this._controlPanel.childClosed();
 };
