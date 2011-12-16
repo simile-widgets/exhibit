@@ -271,7 +271,7 @@ Exhibit.TileView.prototype._reconstruct = function() {
 
     closeGroups = function(groupLevel) {
         for (i = groupLevel; i < state.groupDoms.length; i++) {
-            state.groupDoms[i].countSpan.innerHTML = state.groupCounts[i];
+            $(state.groupDoms[i].countSpan).html(state.groupCounts[i]);
         }
         state.groupDoms = state.groupDoms.slice(0, groupLevel);
         state.groupCounts = state.groupCounts.slice(0, groupLevel);

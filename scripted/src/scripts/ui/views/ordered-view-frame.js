@@ -295,12 +295,14 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
     if (this._settings.showHeader && this._settings.showControls) {
         this._headerDom.groupOptionWidget.setChecked(this._settings.grouped);
     }
+
     if (this._settings.showFooter) {
         this._footerDom.setCounts(
             currentSize, 
             this._settings.abbreviatedCount, 
             this._settings.showAll, 
-            !(hasSomeGrouping && this._settings.grouped) && !this._settings.paginate
+            (!(hasSomeGrouping && this._settings.grouped)
+             && !this._settings.paginate)
         );
     }
 };
@@ -355,7 +357,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 grouped = true;
             }
         }
-        //grouped = grouped && keys.length > 1;
+
         if (grouped) {
             hasSomeGrouping = true;
         }
@@ -803,7 +805,7 @@ Exhibit.OrderedViewFrame.prototype._toggleGroup = function() {
 
     this.parentHistoryAction(
         this._historyKey,
-        this.makeState(null, null, null, !oldGrouped),
+        this.makeState(null, !oldGrouped ? true : null, null, !oldGrouped),
         Exhibit.OrderedViewFrame.l10n[
             oldGrouped ?
                 "ungroupAsSortedActionTitle" :
