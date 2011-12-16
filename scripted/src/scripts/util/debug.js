@@ -67,7 +67,7 @@ Exhibit.Debug.exception = function(e, msg) {
             throw(e2);
         };
     } else if (typeof window["console"] !== "undefined" &&
-               typeof window.console["error"] === "function") {
+               typeof window.console["error"] !== "undefined") {
         f = function(e2, msg2) {
             if (typeof msg2 !== "undefined" && msg2 !== null) {
                 console.error(msg2 + " %o", e2);
