@@ -60,6 +60,7 @@ var Exhibit = {
         "lib/jquery-1.7.1.js",
         "lib/json2.js",
         "lib/jquery.history.js",
+        "lib/jquery.history.shim.js",
         "lib/base64.js",
         "lib/jquery.simile.dom.js",
         "lib/jquery.simile.bubble.js",
