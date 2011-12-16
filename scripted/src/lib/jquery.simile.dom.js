@@ -242,7 +242,7 @@
                 methods._fromString(dom, node, fieldElmts);
                 node = node2;
             }
-        },
+        }
     };
 
     /**

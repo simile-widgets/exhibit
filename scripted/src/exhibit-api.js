@@ -245,7 +245,7 @@ Exhibit.load = function() {
     };
     if (typeof Exhibit_urlPrefix === "string") {
         Exhibit.urlPrefix = Exhibit_urlPrefix;
-        if (window.hasOwnProperty("Exhibit_parameters")) {
+        if (Object.prototype.hasOwnProperty.call(window, "Exhibit_parameters")) {
             Exhibit.parseURLParameters(Exhibit_parameters,
                                        Exhibit.params,
                                        paramTypes);
@@ -254,8 +254,8 @@ Exhibit.load = function() {
         scripts = document.getElementsByTagName("script");
         for (i = 0; i < scripts.length; i++) {
             script = scripts[i];
-            if (script.hasAttribute("src")) {
-                url = script.getAttribute("src");
+            url = script.getAttribute("src");
+            if (url !== null) {
                 if (url.indexOf("/exhibit-api.js") >= 0) {
                     Exhibit.urlPrefix = url.substr(0, url.indexOf("exhibit-api.js"));
                     Exhibit.parseURLParameters(url, Exhibit.params, paramTypes);
@@ -305,7 +305,7 @@ Exhibit.load = function() {
         } else if (Exhibit._dependencies.hasOwnProperty(scr[i])) {
             dep = Exhibit._dependencies[scr[i]].split(".");
             if (dep.length === 1) {
-                if (!window.hasOwnProperty(dep[0])) {
+                if (!Object.prototype.hasOwnProperty.call(window, dep[0])) {
                     $LAB.script(Exhibit.urlPrefix + scr[i]);
                 }
             } else {

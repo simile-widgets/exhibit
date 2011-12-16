@@ -39,7 +39,7 @@ Exhibit.ToolboxWidget = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.ToolboxWidget._settingSpecs = {
-    "itemID": { type: "text" },
+    "itemID": { type: "text" }
 };
 
 /**
@@ -130,7 +130,7 @@ Exhibit.ToolboxWidget.prototype._initializeUI = function() {
 };
 
 Exhibit.ToolboxWidget.prototype._makePopup = function() {
-    var coords, docWidth, docHeight, popup;
+    var coords, docWidth, docHeight, popup, self;
     self = this;
     
     popup = $("<div>")
