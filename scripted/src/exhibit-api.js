@@ -31,6 +31,16 @@ var Exhibit = {
     loaded: false,
 
     /**
+     * Where Exhibit is served from.
+     */
+    urlPrefix: undefined,
+
+    /**
+     * Where to find out more about Exhibit.
+     */
+    exhibitLink: "http://www.simile-widgets.org/exhibit/",
+
+    /**
      * Settable parameters within the query string of loading this file.
      */
     params: {
@@ -130,6 +140,7 @@ var Exhibit = {
         "scripts/ui/widgets/toolbox-widget.js",
         "scripts/ui/widgets/bookmark-widget.js",
         "scripts/ui/widgets/reset-history-widget.js",
+        "scripts/ui/widgets/logo.js",
         "locales/manifest.js",
         "scripts/final.js"
     ],
