@@ -77,7 +77,8 @@ Exhibit.Bookmark.interpretBookmarkHash = function(hash) {
  * @depends Exhibit.History
  */
 Exhibit.Bookmark.generateBookmark = function() {
-    var hash = Exhibit.Bookmark.generateBookmarkHash(Exhibit.History.getState());
+    var hash;
+    hash = Exhibit.Bookmark.generateBookmarkHash(Exhibit.History.getState());
     return document.location.href + ((hash === "") ? "": "#" + hash);
 };
 
@@ -95,6 +96,7 @@ Exhibit.Bookmark.implementBookmark = function(state) {
         Exhibit.Bookmark.run = true;
     }
 };
+
 /**
  * Answer whether the bookmark system should run or not on the hash
  * (if there is a hash) in the current URL.
