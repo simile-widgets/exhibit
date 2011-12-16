@@ -37,6 +37,7 @@ Exhibit.Collection.createAllItemsCollection = function(id, database) {
     collection._update = Exhibit.Collection._allItemsCollection_update;
     
     Exhibit.Collection._initializeBasicCollection(collection, database);
+    collection._setElement();
     
     return collection;
 };
@@ -341,10 +342,12 @@ Exhibit.Collection.prototype.getID = function() {
 /**
  * Create an element to associate with the collection if none
  * exists.
+ *
+ * @param {Element} el
  */
 Exhibit.Collection.prototype._setElement = function(el) {
     if (typeof el === "undefined" || el === null) {
-        if (this._getID() !== "default") {
+        if (this.getID() !== "default") {
             this._elmt = $("<div>")
                 .attr("id", this.getID())
                 .attr("ex:role", "exhibit-collection")
