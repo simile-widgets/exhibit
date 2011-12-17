@@ -112,7 +112,7 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
 };
 
 /**
- * @param {Exhibit.ListFacet}
+ * @param {Exhibit.ListFacet} facet
  * @param {Object} configuration
  */
 Exhibit.ListFacet._configure = function(facet, configuration) {
