@@ -168,7 +168,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
         } else {
             msg = "Failed to access " + url + " (HTTP " + jqxhr.status + ")";
         }
-        $(document).trigger("error.exhibit", msg);
+        $(document).trigger("error.exhibit", [e, msg]);
     };
 
     $.ajax({
