@@ -76,7 +76,8 @@ Exhibit.Database._LocalImpl.prototype.createDatabase = function() {
  * @param {Function} fDone A function to call when finished.
  */
 Exhibit.Database._LocalImpl.prototype.loadLinks = function(fDone) {
-    var links = $("head > link[rel='exhibit/data']");
+    var links = $("head > link[rel='exhibit-data']")
+        .add("head > link[rel='exhibit/data']");
     this._loadLinks(links.toArray(), this, fDone);
 };
 
