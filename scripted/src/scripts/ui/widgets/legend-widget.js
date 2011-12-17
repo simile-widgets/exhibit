@@ -165,7 +165,7 @@ Exhibit.LegendWidget._localeSort = function(a, b) {
 Exhibit.LegendWidget._defaultColorMarkerGenerator = function(value) {
     var span;
     span = $("<span>")
-        .attr("class", "exhibit-legendWidget-entry-swatch"),
+        .attr("class", "exhibit-legendWidget-entry-swatch")
         .css("background", value)
         .html("\u00a0\u00a0");
     return span.get(0);
