@@ -127,6 +127,8 @@ var Exhibit = {
         "scripts/data/exporters/semantic-wikitext.js",
         "scripts/data/importer.js",
         "scripts/data/importers/json.js",
+        "scripts/data/importers/jsonp.js",
+        "scripts/data/importers/google-spreadsheet.js",
         "scripts/ui/ui.js",
         "scripts/ui/ui-context.js",
         "scripts/ui/lens-registry.js",

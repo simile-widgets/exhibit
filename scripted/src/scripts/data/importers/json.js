@@ -12,6 +12,7 @@ Exhibit.Importer.ExhibitJSON = {
 };
 
 /**
+ * @param {String} url
  * @param {String} s
  * @param {Function} callback
  * @depends JSON

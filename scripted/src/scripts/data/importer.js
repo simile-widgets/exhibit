@@ -6,13 +6,15 @@
 /**
  * @class
  * @constructor
- * @param {String} mimeType
+ * @param {String|Array} mimeType
  * @param {String} loadType
  * @param {String} label
  * @param {Function} parse
  */
 Exhibit.Importer = function(mimeType, loadType, parse) {
-    this._mimeType = mimeType;
+    if (typeof mimeType === "string") {
+        this._mimeTypes = [mimeType];
+    }
     this._loadType = loadType;
     this._parse = parse;
     this._registered = this.register();
@@ -37,7 +39,7 @@ Exhibit.Importer._registerComponent = function(evt, reg) {
     Exhibit.Importer._registry = reg;
     if (!reg.hasRegistry(Exhibit.Importer._registryKey)) {
         reg.createRegistry(Exhibit.Importer._registryKey);
-        $(document).trigger("registerImporters.exhibit");
+        $(document).trigger("registerImporters.exhibit", reg);
     }
 };
 
@@ -66,19 +68,23 @@ Exhibit.Importer.checkFileURL = function(url) {
  * @returns {Boolean}
  */
 Exhibit.Importer.prototype.register = function() {
-    var reg = Exhibit.Importer._registry;
-    if (!reg.isRegistered(
-        Exhibit.Importer._registryKey,
-        this._mimeType
-    )) {
-        reg.register(
+    var reg, i, registered;
+    reg = Exhibit.Importer._registry;
+    registered = false;
+    for (i = 0; i < this._mimeTypes.length; i++) {
+        if (!reg.isRegistered(
             Exhibit.Importer._registryKey,
-            this._mimeType,
-            this
-        );
-        return true;
-    } else {
-        return false;
+            this._mimeTypes[i]
+        )) {
+            reg.register(
+                Exhibit.Importer._registryKey,
+                this._mimeTypes[i],
+                this
+            );
+            registered = registered || true;
+        } else {
+            registered = registered || false;
+        }
     }
 };
 
@@ -86,10 +92,13 @@ Exhibit.Importer.prototype.register = function() {
  *
  */
 Exhibit.Importer.prototype.dispose = function() {
-    Exhibit.Importer._registry.getRegistry().unregister(
-        Exhibit.Importer._registryKey,
-        this._mimeType
-    );
+    var i;
+    for (i = 0; i < this._mimeTypes.length; i++) {
+        Exhibit.Importer._registry.unregister(
+            Exhibit.Importer._registryKey,
+            this._mimeTypes[i]
+        );
+    }
 };
 
 /**
@@ -111,9 +120,6 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
     url = Exhibit.Persistence.resolveURL(url);
 
     switch(this._loadType) {
-    case "babel":
-        resolver = this._loadBabel;
-        break;
     case "jsonp":
         resolver = this._loadJSONP;
         break;
@@ -126,9 +132,8 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
         try {
             database.loadData(o, Exhibit.Persistence.getBaseURL(url));
         } catch(e) {
-            // @@@ UI for loading data - trigger event?
             Exhibit.Debug.exception(e);
-            // , Exhibit.l10n.importer.parseError + url);
+            $(document).trigger("error.exhibit", [e, "Could not load data from " + url + " into the database"]);
         } finally {
             if (typeof callback === "function") {
                 callback();
@@ -142,13 +147,12 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
         try {
             self._parse(url, s, postParse);
         } catch(e) {
-            Exhibit.Debug.exception(e);
-            // @@@, Exhibit.l10n.importer.loadError + url);
+            $(document).trigger("error.exhibit", [e, "Could not parse " + url]);
         }
     };
 
     Exhibit.UI.showBusyIndicator();
-    resolver(url, database, postLoad);
+    resolver(url, database, postLoad, link);
 };
 
 /**
@@ -180,22 +184,54 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
 };
 
 /**
- * @@@
+ * @param {String} url
+ * @param {Exhibit.Database} database
+ * @param {Function} callback
+ * @param {Element} link
  */
-Exhibit.Importer.prototype._loadJSONP = function(url, database, callback) {
-    $.ajax({
+Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) {
+    var charset, convertType, jsonpCallback, converter, fDone, ajaxArgs;
+
+    if (typeof link !== "string") {
+        convertType = Exhibit.getAttribute(link, "converter");
+        jsonpCallback = Exhibit.getAttribute(link, "jsonp-callback");
+        charset = Exhibit.getAttribute(link, "charset");
+    }
+
+    converter = Exhibit.Importer._registry.get(
+        Exhibit.Importer.JSONP._registryKey,
+        convertType
+    );
+
+    if (converter !== null && typeof converter.preprocessURL !== "undefined") {
+        url = converter.preprocessURL(url);
+    }
+    
+    fDone = function(s, textStatus, jqxhr) {
+        callback(converter.transformJSON(s), textStatus, jqxhr);
+    };
+
+    fError = function() {
+        alert("ERROR");
+    };
+
+    ajaxArgs = {
         "url": url,
         "dataType": "jsonp",
-        "error": fError,
-        "success": fDone
-    });
-};
+        "success": fDone,
+        "error": fError
+    };
 
-/**
- * @@@
- */ 
-Exhibit.Importer.prototype._loadBabel = function(url, database, callback) {
-    Exhibit.Importer.prototype._loadJSONP(url);
+    if (jsonpCallback !== null) {
+        ajaxArgs.jsonp = false;
+        ajaxArgs.jsonpCallback = jsonpCallback;
+    }
+
+    if (charset !== null) {
+        ajaxArgs.scriptCharset = charset;
+    }
+
+    $.ajax(ajaxArgs);
 };
 
 $(document).one(
