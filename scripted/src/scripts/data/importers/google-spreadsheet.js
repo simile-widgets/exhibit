@@ -1,7 +1,7 @@
 /**
- * @fileOverview
- * @author
- * @author
+ * @fileOverview Read Google Docs Spreadsheet JSONP feed.
+ * @author David Huynh
+ * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
 
 /**
