@@ -304,6 +304,21 @@ Exhibit.load = function() {
         Exhibit.babelPrefix = Exhibit.params.babel;
     }
 
+    // Using the <link> version takes precedence; this is a holdover from
+    // the Babel-based importer where only Babel's translator URL mattered,
+    // but here the root of Babel is more important.
+    // <link rel="exhibit/babel-translator" src="..." />
+    //   or
+    // <link rel="exhibit-babel" src="..." />
+    // will do it.
+    linkElmts = document.getElementsByTagName("link");
+    for (i = 0; i < linkElmts.length; i++) {
+        link = linkElmts[i];
+        if (link.rel.search(/\b(exhibit\/babel-translator|exhibit-babel)\b/) > 0) {
+            Exhibit.babelPrefix = link.href.replace(/\/translator\/$/, "");
+        }
+    }
+
     if (typeof Exhibit.params.backstage !== "undefined") {
         // If using Backstage, force non-auto creation and force Backstage
         // to load after Exhibit.  If the Backstage install also includes
