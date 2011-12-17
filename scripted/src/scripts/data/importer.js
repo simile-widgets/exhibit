@@ -14,6 +14,8 @@
 Exhibit.Importer = function(mimeType, loadType, parse) {
     if (typeof mimeType === "string") {
         this._mimeTypes = [mimeType];
+    } else {
+        this._mimeTypes = mimeType;
     }
     this._loadType = loadType;
     this._parse = parse;
@@ -86,6 +88,7 @@ Exhibit.Importer.prototype.register = function() {
             registered = registered || false;
         }
     }
+    return registered;
 };
 
 /**
@@ -120,6 +123,9 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
     url = Exhibit.Persistence.resolveURL(url);
 
     switch(this._loadType) {
+    case "babel":
+        resolver = this._loadBabel;
+        break;
     case "jsonp":
         resolver = this._loadJSONP;
         break;
@@ -211,8 +217,13 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
         callback(converter.transformJSON(s), textStatus, jqxhr);
     };
 
-    fError = function() {
-        alert("ERROR");
+    fError = function(jqxhr, textStatus, e) {
+        var msg;
+        msg = "Failed to access " + url;
+        if (typeof jqxhr.status !== "undefined") {
+             msg += " (HTTP " + jqxhr.status + ")";
+        }
+        $(document).trigger("error.exhibit", [e, msg]);
     };
 
     ajaxArgs = {
@@ -232,6 +243,25 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
     }
 
     $.ajax(ajaxArgs);
+};
+
+/**
+ * @param {String} url
+ * @param {Exhibit.Database} database
+ * @param {Function} callback
+ * @param {Element} link
+ */
+Exhibit.Importer.prototype._loadBabel = function(url, database, callback, link) {
+    var mimeType = null;
+    if (typeof link !== "string") {
+        mimeType = $(link).attr("type");
+    }
+    this._loadJSONP(
+        Exhibit.Importer.BabelBased.makeURL(url, mimeType),
+        database,
+        callback,
+        link
+    );
 };
 
 $(document).one(
