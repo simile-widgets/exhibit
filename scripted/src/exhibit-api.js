@@ -36,6 +36,17 @@ var Exhibit = {
     urlPrefix: undefined,
 
     /**
+     * Where to find Babel, if at all.
+     */
+    babelPrefix: undefined,
+
+    /**
+     * Where to submit JSON for validation.  Uses jsonlint.com by
+     * default, will use Babel instead of babelPrefix is given.
+     */
+    validateJSON: "http://jsonlint.com/?json=",
+
+    /**
      * Where to find out more about Exhibit.
      */
     exhibitLink: "http://www.simile-widgets.org/exhibit/",
@@ -46,7 +57,9 @@ var Exhibit = {
     params: {
         bundle: false,
         autoCreate: true,
-        safe: false
+        safe: false,
+        babel: undefined,
+        backstage: undefined
     },
 
     _dependencies: {
@@ -253,11 +266,17 @@ Exhibit.load = function() {
         "postLoad": Boolean,
         "css": Array,
         "autoCreate": Boolean,
-        "safe": Boolean
+        "safe": Boolean,
+        "babel": String,
+        "backstage": String
     };
+
     if (typeof Exhibit_urlPrefix === "string") {
         Exhibit.urlPrefix = Exhibit_urlPrefix;
-        if (Object.prototype.hasOwnProperty.call(window, "Exhibit_parameters")) {
+        if (Object.prototype.hasOwnProperty.call(
+            window,
+            "Exhibit_parameters"
+        )) {
             Exhibit.parseURLParameters(Exhibit_parameters,
                                        Exhibit.params,
                                        paramTypes);
@@ -276,6 +295,18 @@ Exhibit.load = function() {
         }
     }
 
+    if (typeof Exhibit.params.babel !== "undefined") {
+        Exhibit.babelPrefix = Exhibit.params.babel;
+    }
+
+    if (typeof Exhibit.params.backstage !== "undefined") {
+        // If using Backstage, force non-auto creation and force Backstage
+        // to load after Exhibit.  If the Backstage install also includes
+        // Babel, the Backstage scripts should set Exhibit.babelPrefix.
+        Exhibit.params.autoCreate = false;
+        Exhibit.scripts = Exhibit.scripts.concat(Exhibit.params.backstage);
+    }
+    
     if (Exhibit.params.autoCreate) {
         Exhibit.scripts.push("scripts/create.js");
     }

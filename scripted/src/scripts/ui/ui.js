@@ -9,12 +9,16 @@
  */
 Exhibit.UI = {
     /**
-     *
+     * Map of components used for instantiating new UI objects.
      */
     componentMap: {},
-// @@@ validator will have to be a configured option unavailable by default
-//    validator: Exhibit.Babel + "validator";
-    validator: ""
+
+    /**
+     * Link to JSON validating service.
+     */
+    validator: (typeof Exhibit.babelPrefix !== "undefined") ?
+        Exhibit.babelPrefix + "validator?url=" :
+        Exhibit.validateJSON
 };
 
 /**
@@ -364,29 +368,17 @@ Exhibit.UI.showHelp = function(message, url, target) {
 /**
  * @static
  * @param {String} message
- * @param {String} expression
- */
-Exhibit.UI.showJavascriptExpressionValidation = function(message, expression) {
-    var target = "_blank";
-    if (window.confirm(message + "\n\n" + Exhibit.l10n.showJavascriptValidationMessage)) {
-        window.open(Exhibit.UI.validator + "?expresson=" + encodeURIComponent(expression), target);
-    }
-};
-
-/**
- * @static
- * @param {String} message
  * @param {String} url
  */
 Exhibit.UI.showJsonFileValidation = function(message, url) {
     var target = "_blank";
-    if (url.indexOf("file:") === 0) {
+    if (typeof Exhibit.babelPrefix !== "undefined" && url.indexOf("file:") === 0) {
         if (window.confirm(message + "\n\n" + Exhibit.l10n.showJsonValidationFormMessage)) {
             window.open(Exhibit.UI.validator, target);
         }
     } else {
         if (window.confirm(message + "\n\n" + Exhibit.l10n.showJsonValidationMessage)) {
-            window.open(Exhibit.UI.validator + "?url=" + url, target);
+            window.open(Exhibit.UI.validator + url, target);
         }
     }
 };
