@@ -24,6 +24,7 @@ Exhibit.ListFacet = function(containerElmt, uiContext) {
     
     this._settings = {};
     this._dom = null;
+    this._id = undefined;
     this._registered = false;
 };
 
@@ -345,10 +346,11 @@ Exhibit.ListFacet.prototype.update = function(items) {
 		this._delayedUpdateItems = items;
 		return;
 	}
-    this._dom.valuesContainer.style.display = "none";
-    this._dom.valuesContainer.innerHTML = "";
+    $(this._dom.valuesContainer)
+        .hide()
+        .empty();
     this._constructBody(this._computeFacet(items));
-    this._dom.valuesContainer.style.display = "block";
+    $(this._dom.valuesContainer).show();
 };
 
 /**
@@ -623,6 +625,7 @@ Exhibit.ListFacet.prototype.exportEmptyState = function() {
 /**
  * @private
  * @param {Boolean} empty
+ * @returns {Object}
  */
 Exhibit.ListFacet.prototype._exportState = function(empty) {
     var s = [];
@@ -639,6 +642,8 @@ Exhibit.ListFacet.prototype._exportState = function(empty) {
 
 /**
  * @param {Object} state
+ * @param {Array} state.selection
+ * @param {Boolean} state.selectMissing
  */
 Exhibit.ListFacet.prototype.importState = function(state) {
     if (this.stateDiffers(state)) {
