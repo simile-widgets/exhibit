@@ -190,7 +190,7 @@ Exhibit._Impl.prototype.getDefaultCollection = function() {
  */
 Exhibit._Impl.prototype.setCollection = function(id, c) {
     if (typeof this._collectionMap[id] !== "undefined") {
-        try{
+        try {
             this._collectionMap[id].dispose();
         } catch(e) {
             Exhibit.Debug.exception(e);
@@ -265,6 +265,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             case "submission-lens":
             case "edit-lens":   lensElmts.push(elmt); break;
             case "facet":       facetElmts.push(elmt); break;
+            case "controlPanel": controlPanelElmts.push(elmt); break;
             default: 
                 otherElmts.push(elmt);
             }
@@ -292,11 +293,11 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
     
     self = this;
     processElmts = function(elmts) {
-        var i, elmt, component, id;
+        var i, elmt;
         for (i = 0; i < elmts.length; i++) {
             elmt = elmts[i];
             try {
-                component = Exhibit.UI.createFromDOM(elmt, uiContext);
+                Exhibit.UI.createFromDOM(elmt, uiContext);
             } catch (ex1) {
                 Exhibit.Debug.exception(ex1);
             }
@@ -308,11 +309,16 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
     processElmts(lensElmts);
     processElmts(facetElmts);
 
-    //if (controlPanelElmts.length > 0) {
+    if (controlPanelElmts.length === 0) {
+        panel = Exhibit.ControlPanel.createFromDOM(
+            $("<div>").prependTo(document.body),
+            null,
+            uiContext
+        );
+        panel.setCreatedAsDefault();
+    } else {
         processElmts(controlPanelElmts);
-    //} else {
-        // @@@ add a div before the first view?
-    //}
+    }
 
     processElmts(otherElmts);
     

@@ -18,6 +18,7 @@ Exhibit.ControlPanel = function(elmt, uiContext) {
     this._id = null;
     this._registered = false;
     this._childOpen = false;
+    this._createdAsDefault = false;
 };
 
 /**
@@ -254,6 +255,43 @@ Exhibit.ControlPanel.prototype.childOpened = function() {
  */
 Exhibit.ControlPanel.prototype.childClosed = function() {
     this._childOpen = false;
+};
+
+/**
+ * 
+ */
+Exhibit.ControlPanel.prototype.setCreatedAsDefault = function() {
+    var self;
+    self = this;
+    this._createdAsDefault = true;
+    $(this._div).hide();
+    $(document).one("exhibitConfigured.exhibit", function(evt, ex) {
+        var keys, component, i, place;
+        component = Exhibit.ViewPanel._registryKey;
+        keys = ex.getRegistry().getKeys(component);
+        if (keys.length === 0) {
+            component = Exhibit.View._registryKey;
+            keys = ex.getRegistry().getKeys(component);
+        }
+        if (keys.length !== 0) {
+            // Places default control panel before the "first" one - ideally,
+            // this is the first of its kind presentationally to the user,
+            // but it may not be.  If not, authors should be placing it
+            // themselves.
+            place = ex.getRegistry().get(component, keys[0]);
+            if (typeof place._div !== "undefined") {
+                $(place._div).before(self._div);
+                $(self._div).show();
+            }
+        }
+    });
+};
+
+/**
+ * @returns {Boolean}
+ */
+Exhibit.ControlPanel.prototype.createdAsDefault = function() {
+    return this._createdAsDefault;
 };
 
 /**
