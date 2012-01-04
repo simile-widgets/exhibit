@@ -279,6 +279,15 @@ Exhibit.DateTime.parseGregorianDateTime = function(o) {
  * Rounds date objects down to the nearest interval or multiple of an interval.
  * This method modifies the given date object, converting it to the given
  * timezone if specified.  NB, does not support Exhibit.DateTime.QUARTER.
+ *
+ * Rounding to the week is something of an odd concept, so the semantics are
+ * described here.  Weeks are 1-index.  The first week of the year goes from
+ * Jan 1 to the day before the first firstDayOfWeek, unless Jan 1 is the first
+ * firstDayOfWeek.  There can be 54 weeks in a leap year, 53 in a non-leap
+ * year.  Rounding is only done within a year; the farthest to round down is
+ * the first week of the year.  The same day of week is retained unless it
+ * comes before the first of the year, in which case the first of the year is
+ * used.
  * 
  * @param {Date} date The date object to round.
  * @param {Number} intervalUnit A constant, integer index specifying an 
@@ -289,17 +298,12 @@ Exhibit.DateTime.parseGregorianDateTime = function(o) {
  *   week, 0 corresponds to Sunday, 1 to Monday, etc.
  */
 Exhibit.DateTime.roundDownToInterval = function(date, intervalUnit, timeZone, multiple, firstDayOfWeek) {
-    var timeShift, date2, clearInDay, clearInYear, x;
+    var timeShift, date2, clearInDay, clearInYear, x, first;
     timeShift = timeZone * 
         Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.HOUR];
         
     date2 = new Date(date.getTime() + timeShift);
-    clearInDay = function(d) {
-        d.setUTCMilliseconds(0);
-        d.setUTCSeconds(0);
-        d.setUTCMinutes(0);
-        d.setUTCHours(0);
-    };
+    clearInDay = Exhibit.DateTime.zeroTimeUTC;
     clearInYear = function(d) {
         clearInDay(d);
         d.setUTCDate(1);
@@ -340,17 +344,21 @@ Exhibit.DateTime.roundDownToInterval = function(date, intervalUnit, timeZone, mu
         date2.setUTCDate(x - (x % multiple));
         break;
     case Exhibit.DateTime.WEEK:
+        first = new Date(date2.getUTCFullYear(), 0, 1);
         clearInDay(date2);
-        d = (date2.getUTCDay() + 7 - firstDayOfWeek) % 7;
-        date2.setTime(date2.getTime() - 
-            d * Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.DAY]);
+        clearInDay(first);
+        x = Math.ceil((((date2 - first) / Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.DAY]) - ((firstDayOfWeek - first.getUTCDay() + 7) % 7) + 1) / 7) + (first.getUTCDay() !== firstDayOfWeek ? 1 : 0);
+        date2.setTime(date2.getTime() - ((x % multiple) * Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.WEEK]));
+        if (date2 < first) {
+            date2 = first;
+        }
         break;
     case Exhibit.DateTime.MONTH:
         clearInDay(date2);
         date2.setUTCDate(1);
         
-        x = date2.getUTCMonth();
-        date2.setUTCMonth(x - (x % multiple));
+        x = date2.getUTCMonth() + 1;
+        date2.setUTCMonth(Math.max(0, x - 1 - (x % multiple)));
         break;
     case Exhibit.DateTime.YEAR:
         clearInYear(date2);
@@ -378,7 +386,13 @@ Exhibit.DateTime.roundDownToInterval = function(date, intervalUnit, timeZone, mu
 /**
  * Rounds date objects up to the nearest interval or multiple of an interval.
  * This method modifies the given date object, converting it to the given
- * timezone if specified.
+ * timezone if specified.  NB, does not support Exhibit.DateTime.QUARTER.
+ *
+ * Unlike round down, round up for week and month may cross year boundaries.
+ * The semantics here are also weird and probably should not be used for
+ * anything other than multiples of one, but if you have October and want
+ * to round up to the nearest fifteenth month, you will get April of the
+ * next year.  Caveat emptor.
  * 
  * @param {Date} date The date object to round.
  * @param {Number} intervalUnit A constant, integer index specifying an 
@@ -390,11 +404,79 @@ Exhibit.DateTime.roundDownToInterval = function(date, intervalUnit, timeZone, mu
  * @see Exhibit.DateTime.roundDownToInterval
  */
 Exhibit.DateTime.roundUpToInterval = function(date, intervalUnit, timeZone, multiple, firstDayOfWeek) {
-    var originalTime = date.getTime();
-    Exhibit.DateTime.roundDownToInterval(date, intervalUnit, timeZone, multiple, firstDayOfWeek);
-    if (date.getTime() < originalTime) {
-        date.setTime(date.getTime() + 
-            Exhibit.DateTime.gregorianUnitLengths[intervalUnit] * multiple);
+    var originalTime, useRoundDown, usedRoundDown, date2, first, x, clearInYear;
+    originalTime = date.getTime();
+    clearInYear = function(d) {
+        Exhibit.DateTime.zeroTimeUTC(d);
+        d.setUTCDate(1);
+        d.setUTCMonth(0);
+    };
+    usedRoundDown = false;
+    useRoundDown = function() {
+        Exhibit.DateTime.roundDownToInterval(date, intervalUnit, timeZone, multiple, firstDayOfWeek);
+        if (date.getTime() < originalTime) {
+            date.setTime(date.getTime() + 
+                         Exhibit.DateTime.gregorianUnitLengths[intervalUnit] * multiple);
+        }
+        usedRoundDown = true;
+    };
+
+    timeShift = timeZone * 
+        Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.HOUR];
+    date2 = new Date(date.getTime() + timeShift);
+
+    switch(intervalUnit) {
+    case Exhibit.DateTime.MILLISECOND:
+        useRoundDown();
+        break;
+    case Exhibit.DateTime.SECOND:
+        useRoundDown();
+        break;
+    case Exhibit.DateTime.MINUTE:
+        useRoundDown();
+        break;
+    case Exhibit.DateTime.HOUR:
+        useRoundDown();
+        break;
+    case Exhibit.DateTime.DAY:
+        useRoundDown();
+        break;
+    case Exhibit.DateTime.WEEK:
+        first = new Date(date2.getUTCFullYear(), 0, 1);
+        Exhibit.DateTime.zeroTimeUTC(date2);
+        Exhibit.DateTime.zeroTimeUTC(first);
+        x = Math.ceil((((date2 - first) / Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.DAY]) - ((firstDayOfWeek - first.getUTCDay() + 7) % 7) + 1) / 7) + (first.getUTCDay() !== firstDayOfWeek ? 1 : 0);
+        date2.setTime(date2.getTime() + (((multiple - (x % multiple)) % multiple) * Exhibit.DateTime.gregorianUnitLengths[Exhibit.DateTime.WEEK]));
+        break;
+    case Exhibit.DateTime.MONTH:
+        Exhibit.DateTime.zeroTimeUTC(date2);
+        date2.setUTCDate(1);
+        
+        x = date2.getUTCMonth() + 1;
+        date2.setUTCMonth(x - 1 + (multiple - (x % multiple)) % multiple);
+        break;
+    case Exhibit.DateTime.YEAR:
+        clearInYear(date2);
+        
+        x = date2.getUTCFullYear();
+        date2.setUTCFullYear(x + (multiple - (x % multiple)) % multiple);
+        break;
+    case Exhibit.DateTime.DECADE:
+        clearInYear(date2);
+        date2.setUTCFullYear(Math.ceil(date2.getUTCFullYear() / 10) * 10);
+        break;
+    case Exhibit.DateTime.CENTURY:
+        clearInYear(date2);
+        date2.setUTCFullYear(Math.ceil(date2.getUTCFullYear() / 100) * 100);
+        break;
+    case Exhibit.DateTime.MILLENNIUM:
+        clearInYear(date2);
+        date2.setUTCFullYear(Math.ceil(date2.getUTCFullYear() / 1000) * 1000);
+        break;
+    }
+
+    if (!usedRoundDown) {
+        date.setTime(date2.getTime() - timeShift);
     }
 };
 
@@ -484,6 +566,7 @@ Exhibit.DateTime.getTimezone = function() {
 /**
  * Zeroes (UTC) all time components of the provided date object.
  *
+ * @static
  * @param {Date} date The Date object to modify.
  * @returns {Date} The modified Date object.
  */

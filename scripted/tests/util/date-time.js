@@ -107,23 +107,23 @@ test("parseGregorianDateTime", function() {
 });
 
 test("roundDownToInterval", function() {
-    expect(10);
+    expect(11);
 
     var round = Exhibit.DateTime.roundDownToInterval;
 
     // Start here, then progressively round it down
-    var d = new Date("1993/02/23 18:45:09 GMT-0000");
+    var d = new Date("1993/03/16 18:45:09 GMT-0000");
     d.setUTCMilliseconds(123);
 
-    // Expected round-downs for multiple=10, no offset, sunday as first day of week
-    var mils_date = new Date("1993/02/23 18:45:09 GMT-0000");
+    // Expected round-downs, by 10's, no offset, sunday as first day of week
+    var mils_date = new Date("1993/03/16 18:45:09 GMT-0000");
     mils_date.setUTCMilliseconds(120);
     var d_round_mils_10 = mils_date.valueOf();
-    var d_round_sec_10 = new Date("1993/02/23 18:45:00 GMT-0000").valueOf();
-    var d_round_min_10 = new Date("1993/02/23 18:40 GMT-0000").valueOf();
-    var d_round_hour_10 = new Date("1993/02/23 10:00 GMT-0000").valueOf();
-    var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/20")).valueOf();
-    //var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1992/12/13")).valueOf();
+    var d_round_sec_10 = new Date("1993/03/16 18:45:00 GMT-0000").valueOf();
+    var d_round_min_10 = new Date("1993/03/16 18:40 GMT-0000").valueOf();
+    var d_round_hour_10 = new Date("1993/03/16 10:00 GMT-0000").valueOf();
+    var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/03/10")).valueOf();
+    var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/03/03")).valueOf();
     var d_round_month_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/01/01")).valueOf();
     var d_round_year_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1990/01/01")).valueOf();
     // multiple=1 for the big guys
@@ -146,8 +146,8 @@ test("roundDownToInterval", function() {
     round(d,Exhibit.DateTime.DAY,0,10,0);
     equal(d.valueOf(),d_round_day_10,"Day round down");
 
-    //round(d,Exhibit.DateTime.WEEK,0,10,0);
-    //equal(d.valueOf(),d_round_week_10,"Week round down");
+    round(d,Exhibit.DateTime.WEEK,0,5,0);
+    equal(d.valueOf(),d_round_week_10,"Week round down");
 
     round(d,Exhibit.DateTime.MONTH,0,10,0);
     equal(d.valueOf(),d_round_month_10,"Month round down");
@@ -166,7 +166,7 @@ test("roundDownToInterval", function() {
 });
 
 test("roundUpToInterval", function() {
-    expect(5);
+    expect(8);
 
     var round = Exhibit.DateTime.roundUpToInterval;
 
@@ -182,7 +182,7 @@ test("roundUpToInterval", function() {
     var d_round_min_10 = new Date("1993/02/23 18:50 GMT-0000").valueOf();
     var d_round_hour_10 = new Date("1993/02/23 20:00 GMT-0000").valueOf();
     var d_round_day_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/30")).valueOf();
-    //var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/23")).valueOf();
+    var d_round_week_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/02/30")).valueOf();
     var d_round_month_10 = Exhibit.DateTime.zeroTimeUTC(new Date("1993/10/01")).valueOf();
     var d_round_year_10 = Exhibit.DateTime.zeroTimeUTC(new Date("2000/01/01")).valueOf();
 
@@ -201,14 +201,14 @@ test("roundUpToInterval", function() {
     round(d,Exhibit.DateTime.DAY,0,10,0);
     equal(d.valueOf(),d_round_day_10,"Day round up");
 
-    //round(d,Exhibit.DateTime.WEEK,0,10,0);
-    //equal(d.valueOf(),d_round_week_10,"Week round up");
+    round(d,Exhibit.DateTime.WEEK,0,10,0);
+    equal(d.valueOf(),d_round_week_10,"Week round up");
 
     round(d,Exhibit.DateTime.MONTH,0,10,0);
-    //equal(d.valueOf(),d_round_month_10,"Month round up");
+    equal(d.valueOf(),d_round_month_10,"Month round up");
 
     round(d,Exhibit.DateTime.YEAR,0,10,0);
-    //equal(d.valueOf(),d_round_year_10,"Year round up");
+    equal(d.valueOf(),d_round_year_10,"Year round up");
 });
 
 test("incrementByInterval", function() {
