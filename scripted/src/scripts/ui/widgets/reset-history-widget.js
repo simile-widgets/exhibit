@@ -88,6 +88,14 @@ Exhibit.ResetHistoryWidget.prototype._initializeUI = function() {
 };
 
 /**
+ * @public
+ * @param {Exhibit.ControlPanel} panel
+ */
+Exhibit.ResetHistoryWidget.prototype.reconstruct = function(panel) {
+    this._initializeUI();
+};
+
+/**
  *
  */
 Exhibit.ResetHistoryWidget.prototype.dispose = function() {

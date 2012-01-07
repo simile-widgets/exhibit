@@ -11,19 +11,18 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.TabularView = function(containerElmt, uiContext) {
-    this._div = containerElmt;
-    this._uiContext = uiContext;
-    
-    this._settings = { rowStyler: null, tableStyler: null, indexMap: {} };
+    var view = this;
+    $.extend(this, new Exhibit.View(
+        "tabular",
+        containerElmt,
+        uiContext
+    ));
+    this.addSettingSpecs(Exhibit.TabularView._settingSpecs);
+    $.extend(this._settings, { rowStyler: null, tableStyler: null, indexMap: {} });
+
     this._columns = [];
     this._rowTemplate = null;
     this._dom = null;
-    this._id = undefined;
-    this._registered = false;
-    this._label = null;
-    this._viewPanel = null;
-
-    var view = this;
 
     this._onItemsChanged = function(evt) {
         view._settings.page = 0;
@@ -35,14 +34,7 @@ Exhibit.TabularView = function(containerElmt, uiContext) {
         view._onItemsChanged
     );
 
-    this._generator = {
-        "getLabel": function() {
-            return view.getLabel();
-        },
-        "getContent": function() {
-            return $(view._dom.bodyDiv).html();
-        }
-    };
+    this.register();
 };
 
 /**
@@ -77,8 +69,7 @@ Exhibit.TabularView.create = function(configuration, containerElmt, uiContext) {
     Exhibit.TabularView._configure(view, configuration);
     
     view._internalValidate();
-    view._setIdentifier();
-    view.register();
+
     view._initializeUI();
     return view;
 };
@@ -101,7 +92,7 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
         uiContext
     );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.TabularView._settingSpecs, view._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, view.getSettingSpecs(), view._settings);
     
     try {
         expressions = [];
@@ -116,7 +107,7 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
             expression = expressions[i];
             view._columns.push({
                 expression: expression,
-                uiContext:  Exhibit.UIContext.create({}, view._uiContext, true),
+                uiContext:  Exhibit.UIContext.create({}, view.getUIContext(), true),
                 styler:     null,
                 label:      i < labels.length ? labels[i] : null,
                 format:     "list"
@@ -170,8 +161,7 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
         
     Exhibit.TabularView._configure(view, configuration);
     view._internalValidate();
-    view._setIdentifier();
-    view.register();
+
     view._initializeUI();
     return view;
 };
@@ -205,7 +195,7 @@ Exhibit.TabularView._configure = function(view, configuration) {
             if (expression.isPath()) {
                 path = expression.getPath();
                 if (typeof format !== "undefined" && format !== null && format.length > 0) {
-                    format = Exhibit.FormatParser.parse(view._uiContext, format, 0);
+                    format = Exhibit.FormatParser.parse(view.getUIContext(), format, 0);
                 } else {
                     format = "list";
                 }
@@ -215,7 +205,7 @@ Exhibit.TabularView._configure = function(view, configuration) {
                     styler:     styler,
                     label:      label,
                     format:     format,
-                    uiContext:  view._uiContext 
+                    uiContext:  view.getUIContext()
                 });
             }
         }
@@ -232,35 +222,10 @@ Exhibit.TabularView._configure = function(view, configuration) {
 /**
  *
  */
-Exhibit.TabularView.prototype.register = function() {
-    this._uiContext.getExhibit().getRegistry().register(
-        Exhibit.View._registryKey,
-        this.getID(),
-        this
-    );
-    $(document).trigger("addGenerator.exhibit", this.getGenerator());
-    this._registered = true;
-};
-
-/**
- *
- */
-Exhibit.TabularView.prototype.unregister = function() {
-    this._uiContext.getExhibit().getRegistry().unregister(
-        Exhibit.View._registryKey,
-        this.getID()
-    );
-    $(document).trigger("removeGenerator.exhibit", this.getGenerator());
-    this._registered = false;
-};
-
-/**
- *
- */
 Exhibit.TabularView.prototype._internalValidate = function() {
     var database, propertyIDs, i, propertyID;
     if (this._columns.length === 0) {
-        database = this._uiContext.getDatabase();
+        database = this.getUIContext().getDatabase();
         propertyIDs = database.getAllProperties();
         for (i = 0; i < propertyIDs.length; i++) {
             propertyID = propertyIDs[i];
@@ -281,48 +246,19 @@ Exhibit.TabularView.prototype._internalValidate = function() {
 };
 
 /**
- * @param {String} label
- */
-Exhibit.TabularView.prototype.setLabel = function(label) {
-    this._label = label;
-};
-
-/**
- * @returns {String}
- */
-Exhibit.TabularView.prototype.getLabel = function() {
-    return this._label;
-};
-
-/**
- * @param {Exhibit.ViewPanel} panel
- */
-Exhibit.TabularView.prototype.setViewPanel = function(panel) {
-    this._viewPanel = panel;
-};
-
-/**
  *
  */
 Exhibit.TabularView.prototype.dispose = function() {
-    $(this._uiContext.getCollection().getElement()).unbind(
+    $(this.getUIContext().getCollection().getElement()).unbind(
         "onItemsChanged.exhibit",
         this._onItemsChanged
     );
 
     this._collectionSummaryWidget.dispose();
     this._collectionSummaryWidget = null;
-
-    this._viewPanel = null;
-    
-    this.unregister();
-    this._uiContext.dispose();
-    this._uiContext = null;
-    
-    this._div.innerHTML = "";
-    
     this._dom = null;
-    this._div = null;
+
+    Exhibit.View.prototype.dispose.call(arguments);
 };
 
 /**
@@ -331,12 +267,16 @@ Exhibit.TabularView.prototype.dispose = function() {
 Exhibit.TabularView.prototype._initializeUI = function() {
     var self = this;
     
-    $(this._div).empty();
-    this._dom = Exhibit.TabularView.createDom(this._div);
+    $(this.getContainer()).empty();
+    self._initializeViewUI(function() {
+        return $(self._dom.bodyDiv).html();
+    });
+
+    this._dom = Exhibit.TabularView.createDom(this.getContainer());
     this._collectionSummaryWidget = Exhibit.CollectionSummaryWidget.create(
         {}, 
         this._dom.collectionSummaryDiv, 
-        this._uiContext
+        this.getUIContext()
     );
     
     if (!this._settings.showSummary) {
@@ -357,8 +297,8 @@ Exhibit.TabularView.prototype._initializeUI = function() {
 Exhibit.TabularView.prototype._reconstruct = function() {
     var self, collection, database, bodyDiv, items, originalSize, currentSet, sortColumn, sorter, table, tr, createColumnHeader, i, renderItem, start, end, generatePagingControls;
     self = this;
-    collection = this._uiContext.getCollection();
-    database = this._uiContext.getDatabase();
+    collection = this.getUIContext().getCollection();
+    database = this.getUIContext().getDatabase();
     
     bodyDiv = this._dom.bodyDiv;
     $(bodyDiv).empty();
@@ -443,7 +383,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
             renderItem = function(i) {
                 var item, tr;
                 item = items[i];
-                tr = Exhibit.Lens.constructFromLensTemplate(item.id, self._rowTemplate, table, self._uiContext);
+                tr = Exhibit.Lens.constructFromLensTemplate(item.id, self._rowTemplate, table, self.getUIContext());
                 
                 if (self._settings.rowStyler !== null) {
                     self._settings.rowStyler(item.id, database, tr, i);
@@ -550,7 +490,7 @@ Exhibit.TabularView.prototype._renderPagingDiv = function(parentElmt, itemCount,
  */
 Exhibit.TabularView.prototype._getColumnLabel = function(expression) {
     var database, path, segment, propertyID, property;
-    database = this._uiContext.getDatabase();
+    database = this.getUIContext().getDatabase();
     path = expression.getPath();
     segment = path.getSegment(path.getSegmentCount() - 1);
     propertyID = segment.property;
@@ -604,7 +544,7 @@ Exhibit.TabularView.prototype._stabilize = function(f, indexMap)  {
  */
 Exhibit.TabularView.prototype._createSortFunction = function(items, expression, ascending) {
     var database, multiply, numericFunction, textFunction, valueTypes, valueTypeMap, makeSetter, i, item, r, coercedValueType, coersion, sortingFunction;
-    database = this._uiContext.getDatabase();
+    database = this.getUIContext().getDatabase();
     multiply = ascending ? 1 : -1;
     
     numericFunction = function(item1, item2) {
@@ -754,37 +694,6 @@ Exhibit.TabularView.prototype._gotoPage = function(page) {
 /**
  * @returns {Object}
  */
-Exhibit.TabularView.prototype.getGenerator = function() {
-    return this._generator;
-};
-
-/**
- *
- */
-Exhibit.TabularView.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
-
-    if (typeof this._id === "undefined") {
-        this._id = "tabular"
-            + "-"
-            + this._uiContext.getCollection().getID()
-            + "-"
-            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
-                Exhibit.View._registryKey
-            );
-    }
-};
-
-/**
- * @returns {String}
- */
-Exhibit.TabularView.prototype.getID = function() {
-    return this._id;
-};
-
-/**
- * @returns {Object}
- */
 Exhibit.TabularView.prototype.exportState = function() {
     return {
         "page": this._settings.page,
@@ -797,7 +706,7 @@ Exhibit.TabularView.prototype.exportState = function() {
  * @param {Object} state
  */
 Exhibit.TabularView.prototype.importState = function(state) {
-    if (this._uiContext !== null) {
+    if (this.getUIContext() !== null) {
         this._settings.page = state.page;
         this._settings.sortColumn = state.sortColumn;
         this._settings.sortAscending = state.sortAscending;

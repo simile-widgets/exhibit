@@ -12,16 +12,14 @@
  * @param {Exhibit.UIContext} uiContext
  */ 
 Exhibit.ThumbnailView = function(containerElmt, uiContext) {
-    this._div = containerElmt;
-    this._uiContext = uiContext;
-    this._settings = {};
-
-    this._id = null;
-    this._registered = false;
-    this._label = null;
-    this._viewPanel = null;
-
     var view = this;
+    $.extend(this, new Exhibit.View(
+        "thumbnail",
+        containerElmt,
+        uiContext
+    ));
+    this.addSettingSpecs(Exhibit.ThumbnailView._settingSpecs);
+
     this._onItemsChanged = function() {
         // @@@this will ignore the stored state, which is odd
         // it should probably replace the state after doing this - 
@@ -42,21 +40,14 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
     this._orderedViewFrame.parentHistoryAction = function(child, state, title) {
         Exhibit.History.pushComponentState(
             view,
-            Exhibit.View._registryKey,
+            Exhibit.View.getRegistryKey(),
             view.exportState(view.makeStateWithSub(child, state)),
             title,
             true
         );
     };
 
-    this._generator = {
-        "getLabel": function() {
-            return view.getLabel();
-        },
-        "getContent": function() {
-            return $(view._dom.bodyDiv).html();
-        }
-    };
+    this.register();
 };
 
 /**
@@ -84,15 +75,19 @@ Exhibit.ThumbnailView.create = function(configuration, containerElmt, uiContext)
         Exhibit.UIContext.create(configuration, uiContext, true)
     );
 
-    view._lensRegistry = Exhibit.UIContext.createLensRegistry(configuration, uiContext.getLensRegistry());
+    view._lensRegistry = Exhibit.UIContext.createLensRegistry(
+        configuration,
+        uiContext.getLensRegistry()
+    );
 
     Exhibit.SettingsUtilities.collectSettings(
-        configuration, Exhibit.ThumbnailView._settingSpecs, view._settings);
+        configuration,
+        view.getSettingSpecs(),
+        view._settings
+    );
 
     view._orderedViewFrame.configure(configuration);
-    view._setIdentifier();
 
-    view.register();
     view._initializeUI();
     return view;
 };
@@ -113,41 +108,28 @@ Exhibit.ThumbnailView.createFromDOM = function(configElmt, containerElmt, uiCont
         Exhibit.UIContext.createFromDOM(configElmt, uiContext, true)
     );
 
-    view._lensRegistry = Exhibit.UIContext.createLensRegistryFromDOM(configElmt, configuration, uiContext.getLensRegistry());
+    view._lensRegistry = Exhibit.UIContext.createLensRegistryFromDOM(
+        configElmt,
+        configuration,
+        uiContext.getLensRegistry()
+    );
 
     Exhibit.SettingsUtilities.collectSettingsFromDOM(
-        configElmt, Exhibit.ThumbnailView._settingSpecs, view._settings);
+        configElmt,
+        view.getSettingSpecs(),
+        view._settings
+    );
     Exhibit.SettingsUtilities.collectSettings(
-        configuration, Exhibit.ThumbnailView._settingSpecs, view._settings);
+        configuration,
+        view.getSettingSpecs(),
+        view._settings
+    );
 
     view._orderedViewFrame.configureFromDOM(configElmt);
     view._orderedViewFrame.configure(configuration);
-    view._setIdentifier();
 
-    view.register();
     view._initializeUI();
     return view;
-};
-
-/**
- * @param {String} label
- */
-Exhibit.ThumbnailView.prototype.setLabel = function(label) {
-    this._label = label;
-};
-
-/**
- * @returns {String}
- */
-Exhibit.ThumbnailView.prototype.getLabel = function() {
-    return this._label;
-};
-
-/**
- * @param {Exhibit.ViewPanel} panel
- */
-Exhibit.ThumbnailView.prototype.setViewPanel = function(panel) {
-    this._viewPanel = panel;
 };
 
 /**
@@ -155,14 +137,10 @@ Exhibit.ThumbnailView.prototype.setViewPanel = function(panel) {
  */
 Exhibit.ThumbnailView.prototype.dispose = function() {
     var view = this;
-    $(this._uiContext.getCollection().getElement()).unbind(
+    $(this.getUIContext().getCollection().getElement()).unbind(
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
-
-    $(this._div).empty();
-
-    this._viewPanel = null;
 
     this._orderedViewFrame.dispose();
     this._orderedViewFrame = null;
@@ -170,65 +148,7 @@ Exhibit.ThumbnailView.prototype.dispose = function() {
     this._lensRegistry = null;
     this._dom = null;
 
-    this._div = null;
-    this.unregister();
-    this._uiContext = null;
-};
-
-/**
- *
- */
-Exhibit.ThumbnailView.prototype.register = function() {
-    this._uiContext.getExhibit().getRegistry().register(
-        Exhibit.View._registryKey,
-        this.getID(),
-        this
-    );
-    $(document).trigger("addGenerator.exhibit", this.getGenerator());
-    this._registered = true;
-};
-
-/**
- *
- */
-Exhibit.ThumbnailView.prototype.unregister = function() {
-    this._uiContext.getExhibit().getRegistry().unregister(
-        Exhibit.View._registryKey,
-        this.getID()
-    );
-    $(document).trigger("removeGenerator.exhibit", this.getGenerator());
-    this._registered = false;
-};
-
-/**
- * @returns {Object}
- */
-Exhibit.ThumbnailView.prototype.getGenerator = function() {
-    return this._generator;
-};
-
-/**
- *
- */
-Exhibit.ThumbnailView.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
-
-    if (typeof this._id === "undefined" || this._id === null) {
-        this._id = "thumbnail"
-            + "-"
-            + this._uiContext.getCollection().getID()
-            + "-"
-            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
-                Exhibit.View._registryKey
-            );
-    }
-};
-
-/**
- * @returns {String}
- */
-Exhibit.ThumbnailView.prototype.getID = function() {
-    return this._id;
+    Exhibit.View.prototype.dispose.call(arguments);
 };
 
 /**
@@ -239,9 +159,13 @@ Exhibit.ThumbnailView.prototype._initializeUI = function() {
 
     self = this;
 
-    $(this._div).empty();
+    $(this.getContainer()).empty();
+    self._initializeViewUI(function() {
+        return $(self._dom.bodyDiv).html();
+    });
+
     template = {
-        elmt: this._div,
+        elmt: this.getContainer(),
         children: [
             {   tag: "div",
                 field: "headerDiv"
@@ -255,6 +179,7 @@ Exhibit.ThumbnailView.prototype._initializeUI = function() {
             }
         ]
     };
+
     this._dom = $.simileDOM("template", template);
 
     this._orderedViewFrame._divHeader = this._dom.headerDiv;
@@ -262,6 +187,7 @@ Exhibit.ThumbnailView.prototype._initializeUI = function() {
     this._orderedViewFrame._generatedContentElmtRetriever = function() {
         return self._dom.bodyDiv;
     };
+
     this._orderedViewFrame.initializeUI();
 
     Exhibit.View.addViewState(
@@ -339,17 +265,17 @@ Exhibit.ThumbnailView.prototype._reconstructWithFloats = function() {
         itemLensDiv = $("<div>");
         itemLensDiv.attr("class", Exhibit.ThumbnailView._itemContainerClass);
 
-        itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view._uiContext);
+        itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view.getUIContext());
         state.itemContainer.append(itemLensDiv);
     };
 
-    $(this._div).hide();
+    $(this.getContainer()).hide();
 
     $(this._dom.bodyDiv).empty();
     this._orderedViewFrame.reconstruct();
     closeGroups(0);
 
-    $(this._div).show();
+    $(this.getContainer()).show();
 };
 
 Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
@@ -423,17 +349,17 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
         itemLensDiv = $("<div>");
         itemLensDiv.attr("class", Exhibit.ThumbnailView._itemContainerClass);
 
-        itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view._uiContext);
+        itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view.getUIContext());
         $(td).append(itemLensDiv);
     };
 
-    $(this._div).hide();
+    $(this.getContainer()).hide();
 
     $(this._dom.bodyDiv).empty();
     this._orderedViewFrame.reconstruct();
     closeGroups(0);
 
-    $(this._div).show();
+    $(this.getContainer()).show();
 };
 
 

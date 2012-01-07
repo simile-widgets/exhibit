@@ -71,6 +71,15 @@ Exhibit.BookmarkWidget.prototype._initializeUI = function() {
 };
 
 /**
+ * @public
+ * @param {Exhibit.ControlPanel} panel
+ */
+Exhibit.BookmarkWidget.prototype.reconstruct = function(panel) {
+    this._popup = null;
+    this._initializeUI();
+};
+
+/**
  * @param {jQuery} popup
  */
 Exhibit.BookmarkWidget.prototype._fillPopup = function(popup) {

@@ -26,7 +26,6 @@ Exhibit.ControlPanel = function(elmt, uiContext) {
  * @private
  */
 Exhibit.ControlPanel._settingSpecs = {
-    "showToolbox":          { type: "boolean", defaultValue: true },
     "showBookmark":         { type: "boolean", defaultValue: true },
     "developerMode":        { type: "boolean", defaultvalue: false },
     "hoverReveal":          { type: "boolean", defaultValue: false }
@@ -112,7 +111,7 @@ Exhibit.ControlPanel._configureFromDOM = function(panel, configuration) {
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
  */
-Exhibit.ControlPanel._registerComponent = function(evt, reg) {
+Exhibit.ControlPanel.registerComponent = function(evt, reg) {
     if (!reg.hasRegistry(Exhibit.ControlPanel._registryKey)) {
         reg.createRegistry(Exhibit.ControlPanel._registryKey);
     }
@@ -157,21 +156,13 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
             }
         });
     }
-    if (this._settings.showToolbox) {
-        widget = Exhibit.ToolboxWidget.create(
-            { },
-            this.getContainer(),
-            this._uiContext
-        );
-        this.addWidget(widget);
-    }
     if (this._settings.showBookmark) {
         widget = Exhibit.BookmarkWidget.create(
             { },
             this.getContainer(),
             this._uiContext
         );
-        this.addWidget(widget);
+        this.addWidget(widget, true);
     }
     if (this._settings.developerMode) {
         widget = Exhibit.ResetHistoryWidget.create(
@@ -179,10 +170,9 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
             this.getContainer(),
             this._uiContext
         );
-        this.addWidget(widget);
+        this.addWidget(widget, true);
     }
     $(this.getContainer()).addClass("exhibit-controlPanel");
-    this.reconstruct();
 };
 
 /**
@@ -308,13 +298,16 @@ Exhibit.ControlPanel.prototype.dispose = function() {
 
 /**
  * @param {Object} widget
+ * @param {Boolean} initial
  */
-Exhibit.ControlPanel.prototype.addWidget = function(widget) {
+Exhibit.ControlPanel.prototype.addWidget = function(widget, initial) {
     this._widgets.push(widget);
     if (typeof widget.setControlPanel === "function") {
         widget.setControlPanel(this);
     }
-    this.reconstruct();
+    if (typeof initial === "undefined" || !initial) {
+        this.reconstruct();
+    }
 };
 
 /**
@@ -339,12 +332,15 @@ Exhibit.ControlPanel.prototype.removeWidget = function(widget) {
  */
 Exhibit.ControlPanel.prototype.reconstruct = function() {
     var i;
-    //$(this._div).empty();
+    $(this._div).empty();
     for (i = 0; i < this._widgets.length; i++) {
-        // @@@
-        //this._widgets[i].reconstruct(this);
+        if (typeof this._widgets[i].reconstruct === "function") {
+            this._widgets[i].reconstruct(this);
+        }
     }
 };
 
-$(document).one("registerComponents.exhibit",
-                Exhibit.ControlPanel._registerComponent);
+$(document).one(
+    "registerComponents.exhibit",
+    Exhibit.ControlPanel.registerComponent
+);
