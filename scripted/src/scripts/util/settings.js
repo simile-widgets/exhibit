@@ -48,11 +48,11 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
         if (specs.hasOwnProperty(field)) {
             spec = specs[field];
             name = field;
-            if (typeof spec["name"] !== "undefined") {
+            if (typeof spec.name !== "undefined") {
                 name = spec.name;
             }
             if (typeof settings[name] === "undefined" &&
-                typeof spec["defaultValue"] !== "undefined") {
+                typeof spec.defaultValue !== "undefined") {
                 settings[name] = spec.defaultValue;
             }
         
@@ -60,41 +60,41 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
             if (typeof value !== "undefined" && value !== null) {
                 if (typeof value === "string") {
                     value = value.trim();
-                    if (value.length > 0) {
-                        type = "text";
-                        if (typeof spec["type"] !== "undefined") {
-                            type = spec.type;
+                }
+            }
+
+            if (typeof value !== "undefined" && value !== null && ((typeof value === "string" && value.length > 0) || typeof value !== "string")) {
+                type = "text";
+                if (typeof spec.type !== "undefined") {
+                    type = spec.type;
+                }
+                
+                dimensions = 1;
+                if (typeof spec.dimensions !== "undefined") {
+                    dimensions = spec.dimensions;
+                }
+                
+                try {
+                    if (dimensions > 1) {
+                        separator = ",";
+                        if (typeof spec.separator !== "undefined") {
+                            separator = spec.separator;
                         }
-        
-                        dimensions = 1;
-                        if (typeof spec["dimensions"] !== "undefined") {
-                            dimensions = spec.dimensions;
-                        }
-        
-                        try {
-                            if (dimensions > 1) {
-                                separator = ",";
-                                if (typeof spec["separator"] !== "undefined") {
-                                    separator = spec.separator;
-                                }
-                    
-                                a = value.split(separator);
-                                if (a.length !== dimensions) {
-                                    throw new Error("Expected a tuple of " + dimensions + " dimensions separated with " + separator + " but got " + value);
-                                } else {
-                                    for (i = 0; i < a.length; i++) {
-                                        a[i] = Exhibit.SettingsUtilities._parseSetting(a[i].trim(), type, spec);
-                                    }
-                                    
-                                    settings[name] = a;
-                                }
-                            } else {
-                                settings[name] = Exhibit.SettingsUtilities._parseSetting(value, type, spec);
+
+                        a = value.split(separator);
+                        if (a.length !== dimensions) {
+                            throw new Error("Expected a tuple of " + dimensions + " dimensions separated with " + separator + " but got " + value);
+                        } else {
+                            for (i = 0; i < a.length; i++) {
+                                a[i] = Exhibit.SettingsUtilities._parseSetting(a[i].trim(), type, spec);
                             }
-                        } catch (e) {
-                            Exhibit.Debug.exception(e);
+                            settings[name] = a;
                         }
+                    } else {
+                        settings[name] = Exhibit.SettingsUtilities._parseSetting(value, type, spec);
                     }
+                } catch (e) {
+                    Exhibit.Debug.exception(e);
                 }
             }
         }
