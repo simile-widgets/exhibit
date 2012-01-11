@@ -325,7 +325,7 @@ Exhibit.ViewPanel.prototype._createView = function() {
         Exhibit.Debug.exception(e);
     }
     
-    this._uiContextCache[index] = this._view._uiContext;
+    this._uiContextCache[index] = this._view.getUIContext();
     this._view.setLabel(this._viewLabels[index]);
     this._view.setViewPanel(this);
 
