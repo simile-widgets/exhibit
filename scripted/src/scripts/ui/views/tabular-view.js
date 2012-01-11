@@ -258,7 +258,7 @@ Exhibit.TabularView.prototype.dispose = function() {
     this._collectionSummaryWidget = null;
     this._dom = null;
 
-    Exhibit.View.prototype.dispose.call(arguments);
+    this._dispose();
 };
 
 /**

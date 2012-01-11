@@ -148,7 +148,7 @@ Exhibit.ThumbnailView.prototype.dispose = function() {
     this._lensRegistry = null;
     this._dom = null;
 
-    Exhibit.View.prototype.dispose.call(arguments);
+    this._dispose();
 };
 
 /**

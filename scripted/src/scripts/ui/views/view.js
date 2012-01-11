@@ -191,7 +191,7 @@ Exhibit.View = function(key, div, uiContext) {
     /**
      * Free up all references to objects, empty related elements, unregister.
      */
-    this.dispose = function() {
+    this._dispose = function() {
         _viewPanel = null;
         _label = null;
         _settingSpecs = null;

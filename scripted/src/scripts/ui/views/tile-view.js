@@ -116,7 +116,7 @@ Exhibit.TileView.prototype.dispose = function() {
     this._orderedViewFrame = null;
     this._dom = null;
 
-    Exhibit.View.prototype.dispose.call(arguments);
+    this._dispose();
 };
 
 /**
