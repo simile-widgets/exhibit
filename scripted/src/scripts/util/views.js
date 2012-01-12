@@ -82,12 +82,12 @@ Exhibit.ViewUtilities.constructPlottingViewDom = function(
 ) { 
     var dom = $.simileDOM("string",
         div,
-        "<div class='exhibit-views-header'>" +
-            (showSummary ? "<div id='collectionSummaryDiv'></div>" : "") +
-            "<div id='unplottableMessageDiv' class='exhibit-views-unplottableMessage'></div>" +
+        '<div class="exhibit-views-header">' +
+            (showSummary ? '<div id="collectionSummaryDiv"></div>' : "") +
+            '<div id="unplottableMessageDiv" class="exhibit-views-unplottableMessage"></div>' +
         "</div>" +
-        "<div id='resizableDiv'></div>" +
-        "<div id='legendDiv'></div>",
+        '<div id="resizableDiv"></div>' +
+        '<div id="legendDiv"></div>',
         {}
     );
     
