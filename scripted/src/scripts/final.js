@@ -3,8 +3,25 @@
  */
 
 $(document).ready(function() {
+    var delays = [];
+
+    $(document).bind("delayCreation.exhibit", function(evt, delayID) {
+        delays.push(delayID);
+    });
+
+    $(document).bind("delayFinished.exhibit", function(evt, delayID) {
+        var idx = delays.indexOf(delayID);
+        if (idx >= 0) {
+            delays.splice(idx);
+            if (delays.length === 0) {
+                $(document).trigger("scriptsLoaded.exhibit");
+            }
+        }
+    });
+    
     $(document).bind("localeSet.exhibit", function(evt, localeURL) {
         $LAB.script(localeURL);
+        $(document).trigger("loadExtensions.exhibit");
     });
 
     $(document).bind("error.exhibit", function(evt, e, msg) {
@@ -14,7 +31,9 @@ $(document).ready(function() {
     });
 
     $(document).one("localeLoaded.exhibit", function(evt) {
-        $(document).trigger("scriptsLoaded.exhibit");
+        if (delays.length === 0) {
+            $(document).trigger("scriptsLoaded.exhibit");
+        }
     });
 
     $(document).one("scriptsLoaded.exhibit", function(evt) {
