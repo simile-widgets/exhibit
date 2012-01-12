@@ -106,11 +106,18 @@ Exhibit.ToolboxWidget.prototype._initializeUI = function() {
  *
  */
 Exhibit.ToolboxWidget.prototype._makePopup = function() {
-    var coords, docWidth, docHeight, popup, self;
+    var coords, docWidth, popup, self;
     self = this;
 
+    coords = $(this._containerElmt).offset();
+    docWidth = $(document.body).width();
+
     popup = $("<div>")
-        .attr("class", "exhibit-toolboxWidget-popup screen");
+        .attr("class", "exhibit-toolboxWidget-popup screen")
+        .css("position", "absolute")
+        .css("top", coords.top + "px")
+        .css("right", (docWidth - coords.left - $(this._containerElmt).width()) + "px");
+
     this._popup = popup;
     this._fillPopup(popup);
     $(this._containerElmt).append(popup);
@@ -120,13 +127,12 @@ Exhibit.ToolboxWidget.prototype._makePopup = function() {
  * @param {jQuery.Event}
  */
 Exhibit.ToolboxWidget.prototype._onContainerMouseOver = function(evt) {
-    var self, coords, docWidth, docHeight, popup;
+    var self, coords, docWidth, popup;
     if (!this._hovering) {
         self = this;
         coords = $(this._containerElmt).offset();
         docWidth = $(document.body).width();
-        docHeight = $(document.body).height();
-        
+
         popup = $("<div>")
             .hide()
             .attr("class", "exhibit-toolboxWidget-popup screen")
