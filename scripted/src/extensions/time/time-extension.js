@@ -22,7 +22,7 @@
  * In order to compensate, this file uses two polling loops and a modified
  * version of the SimileAjax loader.  The first polling loop waits until
  * jQuery is available, which is mostly a network latency concern.  The
- * second polling loop waits until Timeline has laoded and is defined in
+ * second polling loop waits until Timeline has loaded and is defined in
  * the window context, which is also mostly a network latency concern.
  * But the extension must take advantage of Exhibit's delay mechanism so
  * Exhibit will delay creation until Timeline has finished loading.  The
@@ -32,6 +32,9 @@
  */
 
 (function loadTimeExtension(){
+    /**
+     * Ugly polling hack #1.
+     */
     setTimeout(function() {
         if (typeof jQuery === "undefined") {
             loadTimeExtension();
@@ -87,6 +90,9 @@
                 cssURLs = [];
                 
                 if (typeof SimileAjax === "undefined") {
+                    /**
+                     * Ugly SimileAjax hack.  See load-simile-ajax.js.
+                     */
                     scriptURLs.push(Exhibit.TimeExtension.urlPrefix + "load-simile-ajax.js");
                 }
                 if (typeof Timeline === "undefined") {
@@ -106,6 +112,9 @@
                 Exhibit.includeCssFiles(document, "", cssURLs);
                 Exhibit.includeJavascriptFiles(document, "", scriptURLs);
 
+                /**
+                 * Ugly polly hack #2.
+                 */
                 finishedLoading = function() {
                     setTimeout(function() {
                         if (typeof Timeline === "undefined") {

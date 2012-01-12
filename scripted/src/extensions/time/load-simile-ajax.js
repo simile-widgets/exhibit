@@ -1,3 +1,11 @@
+/**
+ * @fileOverview These things are all normally defined in simile-ajax-api.js
+ *      and scripts/platform.js in the SimileAjax file hierarchy.  Because
+ *      SimileAjax is basically incompatible with Exhibit 3.0, some of its
+ *      methods need to be left out of loading and redefined here.
+ * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
+ */
+
 if (typeof SimileAjax === "undefined") {
     var SimileAjax;
 }
