@@ -14,10 +14,33 @@ Exhibit.create = function(database) {
 };
 
 /**
+ * Check for instances of ex:role and throw into backwards compatibility
+ * mode if any are found.  Authors are responsible for converting or using
+ * the HTML5 attributes correctly; backwards compatibility is only applicable
+ * when used with unconverted Exhibits.
+ * @static
+ * @see Exhibit.Backwards
+ */
+Exhibit.checkBackwardsCompatibility = function() {
+    var exroles;
+    exroles = $("*").filter(function() {
+        return typeof $(this).attr("ex:role") !== "undefined";
+    });
+    if (exroles.length > 0) {
+        Exhibit.Backwards.enable("Attributes");
+    }
+};
+
+/**
+ * Retrieve an Exhibit-specific attribute from an element.
+ *
  * @static
  * @param {Element} elmt
- * @param {String} name
- * @param {String} splitOn
+ * @param {String} name Full attribute name or Exhibit attribute (without any
+ *    prefix), e.g., "id" or "itemTypes".  "item-types" or "data-ex-item-types"
+ *    are equivalent to "itemTypes", but "itemTypes" is the preferred form.
+ * @param {String} splitOn Separator character to split a string
+ *    representation into several values.  Returns an array if used.
  * @returns {String|Array}
  */
 Exhibit.getAttribute = function(elmt, name, splitOn) {
@@ -26,7 +49,7 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
     try {
         value = elmt.getAttribute(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
-            value = elmt.getAttribute("ex:" + name);
+            value = $(elmt).data("ex-"+name);
             if (typeof value === "undefined" || value === null || value.length === 0) {
                 return null;
             }
@@ -59,6 +82,39 @@ Exhibit.getRoleAttribute = function(elmt) {
 };
 
 /**
+ * Process a DOM element's attribute name to see if it is an Exhibit
+ * attribute.
+ * @static
+ * @param {String} name
+ * @returns {Boolean}
+ */
+Exhibit.isExhibitAttribute = function(name) {
+    return name.length > "data-ex-".length
+        && name.startsWith("data-ex-");
+};
+
+/**
+ * Process a DOM element's attribute and convert it into the name Exhibit
+ * uses internally.
+ * @static
+ * @param {String} name
+ * @returns {String}
+ */
+Exhibit.extractAttributeName = function(name) {
+    return name.substr("data-ex-".length);
+};
+
+/**
+ * Turn an internal attribute name into something that can be inserted into
+ * the DOM and correctly re-extracted later as an Exhibit attribute.
+ * @static
+ * @param {String} name
+ */
+Exhibit.makeExhibitAttribute = function(name) {
+    return "data-ex-" + name;
+};
+
+/**
  * @static
  * @param {Element} elmt
  * @returns {Object}
@@ -78,22 +134,23 @@ Exhibit.getConfigurationFromDOM = function(elmt) {
 };
 
 /**
+ * This method is not commonly used.  Consider using Exhibit.SettingsUtilties.
+ * @deprecated
  * @static
  * @param {Element} elmt
  * @returns {Object}
  */
 Exhibit.extractOptionsFromElement = function(elmt) {
-    var opts, attrs, i, name, value;
+    var opts, dataset, i;
     opts = {};
-    attrs = elmt.attributes;
-    for (i in attrs) {
-        if (attrs.hasOwnProperty(i)) {
-            name = attrs[i].nodeName;
-            value = attrs[i].nodeValue;
-            if (name.indexOf('ex:') === 0) {
-                name = name.substring(3);
+    dataset = $(elmt).data();
+    for (i in dataset) {
+        if (dataset.hasOwnProperty(i)) {
+            if (i.startsWith("ex")) {
+                opts[i.substring(2)] = dataset[i];
+            } else {
+                opts[i] = dataset[i];
             }
-            opts[name] = value;
         }
     }
     return opts;

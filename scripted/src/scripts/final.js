@@ -3,7 +3,13 @@
  */
 
 $(document).ready(function() {
-    var delays = [];
+    var delays, localeLoaded;
+    // Without threading, this shouldn't introduce a race condition,
+    // but it is definitely a problem if concurrency comes into play.
+    // Maybe refactoring so everything uses the delay queue under the hood
+    // would make more sense.
+    delays = [];
+    localeLoaded = false;
 
     $(document).bind("delayCreation.exhibit", function(evt, delayID) {
         delays.push(delayID);
@@ -13,7 +19,8 @@ $(document).ready(function() {
         var idx = delays.indexOf(delayID);
         if (idx >= 0) {
             delays.splice(idx);
-            if (delays.length === 0) {
+            if (delays.length === 0 && localeLoaded) {
+                delays = null;
                 $(document).trigger("scriptsLoaded.exhibit");
             }
         }
@@ -31,6 +38,7 @@ $(document).ready(function() {
     });
 
     $(document).one("localeLoaded.exhibit", function(evt) {
+        localeLoaded = true;
         if (delays.length === 0) {
             $(document).trigger("scriptsLoaded.exhibit");
         }
@@ -45,6 +53,7 @@ $(document).ready(function() {
         Exhibit.History.init(ex);
     });
 
+    Exhibit.checkBackwardsCompatibility();
     Exhibit.staticRegistry = new Exhibit.Registry(true);
     $(document).trigger("registerLocalization.exhibit", Exhibit.staticRegistry);
 });

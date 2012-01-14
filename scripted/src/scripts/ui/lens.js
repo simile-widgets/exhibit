@@ -65,7 +65,7 @@ Exhibit.Lens.prototype._constructDefaultUI = function(itemID, div, uiContext) {
     };
     dom = $.simileDOM("template", template);
     
-    $(div).attr("ex:itemID", itemID);
+    $(div).attr(Exhibit.makeExhibitAttribute("itemID"), itemID);
     
     pairs = Exhibit.ViewPanel.getPropertyValuesPairs(
         itemID, properties, database);
@@ -345,8 +345,8 @@ Exhibit.Lens._processTemplateAttribute = function(uiContext, templateNode, setti
     if (typeof value === "undefined" || value === null || typeof value !== "string" || value.length === 0 || name === "contentEditable") {
         return;
     }
-    if (name.length > 3 && name.substr(0,3) === "ex:") {
-        name = name.substr(3);
+    if (Exhibit.isExhibitAttribute(name)) {
+        name = Exhibit.extractAttributeName(name);
         if (name === "formats") {
             templateNode.uiContext = Exhibit.UIContext._createWithParent(uiContext);
             
@@ -361,12 +361,12 @@ Exhibit.Lens._processTemplateAttribute = function(uiContext, templateNode, setti
         } else if (name === "content") {
             templateNode.content = Exhibit.ExpressionParser.parse(value);
             templateNode.attributes.push({
-                name:   "ex:content",
+                name:   Exhibit.makeExhibitAttribute("content"),
                 value:  value
             });
         } else if (name === "editor") {
             templateNode.attributes.push({
-                name:   "ex:editor",
+                name:   Exhibit.makeExhibitAttribute("editor"),
                 value:  value
             });
         } else if (name === "edit") {
@@ -547,7 +547,7 @@ Exhibit.Lens._performConstructFromLensTemplateJob = function(job) {
 
     node = job.div.get(0).tagName.toLowerCase() === "table" ? job.div.get(0).rows[job.div.get(0).rows.length - 1] : job.div.get(0).lastChild;
     $(node).show();
-    node.setAttribute("ex:itemID", job.itemID);
+    node.setAttribute(Exhibit.makeExhibitAttribute("itemID"), job.itemID);
     
     if (!Exhibit.params.safe) {
         onshow = Exhibit.getAttribute(node, "onshow");

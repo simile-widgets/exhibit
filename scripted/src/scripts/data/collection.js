@@ -350,7 +350,7 @@ Exhibit.Collection.prototype._setElement = function(el) {
         if (this.getID() !== "default") {
             this._elmt = $("<div>")
                 .attr("id", this.getID())
-                .attr("ex:role", "exhibit-collection")
+                .attr(Exhibit.makeExhibitAttribute("role"), "exhibit-collection")
                 .css("display", "none")
                 .appendTo(document.body)
                 .get(0);

@@ -88,6 +88,8 @@ var Exhibit = {
         "lib/jquery.simile.dom.js",
         "lib/jquery.simile.bubble.js",
         "scripts/exhibit.js",
+        "scripts/bc/bc.js",
+        "scripts/bc/attributes.js",
         "scripts/registry.js",
         "scripts/util/util.js",
         "scripts/util/debug.js",
