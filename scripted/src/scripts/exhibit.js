@@ -111,7 +111,7 @@ Exhibit.extractAttributeName = function(name) {
  * @param {String} name
  */
 Exhibit.makeExhibitAttribute = function(name) {
-    return "data-ex-" + name;
+    return "data-ex-" + name.replace(/[A-Z]/g, "-$1").toLowerCase();
 };
 
 /**
