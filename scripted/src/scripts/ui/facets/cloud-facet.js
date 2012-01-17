@@ -399,7 +399,7 @@ Exhibit.CloudFacet.prototype._initializeUI = function() {
     var dom = $.simileDOM(
         "string",
         this.getContainer(),
-        ((typeof this.getLabel() !== "undefined") ?
+        ((typeof this._settings.facetLabel !== "undefined") ?
          (   "<div class='exhibit-cloudFacet-header'>" +
              "<span class='exhibit-cloudFacet-header-title'>" + this.getLabel() + "</span>" +
              "</div>"

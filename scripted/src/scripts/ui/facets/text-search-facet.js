@@ -246,7 +246,7 @@ Exhibit.TextSearchFacet.prototype._notifyCollection = function() {
  */
 Exhibit.TextSearchFacet.prototype._initializeUI = function() {
     var self = this;
-    this._dom = Exhibit.TextSearchFacet.constructFacetFrame(this.getContainer(), this.getLabel());
+    this._dom = Exhibit.TextSearchFacet.constructFacetFrame(this.getContainer(), this._settings.facetLabel);
 
     if (this._text !== null) {
         $(this._dom.input).val(this._text);
