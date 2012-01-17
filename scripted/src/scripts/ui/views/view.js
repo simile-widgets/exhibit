@@ -169,7 +169,7 @@ Exhibit.View = function(key, div, uiContext) {
      * @example MyView = function() { ...; this.register(); };
      */
     this.register = function() {
-        this.getUIContext().getExhibit().getRegistry().register(
+        this.getUIContext().getMain().getRegistry().register(
             Exhibit.View.getRegistryKey(),
             this.getID(),
             this
@@ -181,7 +181,7 @@ Exhibit.View = function(key, div, uiContext) {
      * Remove this view from the registry.
      */
     this.unregister = function() {
-        self.getUIContext().getExhibit().getRegistry().unregister(
+        self.getUIContext().getMain().getRegistry().unregister(
             Exhibit.View.getRegistryKey(),
             self.getID()
         );
@@ -218,7 +218,7 @@ Exhibit.View = function(key, div, uiContext) {
                 + "-"
                 + self.getUIContext().getCollection().getID()
                 + "-"
-                + self.getUIContext().getExhibit().getRegistry().generateIdentifier(Exhibit.View.getRegistryKey());
+                + self.getUIContext().getMain().getRegistry().generateIdentifier(Exhibit.View.getRegistryKey());
         }
     };
 

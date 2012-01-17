@@ -115,7 +115,7 @@ Exhibit.Collection.create2 = function(id, configuration, uiContext) {
         
         collection._expression = Exhibit.ExpressionParser.parse(configuration.expression);
         collection._baseCollection = (typeof configuration["baseCollectionID"] !== "undefined") ? 
-            uiContext.getExhibit().getCollection(configuration.baseCollectionID) : 
+            uiContext.getMain().getCollection(configuration.baseCollectionID) : 
             uiContext.getCollection();
             
         collection._restrictBaseCollection = (typeof configuration["restrictBaseCollection"] !== "undefined") ? 
@@ -156,7 +156,7 @@ Exhibit.Collection.createFromDOM2 = function(id, elmt, uiContext) {
         
         baseCollectionID = Exhibit.getAttribute(elmt, "baseCollectionID");
         collection._baseCollection = (typeof baseCollectionID !== "undefined" && baseCollectionID !== null && baseCollectionID.length > 0) ? 
-            uiContext.getExhibit().getCollection(baseCollectionID) : 
+            uiContext.getMain().getCollection(baseCollectionID) : 
             uiContext.getCollection();
             
         collection._restrictBaseCollection = Exhibit.getAttribute(elmt, "restrictBaseCollection") === "true";

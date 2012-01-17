@@ -11,7 +11,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.CollectionSummaryWidget = function(containerElmt, uiContext) {
-    this._exhibit = uiContext.getExhibit();
+    this._exhibit = uiContext.getMain();
     this._collection = uiContext.getCollection();
     this._uiContext = uiContext;
     this._div = containerElmt;

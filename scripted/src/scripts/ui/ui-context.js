@@ -124,7 +124,7 @@ Exhibit.UIContext.prototype.getParentUIContext = function() {
 /**
  * @returns {Exhibit}
  */
-Exhibit.UIContext.prototype.getExhibit = function() {
+Exhibit.UIContext.prototype.getMain = function() {
     return this._exhibit;
 };
 
@@ -132,7 +132,7 @@ Exhibit.UIContext.prototype.getExhibit = function() {
  * @returns {Exhibit.Database}
  */
 Exhibit.UIContext.prototype.getDatabase = function() {
-    return this.getExhibit().getDatabase();
+    return this.getMain().getDatabase();
 };
 
 /**

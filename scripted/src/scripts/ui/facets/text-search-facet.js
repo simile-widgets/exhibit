@@ -152,7 +152,7 @@ Exhibit.TextSearchFacet.prototype._setIdentifier = function() {
             + "-"
             + this._uiContext.getCollection().getID()
             + "-"
-            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+            + this._uiContext.getMain().getRegistry().generateIdentifier(
                 Exhibit.Facet._registryKey
             );
     }
@@ -169,10 +169,10 @@ Exhibit.TextSearchFacet.prototype.getID = function() {
  *
  */
 Exhibit.TextSearchFacet.prototype.register = function() {
-    if (this._uiContext.getExhibit().getRegistry().hasRegistry(
+    if (this._uiContext.getMain().getRegistry().hasRegistry(
         Exhibit.Facet._registryKey
     )) {
-        this._uiContext.getExhibit().getRegistry().register(
+        this._uiContext.getMain().getRegistry().register(
             Exhibit.Facet._registryKey,
             this.getID(),
             this
@@ -185,7 +185,7 @@ Exhibit.TextSearchFacet.prototype.register = function() {
  *
  */
 Exhibit.TextSearchFacet.prototype.unregister = function() {
-    this._uiContext.getExhibit().getRegistry().unregister(
+    this._uiContext.getMain().getRegistry().unregister(
         Exhibit.Facet._registryKey,
         this.getID()
     );

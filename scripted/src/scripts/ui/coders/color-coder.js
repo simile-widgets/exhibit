@@ -113,7 +113,7 @@ Exhibit.ColorCoder.prototype._setIdentifier = function() {
             + "-"
             + this._uiContext.getCollection().getID()
             + "-"
-            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+            + this._uiContext.getMain().getRegistry().generateIdentifier(
                 Exhibit.Coder._registryKey
             );
     }
@@ -130,7 +130,7 @@ Exhibit.ColorCoder.prototype.getID = function() {
  *
  */
 Exhibit.ColorCoder.prototype.register = function() {
-    this._uiContext.getExhibit().getRegistry().register(
+    this._uiContext.getMain().getRegistry().register(
         Exhibit.Coder._registryKey,
         this.getID(),
         this
@@ -142,7 +142,7 @@ Exhibit.ColorCoder.prototype.register = function() {
  *
  */
 Exhibit.ColorCoder.prototype.unregister = function() {
-    this._uiContext.getExhibit().getRegistry().unregister(
+    this._uiContext.getMain().getRegistry().unregister(
         Exhibit.Coder._registryKey,
         this.getID()
     );

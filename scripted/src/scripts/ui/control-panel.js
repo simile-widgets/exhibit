@@ -185,7 +185,7 @@ Exhibit.ControlPanel.prototype._setIdentifier = function() {
             + "-"
             + this._uiContext.getCollection().getID()
             + "-"
-            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+            + this._uiContext.getMain().getRegistry().generateIdentifier(
                 Exhibit.ControlPanel._registryKey
             );
     }
@@ -195,11 +195,11 @@ Exhibit.ControlPanel.prototype._setIdentifier = function() {
  *
  */
 Exhibit.ControlPanel.prototype.register = function() {
-    if (!this._uiContext.getExhibit().getRegistry().isRegistered(
+    if (!this._uiContext.getMain().getRegistry().isRegistered(
         Exhibit.ControlPanel._registryKey,
         this.getID()
     )) {
-        this._uiContext.getExhibit().getRegistry().register(
+        this._uiContext.getMain().getRegistry().register(
             Exhibit.ControlPanel._registryKey,
             this.getID(),
             this
@@ -212,7 +212,7 @@ Exhibit.ControlPanel.prototype.register = function() {
  *
  */
 Exhibit.ControlPanel.prototype.unregister = function() {
-    this._uiContext.getExhibit().getRegistry().unregister(
+    this._uiContext.getMain().getRegistry().unregister(
         Exhibit.ControlPanel._registryKey,
         this.getID()
     );

@@ -155,7 +155,7 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
     }
     
     if (facet._settings.colorCoder !== "undefined") {
-        facet._colorCoder = facet._uiContext.getExhibit().getComponent(facet._settings.colorCoder);
+        facet._colorCoder = facet._uiContext.getMain().getComponent(facet._settings.colorCoder);
     }
     
     if (facet._settings.collapsed) {
@@ -197,7 +197,7 @@ Exhibit.ListFacet.prototype._setIdentifier = function() {
             + "-"
             + this._uiContext.getCollection().getID()
             + "-"
-            + this._uiContext.getExhibit().getRegistry().generateIdentifier(
+            + this._uiContext.getMain().getRegistry().generateIdentifier(
                 Exhibit.Facet._registryKey
             );
     }
@@ -214,10 +214,10 @@ Exhibit.ListFacet.prototype.getID = function() {
  *
  */
 Exhibit.ListFacet.prototype.register = function() {
-    if (this._uiContext.getExhibit().getRegistry().hasRegistry(
+    if (this._uiContext.getMain().getRegistry().hasRegistry(
         Exhibit.Facet._registryKey
     )) {
-        this._uiContext.getExhibit().getRegistry().register(
+        this._uiContext.getMain().getRegistry().register(
             Exhibit.Facet._registryKey,
             this.getID(),
             this
@@ -230,7 +230,7 @@ Exhibit.ListFacet.prototype.register = function() {
  *
  */
 Exhibit.ListFacet.prototype.unregister = function() {
-    this._uiContext.getExhibit().getRegistry().unregister(
+    this._uiContext.getMain().getRegistry().unregister(
         Exhibit.Facet._registryKey,
         this.getID()
     );
