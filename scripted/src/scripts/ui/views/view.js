@@ -11,7 +11,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.View = function(key, div, uiContext) {
-    var self, _instanceKey, _toolbox, _label, _viewPanel, _settingSpecs, _div, _uiContext, _registered, _setIdentifier;
+    var self, _id, _instanceKey, _toolbox, _label, _viewPanel, _settingSpecs, _div, _uiContext, _registered, _setIdentifier;
 
     /**
      * @private
