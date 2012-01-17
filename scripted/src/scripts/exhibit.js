@@ -111,7 +111,16 @@ Exhibit.extractAttributeName = function(name) {
  * @param {String} name
  */
 Exhibit.makeExhibitAttribute = function(name) {
-    return "data-ex-" + name.replace(/[A-Z]/g, "-$1").toLowerCase();
+    var exname;
+    switch (name) {
+        case "itemID":
+            exname = "itemid";
+            break;
+        default:
+            exname = "data-ex-" + name.replace(/([A-Z])/g, "-$1").toLowerCase();
+            break;
+    }
+    return exname;
 };
 
 /**
