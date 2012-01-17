@@ -11,20 +11,14 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.TextSearchFacet = function(containerElmt, uiContext) {
-    this._div = containerElmt;
-    this._uiContext = uiContext;
-    
-    this._expressions = [];
-    this._expressionsStrings = [];
+    var self = this;
+    $.extend(this, new Exhibit.Facet("text", containerElmt, uiContext));
+    this.addSettingSpecs(Exhibit.TextSearchFacet._settingSpecs);
+
     this._text = null;
-    
-    this._settings = {};
     this._dom = null;
     this._timerID = null;
     
-    this._registered = false;
-
-    var self = this;
     this._onRootItemsChanged = function(evt) {
         if (typeof self._itemToValue !== "undefined") {
             delete self._itemToValue;
@@ -41,7 +35,6 @@ Exhibit.TextSearchFacet = function(containerElmt, uiContext) {
  * @constant
  */ 
 Exhibit.TextSearchFacet._settingSpecs = {
-    "facetLabel":       { "type": "text" },
     "queryParamName":   { "type": "text" },
     "requiresEnter":    { "type": "boolean", "defaultValue": false}
 };
@@ -60,6 +53,7 @@ Exhibit.TextSearchFacet.create = function(configuration, containerElmt, uiContex
     
     facet._initializeUI();
     uiContext.getCollection().addFacet(facet);
+    facet.register();
     
     return facet;
 };
@@ -78,13 +72,13 @@ Exhibit.TextSearchFacet.createFromDOM = function(configElmt, containerElmt, uiCo
         uiContext
     );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.TextSearchFacet._settingSpecs, facet._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
     
     try {
         var s = Exhibit.getAttribute(configElmt, "expressions");
         if (typeof s !== "undefined" && s !== null && s.length > 0) {
-            facet._expressionsStrings.push(s);
-            facet._expressions = Exhibit.ExpressionParser.parseSeveral(s);
+            facet.setExpressionString(s);
+            facet.setExpression(Exhibit.ExpressionParser.parseSeveral(s));
         }
         
         var query = Exhibit.getAttribute(configElmt, "query");
@@ -98,6 +92,7 @@ Exhibit.TextSearchFacet.createFromDOM = function(configElmt, containerElmt, uiCo
     
     facet._initializeUI();
     uiContext.getCollection().addFacet(facet);
+    facet.register();
     
     return facet;
 };
@@ -107,13 +102,18 @@ Exhibit.TextSearchFacet.createFromDOM = function(configElmt, containerElmt, uiCo
  * @param {Object} configuration
  */
 Exhibit.TextSearchFacet._configure = function(facet, configuration) {
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.TextSearchFacet._settingSpecs, facet._settings);
+    var expressions, expressionsStrings;
+    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
     
     if (typeof configuration.expressions !== "undefined") {
+        expressions = [];
+        expressionsStrings = [];
         for (var i = 0; i < configuration.expressions.length; i++) {
-            facet._expressionsStrings.push(configuration.expressions[i]);
-            facet._expressions.push(Exhibit.ExpressionParser.parse(configuration.expressions[i]));
+            expressionsStrings.push(configuration.expressions[i]);
+            expressions.push(Exhibit.ExpressionParser.parse(configuration.expressions[i]));
         }
+        facet.setExpressionString(expressionStrings.join(",").replace(/ /g, ""));
+        facet.setExpression(expressions);
     }
     if (typeof configuration.selection !== "undefined") {
         var selection = configuration.selection;
@@ -130,89 +130,24 @@ Exhibit.TextSearchFacet._configure = function(facet, configuration) {
             facet._text = params[facet._settings.queryParamName];
         }
     }
-    
-    if (typeof facet._settings.facetLabel === "undefined") {
-        facet._settings.facetLabel = "";
-    }
-
-    facet._setIdentifier();
-    facet.register();
-};
-
-/**
- *
- */
-Exhibit.TextSearchFacet.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
-
-    if (typeof this._id === "undefined") {
-        this._id = Exhibit.Facet._registryKey
-            + "-textSearch-"
-            + this._expressionsStrings.join(",").replace(/ /g, "")
-            + "-"
-            + this._uiContext.getCollection().getID()
-            + "-"
-            + this._uiContext.getMain().getRegistry().generateIdentifier(
-                Exhibit.Facet._registryKey
-            );
-    }
-};
-
-/**
- * @returns {String}
- */
-Exhibit.TextSearchFacet.prototype.getID = function() {
-    return this._id;
-};
-
-/**
- *
- */
-Exhibit.TextSearchFacet.prototype.register = function() {
-    if (this._uiContext.getMain().getRegistry().hasRegistry(
-        Exhibit.Facet._registryKey
-    )) {
-        this._uiContext.getMain().getRegistry().register(
-            Exhibit.Facet._registryKey,
-            this.getID(),
-            this
-        );
-        this._registered = true;
-    }   
-};
-
-/**
- *
- */
-Exhibit.TextSearchFacet.prototype.unregister = function() {
-    this._uiContext.getMain().getRegistry().unregister(
-        Exhibit.Facet._registryKey,
-        this.getID()
-    );
-    this._registered = false;
 };
 
 /**
  *
  */
 Exhibit.TextSearchFacet.prototype.dispose = function() {
-    this._uiContext.getCollection().removeFacet(this);
-    
-    $(this._uiContext.getCollection().getElement()).unbind(
+    this.getUIContext().getCollection().removeFacet(this);
+    $(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
-    this.unregister();
-    this._uiContext = null;
     
-    $(this._div).empty();
-    this._div = null;
+    this._text = null;
     this._dom = null;
-    
-    this._expressions = null;
-    this._expressionsStrings = null;
     this._itemToValue = null;
-    this._settings = null;
+    this._timerID = null;
+
+    this._dispose();
 };
 
 /**
@@ -303,7 +238,7 @@ Exhibit.TextSearchFacet.prototype.update = function(items) {
  *
  */
 Exhibit.TextSearchFacet.prototype._notifyCollection = function() {
-    this._uiContext.getCollection().onFacetUpdated(this);
+    this.getUIContext().getCollection().onFacetUpdated(this);
 };
 
 /**
@@ -311,7 +246,7 @@ Exhibit.TextSearchFacet.prototype._notifyCollection = function() {
  */
 Exhibit.TextSearchFacet.prototype._initializeUI = function() {
     var self = this;
-    this._dom = Exhibit.TextSearchFacet.constructFacetFrame(this._div, this._settings.facetLabel);
+    this._dom = Exhibit.TextSearchFacet.constructFacetFrame(this.getContainer(), this.getLabel());
 
     if (this._text !== null) {
         $(this._dom.input).val(this._text);
@@ -407,11 +342,11 @@ Exhibit.TextSearchFacet.prototype._buildMaps = function() {
     var itemToValue, allItems, database, expressions, propertyIDs;
     if (typeof this._itemToValue === "undefined") {
         itemToValue = {};
-        allItems = this._uiContext.getCollection().getAllItems();
-        database = this._uiContext.getDatabase();
+        allItems = this.getUIContext().getCollection().getAllItems();
+        database = this.getUIContext().getDatabase();
         
-        if (this._expressions.length > 0) {
-            expressions = this._expressions;
+        if (this.getExpression().length > 0) {
+            expressions = this.getExpression();
             allItems.visit(function(item) {
                 var values, x, expression;
                 values = [];

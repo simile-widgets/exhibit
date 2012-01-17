@@ -11,39 +11,32 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.ListFacet = function(containerElmt, uiContext) {
-    this._div = containerElmt;
-    this._uiContext = uiContext;
+    $.extend(this, new Exhibit.Facet("list", containerElmt, uiContext));
+    this.addSettingSpecs(Exhibit.ListFacet._settingSpecs);
+
     this._colorCoder = null;
-    
-    this._expression = null;
-    this._expressionString = null;
     this._valueSet = new Exhibit.Set();
     this._selectMissing = false;
-
 	this._delayedUpdateItems = null;
-    
-    this._settings = {};
     this._dom = null;
-    this._id = undefined;
-    this._registered = false;
+    this._orderMap = null;
 };
 
 /**
  * @constant
  */
 Exhibit.ListFacet._settingSpecs = {
-    "facetLabel":       { type: "text" },
-    "fixedOrder":       { type: "text" },
-    "sortMode":         { type: "text", defaultValue: "value" },
-    "sortDirection":    { type: "text", defaultValue: "forward" },
-    "showMissing":      { type: "boolean", defaultValue: true },
-    "missingLabel":     { type: "text" },
-    "scroll":           { type: "boolean", defaultValue: true },
-    "height":           { type: "text" },
-    "colorCoder":       { type: "text", defaultValue: null },
-    "collapsible":      { type: "boolean", defaultValue: false },
-    "collapsed":        { type: "boolean", defaultValue: false },
-    "formatter":        { type: "text", defaultValue: null}
+    "fixedOrder":       { "type": "text" },
+    "sortMode":         { "type": "text", "defaultValue": "value" },
+    "sortDirection":    { "type": "text", "defaultValue": "forward" },
+    "showMissing":      { "type": "boolean", "defaultValue": true },
+    "missingLabel":     { "type": "text" },
+    "scroll":           { "type": "boolean", "defaultValue": true },
+    "height":           { "type": "text" },
+    "colorCoder":       { "type": "text", "defaultValue": null },
+    "collapsible":      { "type": "boolean", "defaultValue": false },
+    "collapsed":        { "type": "boolean", "defaultValue": false },
+    "formatter":        { "type": "text", "defaultValue": null}
 };
 
 /**
@@ -61,6 +54,7 @@ Exhibit.ListFacet.create = function(configuration, containerElmt, uiContext) {
     
     facet._initializeUI();
     thisUIContext.getCollection().addFacet(facet);
+    facet.register();
     
     return facet;
 };
@@ -81,13 +75,13 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
         thisUIContext
     );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.ListFacet._settingSpecs, facet._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
     
     try {
         expressionString = Exhibit.getAttribute(configElmt, "expression");
         if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
-            facet._expression = Exhibit.ExpressionParser.parse(expressionString);
-            facet._expressionString = expressionString;
+            facet.setExpression(Exhibit.ExpressionParser.parse(expressionString));
+            facet.setExpressionString(expressionString);
         }
 
         selection = Exhibit.getAttribute(configElmt, "selection", ";");
@@ -108,6 +102,7 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
 
     facet._initializeUI();
     thisUIContext.getCollection().addFacet(facet);
+    facet.register();
 
     return facet;
 };
@@ -118,11 +113,11 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
  */
 Exhibit.ListFacet._configure = function(facet, configuration) {
     var selection, i, segment, property, values, orderMap, formatter;
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.ListFacet._settingSpecs, facet._settings);
+    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
     
     if (typeof configuration.expression !== "undefined") {
-        facet._expressionString = configuration.expression;
-        facet._expression = Exhibit.ExpressionParser.parse(configuration.expression);
+        facet.setExpressionString(configuration.expression);
+        facet.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
     }
     if (typeof configuration.selection !== "undefined") {
         selection = configuration.selection;
@@ -135,10 +130,9 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
     }
     
     if (typeof facet._settings.facetLabel === "undefined") {
-        facet._settings.facetLabel = "missing ex:facetLabel";
-        if (typeof facet._expression !== "undefined" && facet._expression !== null && facet._expression.isPath()) {
-            segment = facet._expression.getPath().getLastSegment();
-            property = facet._uiContext.getDatabase().getProperty(segment.property);
+        if (facet.getExpression() !== null && facet.getExpression().isPath()) {
+            segment = facet.getExpression().getPath().getLastSegment();
+            property = facet.getUIContext().getDatabase().getProperty(segment.property);
             if (typeof property !== "undefined" && property !== null) {
                 facet._settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
             }
@@ -155,7 +149,7 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
     }
     
     if (facet._settings.colorCoder !== "undefined") {
-        facet._colorCoder = facet._uiContext.getMain().getComponent(facet._settings.colorCoder);
+        facet._colorCoder = facet.getUIContext().getMain().getComponent(facet._settings.colorCoder);
     }
     
     if (facet._settings.collapsed) {
@@ -174,67 +168,10 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
     }
     
     facet._cache = new Exhibit.FacetUtilities.Cache(
-        facet._uiContext.getDatabase(),
-        facet._uiContext.getCollection(),
-        facet._expression
+        facet.getUIContext().getDatabase(),
+        facet.getUIContext().getCollection(),
+        facet.getExpression()
     );
-
-    facet._setIdentifier();
-    facet.register();
-};
-
-/**
- * Set the identifier to the HTML element ID or generate a
- * non-random, deterministic hash for this component.
- */
-Exhibit.ListFacet.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
-
-    if (typeof this._id === "undefined") {
-        this._id = Exhibit.Facet._registryKey
-            + "-"
-            + this._expressionString
-            + "-"
-            + this._uiContext.getCollection().getID()
-            + "-"
-            + this._uiContext.getMain().getRegistry().generateIdentifier(
-                Exhibit.Facet._registryKey
-            );
-    }
-};
-
-/**
- * @returns {String}
- */
-Exhibit.ListFacet.prototype.getID = function() {
-    return this._id;
-};
-
-/**
- *
- */
-Exhibit.ListFacet.prototype.register = function() {
-    if (this._uiContext.getMain().getRegistry().hasRegistry(
-        Exhibit.Facet._registryKey
-    )) {
-        this._uiContext.getMain().getRegistry().register(
-            Exhibit.Facet._registryKey,
-            this.getID(),
-            this
-        );
-        this._registered = true;
-    }   
-};
-
-/**
- *
- */
-Exhibit.ListFacet.prototype.unregister = function() {
-    this._uiContext.getMain().getRegistry().unregister(
-        Exhibit.Facet._registryKey,
-        this.getID()
-    );
-    this._registered = false;
 };
 
 /**
@@ -243,19 +180,11 @@ Exhibit.ListFacet.prototype.unregister = function() {
 Exhibit.ListFacet.prototype.dispose = function() {
     this._cache.dispose();
     this._cache = null;
-
-    this._uiContext.getCollection().removeFacet(this);
-    this.unregister();
-    this._uiContext = null;
     this._colorCoder = null;
-    
-    this._div.innerHTML = "";
-    this._div = null;
     this._dom = null;
-    
-    this._expression = null;
     this._valueSet = null;
-    this._settings = null;
+    this._orderMap = null;
+    this._dispose();
 };
 
 /**
@@ -359,7 +288,7 @@ Exhibit.ListFacet.prototype.update = function(items) {
  */
 Exhibit.ListFacet.prototype._computeFacet = function(items) {
     var database, r, entries, valueType, selection, labeler, i, entry, count, span;
-    database = this._uiContext.getDatabase();
+    database = this.getUIContext().getDatabase();
     r = this._cache.getValueCountsFromItems(items);
     entries = r.entries;
     valueType = r.valueType;
@@ -405,7 +334,7 @@ Exhibit.ListFacet.prototype._computeFacet = function(items) {
  *
  */
 Exhibit.ListFacet.prototype._notifyCollection = function() {
-    this._uiContext.getCollection().onFacetUpdated(this);
+    this.getUIContext().getCollection().onFacetUpdated(this);
 };
 
 /**
@@ -416,10 +345,10 @@ Exhibit.ListFacet.prototype._initializeUI = function() {
 
     this._dom = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetFrame" : "constructFlowingFacetFrame"](
 		this,
-        this._div,
-        this._settings.facetLabel,
+        this.getContainer(),
+        this.getLabel(),
         function(elmt, evt, target) { self._clearSelections(); },
-        this._uiContext,
+        this.getUIContext(),
         this._settings.collapsible,
         this._settings.collapsed
     );
@@ -461,7 +390,7 @@ Exhibit.ListFacet.prototype._constructBody = function(entries) {
             facetHasSelection,
             onSelect,
             onSelectOnly,
-            self._uiContext
+            self.getUIContext()
         );
         
         if (self._formatter) {
@@ -534,15 +463,15 @@ Exhibit.ListFacet.prototype._filter = function(value, label, selectOnly) {
 
     Exhibit.History.pushComponentState(
         this,
-        Exhibit.Facet._registryKey,
+        Exhibit.Facet.getRegistryKey(),
         newRestrictions,
         (selectOnly && !wasOnlyThingSelected) ?
             String.substitute(
                 Exhibit.FacetUtilities.l10n["facetSelectOnlyActionTitle"],
-                [ label, this._settings.facetLabel ]) :
+                [ label, this.getLabel() ]) :
             String.substitute(
                 Exhibit.FacetUtilities.l10n[wasSelected ? "facetUnselectActionTitle" : "facetSelectActionTitle"],
-                [ label, this._settings.facetLabel ]),
+                [ label, this.getLabel() ]),
         true
     );
 };
@@ -550,11 +479,11 @@ Exhibit.ListFacet.prototype._filter = function(value, label, selectOnly) {
 Exhibit.ListFacet.prototype._clearSelections = function() {
     Exhibit.History.pushComponentState(
         this,
-        Exhibit.Facet._registryKey,
+        Exhibit.Facet.getRegistryKey(),
         this.exportEmptyState(),
         String.substitute(
             Exhibit.FacetUtilities.l10n["facetClearSelectionsActionTitle"],
-            [ this._settings.facetLabel ]),
+            [ this.getLabel() ]),
         true
     );
 };
@@ -566,7 +495,7 @@ Exhibit.ListFacet.prototype._clearSelections = function() {
 Exhibit.ListFacet.prototype._createSortFunction = function(valueType) {
     var sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
     sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
-    if (typeof this._orderMap !== "undefined") {
+    if (this._orderMap !== null) {
         orderMap = this._orderMap;
         
         sortValueFunction = function(a, b) {
