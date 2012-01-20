@@ -201,6 +201,13 @@ Exhibit.ViewPanel.prototype.dispose = function() {
 };
 
 /**
+ * @returns {jQuery}
+ */
+Exhibit.ViewPanel.prototype.getContainer = function() {
+    return $(this._div);
+};
+
+/**
  *
  */
 Exhibit.ViewPanel.prototype._setIdentifier = function() {
@@ -336,12 +343,20 @@ Exhibit.ViewPanel.prototype._createView = function() {
  * @param {Number} newIndex
  */
 Exhibit.ViewPanel.prototype._switchView = function(newIndex) {
+    $(this.getContainer()).trigger(
+        "onBeforeViewPanelSwitch.exhibit",
+        [ this._viewIndex ]
+    );
     if (this._view !== null) {
         this._view.dispose();
         this._view = null;
     }
     this._viewIndex = newIndex;
     this._createView();
+    $(this.getContainer()).trigger(
+        "onAfterViewPanelSwitch.exhibit",
+        [ this._viewIndex, this._view ]
+    );
 };
 
 /**

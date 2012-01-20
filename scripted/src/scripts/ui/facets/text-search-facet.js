@@ -205,6 +205,10 @@ Exhibit.TextSearchFacet.prototype.restrict = function(items) {
     if (this._text === null) {
         return items;
     } else {
+        $(this.getContainer()).trigger(
+            "onTextSearchFacetSearch.exhibit",
+            [ this._text ]
+        );
         this._buildMaps();
         
         set = new Exhibit.Set();
