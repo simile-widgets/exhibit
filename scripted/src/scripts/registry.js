@@ -44,6 +44,10 @@ Exhibit.Registry.prototype.hasRegistry = function(component) {
     return typeof this._registry[component] !== "undefined";
 };
 
+/**
+ * @param {String} component
+ * @returns {Number}
+ */
 Exhibit.Registry.prototype.generateIdentifier = function(component) {
     var branch, key, size;
     size = 0;
