@@ -141,6 +141,7 @@ var Exhibit = {
         "scripts/ui/format-parser.js",
         "scripts/ui/facets/facet.js",
         "scripts/ui/facets/list-facet.js",
+        "scripts/ui/facets/numeric-range-facet.js",
         "scripts/ui/facets/cloud-facet.js",
         "scripts/ui/facets/text-search-facet.js",
         "scripts/ui/views/view.js",
