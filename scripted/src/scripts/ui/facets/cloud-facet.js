@@ -152,6 +152,7 @@ Exhibit.CloudFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.CloudFacet.prototype.clearAllRestrictions = function() {
+    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     this._valueSet = new Exhibit.Set();
     this._selectMissing = false;
     this._notifyCollection();

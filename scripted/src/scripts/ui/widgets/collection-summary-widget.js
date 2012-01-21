@@ -169,6 +169,7 @@ Exhibit.CollectionSummaryWidget.prototype._resetCollection = function() {
     var state, collection;
     collection = this._collection;
 
+    $(this._collection.getElement()).trigger("onResetAllFilters.exhibit");
     state = this._collection.clearAllRestrictions();
 
     Exhibit.History.pushState(

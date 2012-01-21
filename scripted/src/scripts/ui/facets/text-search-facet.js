@@ -161,6 +161,7 @@ Exhibit.TextSearchFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.TextSearchFacet.prototype.clearAllRestrictions = function() {
+    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     var restrictions = this._text;
     if (this._text !== null) {
         this._text = null;

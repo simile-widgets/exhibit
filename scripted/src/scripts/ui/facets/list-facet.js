@@ -198,6 +198,7 @@ Exhibit.ListFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.ListFacet.prototype.clearAllRestrictions = function() {
+    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     this._valueSet = new Exhibit.Set();
     this._selectMissing = false;
     this._notifyCollection();
