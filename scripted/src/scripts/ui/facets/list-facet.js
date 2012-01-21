@@ -40,6 +40,7 @@ Exhibit.ListFacet._settingSpecs = {
 };
 
 /**
+ * @static
  * @param {Object} configuration
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
@@ -60,6 +61,7 @@ Exhibit.ListFacet.create = function(configuration, containerElmt, uiContext) {
 };
 
 /**
+ * @static
  * @param {Element} configElmt
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
@@ -108,6 +110,8 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
 };
 
 /**
+ * @static
+ * @private
  * @param {Exhibit.ListFacet} facet
  * @param {Object} configuration
  */
@@ -205,7 +209,9 @@ Exhibit.ListFacet.prototype.clearAllRestrictions = function() {
 };
 
 /**
- * @param {Array} restrictions
+ * @param {Object} restrictions
+ * @param {Array} restrictions.selection
+ * @param {Boolean} restrictions.selectMissing
  */
 Exhibit.ListFacet.prototype.applyRestrictions = function(restrictions) {
     var i;
