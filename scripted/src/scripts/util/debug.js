@@ -1,5 +1,6 @@
 /**
- * @fileOverview
+ * @fileOverview Error reporting.  This file is not localized in order to
+ *      keep errors in that system from interfering with this one.
  * @author David Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
