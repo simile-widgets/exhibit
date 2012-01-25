@@ -23,13 +23,46 @@ Exhibit.Locale.prototype.getURL = function() {
 };
 
 /**
+ * @namespace All localization keys and strings fit under this namespace.
+ */
+Exhibit.l10n = {};
+
+/**
+ * Localizing function; take an identifying key and return the most specific
+ * localization possible for it.  May return undefined if no match can be
+ * found.
+ * @see http://purl.eligrey.com/l10n.js
+ * @requires sprintf.js
+ * @param {String} s The key of the localized string to use.
+ * @param [arguments] Any number of optional arguments that may be used in
+ *     displaying the message, like numbers for count-dependent messages.
+ * @returns Usually returns a string but may return arrays, booleans, etc.
+ *     depending on what was localized.  Ideally this would not return a
+ *     data structure.
+ */
+Exhibit._ = function() {
+    var key, s, args;
+    args = [].slice.apply(arguments);
+    if (args.length > 0) {
+        key = args.shift();
+        s = Exhibit.Localization.lookup(key);
+        if (typeof s !== "undefined") {
+            return vsprintf(s, args);
+        } else {
+            return s;
+        }
+    }
+};
+
+/**
  * @namespace
  */
 Exhibit.Localization = {
     _registryKey: "l10n",
     _registry: null,
     _lastResortLocale: "en",
-    _currentLocale: undefined
+    _currentLocale: undefined,
+    _loadedLocales: []
 };
 
 /**
@@ -123,19 +156,59 @@ Exhibit.Localization.getLocale = function(locale) {
  * @param {Array} locales
  */
 Exhibit.Localization.setLocale = function(locales) {
-    var i, locale;
+    var i, locale, urls;
 
+    urls = [];
     for (i = locales.length - 1; i >= 0; i--) {
         locale = locales[i];
         if (Exhibit.Localization.hasLocale(locale)) {
-            Exhibit.Localization._currentLocale = locale;
-            $(document).trigger(
-                "localeSet.exhibit",
-                [Exhibit.Localization.getLocale(locale).getURL()]
-            );
-            break;
+            if (typeof Exhibit.Localization._currentLocale === "undefined") {
+                Exhibit.Localization._currentLocale = locale;
+            }
+            Exhibit.Localization._loadedLocales.push(locale);
+            urls.push(Exhibit.Localization.getLocale(locale).getURL());
         }
     }
+
+    $(document).trigger(
+        "localeSet.exhibit",
+        [urls]
+    );
+};
+
+/**
+ * @returns {String}
+ */
+Exhibit.Localization.getCurrentLocale = function() {
+    return Exhibit.Localization._currentLocale;
+};
+
+/**
+ * @param {String} locale
+ * @param {Object} hash
+ */
+Exhibit.Localization.importLocale = function(locale, hash) {
+    Exhibit.l10n[locale] = hash;
+    $(document).trigger("localeLoaded.exhibit", [locale]);
+};
+
+/**
+ * Looks up a key in the set of localization and returns the corresponding
+ * message; may return undefined if not found.
+ * @param {String} key
+ * @returns {String}
+ */
+Exhibit.Localization.lookup = function(key) {
+    var i, locale;
+    for (i = 0; i < Exhibit.Localization._loadedLocales.length; i++) {
+        locale = Exhibit.Localization._loadedLocales[i];
+        if (typeof Exhibit.l10n[locale] !== "undefined") {
+            if (typeof Exhibit.l10n[locale][key] !== "undefined") {
+                return Exhibit.l10n[locale][key];
+            }
+        }
+    }
+    return undefined;
 };
 
 $(document).one(

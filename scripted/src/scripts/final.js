@@ -26,8 +26,11 @@ $(document).ready(function() {
         }
     });
     
-    $(document).bind("localeSet.exhibit", function(evt, localeURL) {
-        $LAB.script(localeURL);
+    $(document).bind("localeSet.exhibit", function(evt, localeURLs) {
+        var i;
+        for (i = 0; i < localeURLs.length; i++) {
+            $LAB.script(localeURLs[i]);
+        }
         $(document).trigger("loadExtensions.exhibit");
     });
 
