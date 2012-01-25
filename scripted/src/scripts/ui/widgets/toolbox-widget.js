@@ -106,17 +106,23 @@ Exhibit.ToolboxWidget.prototype._initializeUI = function() {
  *
  */
 Exhibit.ToolboxWidget.prototype._makePopup = function() {
-    var coords, docWidth, popup, self;
+    var coords, docWidth, popup, self, right;
     self = this;
 
     coords = $(this._containerElmt).offset();
     docWidth = $(document.body).width();
 
+    // Don't widen the page
+    right = docWidth - coords.left - $(this._containerElmt).width();
+    if (right <= 0) {
+        right = 1;
+    }
+
     popup = $("<div>")
         .attr("class", "exhibit-toolboxWidget-popup screen")
         .css("position", "absolute")
         .css("top", coords.top + "px")
-        .css("right", (docWidth - coords.left - $(this._containerElmt).width()) + "px");
+        .css("right", right + "px");
 
     this._popup = popup;
     this._fillPopup(popup);
