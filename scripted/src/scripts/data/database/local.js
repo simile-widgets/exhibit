@@ -770,7 +770,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
     if (typeof itemEntry.label === "undefined" &&
         typeof itemEntry.id === "undefined") {
         Exhibit.Debug.warn(Exhibit._("%database.error.itemSyntaxError",
-                                     JSON.toJSONString(itemEntry)));
+                                     JSON.stringify(itemEntry)));
 	    itemEntry.label = "item" + Math.ceil(Math.random()*1000000);
     }
     
@@ -779,7 +779,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
         if (!this._items.contains(id)) {
             Exhibit.Debug.warn(
                 Exhibit._("%database.error.itemMissingLabelFailure",
-                          JSON.toJSONString(itemEntry))
+                          JSON.stringify(itemEntry))
             );
         }
     } else {
