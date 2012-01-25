@@ -76,7 +76,7 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
             } else if (typeof viewClassName !== "undefined") {
                 label = viewClassName;
             } else {
-                label = "[no view label set]";
+                label = Exhibit._("%viewPanel.noViewLabel");
             }
             
             tooltip = null;
@@ -126,7 +126,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
             if (typeof viewClassName !== "undefined" && viewClassName !== null && viewClassName.length > 0) {
                 viewClass = Exhibit.UI.viewClassNameToViewClass(viewClassName);
                 if (typeof viewClass === "undefined" || viewClass === null) {
-                    Exhibit.Debug.warn("Unknown viewClass " + viewClassName);
+                    Exhibit.Debug.warn(Exhibit._("%viewPanel.error.unknownView", viewClassName));
                 }
             }
 
@@ -142,7 +142,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
                 } else if (typeof viewClassName !== "undefined") {
                     label = viewClassName;
                 } else {
-                    label = "[no view label set]";
+                    label = Exhibit._("%viewPanel.noViewLabel");
                 }
             }
             if (typeof tooltip === "undefined" || tooltip === null) {
@@ -353,7 +353,7 @@ Exhibit.ViewPanel.prototype._createView = function() {
             );
         }
     } catch (e) {
-        Exhibit.Debug.log("Failed to create view " + this._viewLabels[index]);
+        Exhibit.Debug.log(Exhibit._("%viewPanel.error.failedViewCreate", this._viewLabels[index], index));
         Exhibit.Debug.exception(e);
     }
     
@@ -493,7 +493,7 @@ Exhibit.ViewPanel.constructDom = function(
                 var selected, span, handler;
                 selected = (i === index);
                 if (i > 0) {
-                    $(dom.viewSelectionDiv).append(document.createTextNode(" \u2022 "));
+                    $(dom.viewSelectionDiv).append(Exhibit._("%viewPanel.viewSeparator"));
                 }
                 
                 span = $("<span>");

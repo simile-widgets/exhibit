@@ -167,10 +167,10 @@ Exhibit.OrderedViewFrame.prototype._configureOrders = function(orders) {
                     }
                 }
             } catch (e) {
-                Exhibit.Debug.warn("Bad order expression " + expr);
+                Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.orderExpression", expr));
             }
         } else {
-            Exhibit.Debug.warn("Bad order object " + order);
+            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.orderObject", JSON.stringify(order)));
         }
     }
 };
@@ -209,10 +209,10 @@ Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleO
                     }
                 }
             } catch (e) {
-                Exhibit.Debug.warn("Bad possible order expression " + expr);
+                Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.possibleOrderExpression", expr));
             }
         }  else {
-            Exhibit.Debug.warn("Bad possible order object " + order);
+            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.possibleOrderObject", JSON.stringify(order)));
         }
     }
 };

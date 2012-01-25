@@ -362,7 +362,7 @@ Exhibit.UIContext.registerLenses = function(configuration, lensRegistry) {
         if (typeof lensSelector === "function") {
             lensRegistry.addLensSelector(lensSelector);
         } else {
-            Exhibit.Debug.log("lensSelector is not a function");
+            Exhibit.Debug.log(Exhibit._("%general.error.lensSelectorNotFunction"));
         }
     }
 };
@@ -392,10 +392,10 @@ Exhibit.UIContext.registerLensesFromDOM = function(parentNode, lensRegistry) {
             if (typeof lensSelector === "function") {
                 lensRegistry.addLensSelector(lensSelector);
             } else {
-                Exhibit.Debug.log("lensSelector expression " + lensSelectorString + " is not a function");
+                Exhibit.Debug.log(Exhibit._("%general.error.lensSelectorExpressionNotFunction", lensSelectorString));
             }
         } catch (e) {
-            Exhibit.Debug.exception(e, "Bad lensSelector expression: " + lensSelectorString);
+            Exhibit.Debug.exception(e, Exhibit._("%general.error.badLensSelectorExpression", lensSelectorString));
         }
     }
 };

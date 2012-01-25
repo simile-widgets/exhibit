@@ -82,9 +82,9 @@ Exhibit.LegendWidget.prototype.addLegendLabel = function(label, type) {
 			"div",
 			'<div id="legend-label">' +
 				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "\u00a0") + 
+					label.replace(/\s+/g, "&nbsp;") + 
 				"</span>" +
-			"\u00a0\u00a0 </div>",
+			"&nbsp;&nbsp; </div>",
 			{ }
 		);
 	$(dom.elmt).attr("class","exhibit-legendWidget-label");
@@ -105,11 +105,11 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
     if (type === "color") {
 		dom = $.simileDOM("string",
 			"span",
-			'<span id="marker"></span>\u00a0' +
+			'<span id="marker"></span>&nbsp;' +
 				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "\u00a0") + 
+					label.replace(/\s+/g, "&nbsp;") + 
 				"</span>" +
-				"\u00a0\u00a0 ",
+				"&nbsp;&nbsp; ",
 			{ marker: this._colorMarkerGenerator(value) }
 		);
 		legendDiv = $("#exhibit-color-legend");
@@ -118,11 +118,11 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 	if (type === "size") {
 		dom = $.simileDOM("string",
 			"span",
-			'<span id="marker"></span>\u00a0' +
+			'<span id="marker"></span>&nbsp;' +
 				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "\u00a0") + 
+					label.replace(/\s+/g, "&nbsp;") + 
 				"</span>" +
-				"\u00a0\u00a0 ",
+				"&nbsp;&nbsp; ",
 			{ marker: this._sizeMarkerGenerator(value) }
 		);
 		legendDiv = $("#exhibit-size-legend");
@@ -131,11 +131,11 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 	if (type === "icon") {
 		dom = $.simileDOM("string",
 			"span",
-			'<span id="marker"></span>\u00a0' +
+			'<span id="marker"></span>&nbsp;' +
 				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "\u00a0") + 
+					label.replace(/\s+/g, "&nbsp;") + 
 				"</span>" +
-				"\u00a0\u00a0 ",
+				"&nbsp; ",
 			{ marker: this._iconMarkerGenerator(value) }
 		);
 		legendDiv = $("#exhibit-icon-legend");
@@ -167,7 +167,7 @@ Exhibit.LegendWidget._defaultColorMarkerGenerator = function(value) {
     span = $("<span>")
         .attr("class", "exhibit-legendWidget-entry-swatch")
         .css("background", value)
-        .html("\u00a0\u00a0");
+        .html("&nbsp;&nbsp;");
     return span.get(0);
 };
 
@@ -184,7 +184,7 @@ Exhibit.LegendWidget._defaultSizeMarkerGenerator = function(value) {
         .height(value)
         .width(value)
         .css("background", "#C0C0C0")
-        .html("\u00a0\u00a0");
+        .html("&nbsp;&nbsp;");
     return span.get(0);
 }
 

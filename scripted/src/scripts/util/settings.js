@@ -83,7 +83,7 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
 
                         a = value.split(separator);
                         if (a.length !== dimensions) {
-                            throw new Error("Expected a tuple of " + dimensions + " dimensions separated with " + separator + " but got " + value);
+                            throw new Error(Exhibit._("%settings.error.inconsistentDimensions", dimensions, separator, value));
                         } else {
                             for (i = 0; i < a.length; i++) {
                                 a[i] = Exhibit.SettingsUtilities._parseSetting(a[i].trim(), type, spec);
@@ -122,7 +122,7 @@ Exhibit.SettingsUtilities._parseSetting = function(s, type, spec) {
                 return f;
             }
         }
-        throw new Error("Expected a floating point number but got " + s);
+        throw new Error(Exhibit._("%settings.error.notFloatingPoint", s));
     } else if (type === "int") {
         if (sType === "number") {
             return Math.round(s);
@@ -132,7 +132,7 @@ Exhibit.SettingsUtilities._parseSetting = function(s, type, spec) {
                 return n;
             }
         }
-        throw new Error("Expected an integer but got " + s);
+        throw new Error(Exhibit._("%settings.error.notInteger", s));
     } else if (type === "boolean") {
         if (sType === "boolean") {
             return s;
@@ -144,7 +144,7 @@ Exhibit.SettingsUtilities._parseSetting = function(s, type, spec) {
                 return false;
             }
         }
-        throw new Error("Expected either 'true' or 'false' but got " + s);
+        throw new Error(Exhibit._("%settings.error.notBoolean", s));
     } else if (type === "function") {
         if (sType === "function") {
             return s;
@@ -158,7 +158,7 @@ Exhibit.SettingsUtilities._parseSetting = function(s, type, spec) {
                 // silent
             }
         }
-        throw new Error("Expected a function or the name of a function but got " + s);
+        throw new Error(Exhibit._("%settings.error.notFunction", s));
     } else if (type === "enum") {
         choices = spec.choices;
         for (i = 0; i < choices.length; i++) {
@@ -166,9 +166,9 @@ Exhibit.SettingsUtilities._parseSetting = function(s, type, spec) {
                 return s;
             }
         }
-        throw new Error("Expected one of " + choices.join(", ") + " but got " + s);
+        throw new Error(Exhibit._("%settings.error.notEnumerated", choices.join(", "), s));
     } else {
-        throw new Error("Unknown setting type " + type);
+        throw new Error(Exhibit._("%settings.error.unknownSetting", type));
     }
 };
 
@@ -414,7 +414,7 @@ Exhibit.SettingsUtilities._typeToParser = function(type) {
     case "date":    return Exhibit.SettingsUtilities._dateParser;
     case "boolean": return Exhibit.SettingsUtilities._booleanParser;
     default:
-        throw new Error("Unknown setting type " + type);
+        throw new Error(Exhibit._("%settings.error.unknownSetting", type));
 
     }
 };

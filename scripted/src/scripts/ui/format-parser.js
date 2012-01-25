@@ -96,7 +96,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseNumber = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || token.type !== Scanner.NUMBER) {
-                throw new Error("Missing number at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingNumber", makePosition()));
             }
             enterSetting(valueType, settingName, token.value);
             next();
@@ -105,7 +105,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseInteger = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || token.type !== Scanner.NUMBER) {
-                throw new Error("Missing integer at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingInteger", makePosition()));
             }
             enterSetting(valueType, settingName, Math.round(token.value));
             next();
@@ -114,7 +114,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseNonnegativeInteger = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || token.type !== Scanner.NUMBER || token.value < 0) {
-                throw new Error("Missing non-negative integer at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingNonNegativeInteger",  makePosition()));
             }
             enterSetting(valueType, settingName, Math.round(token.value));
             next();
@@ -123,7 +123,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseString = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || token.type !== Scanner.STRING) {
-                throw new Error("Missing string at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingString", makePosition()));
             }
             enterSetting(valueType, settingName, token.value);
             next();
@@ -132,7 +132,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseURL = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || token.type !== Scanner.URL) {
-                throw new Error("Missing url at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingURL", makePosition()));
             }
             enterSetting(valueType, settingName, token.value);
             next();
@@ -141,7 +141,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseExpression = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || token.type !== Scanner.EXPRESSION) {
-                throw new Error("Missing expression at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingExpression", makePosition()));
             }
             enterSetting(valueType, settingName, token.value);
             next();
@@ -150,7 +150,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseExpressionOrString = function(valueType, settingName, keywords) {
         if (checkKeywords(valueType, settingName, keywords)) {
             if (typeof token === "undefined" || token === null || (token.type !== Scanner.EXPRESSION && token.type !== Scanner.STRING)) {
-                throw new Error("Missing expression or string at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingExpressionOrString", makePosition()));
             }
             enterSetting(valueType, settingName, token.value);
             next();
@@ -159,7 +159,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     parseChoices = function(valueType, settingName, choices) {
         var i;
         if (typeof token === "undefined" || token === null || token.type !== Scanner.IDENTIFIER) {
-            throw new Error("Missing option at position " + makePosition());
+            throw new Error(Exhibit._("%format.error.missingOption", makePosition()));
         }
         for (i = 0; i < choices.length; i++) {
             if (token.value === choices[i]) {
@@ -168,11 +168,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
                 return;
             }
         }
-        throw new Error(
-            "Unsupported option " + token.value + 
-            " for setting " + settingName + 
-            " on value type " + valueType + 
-            " found at position " + makePosition());
+        throw new Error(Exhibit._("%format.error.unsupportedOption", token.value, settingName, valueType, makePosition()));
     };
     parseFlags = function(valueType, settingName, flags, counterFlags) {
         var i, flagSet, counterFlagSet;
@@ -192,12 +188,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
                 counterFlagSet = true;
             }
             if (!counterFlagSet) {
-                throw new Error(
-                    "Unsupported flag " + token.value + 
-                        " for setting " + settingName + 
-                        " on value type " + valueType + 
-                        " found at position " + makePosition()
-                );
+                throw new Error(Exhibit._("%format.error.unsupportedFlag", token.value, settingName, valueType, makePosition()));
             }
         }
     };
@@ -296,8 +287,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
             }
             break;
         }
-        throw new Error("Unsupported setting called " + settingName + 
-            " for value type " + valueType + " found at position " + makePosition());
+        throw new Error(Exhibit._("%format.error.unsupportedSetting", settingName, valueType, makePosition()));
     };
     parseSettingList = function(valueType) {
 
@@ -308,7 +298,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
             
 
             if (typeof token === "undefined" || token === null || token.type !== Scanner.DELIMITER || token.value !== ":") {
-                throw new Error("Missing : at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingColon", makePosition()));
             }
             next();
             
@@ -325,12 +315,12 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
     };
     parseRule = function() {
         if (typeof token === "undefined" || token === null || token.type !== Scanner.IDENTIFIER) {
-            throw new Error("Missing value type at position " + makePosition());
+            throw new Error(Exhibit._("%format.error.missingValueType", makePosition()));
         }
         
         var valueType = token.value;
         if (typeof Exhibit.FormatParser._valueTypes[valueType] === "undefined") {
-            throw new Error("Unsupported value type " + valueType + " at position " + makePosition());
+            throw new Error(Exhibit._("%format.error.unsupportedValueType", valueType, makePosition()));
         }
         next();
         
@@ -339,7 +329,7 @@ Exhibit.FormatParser._internalParse = function(uiContext, scanner, results, seve
             parseSettingList(valueType);
             
             if (typeof token === "undefined" || token === null || token.type !== Scanner.DELIMITER || token.value !== "}") {
-                throw new Error("Missing } at position " + makePosition());
+                throw new Error(Exhibit._("%format.error.missingBrace", makePosition()));
             }
             next();
         }
@@ -465,7 +455,7 @@ Exhibit.FormatScanner.prototype.next = function() {
                 };
                 this._index = i + 1;
             } else {
-                throw new Error("Unterminated string starting at " + this._index);
+                throw new Error(Exhibit._("%format.error.unterminatedString", this._index));
             }
         } else if (c1 === "#") { // color
             i = this._index + 1;
@@ -527,7 +517,7 @@ Exhibit.FormatScanner.prototype.next = function() {
                         };
                         this._index = closeParen + 1;
                     } else {
-                        throw new Error("Missing ) to close url at " + this._index);
+                        throw new Error(Exhibit._("%format.error.missingCloseURL", this._index));
                     }
                 }
             } else if (identifier === "expression") {

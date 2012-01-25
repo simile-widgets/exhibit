@@ -40,7 +40,7 @@ Exhibit.LensRegistry.prototype.registerLensForType = function(elmtOrURL, type) {
     } else if (role === "edit-lens") {
         this._editLensTemplates[type] = elmtOrURL.cloneNode(true);
     } else {
-        Exhibit.Debug.warn("Unknown lens type " + elmtOrURL);
+        Exhibit.Debug.warn(Exhibit._("%lens.error.unknownLensType", elmtOrURL));
     }
 };
 

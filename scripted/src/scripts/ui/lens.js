@@ -206,7 +206,7 @@ Exhibit.Lens._startCompilingTemplate = function(lensTemplateURL, job) {
     Exhibit.Lens._compiledTemplates[lensTemplateURL] = compiledTemplate;
     
     fError = function(jqxhr, textStatus, e) {
-        Exhibit.Debug.log("Failed to load view template from " + lensTemplateURL + "\n" + textStatus);
+        Exhibit.Debug.log(Exhibit._("%lens.error.failedToLoad", lensTemplateURL, textStatus));
     };
     fDone = function(data, textStatus, jqxhr) {
         var i, job2;
@@ -222,12 +222,12 @@ Exhibit.Lens._startCompilingTemplate = function(lensTemplateURL, job) {
                     job2.template = compiledTemplate;
                     Exhibit.Lens._performConstructFromLensTemplateJob(job2);
                 } catch (e1) {
-                    Exhibit.Debug.exception(e1, "Lens: Error constructing lens template in job queue");
+                    Exhibit.Debug.exception(e1, Exhibit._("%lens.error.constructing"));
                 }
             }
             compiledTemplate.jobs = null;
         } catch (e2) {
-            Exhibit.Debug.exception(e2, "Lens: Error compiling lens template and processing template job queue");
+            Exhibit.Debug.exception(e2, Exhibit._("%lens.error.compilingTemplate"));
         }
     };
     
@@ -809,7 +809,7 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
                 });
                 processChildren();
             } else {
-                Exhibit.Debug.warn('accept-changes element in non-submission item');
+                Exhibit.Debug.warn(Exhibit._("%lens.error.misplacedAcceptChanges"));
                 $(elmt).remove();
             }
             break;

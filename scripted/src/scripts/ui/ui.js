@@ -27,15 +27,15 @@ Exhibit.UI = {
  * @param {String} comp
  */
 Exhibit.UI.registerComponent = function(name, comp) {
-    var msg = "Cannot register component " + name + " -- ";
+    var msg = Exhibit._("%general.error.cannotRegister", name);
     if (typeof Exhibit.UI.componentMap[name] !== "undefined") {
-        Exhibit.Debug.warn(msg + 'another component has taken that name');
-    } else if (!comp) {
-        Exhibit.Debug.warn(msg + 'no component object provided');
-    } else if (!comp.create) {
-        Exhibit.Debug.warn(msg + "component has no create function");
-    } else if (!comp.createFromDOM) {
-        Exhibit.Debug.warn(msg + "component has no createFromDOM function");
+        Exhibit.Debug.warn(Exhibit._("%general.error.componentNameTaken", msg));
+    } else if (typeof comp === "undefined" || comp === null) {
+        Exhibit.Debug.warn(Exhibit._("%general.error.noComponentObject", msg);
+    } else if (typeof comp.create === "undefined") {
+        Exhibit.Debug.warn(Exhibit._("%general.error.missingCreateFunction", msg));
+    } else if (typeof comp.createFromDOM === "undefined") {
+        Exhibit.Debug.warn(Exhibit._("%general.error.missingDOMCreateFunction", msg));
     } else {
         Exhibit.UI.componentMap[name] = comp;
     }
@@ -196,7 +196,7 @@ Exhibit.UI.viewClassNameToViewClass = function(name) {
         try {
             return Exhibit.UI._stringToObject(name, "View");
         } catch (e) {
-            Exhibit.Debug.warn("Unknown viewClass " + name);
+            Exhibit.Debug.warn(Exhibit._("%general.error.unknownViewClass", name));
         }
     }
     return Exhibit.TileView;
@@ -238,7 +238,7 @@ Exhibit.UI.facetClassNameToFacetClass = function(name) {
         try {
             return Exhibit.UI._stringToObject(name, "Facet");
         } catch (e) {
-            Exhibit.Debug.warn("Unknown facetClass " + name);
+            Exhibit.Debug.warn(Exhibit._("%general.error.unknownFacetClass", name));
         }
     }
     return Exhibit.ListFacet;
@@ -278,7 +278,7 @@ Exhibit.UI.coderClassNameToCoderClass = function(name) {
         try {
             return Exhibit.UI._stringToObject(name, "Coder");
         } catch (e) {
-            Exhibit.Debug.warn("Unknown coderClass " + name);
+            Exhibit.Debug.warn(Exhibit._("%general.error.unknownCoderClass", name));
         }
     }
     return Exhibit.ColorCoder;
@@ -340,7 +340,7 @@ Exhibit.UI._stringToObject = function(name, suffix) {
         // ignore
     }
     
-    throw new Error("Unknown class " + name);
+    throw new Error(Exhibit._("%general.error.unknownClass", name));
 };
 
 /*----------------------------------------------------------------------
@@ -594,7 +594,7 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
     } else if (opts.lensType === "edit") {
         lensOpts.lensTemplate = uiContext.getLensRegistry().getEditLens(itemID, uiContext);
     } else if (opts.lensType) {
-        Exhibit.Debug.warn("Unknown Exhibit.UI.showItemInPopup opts.lensType: " + opts.lensType);
+        Exhibit.Debug.warn(Exhibit._("%general.error.unknownLensType", opts.lensType));
     }
 
     uiContext.getLensRegistry().createLens(itemID, itemLensDiv, uiContext, lensOpts);

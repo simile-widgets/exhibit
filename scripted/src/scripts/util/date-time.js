@@ -95,8 +95,8 @@ Exhibit.DateTime.setIso8601Date = function(dateObject, string) {
      */
     var d, sign, year, month, date, dayofyear, week, dayofweek, gd, day, offset;
     d = string.match(Exhibit.DateTime._dateRegexp);
-    if(!d) {
-        throw new Error("Invalid date string: " + string);
+    if (!d) {
+        throw new Error(Exhibit._("%datetime.error.invalidDate", string));
     }
     
     sign = (d[1] === "-") ? -1 : 1; // BC or AD
@@ -152,8 +152,8 @@ Exhibit.DateTime.setIso8601Time = function (dateObject, string) {
      */
     var d, hours, mins, secs, ms;
     d = string.match(Exhibit.DateTime._timeRegexp);
-    if(!d) {
-        throw new Error("Invalid time string: " + string);
+    if (!d) {
+        throw new Error(Exhibit._("%datetime.error.invalidTime", string));
     }
     hours = d[1];
     mins = Number((d[3]) ? d[3] : 0);

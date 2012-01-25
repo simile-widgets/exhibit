@@ -141,7 +141,7 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
             view._rowTemplate = Exhibit.Lens.compileTemplate($("table:eq(0) tr:eq(0)", configElmt).get(0), false, uiContext);
         }
     } catch (e) {
-        Exhibit.Debug.exception(e, "TabularView: Error processing configuration of tabular view");
+        Exhibit.Debug.exception(e, Exhibit._("%TabularView.error.configuration"));
     }
     
     s = Exhibit.getAttribute(configElmt, "rowStyler");
