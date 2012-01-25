@@ -59,13 +59,15 @@ var Exhibit = {
         autoCreate: true,
         safe: false,
         babel: undefined,
-        backstage: undefined
+        backstage: undefined,
+        locale: undefined
     },
 
     _dependencies: {
         "lib/jquery-1.7.1.js": "$",
         "lib/json2.js": "JSON",
-        "lib/base64.js": "Base64"
+        "lib/base64.js": "Base64",
+        "lib/sprintf.js": "sprintf",
 // History fails to load correctly in Safari through this mechanism
 //        "lib/history.js": "History.init",
 //        "lib/history.adapter.jquery.js": "History.Adapter",
@@ -87,6 +89,7 @@ var Exhibit = {
         "lib/base64.js",
         "lib/jquery.simile.dom.js",
         "lib/jquery.simile.bubble.js",
+        "lib/sprintf.js",
         "scripts/exhibit.js",
         "scripts/bc/bc.js",
         "scripts/bc/attributes.js",
@@ -189,7 +192,7 @@ var Exhibit = {
     ],
 
     /**
-     * @constant An Exhibit.Registry of locales. A bootstrapper.
+     * @constant An Exhibit.Registry of static components.
      */
     registry: null
 };
@@ -360,7 +363,8 @@ Exhibit.load = function() {
         "autoCreate": Boolean,
         "safe": Boolean,
         "babel": String,
-        "backstage": String
+        "backstage": String,
+        "locale": String
     };
 
     if (typeof Exhibit_urlPrefix === "string") {
