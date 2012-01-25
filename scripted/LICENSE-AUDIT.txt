@@ -92,3 +92,9 @@ base64.js
  * https://ecmanaut.googlecode.com/svn/trunk/lib/base64.js
  * Public Domain
  * scripted/src/lib/base64.js
+
+sprintf.js
+----------
+ * http://www.diveintojavascript.com/projects/javascript-sprintf
+ * Modified BSD
+ * scripted/src/lib/sprintf.js
