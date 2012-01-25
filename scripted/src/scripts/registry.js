@@ -59,7 +59,7 @@ Exhibit.Registry.prototype.generateIdentifier = function(component) {
             }
         }
     } else {
-        throw new Error("No such registry for component: " + component);
+        throw new Error(Exhibit._("%registry.error.noSuchRegistry", component));
     }
     return size;
 };

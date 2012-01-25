@@ -37,7 +37,7 @@ Exhibit.ResizableDivWidget.create = function(configuration, elmt, uiContext) {
  *
  */
 Exhibit.ResizableDivWidget.prototype.dispose = function() {
-    this._div.innerHTML = "";
+    $(this._div).empty();
     this._contentDiv = null;
     this._resizerDiv = null;
     this._div = null;
@@ -58,7 +58,7 @@ Exhibit.ResizableDivWidget.prototype._initializeUI = function() {
     
     $(this._div).html(
         "<div></div>" +
-        "<div class='exhibit-resizableDivWidget-resizer'>" +
+        '<div class="exhibit-resizableDivWidget-resizer">' +
             Exhibit.UI.createTranslucentImageHTML("images/down-arrow.png") +
             "</div>");
         

@@ -150,7 +150,7 @@ Exhibit.ViewUtilities._setUnplottableMessage = function(dom, totalCount, unplott
     
         dom = $.simileDOM("string",
             div,
-            Exhibit.ViewUtilities.l10n.unplottableMessageFormatter(totalCount, unplottableItems, uiContext),
+            Exhibit.ViewUtilities.unplottableMessageFormatter(totalCount, unplottableItems),
             {}
         );
         $(dom.unplottableCountLink).bind("click", function(evt) {
@@ -158,4 +158,53 @@ Exhibit.ViewUtilities._setUnplottableMessage = function(dom, totalCount, unplott
         });
         $(div).show();
     }
+};
+
+/**
+ * @param {Number} totalCount
+ * @param {Array} unplottableItems
+ */
+Exhibit.ViewUtilities.unplottableMessageFormatter = function(totalCount, unplottableItems) {
+    var count = unplottableItems.length;
+    return Exhibit._("%views.unplottableTemplate", count, Exhibit._(count === 1 ? "%views.resultLabel" : "%views.resultsLabel"), totalCount);
+};
+
+/**
+ * Return labels for sort ordering based on value type; "text" is the base
+ * case that is assumed to always exist in the localization utiltiies.
+ * @param {String} valueType
+ * @returns {Object} An object of the form { "ascending": label,
+ *      "descending": label}
+ */
+Exhibit.ViewUtilities.getSortLabels = function(valueType) {
+    var asc, desc, labels, makeKey;
+    makeKey = function(v, dir) {
+        return "%database.sortLabels." + v + "." + dir;
+    };
+    asc = Exhibit._(makeKey(valueType, "ascending"));
+    if (typeof asc !== "undefined" && asc !== null) {
+        labels = {
+            "ascending": asc,
+            "descending": Exhibit._(makeKey(valueType, "descending"))
+        };
+    } else {
+        labels = Exhibit.ViewUtilities.getSortLabels("text");
+    }
+    return labels;
+};
+
+/**
+ * @param {Number} index
+ * @returns {String}
+ */
+Exhibit.ViewUtilities.makePagingActionTitle = function(index) {
+    return Exhibit._("%orderedViewFrame.pagingActionTitle", index + 1);
+};
+
+/**
+ * @param {Number} index
+ * @returns {String}
+ */
+Exhibit.ViewUtilities.makePagingLinkTooltip = function(index) {
+    return Exhibit._("%orderedViewFrame.pagingActionTooltip", index + 1);
 };

@@ -42,7 +42,13 @@ Exhibit.UIContext.createRootContext = function(configuration, exhibit) {
     context = new Exhibit.UIContext();
     context._exhibit = exhibit;
     
-    settings = Exhibit.UIContext.l10n.initialSettings;
+    // This used to be localized but it is unclear as to why; moving it
+    // here.
+    settings = {
+        "bubbleWidth": 400,
+        "bubbleHeight": 300
+    };
+
     for (n in settings) {
         if (settings.hasOwnProperty(n)) {
             context._settings[n] = settings[n];

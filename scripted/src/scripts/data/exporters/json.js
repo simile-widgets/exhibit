@@ -8,6 +8,7 @@
  * @namespace
  */
 Exhibit.Exporter.ExhibitJSON = {
+    _mimeType: "application/json",
     exporter: null
 };
 
@@ -48,8 +49,8 @@ Exhibit.Exporter.ExhibitJSON.exportOne = function(itemID, o) {
  */
 Exhibit.Exporter.ExhibitJSON._register = function() {
     Exhibit.Exporter.ExhibitJSON.exporter = new Exhibit.Exporter(
-        "application/json",
-        Exhibit.l10n.exhibitJsonExporterLabel,
+        Exhibit.Exporter.ExhibitJSON._mimeType,
+        Exhibit._("%export.exhibitJsonExporterLabel"),
         Exhibit.Exporter.ExhibitJSON.wrap,
         Exhibit.Exporter.ExhibitJSON.wrapOne,
         Exhibit.Exporter.ExhibitJSON.exportOne

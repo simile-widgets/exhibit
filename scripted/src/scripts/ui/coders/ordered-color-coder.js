@@ -23,19 +23,19 @@ Exhibit.OrderedColorCoder = function(uiContext) {
     this._order = new Exhibit.OrderedColorCoder._OrderedHash();
     this._usePriority = "highest";
     this._mixedCase = { 
-        label: null,
-        color: null,
-	    isDefault: true
+        "label": null,
+        "color": null,
+	    "isDefault": true
     };
     this._missingCase = { 
-        label: Exhibit.Coders.l10n.missingCaseLabel, 
-        color: Exhibit.Coders.missingCaseColor,
-	    isDefault: true
+        "label": Exhibit._("%coders.missingCaseLabel"),
+        "color": Exhibit.Coders.missingCaseColor,
+	    "isDefault": true
     };
     this._othersCase = { 
-        label: Exhibit.Coders.l10n.othersCaseLabel, 
-        color: Exhibit.Coders.othersCaseColor,
-	    isDefault: true
+        "label": Exhibit._("%coders.othersCaseLabel"),
+        "color": Exhibit.Coders.othersCaseColor,
+	    "isDefault": true
     };
 };
 
@@ -123,7 +123,7 @@ Exhibit.OrderedColorCoder.createFromDOM = function(configElmt, uiContext) {
 		        coder.getMissingColor());
 	    }
     } catch (e) {
-        Exhibit.Debug.exception(e, "OrderedColorCoder: Error processing configuration of coder");
+        Exhibit.Debug.exception(e, Exhibit._("%coders.error.configuration", "OrderedColorCoder"));
     }
     
     Exhibit.OrderedColorCoder._configure(coder, configuration);

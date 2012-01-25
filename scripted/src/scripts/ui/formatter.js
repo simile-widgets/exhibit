@@ -33,13 +33,13 @@ Exhibit.Formatter.createListDelimiter = function(parentElmt, count, uiContext) {
     pairSeparator = uiContext.getSetting("format/list/pair-separator");
     
     if (typeof separator !== "string") {
-        separator = Exhibit.Formatter.l10n.listSeparator;
+        separator = Exhibit._("%formatter.listSeparator");
     }
     if (typeof lastSeparator !== "string") {
-        lastSeparator = Exhibit.Formatter.l10n.listLastSeparator;
+        lastSeparator = Exhibit._("%formatter.listLastSeparator");
     }
     if (typeof pairSeparator !== "string") {
-        pairSeparator = Exhibit.Formatter.l10n.listPairSeparator;
+        pairSeparator = Exhibit._("%formatter.listPairSeparator");
     }
 
     f = function() {
@@ -81,13 +81,13 @@ Exhibit.Formatter._ListFormatter = function(uiContext) {
     this._emptyText = uiContext.getSetting("format/list/empty-text");
     
     if (typeof this._separator !== "string") {
-        this._separator = Exhibit.Formatter.l10n.listSeparator;
+        this._separator = Exhibit._("%formatter.listSeparator");
     }
     if (typeof this._lastSeparator !== "string") {
-        this._lastSeparator = Exhibit.Formatter.l10n.listLastSeparator;
+        this._lastSeparator = Exhibit._("%formatter.listLastSeparator");
     }
     if (typeof this._pairSeparator !== "string") {
-        this._pairSeparator = Exhibit.Formatter.l10n.listPairSeparator;
+        this._pairSeparator = Exhibit._("%formatter.listPairSeparator");
     }
 };
 
@@ -171,7 +171,7 @@ Exhibit.Formatter._TextFormatter.prototype.formatText = function(value) {
     if (this._maxLength === 0 || value.length <= this._maxLength) {
         return value;
     } else {
-        return value.substr(0, this._maxLength) + Exhibit.Formatter.l10n.textEllipsis;
+        return Exhibit._("%formatter.textEllipsis", value.substr(0, this._maxLength));
     }
 };
 
@@ -199,7 +199,7 @@ Exhibit.Formatter._BooleanFormatter.prototype.format = function(value, appender)
  */
 Exhibit.Formatter._BooleanFormatter.prototype.formatText = function(value) {
     return (typeof value === "boolean" ? value : (typeof value === "string" ? (value === "true") : false)) ? 
-        Exhibit.Formatter.l10n.booleanTrue : Exhibit.Formatter.l10n.booleanFalse;
+        Exhibit._("%formatter.booleanTrue") : Exhibit._("%formatter.booleanFalse");
 };
 
 /**
@@ -352,18 +352,18 @@ Exhibit.Formatter._CurrencyFormatter = function(uiContext) {
     
     this._symbol = uiContext.getSetting("format/currency/symbol");
     if (typeof this._symbol === "undefined" || this._symbol === null) {
-        this._symbol = Exhibit.Formatter.l10n.currencySymbol;
+        this._symbol = Exhibit._("%formatter.currencySymbol");
     }
     
     this._symbolPlacement = uiContext.getSetting("format/currency/symbol-placement");
     if (typeof this._symbolPlacement === "undefined" || this._symbolPlacement === null) {
-        this._symbol = Exhibit.Formatter.l10n.currencySymbolPlacement;
+        this._symbol = Exhibit._("%formatter.currencySymbolPlacement");
     }
     
     this._negativeFormat = {
-        signed :      uiContext.getBooleanSetting("format/currency/negative-format/signed", Exhibit.Formatter.l10n.currencyShowSign),
-        red :         uiContext.getBooleanSetting("format/currency/negative-format/red", Exhibit.Formatter.l10n.currencyShowRed),
-        parentheses : uiContext.getBooleanSetting("format/currency/negative-format/parentheses", Exhibit.Formatter.l10n.currencyShowParentheses)
+        signed :      uiContext.getBooleanSetting("format/currency/negative-format/signed", Exhibit._("%formatter.currencyShowSign")),
+        red :         uiContext.getBooleanSetting("format/currency/negative-format/red", Exhibit._("%formatter.currencyShowRed")),
+        parentheses : uiContext.getBooleanSetting("format/currency/negative-format/parentheses", Exhibit._("%formatter.currencyShowParentheses"))
     };
 };
 
@@ -485,34 +485,34 @@ Exhibit.Formatter._DateFormatter = function(uiContext) {
     switch (mode) {
     case "short":
         template = 
-            show === "date" ?  Exhibit.Formatter.l10n.dateShortFormat :
-            (show === "time" ? Exhibit.Formatter.l10n.timeShortFormat : 
-                              Exhibit.Formatter.l10n.dateTimeShortFormat);
+            show === "date" ?  Exhibit._("%formatter.dateShortFormat") :
+            (show === "time" ? Exhibit._("%formatter.timeShortFormat") : 
+                              Exhibit._("%formatter.dateTimeShortFormat"));
         break;
     case "medium":
         template = 
-            show === "date" ?  Exhibit.Formatter.l10n.dateMediumFormat :
-            (show === "time" ? Exhibit.Formatter.l10n.timeMediumFormat : 
-                              Exhibit.Formatter.l10n.dateTimeMediumFormat);
+            show === "date" ?  Exhibit._("%formatter.dateMediumFormat") :
+            (show === "time" ? Exhibit._("%formatter.timeMediumFormat") : 
+                              Exhibit._("%formatter.dateTimeMediumFormat"));
         break;
     case "long":
         template = 
-            show === "date" ?  Exhibit.Formatter.l10n.dateLongFormat :
-            (show === "time" ? Exhibit.Formatter.l10n.timeLongFormat : 
-                              Exhibit.Formatter.l10n.dateTimeLongFormat);
+            show === "date" ?  Exhibit._("%formatter.dateLongFormat") :
+            (show === "time" ? Exhibit._("%formatter.timeLongFormat") : 
+                              Exhibit._("%formatter.dateTimeLongFormat"));
         break;
     case "full":
         template = 
-            show === "date" ?  Exhibit.Formatter.l10n.dateFullFormat :
-            (show === "time" ? Exhibit.Formatter.l10n.timeFullFormat : 
-                              Exhibit.Formatter.l10n.dateTimeFullFormat);
+            show === "date" ?  Exhibit._("%formatter.dateFullFormat") :
+            (show === "time" ? Exhibit._("%formatter.timeFullFormat") : 
+                              Exhibit._("%formatter.dateTimeFullFormat"));
         break;
     default:
         template = uiContext.getSetting("format/date/template");
     }
     
     if (typeof template !== "string") {
-        template = Exhibit.Formatter.l10n.dateTimeDefaultFormat;
+        template = Exhibit._("%formatter.dateTimeDefaultFormat");
     }
     
     segments = [];
@@ -616,14 +616,14 @@ Exhibit.Formatter._DateFormatter._retrievers = {
      * @returns {String}
      */
     "EEE": function(date) {
-        return Exhibit.Formatter.l10n.shortDaysOfWeek[date.getUTCDay()];
+        return Exhibit._("%formatter.shortDaysOfWeek")[date.getUTCDay()];
     },
     /**
      * @param {Date} date
      * @returns {String}
      */
     "EEEE": function(date) {
-        return Exhibit.Formatter.l10n.daysOfWeek[date.getUTCDay()];
+        return Exhibit._("%formatter.daysOfWeek")[date.getUTCDay()];
     },
     
     // month
@@ -639,14 +639,14 @@ Exhibit.Formatter._DateFormatter._retrievers = {
      * @returns {String}
      */
     "MMM": function(date) {
-        return Exhibit.Formatter.l10n.shortMonths[date.getUTCMonth()];
+        return Exhibit._("%formatter.shortMonths")[date.getUTCMonth()];
     },
     /**
      * @param {Date} date
      * @returns {String}
      */
     "MMMM": function(date) {
-        return Exhibit.Formatter.l10n.months[date.getUTCMonth()];
+        return Exhibit._("%formatter.months")[date.getUTCMonth()];
     },
     
     // year
@@ -673,7 +673,7 @@ Exhibit.Formatter._DateFormatter._retrievers = {
      */
     "G": function(date) {
         var y = date.getUTCYear();
-        return y > 0 ? Exhibit.Formatter.l10n.commonEra : Exhibit.Formatter.l10n.beforeCommonEra;
+        return y > 0 ? Exhibit._("%formatter.commonEra") : Exhibit._("%formatter.beforeCommonEra");
     },
     
     // hours of day
@@ -707,14 +707,14 @@ Exhibit.Formatter._DateFormatter._retrievers = {
      * @returns {String}
      */
     "a": function(date) {
-        return date.getUTCHours() < 12 ? Exhibit.Formatter.l10n.beforeNoon : Exhibit.Formatter.l10n.afterNoon;
+        return date.getUTCHours() < 12 ? Exhibit._("%formatter.beforeNoon") : Exhibit._("%formatter.afterNoon");
     },
     /**
      * @param {Date} date
      * @returns {String}
      */
     "A": function(date) {
-        return date.getUTCHours() < 12 ? Exhibit.Formatter.l10n.BeforeNoon : Exhibit.Formatter.l10n.AfterNoon;
+        return date.getUTCHours() < 12 ? Exhibit._("%formatter.BeforeNoon") : Exhibit._("%formatter.AfterNoon");
     },
     
     // minutes of hour

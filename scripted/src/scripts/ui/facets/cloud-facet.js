@@ -92,7 +92,7 @@ Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext
             facet._selectMissing = (selectMissing === "true");
         }
     } catch (e) {
-        Exhibit.Debug.exception(e, "CloudFacet: Error processing configuration of list facet");
+        Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "CloudFacet"));
     }
     Exhibit.CloudFacet._configure(facet, configuration);
 
@@ -366,8 +366,8 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
         if (count > 0 || this._selectMissing) {
             span = $("<span>");
             $(span).html((typeof this._settings.missingLabel !== "undefined") ? 
-                this._settings.missingLabel :
-                Exhibit.FacetUtilities.l10n.missingThisField);
+                         this._settings.missingLabel :
+                         Exhibit._("%facets..missingThisField"));
             $(span).attr("class", "exhibit-facet-value-missingThisField");
             
             entries.unshift({
@@ -375,7 +375,7 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
                 count:          count,
                 selected:       this._selectMissing,
                 selectionLabel: $(span).get(0),
-                actionLabel:    Exhibit.FacetUtilities.l10n.missingThisField
+                actionLabel:    Exhibit._("%facets.missingThisField")
             });
         }
     }
@@ -534,12 +534,8 @@ Exhibit.CloudFacet.prototype._filter = function(value, label, selectOnly) {
         Exhibit.Facet.getRegistryKey(),
         newRestrictions,
         (selectOnly && !wasOnlyThingSelected) ?
-            String.substitute(
-                Exhibit.FacetUtilities.l10n["facetSelectOnlyActionTitle"],
-                [ label, facetLabel ]) :
-            String.substitute(
-                Exhibit.FacetUtilities.l10n[wasSelected ? "facetUnselectActionTitle" : "facetSelectActionTitle"],
-                [ label, facetLabel ]),
+            Exhibit._("%facets.facetSelectOnlyActionTitle", label, facetLabel) :
+            Exhibit._(wasSelected ? "%facets.facetUnselectActionTitle" : "%facets.facetSelectActionTitle", label, facetLabel),
         true
     );
 };
@@ -549,9 +545,7 @@ Exhibit.CloudFacet.prototype._clearSelections = function() {
         this,
         Exhibit.Facet.getRegistryKey(),
         this.exportEmptyState(),
-        String.substitute(
-            Exhibit.FacetUtilities.l10n["facetClearSelectionsActionTitle"],
-            [ this.getLabel() ]),
+        Exhibit._("%facets.facetClearSelectionsActionTitle", this.getLabel()),
         true
     );
 };

@@ -71,7 +71,7 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
                 next();
 
             } else {
-                throw new Error("Missing property ID at position " + makePosition());
+                throw new Error(Exhibit._("%expression.error.missingPropertyID", makePosition()));
             }
         }
         return path;
@@ -79,7 +79,7 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
     parseFactor = function() {
         var result = null, identifier, args;
         if (typeof token === "undefined" || token === null) {
-            throw new Error("Missing factor at end of expression");
+            throw new Error(Exhibit._("%expression.error.missingFactor"));
         }
         
         switch (token.type) {
@@ -111,10 +111,10 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
                     if (token !== null && token.type === Scanner.DELIMITER && token.value === ")") {
                         next();
                     } else {
-                        throw new Error("Missing ) to end " + identifier + " at position " + makePosition());
+                        throw new Error(Exhibit._("%expression.error.missingParenEnd", identifier, makePosition()));
                     }
                 } else {
-                    throw new Error("Missing ( to start " + identifier + " at position " + makePosition());
+                    throw new Error(Exhibit._("%expression.error.missingParenStart", identifier, makePosition()));
                 }
             } else {
                 if (token !== null && token.type === Scanner.DELIMITER && token.value === "(") {
@@ -129,7 +129,7 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
                     if (token !== null && token.type === Scanner.DELIMITER && token.value === ")") {
                         next();
                     } else {
-                        throw new Error("Missing ) after function call " + identifier + " at position " + makePosition());
+                        throw new Error(Exhibit._("%expression.error.missingParenFunction", identifier, makePosition()));
                     }
                 } else {
                     result = parsePath();
@@ -146,13 +146,13 @@ Exhibit.ExpressionParser._internalParse = function(scanner, several) {
                     next();
                     break;
                 } else {
-                    throw new Error("Missing ) at position " + makePosition());
+                    throw new Error(Exhibit._("%expression.error.missingParen", + makePosition()));
                 }
             } else {
-                throw new Error("Unexpected text " + token.value + " at position " + makePosition());
+                throw new Error(Exhibit._("%expression.error.unexpectedSyntax", token.value, makePosition()));
             }
         default:
-            throw new Error("Unexpected text " + token.value + " at position " + makePosition());
+            throw new Error(Exhibit._("%expression.error.unexpectedSyntax", token.value, makePosition()));
         }
         
         return result;
@@ -341,7 +341,7 @@ Exhibit.ExpressionScanner.prototype.next = function() {
                 };
                 this._index = i + 1;
             } else {
-                throw new Error("Unterminated string starting at " + this._index);
+                throw new Error(Exhibit._("%expression.error.unterminatedString", + this._index));
             }
         } else if (this._isDigit(c1)) { // number
             i = this._index;

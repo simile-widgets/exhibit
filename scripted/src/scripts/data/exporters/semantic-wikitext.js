@@ -8,6 +8,7 @@
  * @namespace
  */
 Exhibit.Exporter.SemanticWikiText = {
+    _type: "semantic-mediawiki",
     exporter: null
 };
 
@@ -37,7 +38,7 @@ Exhibit.Exporter.SemanticWikiText.wrapOne = function(s, first, last) {
 Exhibit.Exporter.SemanticWikiText.exportOne = function(itemID, o, properties) {
     var uri, prop, valueType, values, i, s = "";
 
-    uri = o["uri"];
+    uri = o.uri;
     s += uri + "\n";
 
     for (prop in o) {
@@ -66,8 +67,8 @@ Exhibit.Exporter.SemanticWikiText.exportOne = function(itemID, o, properties) {
  */
 Exhibit.Exporter.SemanticWikiText._register = function() {
     Exhibit.Exporter.SemanticWikiText.exporter = new Exhibit.Exporter(
-        "semantic-mediawiki",
-        Exhibit.l10n.smwExporterLabel,
+        Exhibit.Exporter.SemanticWikiText._type,
+        Exhibit._("%export.smwExporterLabel"),
         Exhibit.Exporter.SemanticWikiText.wrap,
         Exhibit.Exporter.SemanticWikiText.wrapOne,
         Exhibit.Exporter.SemanticWikiText.exportOne

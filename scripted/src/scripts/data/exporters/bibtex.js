@@ -18,6 +18,7 @@ Exhibit.Exporter.BibTex = {
         "uri": true,
         "key": true
     },
+    _mimeType: "application/x-bibtex",
     exporter: null
 };
 
@@ -47,12 +48,12 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
 
     if (typeof o["pub-type"] !== "undefined") {
         type = o["pub-type"];
-    } else if (typeof o["type"] !== "undefined") {
-        type = o["type"];
+    } else if (typeof o.type !== "undefined") {
+        type = o.type;
     }
 
-    if (typeof o["key"] !== "undefined") {
-        key = o["key"];
+    if (typeof o.key !== "undefined") {
+        key = o.key;
     } else {
         key = itemID;
     }
@@ -83,8 +84,8 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
  */
 Exhibit.Exporter.BibTex._register = function() {
     Exhibit.Exporter.BibTex.exporter = new Exhibit.Exporter(
-        "application/x-bibtex",
-        Exhibit.l10n.bibtexExporterLabel,
+        Exhibit.Exporter.BibTex._mimeType,
+        Exhibit._("%export.bibtexExporterLabel"),
         Exhibit.Exporter.BibTex.wrap,
         Exhibit.Exporter.BibTex.wrapOne,
         Exhibit.Exporter.BibTex.exportOne

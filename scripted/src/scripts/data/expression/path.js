@@ -110,7 +110,7 @@ Exhibit.Expression.Path.prototype.evaluate = function(
         
         return this._walkForward(collection, database);
     } else {
-        throw new Error("No such variable called " + rootName);
+        throw new Error(Exhibit._("%expression.error.noSuchVariable", rootName));
     }
 };
 
@@ -280,7 +280,7 @@ Exhibit.Expression.Path.prototype.rangeBackward = function(
         if (segment.forward) {
             database.getSubjectsInRange(segment.property, from, to, inclusive, set, this._segments.length === 1 ? filter : null);
         } else {
-            throw new Error("Last path of segment must be forward");
+            throw new Error(Exhibit._("%expression.error.mustBeForward"));
         }
                 
         for (i = this._segments.length - 2; i >= 0; i--) {

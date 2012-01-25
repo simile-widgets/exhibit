@@ -23,7 +23,7 @@ Exhibit.Importer.ExhibitJSON.parse = function(url, s, callback) {
     try {
         o = JSON.parse(s);
     } catch(e) {
-        Exhibit.UI.showJsonFileValidation(Exhibit.l10n.badJsonMessage(url, e), url);
+        Exhibit.UI.showJsonFileValidation(Exhibit._("%general.badJsonMessage", url, e.message), url);
     }
 
     if (typeof callback === "function") {

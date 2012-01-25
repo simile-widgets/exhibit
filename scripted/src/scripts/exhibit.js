@@ -195,7 +195,7 @@ Exhibit._Impl.prototype.dispose = function() {
             try {
                 this._collectionMap[id].dispose();
             } catch(ex2) {
-                Exhibit.Debug.exception(ex2, "Failed to dispose collection");
+                Exhibit.Debug.exception(ex2, Exhibit._("%general.error.disposeCollection"));
             }
         }
     }
@@ -435,7 +435,7 @@ Exhibit._Impl.prototype._showFocusDialogOnItem = function(itemID) {
         "</div>" +
         "<div class='exhibit-focusDialog-controls'>" +
             "<button id='closeButton'>" + 
-                Exhibit.l10n.focusDialogBoxCloseButtonLabel + 
+                      Exhibit._("%export.focusDialogBoxCloseButtonLabel") + 
             "</button>" +
         "</div>"
     );

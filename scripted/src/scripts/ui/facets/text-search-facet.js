@@ -86,7 +86,7 @@ Exhibit.TextSearchFacet.createFromDOM = function(configElmt, containerElmt, uiCo
             facet._text = query;
         }
     } catch (e) {
-        Exhibit.Debug.exception(e, "TextSearchFacet: Enor processing configuration of list facet");
+        Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "TextSearchFacet"));
     }
     Exhibit.TextSearchFacet._configure(facet, configuration);
     
@@ -331,10 +331,8 @@ Exhibit.TextSearchFacet.prototype._onTimeout = function() {
             Exhibit.Facet._registryKey,
             { "text": newText },
             newText !== null ?
-                String.substitute(
-                    Exhibit.FacetUtilities.l10n["facetTextSearchActionTitle"],
-                    [ newText ]) :
-                Exhibit.FacetUtilities.l10n["facetClearTextSearchActionTitle"],
+                Exhibit._("%facets.facetTextSearchActionTitle", newText) :
+                Exhibit._("%facets.facetClearTextSearchActionTitle"),
             true
         );
     }

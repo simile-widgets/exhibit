@@ -38,6 +38,6 @@ Exhibit.Expression._FunctionCall.prototype.evaluate = function(
     if (typeof Exhibit.Functions[this._name] !== "undefined") {
         return Exhibit.Functions[this._name].f(args);
     } else {
-        throw new Error("No such function named " + this._name);
+        throw new Error(Exhibit._("%expression.noSuchFunction", this._name));
     }
 };

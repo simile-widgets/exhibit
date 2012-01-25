@@ -47,7 +47,7 @@ Exhibit.Lens.prototype._constructDefaultUI = function(itemID, div, uiContext) {
                     {   tag:        "a",
                         href:       Exhibit.Persistence.getItemLink(itemID),
                         target:     "_blank",
-                        children:   [ Exhibit.l10n.itemLinkLabel ]
+                        children:   [ Exhibit._("%general.itemLinkLabel") ]
                     },
                     ")"
                 ]
@@ -731,7 +731,7 @@ Exhibit.Lens._constructFromLensTemplateNode = function(
 
         case "item-link":
             a = $("<a>")
-                .html(Exhibit.l10n.itemLinkLabel)
+                .html(Exhibit._("%general.itemLinkLabel"))
                 .attr("href", Exhibit.Persistence.getItemLink(itemID))
                 .attr("target", "_blank");
             $(elmt).append(a);

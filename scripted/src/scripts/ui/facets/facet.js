@@ -71,7 +71,7 @@ Exhibit.Facet = function(key, div, uiContext) {
         if (typeof this._settings.facetLabel !== "undefined") {
             return this._settings.facetLabel;
         } else {
-            return "missing " + Exhibit.makeExhibitAttribute("facetLabel");
+            return Exhibit._("%facets.error.missingLabel", Exhibit.makeExhibitAttribute("facetLabel"));
         }
     };
 

@@ -357,7 +357,7 @@ Exhibit.UI._stringToObject = function(name, suffix) {
 Exhibit.UI.showHelp = function(message, url, target) {
     target = (target) ? target : "_blank";
     if (typeof url !== "undefined" && url !== null) {
-        if (window.confirm(message + "\n\n" + Exhibit.l10n.showDocumentationMessage)) {
+        if (window.confirm(Exhibit._("%general.showDocumentationMessage", message))) {
             window.open(url, target);
         }
     } else {
@@ -373,11 +373,11 @@ Exhibit.UI.showHelp = function(message, url, target) {
 Exhibit.UI.showJsonFileValidation = function(message, url) {
     var target = "_blank";
     if (typeof Exhibit.babelPrefix !== "undefined" && url.indexOf("file:") === 0) {
-        if (window.confirm(message + "\n\n" + Exhibit.l10n.showJsonValidationFormMessage)) {
+        if (window.confirm(Exhibit._("%general.showJsonValidationFormMessage", message))) {
             window.open(Exhibit.UI.validator, target);
         }
     } else {
-        if (window.confirm(message + "\n\n" + Exhibit.l10n.showJsonValidationMessage)) {
+        if (window.confirm(Exhibit._("%general.showJsonValidationMessage", message))) {
             window.open(Exhibit.UI.validator + url, target);
         }
     }
@@ -761,7 +761,7 @@ Exhibit.UI.createBusyIndicator = function() {
     
     img = $("<img />").attr("src", urlPrefix + "progress-running.gif");
     contentDiv.append(img);
-    contentDiv.append(document.createTextNode(" " + Exhibit.l10n.busyIndicatorMessage));
+    contentDiv.append(document.createTextNode(Exhibit._("%general.busyIndicatorMessage")));
     
     return containerDiv;
 };
@@ -788,7 +788,7 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
                 children: [
                     {   tag:        "button",
                         field:      "closeButton",
-                        children:    [ Exhibit.l10n.focusDialogBoxCloseButtonLabel ]
+                        children:   [ Exhibit._("%general.focusDialogBoxCloseButtonLabel") ]
                     }
                 ]
             }

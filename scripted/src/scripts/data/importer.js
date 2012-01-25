@@ -139,7 +139,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
             database.loadData(o, Exhibit.Persistence.getBaseURL(url));
         } catch(e) {
             Exhibit.Debug.exception(e);
-            $(document).trigger("error.exhibit", [e, "Could not load data from " + url + " into the database"]);
+            $(document).trigger("error.exhibit", [e, Exhibit._("%expression.import.couldNotLoad", url)]);
         } finally {
             if (typeof callback === "function") {
                 callback();
@@ -153,7 +153,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
         try {
             self._parse(url, s, postParse);
         } catch(e) {
-            $(document).trigger("error.exhibit", [e, "Could not parse " + url]);
+            $(document).trigger("error.exhibit", [e, Exhibit._("%import.error.couldNotParse", url)]);
         }
     };
 
@@ -174,9 +174,9 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
     fError = function(jqxhr, textStatus, e) {
         var msg;
         if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
-            msg = "Failed to access " + url + ", possibly because the file is missing or because you are accessing your files via filesystem instead of a webserver while using Chrome or IE.  Use a different browser or move your files onto a webserver.";
+            msg = Exhibit._("%import.error.missingOrFilesystem", url);
         } else {
-            msg = "Failed to access " + url + " (HTTP " + jqxhr.status + ")";
+            msg = Exhibit._("%import.error.httpError", url, jqxhr.status);
         }
         $(document).trigger("error.exhibit", [e, msg]);
     };
@@ -219,10 +219,10 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
 
     fError = function(jqxhr, textStatus, e) {
         var msg;
-        msg = "Failed to access " + url;
-        if (typeof jqxhr.status !== "undefined") {
-             msg += " (HTTP " + jqxhr.status + ")";
-        }
+        msg = Exhibit._(
+            "%import.error.failedAccess",
+            url,
+            (typeof jqxhr.status !== "undefined") ? Exhibit._("%import.error.failedAccessHttpStatus", jqxhr.status) : "");
         $(document).trigger("error.exhibit", [e, msg]);
     };
 

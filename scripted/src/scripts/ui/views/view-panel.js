@@ -71,9 +71,8 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
                 label = viewConfig.viewLabel;
             } else if (typeof viewConfig.label !== "undefined") {
                 label = viewConfig.label;
-            } else if (typeof viewClass.l10n !== "undefined" &&
-                       typeof viewClass.l10n.viewLabel !== "undefined") {
-                label = viewClass.l10n.viewLabel;
+            } else if (typeof Exhibit.ViewPanel.getViewLabel(viewClass) !== "undefined") {
+                label = Exhibit.ViewPanel.getViewLabel(viewClass);
             } else if (typeof viewClassName !== "undefined") {
                 label = viewClassName;
             } else {
@@ -83,9 +82,8 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
             tooltip = null;
             if (typeof viewConfig.tooltip !== "undefined") {
                 tooltip = viewConfig.tooltip;
-            } else if (typeof viewClass.l10n !== "undefined" &&
-                       typeof viewClass.l10n.viewTooltip !== "undefined") {
-                tooltip = viewClass.l10n.viewTooltip;
+            } else if (typeof Exhibit.ViewPanel.getViewTooltip(viewClass) !== "undefined") {
+                tooltip = Exhibit.ViewPanel.getViewTooltip(viewClass);
             } else {
                 tooltip = label;
             }
@@ -139,8 +137,8 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
             tooltip = Exhibit.getAttribute(this, "title");
                 
             if (typeof label === "undefined" || label === null) {
-                if (typeof viewClass.l10n.viewLabel !== "undefined") {
-                    label = viewClass.l10n.viewLabel;
+                if (typeof Exhibit.ViewPanel.getViewLabel(viewClass) !== "undefined") {
+                    label = Exhibit.ViewPanel.getViewLabel(viewClass);
                 } else if (typeof viewClassName !== "undefined") {
                     label = viewClassName;
                 } else {
@@ -148,9 +146,8 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
                 }
             }
             if (typeof tooltip === "undefined" || tooltip === null) {
-                if (typeof viewClass.l10n !== "undefined" &&
-                    typeof viewClass.l10n.viewTooltip !== "undefined") {
-                    tooltip = viewClass.l10n.viewTooltip;
+                if (typeof Exhibit.ViewPanel.getViewTooltip(viewClass) !== "undefined") {
+                    tooltip = Exhibit.ViewPanel.getViewTooltip(viewClass);
                 } else {
                     tooltip = label;
                 }
@@ -181,6 +178,34 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
     viewPanel._initializeUI();
     
     return viewPanel;
+};
+
+/**
+ * @static
+ * @param {String} viewClass
+ * @returns {String}
+ */
+Exhibit.ViewPanel.getViewLabel = function(viewClass) {
+    return Exhibit.ViewPanel._getLocalized(viewClass, "label");
+};
+
+/**
+ * @static
+ * @param {String} viewClass
+ * @returns {String}
+ */
+Exhibit.ViewPanel.getViewTooltip = function(viewClass) {
+    return Exhibit.ViewPanel._getLocalized(viewClass, "tooltip");
+};
+
+/**
+ * @static
+ * @param {String} viewClass
+ * @param {String} type
+ * @returns {String}
+ */
+Exhibit.ViewPanel._getLocalized = function(viewClass, type) {
+    return Exhibit._("%" + viewClass + "." + type);
 };
 
 /**
@@ -266,8 +291,8 @@ Exhibit.ViewPanel.prototype._internalValidate = function() {
     if (this._viewConstructors.length === 0) {
         this._viewConstructors.push(Exhibit.TileView);
         this._viewConfigs.push({});
-        this._viewLabels.push(Exhibit.TileView.l10n.viewLabel);
-        this._viewTooltips.push(Exhibit.TileView.l10n.viewTooltip);
+        this._viewLabels.push(Exhibit._("%tileView.viewLabel"));
+        this._viewTooltips.push(Exhibit._("%tileView.viewTooltip"));
         this._viewDomConfigs.push(null);
     }
     
@@ -370,7 +395,7 @@ Exhibit.ViewPanel.prototype._selectView = function(newIndex) {
         this,
         Exhibit.ViewPanel._registryKey,
         this.exportState(this.makeState(newIndex)),
-        Exhibit.ViewPanel.l10n.createSelectViewActionTitle(self._viewLabels[newIndex]),
+        Exhibit._("%viewPanel.selectViewActionTitle", self._viewLabels[newIndex]),
         true
     );
 };
@@ -440,19 +465,18 @@ Exhibit.ViewPanel.constructDom = function(
     viewTooltips,
     onSelectView
 ) {
-    var l10n, template, dom;
-    l10n = Exhibit.ViewPanel.l10n;
+    var template, dom;
     template = {
-        elmt: div,
+        "elmt": div,
         "class": "exhibit-viewPanel exhibit-ui-protection",
-        children: [
-            {   tag:        "div",
+        "children": [
+            {   "tag":    "div",
                 "class":  "exhibit-viewPanel-viewSelection",
-                field:      "viewSelectionDiv"
+                "field":  "viewSelectionDiv"
             },
-            {   tag:        "div",
+            {   "tag":    "div",
                 "class":  "exhibit-viewPanel-viewContainer",
-                field:      "viewContainerDiv"
+                "field":  "viewContainerDiv"
             }
         ]
     };

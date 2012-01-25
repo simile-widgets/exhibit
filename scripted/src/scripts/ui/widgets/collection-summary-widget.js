@@ -65,7 +65,7 @@ Exhibit.CollectionSummaryWidget.prototype.dispose = function() {
         "onItemsChanged.exhibit",
         this._onItemsChanged
     );
-    this._div.innerHTML = "";
+    $(this._div).empty();
     
     this._noResultsDom = null;
     this._allResultsDom = null;
@@ -79,10 +79,9 @@ Exhibit.CollectionSummaryWidget.prototype.dispose = function() {
  *
  */
 Exhibit.CollectionSummaryWidget.prototype._initializeUI = function() {
-    var self, l10n, onClearFilters;
+    var self, onClearFilters;
     self = this;
     
-    l10n = Exhibit.CollectionSummaryWidget.l10n;
     onClearFilters = function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
@@ -90,29 +89,23 @@ Exhibit.CollectionSummaryWidget.prototype._initializeUI = function() {
     };
 
     $(this._div).hide();
-    this._allResultsDom = $.simileDOM("string",
-        "span", 
-        String.substitute(
-            l10n.allResultsTemplate,
-            [ "exhibit-collectionSummaryWidget-results" ]
-        )
+    this._allResultsDom = $.simileDOM(
+        "string",
+        "span",
+        Exhibit._("%widget.collectionSummary.allResultsTemplate", "exhibit-collectionSummaryWidget-results")
     );
-    this._filteredResultsDom = $.simileDOM("string", 
-        "span", 
-        String.substitute(
-            l10n.filteredResultsTemplate,
-            [ "exhibit-collectionSummaryWidget-results" ]
-        ),
-        {   resetActionLink: Exhibit.UI.makeActionLink(l10n.resetFiltersLabel, onClearFilters)
+    this._filteredResultsDom = $.simileDOM(
+        "string", 
+        "span",
+        Exhibit._("%widget.collectionSummary.filteredResultsTemplate", "exhibit-collectionSummaryWidget-results"),
+        {   resetActionLink: Exhibit.UI.makeActionLink(Exhibit._("%widget.collectionSummary.resetFiltersLabel"), onClearFilters)
         }
     );
-    this._noResultsDom = $.simileDOM("string",
+    this._noResultsDom = $.simileDOM(
+        "string",
         "span",
-        String.substitute(
-            l10n.noResultsTemplate,
-            [ "exhibit-collectionSummaryWidget-results", "exhibit-collectionSummaryWidget-count" ]
-        ),
-        {   resetActionLink: Exhibit.UI.makeActionLink(l10n.resetFiltersLabel, onClearFilters)
+        Exhibit._("%widget.collectionSummary.noResultsTemplate", "exhibit-collectionSummaryWidget-results", "exhibit-collectionSummaryWidget-count"),
+        {   resetActionLink: Exhibit.UI.makeActionLink(Exhibit._("%widget.collectionSummary.resetFiltersLabel"), onClearFilters)
         }
     );
     $(this._div).append(this._allResultsDom.elmt);
@@ -144,7 +137,7 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
             typeID = typeIDs.length === 1 ? typeIDs[0] : "Item";
             
             description = 
-                Exhibit.Database.l10n.labelItemsOfType(currentSize, typeID, database, "exhibit-collectionSummaryWidget-count");
+                database.labelItemsOfType(currentSize, typeID, "exhibit-collectionSummaryWidget-count");
             
             if (currentSize === originalSize) {
                 $(this._allResultsDom.elmt).show();
@@ -174,6 +167,6 @@ Exhibit.CollectionSummaryWidget.prototype._resetCollection = function() {
 
     Exhibit.History.pushState(
         state.data,
-        Exhibit.CollectionSummaryWidget.l10n.resetActionTitle
+        Exhibit._("%widget.collectionSummary.resetActionTitle")
     );
 };

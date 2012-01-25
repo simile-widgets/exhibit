@@ -94,7 +94,7 @@ Exhibit.DefaultColorCoder.prototype.translateSet = function(keys, flags) {
  * @returns {String}
  */
 Exhibit.DefaultColorCoder.prototype.getOthersLabel = function() {
-    return Exhibit.Coders.l10n.othersCaseLabel;
+    return Exhibit._("%coders.othersCaseLabel");
 };
 
 /**
@@ -108,7 +108,7 @@ Exhibit.DefaultColorCoder.prototype.getOthersColor = function() {
  * @returns {String}
  */
 Exhibit.DefaultColorCoder.prototype.getMissingLabel = function() {
-    return Exhibit.Coders.l10n.missingCaseLabel;
+    return Exhibit._("%coders.missingCaseLabel");
 };
 
 /**
@@ -122,7 +122,7 @@ Exhibit.DefaultColorCoder.prototype.getMissingColor = function() {
  * @returns {String}
  */
 Exhibit.DefaultColorCoder.prototype.getMixedLabel = function() {
-    return Exhibit.Coders.l10n.mixedCaseLabel;
+    return Exhibit._("%coders.mixedCaseLabel");
 };
 
 /**

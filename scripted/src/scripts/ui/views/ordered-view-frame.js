@@ -380,7 +380,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         
         if (items.size() > 0) {
             if (grouped && settings.grouped) {
-                createGroup(Exhibit.l10n.missingSortKey, valueType, index);
+                createGroup(Exhibit._("%general.missingSortKey"), valueType, index);
             }
             
             if (items.size() > 1 && index < orders.length - 1) {
@@ -604,11 +604,8 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
         property = database.getProperty(order.property);
         propertyLabel = order.forward ? property.getPluralLabel() : property.getReversePluralLabel();
         valueType = order.forward ? property.getValueType() : "item";
-        sortLabels = Exhibit.Database.l10n.sortLabels[valueType];
-        sortLabels = (typeof sortLabels !== "undefined" && sortLabels !== null) ?
-            sortLabels : 
-            Exhibit.Database.l10n.sortLabels["text"];
-        
+        sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
+
         popupDom.appendMenuItem(
             sortLabels.ascending, 
             Exhibit.urlPrefix +
@@ -644,7 +641,7 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
         if (configuredOrders.length > 1) {
             popupDom.appendSeparator();
             popupDom.appendMenuItem(
-                Exhibit.OrderedViewFrame.l10n.removeOrderLabel, 
+                Exhibit._("%orderedViewFrame.removeOrderLabel"),
                 null,
                 function() {self._removeOrder(index);}
             );
@@ -734,15 +731,12 @@ Exhibit.OrderedViewFrame.prototype._reSort = function(index, propertyID, forward
     property = this._uiContext.getDatabase().getProperty(propertyID);
     propertyLabel = forward ? property.getPluralLabel() : property.getReversePluralLabel();
     valueType = forward ? property.getValueType() : "item";
-    sortLabels = Exhibit.Database.l10n.sortLabels[valueType];
-    sortLabels = (typeof sortLabels !== "undefined" && sortLabels !== null) ?
-        sortLabels : 
-        Exhibit.Database.l10n.sortLabels["text"];
+    sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
 
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(newOrders),
-        Exhibit.OrderedViewFrame.l10n.formatSortActionTitle(
+        Exhibit._("%orderedViewFrame.formatSortActionTitle",
             propertyLabel,
             ascending ?
                 sortLabels.ascending :
@@ -767,15 +761,12 @@ Exhibit.OrderedViewFrame.prototype._removeOrder = function(index) {
     valueType = order.forward ?
         property.getValueType() :
         "item";
-    sortLabels = Exhibit.Database.l10n.sortLabels[valueType];
-    sortLabels = (typeof sortLabels !== "undefined" && sortLabels !== null) ?
-        sortLabels : 
-        Exhibit.Database.l10n.sortLabels.text;
+    sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
     
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(newOrders),
-        Exhibit.OrderedViewFrame.l10n.formatRemoveOrderActionTitle(
+        Exhibit._("%orderedViewFrame.formatRemoveOrderActionTitle",
             propertyLabel, order.ascending ?
                 sortLabels.ascending :
                 sortLabels.descending)
@@ -789,10 +780,10 @@ Exhibit.OrderedViewFrame.prototype._setShowAll = function(showAll) {
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(null, showAll),
-        Exhibit.OrderedViewFrame.l10n[
+        Exhibit._(
             showAll ?
-                "showAllActionTitle" :
-                "dontShowAllActionTitle"]
+                "%orderedViewFrame.showAllActionTitle" :
+                "%orderedViewFrame.dontShowAllActionTitle")
     );
 };
 
@@ -806,10 +797,10 @@ Exhibit.OrderedViewFrame.prototype._toggleGroup = function() {
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(null, !oldGrouped ? true : null, null, !oldGrouped),
-        Exhibit.OrderedViewFrame.l10n[
+        Exhibit._(
             oldGrouped ?
-                "ungroupAsSortedActionTitle" :
-                "groupAsSortedActionTitle"]
+                "%orderedViewFrame.ungroupAsSortedActionTitle" :
+                "%orderedViewFrame.groupAsSortedActionTitle")
     );
 };
 
@@ -823,10 +814,10 @@ Exhibit.OrderedViewFrame.prototype._toggleShowDuplicates = function() {
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(null, null, !oldShowDuplicates),
-        Exhibit.OrderedViewFrame.l10n[
+        Exhibit._(
             oldShowDuplicates ?
-                "hideDuplicatesActionTitle" :
-                "showDuplicatesActionTitle"]
+                "%orderedViewFrame.hideDuplicatesActionTitle" :
+                "%orderedViewFrame.showDuplicatesActionTitle")
     );
 };
 
@@ -837,7 +828,7 @@ Exhibit.OrderedViewFrame.prototype._gotoPage = function(pageIndex) {
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(null, null, null, null, pageIndex),
-        Exhibit.OrderedViewFrame.l10n.makePagingActionTitle(pageIndex)
+        Exhibit.ViewUtilities.makePagingActionTitle(pageIndex)
     );
 };
 
@@ -845,13 +836,13 @@ Exhibit.OrderedViewFrame.prototype._gotoPage = function(pageIndex) {
  * @constant
  */
 Exhibit.OrderedViewFrame.headerTemplate =
-    "<div id='collectionSummaryDiv' style='display: none;'></div>" +
-    "<div class='exhibit-collectionView-header-sortControls' style='display: none;' id='controlsDiv'>" +
-        "%0" + // sorting controls template
-        "<span class='exhibit-collectionView-header-groupControl'> \u2022 " +
-            "<a id='groupOption' class='exhibit-action'></a>" + 
-        "</span>" +
-    "</div>";
+    '<div id="collectionSummaryDiv" style="display: none;"></div>' +
+    '<div class="exhibit-collectionView-header-sortControls" style="display: none;" id="controlsDiv">' +
+        '%0' + // sorting controls template
+        '<span class="exhibit-collectionView-header-groupControl"> \u2022 ' +
+            '<a id="groupOption" class="exhibit-action"></a>' + 
+        '</span>' +
+    '</div>';
 
 /**
  * @param {Exhibit.UIContext} uiContext
@@ -872,15 +863,14 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
     onGroupToggle,
     gotoPage
 ) {
-    var l10n, template, dom;
-    l10n = Exhibit.OrderedViewFrame.l10n;
+    var template, dom;
     template = String.substitute(                                          
         Exhibit.OrderedViewFrame.headerTemplate +
-            "<" + l10n.pagingControlContainerElement + " class='exhibit-collectionView-pagingControls' style='display: none;' id='topPagingDiv'></" + l10n.pagingControlContainerElement + ">",
-        [ l10n.sortingControlsTemplate ]);
+            '<div class="exhibit-collectionView-pagingControls" style="display: none;" id="topPagingDiv"></div>',
+        [ Exhibit._("%orderedViewFrame.sortingControlsTemplate") ] );
 
     dom = $.simileDOM("string", headerDiv, template, {});
-    headerDiv.className = "exhibit-collectionView-header";
+    $(headerDiv).attr("class", "exhibit-collectionView-header");
     
     if (showSummary) {
         $(dom.collectionSummaryDiv).show();
@@ -893,7 +883,7 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
     if (showControls) {
         $(dom.controlsDiv).show();
         dom.groupOptionWidget = Exhibit.OptionWidget.create(
-            {   label:      l10n.groupedAsSortedOptionLabel,
+            {   label:      Exhibit._("%orderedViewFrame.groupedAsSortedOptionLabel"),
                 onToggle:   onGroupToggle
             },
             dom.groupOption,
@@ -957,14 +947,13 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
     onDontShowAll,
     gotoPage
 ) {
-    var l10n, dom;
-    l10n = Exhibit.OrderedViewFrame.l10n;
+    var dom;
     
     dom = $.simileDOM(
         "string",
         footerDiv,
         Exhibit.OrderedViewFrame.footerTemplate +
-            "<" + l10n.pagingControlContainerElement + " class='exhibit-collectionView-pagingControls' style='display: none;' id='bottomPagingDiv'></" + l10n.pagingControlContainerElement + ">",
+            '<div class="exhibit-collectionView-pagingControls" style="display: none;" id="bottomPagingDiv"></div>',
         {}
     );
     $(footerDiv).attr("class", "exhibit-collectionView-footer");
@@ -976,11 +965,11 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
             if (showAll) {
                 $(dom.showAllSpan).append(
                     Exhibit.UI.makeActionLink(
-                        l10n.formatDontShowAll(limitCount), onDontShowAll));
+                        Exhibit._("%orderedViewFrame.formatDontShowAll", limitCount), onDontShowAll));
             } else {
                 $(dom.showAllSpan).append(
                     Exhibit.UI.makeActionLink(
-                        l10n.formatShowAll(count), onShowAll));
+                        Exhibit._("%orderedViewFrame.formatShowAll", count), onShowAll));
             }
         }
     };
@@ -1005,8 +994,7 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
  * @param {Function} gotoPage
  */
 Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount, pageWindow, gotoPage) {
-    var l10n, self, renderPageLink, renderPageNumber, renderHTML, pageWindowStart, pageWindowEnd, i;
-    l10n = Exhibit.OrderedViewFrame.l10n;
+    var self, renderPageLink, renderPageNumber, renderHTML, pageWindowStart, pageWindowEnd, i;
     
     $(parentElmt).attr("class", "exhibit-collectionView-pagingControls");
     $(parentElmt).empty();
@@ -1014,14 +1002,14 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
     self = this;
     renderPageLink = function(label, index) {
         var elmt, a, handler;
-        elmt = $("<" + l10n.pagingControlElement + ">")
+        elmt = $("<span>")
             .attr("class", "exhibit-collectionView-pagingControls-page");
         $(parentElmt).append(elmt);
         
         a = $("<a>")
             .html(label)
             .attr("href", "#")
-            .attr("title", l10n.makePagingLinkTooltip(index));
+            .attr("title", Exhibit.ViewUtilities.makePagingLinkTooltip(index));
         elmt.append(a);
         
         handler = function(evt) {
@@ -1034,7 +1022,7 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
 
     renderPageNumber = function(index) {
         if (index === page) {
-            var elmt = $("<" + l10n.pagingControlElement + ">")
+            var elmt = $("<span>")
                 .attr("class",
                       "exhibit-collectionView-pagingControls-currentPage")
                 .html(index + 1);
@@ -1045,15 +1033,15 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
         }
     };
     renderHTML = function(html) {
-        var elmt = $("<" + l10n.pagingControlElement + ">")
+        var elmt = $("<span>")
             .html(html);
         
         $(parentElmt).append(elmt);
     };
     
     if (page > 0) {
-        renderPageLink(l10n.previousPage, page - 1);
-        if (l10n.pageSeparator.length > 0) {
+        renderPageLink(Exhibit._("%orderedViewFrame.previousPage"), page - 1);
+        if (Exhibit._("%orderedViewFrame.pageSeparator").length > 0) {
             renderHTML(" ");
         }
     }
@@ -1063,7 +1051,7 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
     
     if (page - pageWindow > 1) {
         renderPageNumber(0);
-        renderHTML(l10n.pageWindowEllipses);
+        renderHTML(Exhibit._("%orderedViewFrame.pageWindowEllipses"));
         
         pageWindowStart = page - pageWindow;
     }
@@ -1072,22 +1060,22 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
     }
     
     for (i = pageWindowStart; i <= pageWindowEnd; i++) {
-        if (i > pageWindowStart && l10n.pageSeparator.length > 0) {
-            renderHTML(l10n.pageSeparator);
+        if (i > pageWindowStart && Exhibit._("%orderedViewFrame.pageSeparator").length > 0) {
+            renderHTML(Exhibit._("%orderedViewFrame.pageSeparator"));
         }
         renderPageNumber(i);
     }
     
     if (pageWindowEnd < pageCount - 1) {
-        renderHTML(l10n.pageWindowEllipses);
+        renderHTML(Exhibit._("%orderedViewFrame.pageWindowEllipses"));
         renderPageNumber(pageCount - 1);
     }
     
     if (page < pageCount - 1) {
-        if (l10n.pageSeparator.length > 0) {
+        if (Exhibit._("%orderedViewFrame.pageSeparator").length > 0) {
             renderHTML(" ");
         }
-        renderPageLink(l10n.nextPage, page + 1);
+        renderPageLink(Exhibit._("%orderedViewFrame.nextPage"), page + 1);
     }
 };
 

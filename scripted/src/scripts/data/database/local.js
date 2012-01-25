@@ -19,46 +19,48 @@ Exhibit.Database._LocalImpl = function() {
     /*
      *  Predefined types and properties
      */
-    var l10n, itemType, labelProperty, typeProperty, uriProperty;
+    var itemType, labelProperty, typeProperty, uriProperty;
      
-    l10n = Exhibit.Database.l10n;
-    
     itemType = new Exhibit.Database.Type("Item");
-    itemType._custom = Exhibit.Database.l10n.itemType;
-    this._types["Item"] = itemType;
+    itemType._custom = {
+        "label":       Exhibit._("%database.itemType.label"),
+        "pluralLabel": Exhibit._("%database.itemType.pluralLabel"),
+        "uri":         Exhibit.namespace + "Item"
+    };
+    this._types.Item = itemType;
 
     labelProperty = new Exhibit.Database.Property("label", this);
     labelProperty._uri = "http://www.w3.org/2000/01/rdf-schema#label";
     labelProperty._valueType            = "text";
-    labelProperty._label                = l10n.labelProperty.label;
-    labelProperty._pluralLabel          = l10n.labelProperty.pluralLabel;
-    labelProperty._reverseLabel         = l10n.labelProperty.reverseLabel;
-    labelProperty._reversePluralLabel   = l10n.labelProperty.reversePluralLabel;
-    labelProperty._groupingLabel        = l10n.labelProperty.groupingLabel;
-    labelProperty._reverseGroupingLabel = l10n.labelProperty.reverseGroupingLabel;
-    this._properties["label"]           = labelProperty;
+    labelProperty._label                = Exhibit._("%database.labelProperty.label");
+    labelProperty._pluralLabel          = Exhibit._("%database.labelProperty.pluralLabel");
+    labelProperty._reverseLabel         = Exhibit._("%database.labelProperty.reverseLabel");
+    labelProperty._reversePluralLabel   = Exhibit._("%database.labelProperty.reversePluralLabel");
+    labelProperty._groupingLabel        = Exhibit._("%database.labelProperty.groupingLabel");
+    labelProperty._reverseGroupingLabel = Exhibit._("%database.labelProperty.reverseGroupingLabel");
+    this._properties.label              = labelProperty;
     
     typeProperty = new Exhibit.Database.Property("type", this);
     typeProperty._uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     typeProperty._valueType             = "text";
-    typeProperty._label                 = l10n.typeProperty.label;
-    typeProperty._pluralLabel           = l10n.typeProperty.pluralLabel;
-    typeProperty._reverseLabel          = l10n.typeProperty.reverseLabel;
-    typeProperty._reversePluralLabel    = l10n.typeProperty.reversePluralLabel;
-    typeProperty._groupingLabel         = l10n.typeProperty.groupingLabel;
-    typeProperty._reverseGroupingLabel  = l10n.typeProperty.reverseGroupingLabel;
-    this._properties["type"]            = typeProperty;
+    typeProperty._label                 = Exhibit._("%database.typeProperty.label");
+    typeProperty._pluralLabel           = Exhibit._("%database.typeProperty.pluralLabel");
+    typeProperty._reverseLabel          = Exhibit._("%database.typeProperty.reverseLabel");
+    typeProperty._reversePluralLabel    = Exhibit._("%database.typeProperty.reversePluralLabel");
+    typeProperty._groupingLabel         = Exhibit._("%database.typeProperty.groupingLabel");
+    typeProperty._reverseGroupingLabel  = Exhibit._("%database.typeProperty.reverseGroupingLabel");
+    this._properties.type               = typeProperty;
     
     uriProperty = new Exhibit.Database.Property("uri", this);
     uriProperty._uri = "http://simile.mit.edu/2006/11/exhibit#uri";
     uriProperty._valueType              = "url";
-    uriProperty._label                  = l10n.uriProperty.label;
-    uriProperty._pluralLabel            = l10n.uriProperty.pluralLabel;
-    uriProperty._reverseLabel           = l10n.uriProperty.reverseLabel;
-    uriProperty._reversePluralLabel     = l10n.uriProperty.reversePluralLabel;
-    uriProperty._groupingLabel          = l10n.uriProperty.groupingLabel;
-    uriProperty._reverseGroupingLabel   = l10n.uriProperty.reverseGroupingLabel;
-    this._properties["uri"]             = uriProperty;
+    uriProperty._label                  = Exhibit._("%database.uriProperty.label");
+    uriProperty._pluralLabel            = Exhibit._("%database.uriProperty.pluralLabel");
+    uriProperty._reverseLabel           = Exhibit._("%database.uriProperty.reverseLabel");
+    uriProperty._reversePluralLabel     = Exhibit._("%database.uriProperty.reversePluralLabel");
+    uriProperty._groupingLabel          = Exhibit._("%database.uriProperty.groupingLabel");
+    uriProperty._reverseGroupingLabel   = Exhibit._("%database.uriProperty.reverseGroupingLabel");
+    this._properties.uri                = uriProperty;
 };
 
 /**
@@ -89,18 +91,18 @@ Exhibit.Database._LocalImpl.prototype.loadLinks = function(fDone) {
  */
 Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI) {
     if (typeof o === "undefined" || o === null) {
-        throw Error("Could not load data.");
+        throw Error(Exhibit._("%database.error.unloadable"));
     }
     if (typeof baseURI === "undefined") {
         baseURI = location.href;
     }
-    if (typeof o["types"] !== "undefined") {
+    if (typeof o.types !== "undefined") {
         this.loadTypes(o.types, baseURI);
     }
-    if (typeof o["properties"] !== "undefined") {
+    if (typeof o.properties !== "undefined") {
         this.loadProperties(o.properties, baseURI);
     }
-    if (typeof o["items"] !== "undefined") {
+    if (typeof o.items !== "undefined") {
         this.loadItems(o.items, baseURI);
     }
 };
@@ -140,12 +142,12 @@ Exhibit.Database._LocalImpl.prototype.loadTypes = function(typeEntries, baseURI)
                             }
                         }
                         
-                        if (typeof type._custom["uri"] === "undefined") {
-                            type._custom["uri"] = baseURI + "type#" + encodeURIComponent(typeID);
+                        if (typeof type._custom.uri === "undefined") {
+                            type._custom.uri = baseURI + "type#" + encodeURIComponent(typeID);
                         }
                         
-                        if (typeof type._custom["label"] === "undefined") {
-                            type._custom["label"] = typeID;
+                        if (typeof type._custom.label === "undefined") {
+                            type._custom.label = typeID;
                         }
                     }
                 }
@@ -154,7 +156,7 @@ Exhibit.Database._LocalImpl.prototype.loadTypes = function(typeEntries, baseURI)
         
         $(document).trigger('onAfterLoadingTypes.exhibit');
     } catch(e) {
-        Exhibit.Debug.exception(e, "Database.loadTypes failed");
+        Exhibit.Debug.exception(e, Exhibit._("%database.error.loadTypesFailure"));
     }
 };
 
@@ -188,39 +190,39 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
                             this._properties[propertyID] = property;
                         }
             
-                        property._uri = typeof propertyEntry["uri"] !== "undefined" ?
+                        property._uri = typeof propertyEntry.uri !== "undefined" ?
                             propertyEntry.uri :
                             (baseURI + "property#" + encodeURIComponent(propertyID));
 
-                        property._valueType = typeof propertyEntry["valueType"] !== "undefined" ?
+                        property._valueType = typeof propertyEntry.valueType !== "undefined" ?
                             propertyEntry.valueType :
                             "text";
             
-                        property._label = typeof propertyEntry["label"] !== "undefined" ?
+                        property._label = typeof propertyEntry.label !== "undefined" ?
                             propertyEntry.label :
                             propertyID;
 
-                        property._pluralLabel = typeof propertyEntry["pluralLabel"] !== "undefined" ?
+                        property._pluralLabel = typeof propertyEntry.pluralLabel !== "undefined" ?
                             propertyEntry.pluralLabel :
                             property._label;
             
-                        property._reverseLabel = typeof propertyEntry["reverseLabel"] !== "undefined" ?
+                        property._reverseLabel = typeof propertyEntry.reverseLabel !== "undefined" ?
                             propertyEntry.reverseLabel :
                             ("!" + property._label);
 
-                        property._reversePluralLabel = typeof propertyEntry["reversePluralLabel"] !== "undefined" ?
+                        property._reversePluralLabel = typeof propertyEntry.reversePluralLabel !== "undefined" ?
                             propertyEntry.reversePluralLabel :
                             ("!" + property._pluralLabel);
             
-                        property._groupingLabel = typeof propertyEntry["groupingLabel"] !== "undefined" ?
+                        property._groupingLabel = typeof propertyEntry.groupingLabel !== "undefined" ?
                             propertyEntry.groupingLabel :
                             property._label;
 
-                        property._reverseGroupingLabel = typeof propertyEntry["reverseGroupingLabel"] !== "undefined" ?
+                        property._reverseGroupingLabel = typeof propertyEntry.reverseGroupingLabel !== "undefined" ?
                             propertyEntry.reverseGroupingLabel :
                             property._reverseLabel;
             
-                        if (typeof propertyEntry["origin"] !== "undefined") {
+                        if (typeof propertyEntry.origin !== "undefined") {
                             property._origin = propertyEntry.origin;
                         }
                     }
@@ -232,7 +234,7 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
         
         $(document).trigger("onAfterLoadingProperties.exhibit");
     } catch(e) {
-        Exhibit.Debug.exception(e, "Database.loadProperties failed");
+        Exhibit.Debug.exception(e, Exhibit._("%database.error.loadPropertiesFailure"));
     }
 };
 
@@ -272,7 +274,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
         
         $(document).trigger("onAfterLoadingItems.exhibit");
     } catch(e) {
-        Exhibit.Debug.exception(e, "Database.loadItems failed");
+        Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
     }
 };
 
@@ -716,7 +718,7 @@ Exhibit.Database._LocalImpl.prototype.removeAllStatements = function() {
         
         $(document).trigger("onAfterRemovingAllStatements.exhibit");
     } catch(e) {
-        Exhibit.Debug.exception(e, "Database.removeAllStatements failed");
+        Exhibit.Debug.exception(e, Exhibit._("%database.error.removeAllStatementsFailure"));
     }
 };
 
@@ -743,7 +745,7 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
                 importer.load(link, database, fNext);
                 return;
             } else {
-                Exhibit.Debug.log("No importer for data of type " + type);
+                Exhibit.Debug.log(Exhibit._("%database.error.noImporterFailure", type));
             }
         }
 
@@ -765,28 +767,30 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
 Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunction, baseURI) {
     var id, label, uri, type, isArray, p, v, j;
 
-    if (typeof itemEntry["label"] === "undefined" &&
-        typeof itemEntry["id"] === "undefined") {
-        Exhibit.Debug.warn("Item entry has no label and no id: " +
-                           JSON.toJSONString(itemEntry));
+    if (typeof itemEntry.label === "undefined" &&
+        typeof itemEntry.id === "undefined") {
+        Exhibit.Debug.warn(Exhibit._("%database.error.itemSyntaxError",
+                                     JSON.toJSONString(itemEntry)));
 	    itemEntry.label = "item" + Math.ceil(Math.random()*1000000);
     }
     
-    if (typeof itemEntry["label"] === "undefined") {
+    if (typeof itemEntry.label === "undefined") {
         id = itemEntry.id;
         if (!this._items.contains(id)) {
-            Exhibit.Debug.warn("Cannot add new item containing no label: " +
-                               JSON.toJSONString(itemEntry));
+            Exhibit.Debug.warn(
+                Exhibit._("%database.error.itemMissingLabelFailure",
+                          JSON.toJSONString(itemEntry))
+            );
         }
     } else {
         label = itemEntry.label;
-        id = typeof itemEntry["id"] !== "undefined" ?
+        id = typeof itemEntry.id !== "undefined" ?
             itemEntry.id :
             label;
-        uri = typeof itemEntry["uri"] !== "undefined" ?
+        uri = typeof itemEntry.uri !== "undefined" ?
             itemEntry.uri :
             (baseURI + "item#" + encodeURIComponent(id));
-        type = typeof itemEntry["type"] !== "undefined" ?
+        type = typeof itemEntry.type !== "undefined" ?
             itemEntry.type :
             "Item";
                 
@@ -855,8 +859,8 @@ Exhibit.Database._LocalImpl.prototype._ensureTypeExists = function(typeID, baseU
     if (typeof this._types[typeID] === "undefined") {
         type = new Exhibit.Database.Type(typeID);
         
-        type._custom["uri"] = baseURI + "type#" + encodeURIComponent(typeID);
-        type._custom["label"] = typeID;
+        type._custom.uri = baseURI + "type#" + encodeURIComponent(typeID);
+        type._custom.label = typeID;
         
         this._types[typeID] = type;
     }
@@ -881,8 +885,8 @@ Exhibit.Database._LocalImpl.prototype._ensurePropertyExists = function(propertyI
         property._label = propertyID;
         property._pluralLabel = property._label;
         
-        property._reverseLabel = "reverse of " + property._label;
-        property._reversePluralLabel = "reverse of " + property._pluralLabel;
+        property._reverseLabel = Exhibit._("%database.reverseLabel", property._label);
+        property._reversePluralLabel = Exhibit._("%database.reversePluralLabel", property._pluralLabel);
         
         property._groupingLabel = property._label;
         property._reverseGroupingLabel = property._reverseLabel;
@@ -1055,6 +1059,35 @@ Exhibit.Database._LocalImpl.prototype._getProperties = function(index, x) {
         }
     }
     return properties;
+};
+
+/**
+ * @param {Number} count
+ * @param {String} typeID
+ * @param {String} countStyleClass
+ * @returns {jQuery}
+ */
+Exhibit.Database._LocalImpl.prototype.labelItemsOfType = function(count, typeID, countStyleClass) {
+    var label, type, pluralLabel, span;
+    label = Exhibit._((count === 1) ? "" : "");
+    type = this.getType(typeID);
+    if (typeof type !== "undefined" && type !== null) {
+        label = type.getLabel();
+        if (count !== 1) {
+            pluralLabel = type.getProperty("pluralLabel");
+            if (typeof pluralLabel !== "undefined" && pluralLabel !== null) {
+                label = pluralLabel
+            }
+        }
+    }
+
+    span = $("<span>").html(
+        $("<span>")
+            .attr("class", countStyleClass)
+            .html(count)
+    ).append(" " + label);
+    
+    return span;
 };
 
 /**

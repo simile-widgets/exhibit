@@ -289,7 +289,7 @@ Exhibit.ToolboxWidget.prototype._showExportMenu = function(elmt, evt) {
     
     if (typeof this.getGeneratedHTML === "function") {
         makeMenuItem({
-            "getLabel":  function() { return Exhibit.l10n.htmlExporterLabel; },
+            "getLabel":  function() { return Exhibit._("%export.htmlExporterLabel"); },
             "exportOne":  this.getGeneratedHTML,
             "exportMany": this.getGeneratedHTML
         });
@@ -310,10 +310,10 @@ Exhibit.ToolboxWidget.createExportDialogBox = function(string) {
         "children": [
             {   tag:        "button",
                 field:      "closeButton",
-                children:    [ Exhibit.l10n.exportDialogBoxCloseButtonLabel ]
+                children:    [ Exhibit._("%export.exportDialogBoxCloseButtonLabel") ]
             },
             {   tag:        "p",
-                children:   [ Exhibit.l10n.exportDialogBoxPrompt ]
+                children:   [ Exhibit._("%export.exportDialogBoxPrompt") ]
             },
             {   tag:        "div",
                 field:      "textAreaContainer"

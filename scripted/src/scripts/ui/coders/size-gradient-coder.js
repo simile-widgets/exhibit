@@ -33,9 +33,18 @@ Exhibit.SizeGradientCoder = function(uiContext) {
     this._valueScale = this._linear; // value scaling functionality needs to be added
     
     this._gradientPoints = [];
-    this._mixedCase = { label: "mixed", size: 20 };
-    this._missingCase = { label: "missing", size: 20 };
-    this._othersCase = { label: "others", size: 20 };
+    this._mixedCase = {
+        "label": Exhibit._("%coders.mixedCaseLabel"),
+        "size": 20
+    };
+    this._missingCase = {
+        "label": Exhibit._("%coders.missingCaseLabel"),
+        "size": 20
+    };
+    this._othersCase = {
+        "label": Exhibit._("%coders.othersCaseLabel"),
+        "size": 20
+    };
 };
 
 Exhibit.SizeGradientCoder._settingSpecs = {
@@ -90,7 +99,7 @@ Exhibit.SizeGradientCoder.createFromDOM = function(configElmt, uiContext) {
             );
         });
     } catch (e) {
-        Exhibit.Debug.exception(e, "SizeGradientCoder: Error processing configuration of coder");
+        Exhibit.Debug.exception(e, Exhibit._("%coders.error.configuration", "SizeGradientCoder"));
     }
     
     Exhibit.SizeGradientCoder._configure(coder, configuration);

@@ -14,9 +14,18 @@ Exhibit.SizeCoder = function(uiContext) {
     this._settings = {};
     
     this._map = {};
-    this._mixedCase = { label: "mixed", size: 10 };
-    this._missingCase = { label: "missing", size: 10 };
-    this._othersCase = { label: "others", size: 10 };
+    this._mixedCase = {
+        "label": Exhibit._("%coders.mixedCaseLabel"),
+        "size": 10
+    };
+    this._missingCase = {
+        "label": Exhibit._("%coders.missingCaseLabel"),
+        "size": 10
+    };
+    this._othersCase = {
+        "label": Exhibit._("%coders.othersCaseLabel"),
+        "size": 10
+    };
 };
 
 Exhibit.SizeCoder._settingSpecs = {
@@ -58,7 +67,7 @@ Exhibit.SizeCoder.createFromDOM = function(configElmt, uiContext) {
             );
         });
     } catch (e) {
-        Exhibit.Debug.exception(e, "SizeCoder: Error processing configuration of coder");
+        Exhibit.Debug.exception(e, Exhibit._("%coders.error.configuration", "SizeCoder"));
     }
     
     Exhibit.SizeCoder._configure(coder, configuration);

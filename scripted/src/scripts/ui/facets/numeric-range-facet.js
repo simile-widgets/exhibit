@@ -92,7 +92,7 @@ Exhibit.NumericRangeFacet.createFromDOM = function(configElmt, containerElmt, ui
             facet.setExpression(Exhibit.ExpressionParser.parse(expressionString));
         }
     } catch (e) {
-        Exhibit.Debug.exception(e, "NumericRangeFacet: Error processing configuration of numeric range facet");
+        Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "NumericRangeFacet"));
     }
     Exhibit.NumericRangeFacet._configure(facet, configuration);
     
@@ -318,7 +318,7 @@ Exhibit.NumericRangeFacet.prototype._reconstruct = function(items) {
             evt.stopPropagation();
         };
         elmt = constructFacetItemFunction(
-            from + " - " + to, 
+            Exhibit._("%facets.numeric.rangeShort", from, to), 
             count, 
             null,
             selected, 
@@ -379,7 +379,7 @@ Exhibit.NumericRangeFacet.prototype._initializeUI = function() {
 Exhibit.NumericRangeFacet.prototype._toggleRange = function(from, to, wasSelected, singleSelection) {
     var self, label, wasOnlyThingSelected, newRestrictions, oldRestrictions;
     self = this;
-    label = from + " to " + to;
+    label = Exhibit._("%facets.numeric.rangeWords", from, to);
     wasOnlyThingSelected = (this._ranges.length === 1 && wasSelected);
     if (singleSelection && !wasOnlyThingSelected) {
         newRestrictions = { "ranges": [ { from: from, to: to } ] };
@@ -387,9 +387,7 @@ Exhibit.NumericRangeFacet.prototype._toggleRange = function(from, to, wasSelecte
             this,
             Exhibit.Facet.getRegistryKey(),
             newRestrictions,
-            String.substitute(
-                Exhibit.FacetUtilities.l10n["facetSelectOnlyActionTitle"],
-                [ label, this.getLabel() ]),
+            Exhibit._("%facets.facetSelectOnlyActionTitle", label, this.getLabel()),
             true
         );
     } else {
@@ -399,9 +397,7 @@ Exhibit.NumericRangeFacet.prototype._toggleRange = function(from, to, wasSelecte
             this,
             Exhibit.Facet.getRegistryKey(),
             newRestrictions,
-            String.substitute(
-                Exhibit.FacetUtilities.l10n[wasSelected ? "facetUnselectActionTitle" : "facetSelectActionTitle"],
-                [ label, this.getLabel() ]),
+            Exhibit._(wasSelected ? "%facets.facetUnselectActionTitle" : "%facets.facetSelectActionTitle", label, this.getLabel()),
             true
         );
     }
@@ -415,9 +411,7 @@ Exhibit.NumericRangeFacet.prototype._clearSelections = function() {
         this,
         Exhibit.Facet.getRegistryKey(),
         this.exportEmptyState(),
-        String.substitute(
-            Exhibit.FacetUtilities.l10n["facetClearSelectionsActionTitle"],
-            [ this.getLabel() ]),
+        Exhibit._("%facets.facetClearSelectionsActionTitle", this.getLabel()),
         true
     );
 };

@@ -14,9 +14,18 @@ Exhibit.IconCoder = function(uiContext) {
     this._settings = {};
     
     this._map = {};
-    this._mixedCase = { label: "mixed", icon: null };
-    this._missingCase = { label: "missing", icon: null };
-    this._othersCase = { label: "others", icon: null };
+    this._mixedCase = {
+        "label": Exhibit._("%coders.mixedCaseLabel"),
+        "icon": null
+    };
+    this._missingCase = {
+        "label": Exhibit._("%coders.missingCaseLabel"),
+        "icon": null
+    };
+    this._othersCase = {
+        "label": Exhibit._("%coders.othersCaseLabel"),
+        "icon": null
+    };
 };
 
 Exhibit.IconCoder._settingSpecs = {
@@ -62,7 +71,7 @@ Exhibit.IconCoder.createFromDOM = function(configElmt, uiContext) {
             );
         });
     } catch (e) {
-        Exhibit.Debug.exception(e, "IconCoder: Error processing configuration of coder");
+        Exhibit.Debug.exception(e, Exhibit._("%coders.error.configuration", "IconCoder"));
     }
     
     Exhibit.IconCoder._configure(coder, configuration);

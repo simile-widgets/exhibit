@@ -631,7 +631,7 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
         sortingFunction = textFunction;
         coersion = function(v) {
             if (typeof v === "undefined" || v === null) {
-                return Exhibit.l10n.missingSortKey;
+                return Exhibit._("%general.missingSortKey");
             } else {
                 var label = database.getObject(v, "label");
                 return (typeof label === "undefined" || label === null) ? v : label;
@@ -641,7 +641,7 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
         sortingFunction = textFunction;
         coersion = function(v) {
             if (typeof v === "undefined" || v === null) {
-                return Exhibit.l10n.missingSortKey;
+                return Exhibit._("%general.missingSortKey");
             } else {
                 return v.toString();
             }
@@ -671,7 +671,7 @@ Exhibit.TabularView.prototype._doSort = function(columnIndex) {
         this,
         Exhibit.View._registryKey,
         this.exportState(),
-        Exhibit.TabularView.l10n.makeSortActionTitle(this._columns[columnIndex].label, this._settings.sortAscending),
+        Exhibit._(this._settings.sortAscending ? "%TabularView.sortColumnAscending" : "%TabularView.sortColumnDescending", this._columns[columnIndex].label),
         true
     );
 };
@@ -686,7 +686,7 @@ Exhibit.TabularView.prototype._gotoPage = function(page) {
         this,
         Exhibit.View._registryKey,
         this.exportState(),
-        Exhibit.OrderedViewFrame.l10n.makePagingActionTitle(page),
+        Exhibit.ViewUtilities.makePagingActionTitle(page),
         true
     );
 };
@@ -732,26 +732,24 @@ Exhibit.TabularView._constructDefaultValueList = function(values, valueType, par
  * @returns {Element}
  */
 Exhibit.TabularView.createDom = function(div) {
-    var l10n, l10n2, headerTemplate;
-    l10n = Exhibit.TabularView.l10n;
-    l10n2 = Exhibit.OrderedViewFrame.l10n;
+    var headerTemplate;
     headerTemplate = {
         elmt:       div,
         "class":  "exhibit-collectionView-header",
         children: [
-            {   tag:    "div",
-                field:  "collectionSummaryDiv"
+            {   "tag":    "div",
+                "field":  "collectionSummaryDiv"
             },
-            {   tag:        l10n2.pagingControlContainerElement,
+            {   "tag":    "div",
                 "class":  "exhibit-tabularView-pagingControls",
-                field:      "topPagingDiv"
+                "field":  "topPagingDiv"
             },
-            {   tag:    "div",
-                field:  "bodyDiv"
+            {   "tag":    "div",
+                "field":  "bodyDiv"
             },
-            {   tag:        l10n2.pagingControlContainerElement,
+            {   "tag":    "div",
                 "class":  "exhibit-tabularView-pagingControls",
-                field:      "bottomPagingDiv"
+                "field":  "bottomPagingDiv"
             }
         ]
     };
@@ -775,15 +773,14 @@ Exhibit.TabularView.createColumnHeader = function(
     sortAscending,
     sortFunction
 ) {
-    var l10n, template, dom;
-    l10n = Exhibit.TabularView.l10n;
+    var template, dom;
     template = {
-        elmt:       th,
+        "elmt":   th,
         "class":  sort ? 
                     "exhibit-tabularView-columnHeader-sorted" : 
                     "exhibit-tabularView-columnHeader",
-        title: sort ? l10n.columnHeaderReSortTooltip : l10n.columnHeaderSortTooltip,
-        children: [ label ]
+        "title": Exhibit._(sort ? "%TabularView.columnHeaderReSortTooltip" : "%TabularView.columnHeaderSortTooltip"),
+        "children": [ label ]
     };
     if (sort) {
         template.children.push({

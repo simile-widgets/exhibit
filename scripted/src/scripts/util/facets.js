@@ -25,17 +25,17 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
 
     $(div).attr("class", "exhibit-facet");
     dom = $.simileDOM("string", div,
-            "<div class='exhibit-facet-header'>" +
-            "<div class='exhibit-facet-header-filterControl' id='clearSelectionsDiv' title='" + Exhibit.FacetUtilities.l10n.clearSelectionsTooltip + "'>" +
-                "<span id='filterCountSpan'></span>" +
-                "<img id='checkImage' />" +
-            "</div>" +
+            '<div class="exhibit-facet-header">' +
+            '<div class="exhibit-facet-header-filterControl" id="clearSelectionsDiv" title="' + Exhibit._("%facets.clearSelectionsTooltip") + '">' +
+            '<span id="filterCountSpan"></span>' +
+            '<img id="checkImage" />' +
+            '</div>' +
             ((collapsible) ?
-                "<img src='"+Exhibit.urlPrefix+"images/collapse.png' class='exhibit-facet-header-collapse' id='collapseImg' />" :
-                "") +
-            "<span class='exhibit-facet-header-title'>" + facetLabel + "</span>" +
-        "</div>" +
-        "<div class='exhibit-facet-body-frame' id='frameDiv'></div>",
+             '<img src="' + Exhibit.urlPrefix + 'images/collapse.png" class="exhibit-facet-header-collapse" id="collapseImg" />' :
+                '') +
+            '<span class="exhibit-facet-header-title">' + facetLabel + '</span>' +
+        '</div>' +
+        '<div class="exhibit-facet-body-frame" id="frameDiv"></div>',
         { checkImage: Exhibit.UI.createTranslucentImage("images/black-check.png") }
     );
     resizableDivWidget = Exhibit.ResizableDivWidget.create({}, dom.frameDiv, uiContext);
@@ -120,9 +120,9 @@ Exhibit.FacetUtilities.constructFacetItem = function(
     
     var dom = $.simileDOM("string",
         "div",
-        "<div class='exhibit-facet-value-count'>" + count + "</div>" +
-        "<div class='exhibit-facet-value-inner' id='inner'>" + 
-            (   "<div class='exhibit-facet-value-checkbox'>&#160;" +
+        '<div class="exhibit-facet-value-count">' + count + "</div>" +
+        '<div class="exhibit-facet-value-inner" id="inner">' + 
+            (   '<div class="exhibit-facet-value-checkbox">&#160;' +
                     Exhibit.UI.createTranslucentImageHTML(
                         facetHasSelection ?
                             (selected ? "images/black-check.png" : "images/no-check.png") :
@@ -130,7 +130,7 @@ Exhibit.FacetUtilities.constructFacetItem = function(
                     ) +
                 "</div>"
             ) +
-            "<a class='exhibit-facet-value-link' href='#' id='link'></a>" +
+            '<a class="exhibit-facet-value-link" href="#" id="link"></a>' +
         "</div>"
     );
 
@@ -170,13 +170,13 @@ Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, face
     $(div).attr("class", "exhibit-flowingFacet");
     var dom = $.simileDOM("string",
         div,
-        "<div class='exhibit-flowingFacet-header'>" +
+        '<div class="exhibit-flowingFacet-header">' +
             ((collapsible) ?
-                "<img src='" + Exhibit.urlPrefix + "images/collapse.png' class='exhibit-facet-header-collapse' id='collapseImg' />" :
+                '<img src="' + Exhibit.urlPrefix + 'images/collapse.png" class="exhibit-facet-header-collapse" id="collapseImg" />' :
                 "") +
-            "<span class='exhibit-flowingFacet-header-title'>" + facetLabel + "</span>" +
+            '<span class="exhibit-flowingFacet-header-title">' + facetLabel + "</span>" +
         "</div>" +
-        "<div id='frameDiv'><div class='exhibit-flowingFacet-body' id='valuesContainer'></div></div>"
+        '<div id="frameDiv"><div class="exhibit-flowingFacet-body" id="valuesContainer"></div></div>'
     );
     
     dom.setSelectionCount = function(count) {
@@ -224,7 +224,7 @@ Exhibit.FacetUtilities.constructFlowingFacetItem = function(
     
     var dom = $.simileDOM("string",
         "div",
-        (   "<div class='exhibit-flowingFacet-value-checkbox'>" +
+        (   '<div class="exhibit-flowingFacet-value-checkbox">' +
                 $.simileBubble("createTranslucentImageHTML",
                     Exhibit.urlPrefix + 
                     (   facetHasSelection ?
@@ -233,9 +233,9 @@ Exhibit.FacetUtilities.constructFlowingFacetItem = function(
                     )) +
             "</div>"
         ) +
-        "<a class='exhibit-flowingFacet-value-link' href='#' id='inner'></a>" +
+        '<a class="exhibit-flowingFacet-value-link" href="#" id="inner"></a>' +
         " " +
-        "<span class='exhibit-flowingFacet-value-count'>(" + count + ")</span>"
+        '<span class="exhibit-flowingFacet-value-count">(' + count + ")</span>"
     );
     
     $(dom.elmt).attr("class", selected ? "exhibit-flowingFacet-value exhibit-flowingFacet-value-selected" : "exhibit-flowingFacet-value");
@@ -293,9 +293,9 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
     
     var dom = $.simileDOM("string",
         "div",
-        "<div class='exhibit-facet-value-count'>" + count + "</div>" +
-        "<div class='exhibit-facet-value-inner' id='inner'>" + 
-            (   "<div class='exhibit-facet-value-checkbox'>&#160;" +
+        '<div class="exhibit-facet-value-count">' + count + "</div>" +
+        '<div class="exhibit-facet-value-inner" id="inner">' + 
+            (   '<div class="exhibit-facet-value-checkbox">&#160;' +
                 $.simileBubble("createTranslucentImageHTML",
                         Exhibit.urlPrefix + 
                         (   facetHasSelection ?
@@ -304,9 +304,9 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
                         )) +
                 "</div>"
             ) +
-            "<a class='exhibit-facet-value-link' href='#' id='link'></a>" +
+            '<a class="exhibit-facet-value-link" href="#" id="link"></a>' +
             (   hasChildren ?
-                (   "<a class='exhibit-facet-value-children-toggle' href='#' id='toggle'>" + 
+                (   '<a class="exhibit-facet-value-children-toggle" href="#" id="toggle">' + 
                     $.simileBubble("createTranslucentImageHTML",
                             Exhibit.urlPrefix + "images/down-arrow.png") +
                     $.simileBubble("createTranslucentImageHTML",
@@ -316,7 +316,7 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
                 ""
             ) +
         "</div>" +
-        (hasChildren ? "<div class='exhibit-facet-childrenContainer' id='childrenContainer'></div>" : "")
+        (hasChildren ? '<div class="exhibit-facet-childrenContainer" id="childrenContainer"></div>' : "")
     );
     $(dom.elmt).attr("class", selected ? "exhibit-facet-value exhibit-facet-value-selected" : "exhibit-facet-value");
     if (typeof label === "string") {
@@ -384,7 +384,7 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
     
     var dom = $.simileDOM("string",
         "div",
-        (   "<div class='exhibit-flowingFacet-value-checkbox'>" +
+        (   '<div class="exhibit-flowingFacet-value-checkbox">' +
             $.simileBubble("createTranslucentImageHTML",
                     Exhibit.urlPrefix + 
                     (   facetHasSelection ?
@@ -393,11 +393,11 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
                     )) +
             "</div>"
         ) +
-        "<a class='exhibit-flowingFacet-value-link' href='#' id='inner'></a>" +
+        '<a class="exhibit-flowingFacet-value-link" href="#" id="inner"></a>' +
         " " +
-        "<span class='exhibit-flowingFacet-value-count'>(" + count + ")</span>" +
+        '<span class="exhibit-flowingFacet-value-count">(' + count + ")</span>" +
         (   hasChildren ?
-            (   "<a class='exhibit-flowingFacet-value-children-toggle' href='#' id='toggle'>" + 
+            (   '<a class="exhibit-flowingFacet-value-children-toggle" href="#" id="toggle">' + 
                 $.simileBubble("createTranslucentImageHTML",
                         Exhibit.urlPrefix + "images/down-arrow.png") +
                 $.simileBubble("createTranslucentImageHTML",
@@ -406,7 +406,7 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
             ) :
             ""
         ) +
-        (hasChildren ? "<div class='exhibit-flowingFacet-childrenContainer' id='childrenContainer'></div>" : "")
+        (hasChildren ? '<div class="exhibit-flowingFacet-childrenContainer" id="childrenContainer"></div>' : "")
     );
     
     $(dom.elmt).attr("class", selected ? "exhibit-flowingFacet-value exhibit-flowingFacet-value-selected" : "exhibit-flowingFacet-value");
