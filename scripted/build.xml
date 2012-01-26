@@ -80,6 +80,7 @@
         <exclude name="lib/*.js"/>
         <exclude name="exhibit-api.js"/>
         <exclude name="scripts/util/util.js"/>
+        <exclude name="scripts/create.js"/>
         <include name="scripts/util/*.js"/>
         <include name="scripts/data/*.js"/>
         <include name="scripts/ui/*.js"/>
@@ -97,21 +98,70 @@
     <mkdir dir="${bundle}"/>
 
     <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
-      <filelist dir="${src}/"
-                files="exhibit-api.js"/>
-      <filelist dir="${src}/"
-                files="scripts/util/util.js"/>
-      <fileset dir="${src}/">
-        <exclude name="images/*"/>
-        <exclude name="styles/*"/>
-        <exclude name="extensions/**/*"/>
-        <exclude name="locales/**/*"/>
-        <exclude name="lib/*.js"/>
-        <exclude name="scripts/node/*.js"/>
-        <exclude name="exhibit-api.js"/>
-        <exclude name="scripts/util/util.js"/>
-        <include name="**/*.js"/>
+      <filelist dir="${src}/">
+        <file name="lib/base64.js"/>
+        <file name="lib/jquery-1.7.1.js"/>
+        <file name="lib/jquery.history.js"/>
+        <file name="lib/jquery.history.shim.js"/>
+        <file name="lib/jquery.simile.bubble.js"/>
+        <file name="lib/jquery.simile.dom.js"/>
+        <file name="lib/polyfill.js"/>
+        <file name="lib/sprintf.js"/>
+        <file name="scripts/exhibit.js"/>
+        <file name="scripts/bc/bc.js"/>
+        <file name="scripts/bc/attributes.js"/>
+        <file name="scripts/registry.js"/>
+        <file name="scripts/util/util.js"/>
+      </filelist>
+      <fileset dir="${src}">
+        <include name="scripts/util/*.js"/>
       </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/database.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/data/database/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/collection.js"/>
+        <file name="scripts/data/expression.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/data/expression/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/expression-parser.js"/>
+        <file name="scripts/data/exporter.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/data/exporters/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/importer.js"/>
+        <file name="scripts/data/importers/json.js"/>
+        <file name="scripts/data/importers/jsonp.js"/>
+        <file name="scripts/data/importers/google-spreadsheet.js"/>
+        <file name="scripts/data/importers/babel-based.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/ui/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/ui/facets/facet.js"/>
+        <file name="scripts/ui/facets/list-facet.js"/>
+        <file name="scripts/ui/facets/cloud-facet.js"/>
+        <file name="scripts/ui/facets/numeric-range-facet.js"/>
+        <file name="scripts/ui/facets/text-search-facet.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/ui/views/*.js"/>
+        <include name="scripts/ui/coders/*.js"/>
+        <include name="scripts/ui/widgets/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="locales/manifest.js"/>
+        <file name="scripts/final.js"/>
+      </filelist>
     </concat>
 
     <concat destfile="${bundle}/exhibit-scripted-bundle.css" force="no">
@@ -129,7 +179,7 @@
     <mkdir dir="${dist}"/>
 
     <yui-compressor
-       munge="true"
+       munge="false"
        fromdir="${bundle}/"
        todir="${dist}/">
       <include name="*.js"/>
@@ -270,6 +320,11 @@
     <delete dir="${dist}/" quiet="true"/>
   </target>
 
+  <target name="clean-compressed">
+    <delete file="${src}/exhibit-scripted-bundle-min.css"/>
+    <delete file="${src}/exhibit-scripted-bundle-min.js"/>
+  </target>
+
   <target name="clean-coverage">
     <delete dir="${coverage}/" quiet="true"/>
   </target>
@@ -284,6 +339,6 @@
     <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-demos,clean-node,clean-bundle,clean-compress,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
+  <target name="clean" depends="clean-demos,clean-node,clean-bundle,clean-compress,clean-compressed,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
 
 </project>
