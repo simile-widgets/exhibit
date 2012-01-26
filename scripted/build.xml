@@ -14,6 +14,7 @@
   <property name="docs" value="${build}/docs"/>
   <property name="demos" value="${build}/demos"/>
   <property name="bundle" value="${build}/bundle"/>
+  <property name="compress" value="${build}/compress"/>
   <property name="node" value="${build}/node"/>
   <property name="demosSrc" value="demos"/>
   <property name="testsOutput" value="${build}/tests"/>
@@ -23,6 +24,7 @@
 
   <property name="modules" value=""/>
   <property name="lintfile" value=""/>
+  <property name="extension" value=""/>
 
   <property name="jscoverage.dir" value="/usr/local/bin"/>
   <property name="jscoverage.port" value="9876"/>
@@ -67,7 +69,7 @@
 
 
 
-  <!-- Code compressor -->
+  <!-- node.js code compressor - unused -->
   <target name="node" description="Combine source files as a Node module">
     <mkdir dir="${node}"/>
 
@@ -93,7 +95,7 @@
 
 
 
-  <!-- Code compressor -->
+  <!-- Code concatenation in prep for compression -->
   <target name="bundle" description="Combine source files in the right order">
     <mkdir dir="${bundle}"/>
 
@@ -176,22 +178,47 @@
 
   <!-- Code compressor -->
   <target name="compress" depends="bundle" description="Compress source files">
-    <mkdir dir="${dist}"/>
+    <mkdir dir="${compress}"/>
 
     <yui-compressor
        munge="false"
        fromdir="${bundle}/"
-       todir="${dist}/">
-      <include name="*.js"/>
+       todir="${compress}/">
+      <include name="**/*.js"/>
     </yui-compressor>
 
     <yui-compressor
        munge="true"
        fromdir="${bundle}/"
-       todir="${dist}/">
-      <include name="*.css"/>
+       todir="${compress}/">
+      <include name="**/*.css"/>
     </yui-compressor>
   </target>
+
+
+
+
+  <!-- Modular bundling of extensions -->
+  <target name="extension-bundle" description="Combine extension source files">
+    <mkdir dir="${bundle}/extensions/${extension}"/>
+
+    <concat destfile="${bundle}/extensions/${extension}/${extension}-extension-bundle.js" force="no">
+      <fileset dir="${src}/extensions/${extension}">
+        <exclude name="${extension}-extension.js"/>
+        <exclude name="styles/*"/>
+        <exclude name="locales/*"/>
+        <include name="*.js"/>
+        <include name="scripts/*.js"/>
+      </fileset>
+    </concat>
+
+    <concat destfile="${bundle}/extensions/${extension}/${extension}-extension-bundle.css" force="no">
+      <fileset dir="${src}/extensions/${extension}">
+        <include name="**/*.css"/>
+      </fileset>
+    </concat>
+  </target>
+
 
 
 
@@ -203,6 +230,22 @@
     </copy>
     <copy todir="${demos}/src">
       <fileset dir="${src}"/>
+    </copy>
+  </target>
+
+
+
+
+
+  <!-- Distribution builder -->
+  <target name="dist" description="Assemble existing and generated files into a directory that can be served online" depends="compress">
+    <!-- work through everything in the extensions directory or list them? -->
+    <mkdir dir="${dist}"/>
+    <copy todir="${dist}">
+      <fileset dir="${src}"/>
+    </copy>
+    <copy todir="${dist}">
+      <fileset dir="${compress}"/>
     </copy>
   </target>
 
@@ -317,12 +360,11 @@
   </target>
 
   <target name="clean-compress">
-    <delete dir="${dist}/" quiet="true"/>
+    <delete dir="${compress}/" quiet="true"/>
   </target>
 
-  <target name="clean-compressed">
-    <delete file="${src}/exhibit-scripted-bundle-min.css"/>
-    <delete file="${src}/exhibit-scripted-bundle-min.js"/>
+  <target name="clean-dist">
+    <delete file="${dist}" quiet="true"/>
   </target>
 
   <target name="clean-coverage">
@@ -339,6 +381,6 @@
     <delete dir="${testsOutput}/" quiet="true"/>
   </target>
 
-  <target name="clean" depends="clean-demos,clean-node,clean-bundle,clean-compress,clean-compressed,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
+  <target name="clean" depends="clean-demos,clean-node,clean-bundle,clean-compress,clean-dist,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
 
 </project>
