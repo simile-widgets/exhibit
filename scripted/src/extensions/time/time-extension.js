@@ -108,8 +108,8 @@
                 }
                 
                 if (Exhibit.TimeExtension.params.bundle) {
-                    scriptURLs.push(Exhibit.TimeExtension.urlPrefix + "time-extension-bundle.js");
-                    cssURLs.push(Exhibit.TimeExtension.urlPrefix + "time-extension-bundle.css");
+                    scriptURLs.push(Exhibit.TimeExtension.urlPrefix + "time-extension-bundle-min.js");
+                    cssURLs.push(Exhibit.TimeExtension.urlPrefix + "time-extension-bundle-min.css");
                 } else {
                     Exhibit.prefixURLs(scriptURLs, Exhibit.TimeExtension.urlPrefix + "scripts/", javascriptFiles);
                     Exhibit.prefixURLs(cssURLs, Exhibit.TimeExtension.urlPrefix + "styles/", cssFiles);
