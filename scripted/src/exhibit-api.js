@@ -55,7 +55,7 @@ var Exhibit = {
      * Settable parameters within the query string of loading this file.
      */
     params: {
-        bundle: false,
+        bundle: false, // set to true for releases
         autoCreate: true,
         safe: false,
         babel: undefined,
@@ -299,7 +299,9 @@ Exhibit.prefixURLs = function(urls, urlPrefix, suffixes) {
 };
 
 /**
- *
+ * @static
+ * @param {Document} doc
+ * @param {String} url
  */
 Exhibit.includeCssFile = function(doc, url) {
     var link;
@@ -320,7 +322,10 @@ Exhibit.includeCssFile = function(doc, url) {
 };
 
 /**
- *
+ * @static
+ * @param {Document} doc
+ * @param {String} urlPrefix
+ * @param {Array} filenames
  */
 Exhibit.includeCssFiles = function(doc, urlPrefix, filenames) {
     var i;
@@ -330,7 +335,10 @@ Exhibit.includeCssFiles = function(doc, urlPrefix, filenames) {
 };
 
 /**
- *
+ * @static
+ * @param {Document} doc
+ * @param {String} urlPrefix
+ * @param {Array} filenames
  */
 Exhibit.includeJavascriptFiles = function(doc, urlPrefix, filenames) {
     var i;
@@ -340,7 +348,8 @@ Exhibit.includeJavascriptFiles = function(doc, urlPrefix, filenames) {
 };
 
 /**
- *
+ * @static
+ * @returns {String}
  */
 Exhibit.generateDelayID = function() {
     return "delay" + Math.round(Math.random()*100000);
@@ -401,6 +410,11 @@ Exhibit.load = function() {
         }
     }
 
+    if (Exhibit.params.bundle) {
+        Exhibit.scripts = ["exhibit-scripted-bundle-min.js"];
+        Exhibit.styles = ["exhibit-scripted-bundle-min.css"];
+    }
+    
     if (typeof Exhibit.params.backstage !== "undefined") {
         // If using Backstage, force non-auto creation and force Backstage
         // to load after Exhibit.  If the Backstage install also includes
@@ -408,7 +422,7 @@ Exhibit.load = function() {
         Exhibit.params.autoCreate = false;
         Exhibit.scripts = Exhibit.scripts.concat(Exhibit.params.backstage);
     }
-    
+
     if (Exhibit.params.autoCreate) {
         Exhibit.scripts.push("scripts/create.js");
     }
