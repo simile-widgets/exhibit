@@ -71,8 +71,8 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
                 label = viewConfig.viewLabel;
             } else if (typeof viewConfig.label !== "undefined") {
                 label = viewConfig.label;
-            } else if (typeof Exhibit.ViewPanel.getViewLabel(viewClass) !== "undefined") {
-                label = Exhibit.ViewPanel.getViewLabel(viewClass);
+            } else if (typeof Exhibit.ViewPanel.getViewLabel(viewClassName) !== "undefined") {
+                label = Exhibit.ViewPanel.getViewLabel(viewClassName);
             } else if (typeof viewClassName !== "undefined") {
                 label = viewClassName;
             } else {
@@ -82,8 +82,8 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
             tooltip = null;
             if (typeof viewConfig.tooltip !== "undefined") {
                 tooltip = viewConfig.tooltip;
-            } else if (typeof Exhibit.ViewPanel.getViewTooltip(viewClass) !== "undefined") {
-                tooltip = Exhibit.ViewPanel.getViewTooltip(viewClass);
+            } else if (typeof Exhibit.ViewPanel.getViewTooltip(viewClassName) !== "undefined") {
+                tooltip = Exhibit.ViewPanel.getViewTooltip(viewClassName);
             } else {
                 tooltip = label;
             }
@@ -137,8 +137,8 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
             tooltip = Exhibit.getAttribute(this, "title");
                 
             if (typeof label === "undefined" || label === null) {
-                if (typeof Exhibit.ViewPanel.getViewLabel(viewClass) !== "undefined") {
-                    label = Exhibit.ViewPanel.getViewLabel(viewClass);
+                if (typeof Exhibit.ViewPanel.getViewLabel(viewClassName) !== "undefined") {
+                    label = Exhibit.ViewPanel.getViewLabel(viewClassName);
                 } else if (typeof viewClassName !== "undefined") {
                     label = viewClassName;
                 } else {
@@ -146,8 +146,8 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
                 }
             }
             if (typeof tooltip === "undefined" || tooltip === null) {
-                if (typeof Exhibit.ViewPanel.getViewTooltip(viewClass) !== "undefined") {
-                    tooltip = Exhibit.ViewPanel.getViewTooltip(viewClass);
+                if (typeof Exhibit.ViewPanel.getViewTooltip(viewClassName) !== "undefined") {
+                    tooltip = Exhibit.ViewPanel.getViewTooltip(viewClassName);
                 } else {
                     tooltip = label;
                 }
@@ -205,6 +205,13 @@ Exhibit.ViewPanel.getViewTooltip = function(viewClass) {
  * @returns {String}
  */
 Exhibit.ViewPanel._getLocalized = function(viewClass, type) {
+    // normalize the view class name
+    if (viewClass.indexOf("View") === -1) {
+        viewClass += "View";
+    }
+    if (viewClass.indexOf("Exhibit.") === 0) {
+        viewClass.substr("Exhibit.".length);
+    }
     return Exhibit._("%" + viewClass + "." + type);
 };
 
