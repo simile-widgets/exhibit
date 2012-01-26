@@ -223,6 +223,18 @@
 
 
 
+  <!-- Bundle everything -->
+  <target name="bundle-all">
+    <antcall target="bundle"/>
+    <antcall target="extension-bundle">
+      <param name="extension" value="time"/>
+    </antcall>
+  </target>
+
+
+
+
+
   <!-- Demo builder -->
   <target name="demos" description="Build demos">
     <copy todir="${demos}">
@@ -238,8 +250,7 @@
 
 
   <!-- Distribution builder -->
-  <target name="dist" description="Assemble existing and generated files into a directory that can be served online" depends="compress">
-    <!-- work through everything in the extensions directory or list them? -->
+  <target name="dist" description="Assemble existing and generated files into a directory that can be served online" depends="bundle-all,compress">
     <mkdir dir="${dist}"/>
     <copy todir="${dist}">
       <fileset dir="${src}"/>
