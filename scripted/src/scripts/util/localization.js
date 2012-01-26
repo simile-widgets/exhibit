@@ -184,12 +184,48 @@ Exhibit.Localization.getCurrentLocale = function() {
 };
 
 /**
+ * Given a list of extension locales, return the viable locales that
+ * should be loaded, based on what core locales were loaded.  Assume
+ * that a localization not available and loaded in core is not an
+ * interesting extension locale to load.
+ * @param {Array} possibles
+ * @returns {Array}
+ */
+Exhibit.Localization.getLoadableLocales = function(possibles) {
+    var i, loaded, loadable;
+    loaded = Exhibit.Localization._loadedLocales;
+    loadable = [];
+    for (i = 0; i < loaded.length; i++) {
+        if (possibles.indexOf(loaded[i]) >= 0) {
+            loadable.push(loaded[i]);
+        }
+    }
+    return loadable;
+};
+
+/**
+ * Import core localization.
  * @param {String} locale
  * @param {Object} hash
  */
 Exhibit.Localization.importLocale = function(locale, hash) {
-    Exhibit.l10n[locale] = hash;
-    $(document).trigger("localeLoaded.exhibit", [locale]);
+    if (typeof Exhibit.l10n[locale] === "undefined") {
+        Exhibit.l10n[locale] = hash;
+        $(document).trigger("localeLoaded.exhibit", [locale]);
+    }
+};
+
+/**
+ * Import extension localization.
+ * @param {String} locale
+ * @param {Object} hash
+ */
+Exhibit.Localization.importExtensionLocale = function(locale, hash) {
+    if (typeof Exhibit.l10n[locale] !== "undefined") {
+        $.extend(Exhibit.l10n[locale], hash);
+    } else {
+        Exhibit.l10n[locale] = hash;
+    }
 };
 
 /**

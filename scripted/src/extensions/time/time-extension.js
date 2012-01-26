@@ -40,7 +40,7 @@
             loadTimeExtension();
         } else {
             $(document).one("loadExtensions.exhibit", function() {
-                var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading;
+                var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad;
                 delayID = Exhibit.generateDelayID();
                 $(document).trigger(
                     "delayCreation.exhibit",
@@ -54,6 +54,14 @@
                         "timelineVersion": "2.3.1"
                     },
                     "urlPrefix": null,
+                    "locales": [
+                        "en",
+                        "de",
+                        "es",
+                        "fr",
+                        "nl",
+                        "sv"
+                    ]
                 };
 
                 javascriptFiles = [
@@ -107,7 +115,10 @@
                     Exhibit.prefixURLs(cssURLs, Exhibit.TimeExtension.urlPrefix + "styles/", cssFiles);
                 }
                 
-                scriptURLs.push(Exhibit.TimeExtension.urlPrefix + "locales/" + Exhibit.Localization._currentLocale + "/time-locale.js");
+                localesToLoad = Exhibit.Localization.getLoadableLocales(Exhibit.TimeExtension.locales);
+                for (i = 0; i < localesToLoad.length; i++) {
+                    scriptURLs.push(Exhibit.TimeExtension.urlPrefix + "locales/" + localesToLoad[i] + "/locale.js");
+                }
 
                 Exhibit.includeCssFiles(document, "", cssURLs);
                 Exhibit.includeJavascriptFiles(document, "", scriptURLs);
