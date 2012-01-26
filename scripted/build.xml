@@ -104,13 +104,19 @@
       <fileset dir="${src}/">
         <exclude name="images/*"/>
         <exclude name="styles/*"/>
-        <exclude name="extensions/*"/>
+        <exclude name="extensions/**/*"/>
         <exclude name="locales/**/*"/>
         <exclude name="lib/*.js"/>
         <exclude name="scripts/node/*.js"/>
         <exclude name="exhibit-api.js"/>
         <exclude name="scripts/util/util.js"/>
         <include name="**/*.js"/>
+      </fileset>
+    </concat>
+
+    <concat destfile="${bundle}/exhibit-scripted-bundle.css" force="no">
+      <fileset dir="${src}/styles/">
+        <include name="**/*.css"/>
       </fileset>
     </concat>
   </target>
@@ -127,6 +133,13 @@
        fromdir="${bundle}/"
        todir="${dist}/">
       <include name="*.js"/>
+    </yui-compressor>
+
+    <yui-compressor
+       munge="true"
+       fromdir="${bundle}/"
+       todir="${dist}/">
+      <include name="*.css"/>
     </yui-compressor>
   </target>
 
