@@ -31,7 +31,7 @@ Exhibit.UI.registerComponent = function(name, comp) {
     if (typeof Exhibit.UI.componentMap[name] !== "undefined") {
         Exhibit.Debug.warn(Exhibit._("%general.error.componentNameTaken", msg));
     } else if (typeof comp === "undefined" || comp === null) {
-        Exhibit.Debug.warn(Exhibit._("%general.error.noComponentObject", msg);
+        Exhibit.Debug.warn(Exhibit._("%general.error.noComponentObject", msg));
     } else if (typeof comp.create === "undefined") {
         Exhibit.Debug.warn(Exhibit._("%general.error.missingCreateFunction", msg));
     } else if (typeof comp.createFromDOM === "undefined") {
