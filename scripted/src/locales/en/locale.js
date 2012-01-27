@@ -132,7 +132,7 @@ Exhibit.Localization.importLocale("en", {
     "%facets.hierarchical.othersLabel": "(others)",
     "%facets.hierarchical.rootLabel": "(root)",
 
-    "%views.unplottableTemplate": '<a class="exhibit-action exhibit-views-unplottableCount" href="#" id="unplottableCountLink">%1$d %2$s</a> out of <span class="exhibit-views-totalCount">%3$d</span> cannot be plotted.',
+    "%views.unplottableTemplate": "<a class=\"exhibit-action exhibit-views-unplottableCount\" href=\"#\" id=\"unplottableCountLink\">%1$d %2$s</a> out of <span class=\"exhibit-views-totalCount\">%3$d</span> cannot be plotted.",
     "%views.resultLabel": "result",
     "%views.resultsLabel": "results",
 
@@ -160,7 +160,7 @@ Exhibit.Localization.importLocale("en", {
     "%TabularView.error.configuration": "TabularView: Error processing configuration of tabular view",
 
     "%orderedViewFrame.removeOrderLabel": "Remove this order",
-    "%orderedViewFrame.sortingControlsTemplate": 'sorted by: <span id="ordersSpan"></span>; <a id="thenSortByAction" href="#" class="exhibit-action" title="Further sort the items">then by...</a>',
+    "%orderedViewFrame.sortingControlsTemplate": "sorted by: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"#\" class=\"exhibit-action\" title=\"Further sort the items\">then by...</a>",
     "%orderedViewFrame.formatSortActionTitle": "Sorted by %1$s (%2$s)",
     "%orderedViewFrame.formatRemoveOrderActionTitle": "Removed order by %1$s (%2$s)",
     "%orderedViewFrame.groupedAsSortedOptionLabel": "grouped as sorted",
@@ -186,12 +186,9 @@ Exhibit.Localization.importLocale("en", {
     "%widget.collectionSummary.resetFiltersLabel": "Reset All Filters",
     "%widget.collectionSummary.resetFiltersTooltip": "Clear all filters and see the original items",
     "%widget.collectionSummary.resetActionTitle": "Reset all filters",
-    "%widget.collectionSummary.resultsLabel": "results",
-    "%widget.collectionSummary.filteredFromLabel": "filtered from",
-    "%widget.collectionSummary.originallyLabel": "originally",
-    "%widget.collectionSummary.allResultsTemplate": '<span class="%1$s" id="resultDescription"></span>',
-    "%widget.collectionSummary.noResultsTemplate": '<span class="%1$s"><span class="%2$s">0</span> results</span> (<span id="resetActionLink"></span>)',
-    "%widget.collectionSummary.filteredResultsTemplate": '<span class="%1$s" id="resultDescription"></span> filtered from <span id="originalCountSpan">0</span> originally (<span id="resetActionLink"></span>)',
+    "%widget.collectionSummary.allResultsTemplate": "<span class=\"%1$s\" id=\"resultDescription\"></span>",
+    "%widget.collectionSummary.noResultsTemplate": "<span class=\"%1$s\"><span class=\"%2$s\">0</span> results</span> (<span id=\"resetActionLink\"></span>)",
+    "%widget.collectionSummary.filteredResultsTemplate": "<span class=\"%1$s\" id=\"resultDescription\"></span> filtered from <span id=\"originalCountSpan\">0</span> originally (<span id=\"resetActionLink\"></span>)",
 
     "%formatter.listSeparator": ", ",
     "%formatter.listLastSeparator": ", and ",
