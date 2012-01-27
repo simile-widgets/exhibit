@@ -71,7 +71,7 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
                 label = viewConfig.viewLabel;
             } else if (typeof viewConfig.label !== "undefined") {
                 label = viewConfig.label;
-            } else if (typeof Exhibit.ViewPanel.getViewLabel(viewClassName) !== "undefined") {
+            } else if (Exhibit.ViewPanel.getViewLabel(viewClassName) !== null) {
                 label = Exhibit.ViewPanel.getViewLabel(viewClassName);
             } else if (typeof viewClassName !== "undefined") {
                 label = viewClassName;
@@ -82,7 +82,7 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
             tooltip = null;
             if (typeof viewConfig.tooltip !== "undefined") {
                 tooltip = viewConfig.tooltip;
-            } else if (typeof Exhibit.ViewPanel.getViewTooltip(viewClassName) !== "undefined") {
+            } else if (Exhibit.ViewPanel.getViewTooltip(viewClassName) !== null) {
                 tooltip = Exhibit.ViewPanel.getViewTooltip(viewClassName);
             } else {
                 tooltip = label;
@@ -137,7 +137,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
             tooltip = Exhibit.getAttribute(this, "title");
                 
             if (typeof label === "undefined" || label === null) {
-                if (typeof Exhibit.ViewPanel.getViewLabel(viewClassName) !== "undefined") {
+                if (Exhibit.ViewPanel.getViewLabel(viewClassName) !== null) {
                     label = Exhibit.ViewPanel.getViewLabel(viewClassName);
                 } else if (typeof viewClassName !== "undefined") {
                     label = viewClassName;
@@ -146,7 +146,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
                 }
             }
             if (typeof tooltip === "undefined" || tooltip === null) {
-                if (typeof Exhibit.ViewPanel.getViewTooltip(viewClassName) !== "undefined") {
+                if (Exhibit.ViewPanel.getViewTooltip(viewClassName) !== null) {
                     tooltip = Exhibit.ViewPanel.getViewTooltip(viewClassName);
                 } else {
                     tooltip = label;
@@ -205,14 +205,18 @@ Exhibit.ViewPanel.getViewTooltip = function(viewClass) {
  * @returns {String}
  */
 Exhibit.ViewPanel._getLocalized = function(viewClass, type) {
-    // normalize the view class name
-    if (viewClass.indexOf("View") === -1) {
-        viewClass += "View";
+    if (typeof viewClass === "undefined" || viewClass === null) {
+        return null;
+    } else {
+        // normalize the view class name
+        if (viewClass.indexOf("View") === -1) {
+            viewClass += "View";
+        }
+        if (viewClass.indexOf("Exhibit.") === 0) {
+            viewClass.substr("Exhibit.".length);
+        }
+        return Exhibit._("%" + viewClass + "." + type);
     }
-    if (viewClass.indexOf("Exhibit.") === 0) {
-        viewClass.substr("Exhibit.".length);
-    }
-    return Exhibit._("%" + viewClass + "." + type);
 };
 
 /**
