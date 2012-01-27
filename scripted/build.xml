@@ -182,6 +182,8 @@
 
     <yui-compressor
        munge="false"
+       warn="false"
+       jssuffix=".js"
        fromdir="${bundle}/"
        todir="${compress}/">
       <include name="**/*.js"/>
@@ -189,6 +191,8 @@
 
     <yui-compressor
        munge="true"
+       warn="false"
+       csssuffix=".css"
        fromdir="${bundle}/"
        todir="${compress}/">
       <include name="**/*.css"/>

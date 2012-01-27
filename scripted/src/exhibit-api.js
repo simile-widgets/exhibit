@@ -411,8 +411,8 @@ Exhibit.load = function() {
     }
 
     if (Exhibit.params.bundle) {
-        Exhibit.scripts = ["exhibit-scripted-bundle-min.js"];
-        Exhibit.styles = ["exhibit-scripted-bundle-min.css"];
+        Exhibit.scripts = ["exhibit-scripted-bundle.js"];
+        Exhibit.styles = ["exhibit-scripted-bundle.css"];
     }
     
     if (typeof Exhibit.params.backstage !== "undefined") {
