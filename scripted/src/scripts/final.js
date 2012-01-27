@@ -32,6 +32,7 @@ $(document).ready(function() {
             $LAB.script(localeURLs[i]);
         }
         $(document).trigger("loadExtensions.exhibit");
+        Exhibit.signals["loadExtensions.exhibit"] = true;
     });
 
     $(document).bind("error.exhibit", function(evt, e, msg) {

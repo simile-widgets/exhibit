@@ -31,6 +31,16 @@ var Exhibit = {
     loaded: false,
 
     /**
+     * Indicates for listeners whether the event they're listening
+     * for has fired already or not.  Not all events are currently
+     * recorded here.  This is predominantly for the benefit of
+     * extensions.
+     */
+    signals: {
+        "loadExtensions.exhibit": false
+    },
+
+    /**
      * Where Exhibit is served from.
      */
     urlPrefix: undefined,
