@@ -139,7 +139,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
             database.loadData(o, Exhibit.Persistence.getBaseURL(url));
         } catch(e) {
             Exhibit.Debug.exception(e);
-            $(document).trigger("error.exhibit", [e, Exhibit._("%expression.import.couldNotLoad", url)]);
+            $(document).trigger("error.exhibit", [e, Exhibit._("%import.couldNotLoad", url)]);
         } finally {
             if (typeof callback === "function") {
                 callback();
@@ -153,7 +153,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
         try {
             self._parse(url, s, postParse);
         } catch(e) {
-            $(document).trigger("error.exhibit", [e, Exhibit._("%import.error.couldNotParse", url)]);
+            $(document).trigger("error.exhibit", [e, Exhibit._("%import.couldNotParse", url)]);
         }
     };
 
@@ -174,9 +174,9 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
     fError = function(jqxhr, textStatus, e) {
         var msg;
         if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
-            msg = Exhibit._("%import.error.missingOrFilesystem", url);
+            msg = Exhibit._("%import.missingOrFilesystem", url);
         } else {
-            msg = Exhibit._("%import.error.httpError", url, jqxhr.status);
+            msg = Exhibit._("%import.httpError", url, jqxhr.status);
         }
         $(document).trigger("error.exhibit", [e, msg]);
     };
@@ -220,9 +220,9 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
     fError = function(jqxhr, textStatus, e) {
         var msg;
         msg = Exhibit._(
-            "%import.error.failedAccess",
+            "%import.failedAccess",
             url,
-            (typeof jqxhr.status !== "undefined") ? Exhibit._("%import.error.failedAccessHttpStatus", jqxhr.status) : "");
+            (typeof jqxhr.status !== "undefined") ? Exhibit._("%import.failedAccessHttpStatus", jqxhr.status) : "");
         $(document).trigger("error.exhibit", [e, msg]);
     };
 
