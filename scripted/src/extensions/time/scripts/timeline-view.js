@@ -207,7 +207,7 @@ Exhibit.TimelineView.prototype._internalValidate = function() {
     var selectCoordinator;
     if (typeof this._accessors.getColorKey !== "undefined") {
         if (typeof this._settings.colorCoder !== "undefined") {
-            this._colorCoder = this.getUIContext().getExhibit().getComponent(this._settings.colorCoder);
+            this._colorCoder = this.getUIContext().getMain().getComponent(this._settings.colorCoder);
         }
 
         if (this._colorCoder === null) {
@@ -217,7 +217,7 @@ Exhibit.TimelineView.prototype._internalValidate = function() {
     if (typeof this._accessors.getIconKey !== "undefined") {
         this._iconCoder = null;
         if (typeof this._settings.iconCoder !== "undefined") {
-            this._iconCoder = this.getUIContext().getExhibit().getComponent(this._settings.iconCoder);
+            this._iconCoder = this.getUIContext().getMain().getComponent(this._settings.iconCoder);
         }
     }
     if (typeof this._settings.selectCoordinator !== "undefined") {
