@@ -5,7 +5,7 @@ if(!("l10n" in Exhibit.Database)){Exhibit.Database.l10n={};
 Exhibit.Database.l10n.labelProperty={label:"label",pluralLabel:"labels",reverseLabel:"label van",reversePluralLabel:"labels van"};
 Exhibit.Database.l10n.typeProperty={label:"type",pluralLabel:"types",reverseLabel:"type van",reversePluralLabel:"types van"};
 Exhibit.Database.l10n.uriProperty={label:"webadres",pluralLabel:"webadressen",reverseLabel:"webadres van",reversePluralLabel:"webadressen van"};
-Exhibit.Database.l10n.sortLabels={"text":{ascending:"a - z",descending:"z - a"},"nummer":{ascending:"kleinste eerst",descending:"grootste eerst"},"date":{ascending:"eerste eerst",descending:"laatste eerst"},"boolean":{ascending:"foutief eerst",descending:"correct first"},"item":{ascending:"a - z",descending:"z - a"}};
+Exhibit.Database.l10n.sortLabels={"text":{ascending:"a - z",descending:"z - a"},"number":{ascending:"kleinste eerst",descending:"grootste eerst"},"date":{ascending:"eerste eerst",descending:"laatste eerst"},"boolean":{ascending:"foutief eerst",descending:"correct first"},"item":{ascending:"a - z",descending:"z - a"}};
 Exhibit.Database.l10n.labelItemsOfType=function(F,C,G,B){var A=F==1?Exhibit.Database.l10n.itemType.label:Exhibit.Database.l10n.itemType.pluralLabel;
 var E=G.getType(C);
 if(E){A=E.getLabel();
