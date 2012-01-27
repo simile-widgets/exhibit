@@ -18,21 +18,6 @@ test("startsWith", function() {
     ok(!(new String("AA")).startsWith("AAA"), "!'AA'.startsWith('AAA')");
 });
 
-test("substitute", function() {
-    expect(4);
-
-    var text = "The %0 and the %1, the %3 jumped over the %2.";
-    var ntext = "The cat and the fiddle";
-    var xtext = "The %0 and \\%1";
-    var subs1 = ["cat", "fiddle", "moon", "cow"];
-    var subs2 = [];
-
-    strictEqual(String.substitute(ntext, subs1), ntext, "No interpolations available");
-    strictEqual(String.substitute(text, subs2), text, "No objects substitution");
-    strictEqual(String.substitute(text, subs1), "The cat and the fiddle, the cow jumped over the moon.", "General substitution test");
-    strictEqual(String.substitute(xtext, subs1), "The cat and %1", "Escape substitution");
-});
-
 test("trim", function() {
     expect(4);
 

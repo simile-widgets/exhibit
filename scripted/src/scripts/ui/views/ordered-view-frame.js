@@ -838,8 +838,8 @@ Exhibit.OrderedViewFrame.prototype._gotoPage = function(pageIndex) {
 Exhibit.OrderedViewFrame.headerTemplate =
     '<div id="collectionSummaryDiv" style="display: none;"></div>' +
     '<div class="exhibit-collectionView-header-sortControls" style="display: none;" id="controlsDiv">' +
-        '%0' + // sorting controls template
-        '<span class="exhibit-collectionView-header-groupControl"> \u2022 ' +
+        '%1$s' + // sorting controls template
+        '<span class="exhibit-collectionView-header-groupControl"> &bull; ' +
             '<a id="groupOption" class="exhibit-action"></a>' + 
         '</span>' +
     '</div>';
@@ -864,10 +864,10 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
     gotoPage
 ) {
     var template, dom;
-    template = String.substitute(                                          
+    template = sprintf(
         Exhibit.OrderedViewFrame.headerTemplate +
             '<div class="exhibit-collectionView-pagingControls" style="display: none;" id="topPagingDiv"></div>',
-        [ Exhibit._("%orderedViewFrame.sortingControlsTemplate") ] );
+        Exhibit._("%orderedViewFrame.sortingControlsTemplate"));
 
     dom = $.simileDOM("string", headerDiv, template, {});
     $(headerDiv).attr("class", "exhibit-collectionView-header");

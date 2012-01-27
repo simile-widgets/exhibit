@@ -58,24 +58,25 @@ Exhibit.OptionWidget.checkedImageURL = Exhibit.urlPrefix + "images/option-check.
  * @constant
  */
 Exhibit.OptionWidget.uncheckedTemplate = 
-    "<span id=\"uncheckedSpan\" style=\"display: none;\"><img id=\"uncheckedImage\" /> %0</span>";
+    "<span id=\"uncheckedSpan\" style=\"display: none;\"><img id=\"uncheckedImage\" /> %1$s</span>";
     
 /**
  * @constant
  */
 Exhibit.OptionWidget.checkedTemplate = 
-    "<span id=\"checkedSpan\" style=\"display: none;\"><img id=\"checkedImage\" /> %0</span>";
+    "<span id=\"checkedSpan\" style=\"display: none;\"><img id=\"checkedImage\" /> %1$s</span>";
     
 /**
  *
  */
 Exhibit.OptionWidget.prototype._initializeUI = function() {
     this._containerElmt.className = "exhibit-optionWidget";
-    this._dom = $.simileDOM("string",
+    this._dom = $.simileDOM(
+        "string",
         this._containerElmt,
-        String.substitute(
+        sprintf(
             Exhibit.OptionWidget.uncheckedTemplate + Exhibit.OptionWidget.checkedTemplate,
-            [ this._label ]
+            this._label
         ),
         {   uncheckedImage: $.simileBubble("createTranslucentImage", Exhibit.OptionWidget.uncheckedImageURL),
             checkedImage:   $.simileBubble("createTranslucentImage", Exhibit.OptionWidget.checkedImageURL)
