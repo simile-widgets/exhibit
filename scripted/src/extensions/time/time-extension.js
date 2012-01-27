@@ -36,10 +36,11 @@
      * Ugly polling hack #1.
      */
     setTimeout(function() {
+        var loader;
         if (typeof jQuery === "undefined") {
             loadTimeExtension();
         } else {
-            $(document).one("loadExtensions.exhibit", function() {
+            loader = function() {
                 var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad;
                 delayID = Exhibit.generateDelayID();
                 $(document).trigger(
@@ -136,7 +137,12 @@
                     }, 500);
                 };
                 finishedLoading();
-            });
+            };
+            if (Exhibit.signals["loadExtensions.exhibit"]) {
+                loader();
+            } else {
+                $(document).one("loadExtensions.exhibit", loader);
+            }
         }
     }, 500);
 }());
