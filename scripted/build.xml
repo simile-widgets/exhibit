@@ -236,12 +236,12 @@
 
 
   <!-- Demo builder -->
-  <target name="demos" description="Build demos">
+  <target name="demos" depends="dist" description="Build demos">
     <copy todir="${demos}">
       <fileset dir="${demosSrc}"/>
     </copy>
     <copy todir="${demos}/src">
-      <fileset dir="${src}"/>
+      <fileset dir="${dist}"/>
     </copy>
   </target>
 
@@ -375,7 +375,7 @@
   </target>
 
   <target name="clean-dist">
-    <delete file="${dist}" quiet="true"/>
+    <delete dir="${dist}" quiet="true"/>
   </target>
 
   <target name="clean-coverage">
