@@ -25,7 +25,7 @@ Exhibit.NumericRangeFacet = function(containerElmt, uiContext) {
         if (typeof self._rangeIndex !== "undefined") {
             delete self._rangeIndex;
         }
-    } ;
+    };
     $(uiContext.getCollection().getElement()).bind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
@@ -52,8 +52,9 @@ Exhibit.NumericRangeFacet._settingSpecs = {
  * @returns {Exhibit.NumericRangeFacet}
  */
 Exhibit.NumericRangeFacet.create = function(configuration, containerElmt, uiContext) {
-    var uiContext = Exhibit.UIContext.create(configuration, uiContext);
-    var facet = new Exhibit.NumericRangeFacet(
+    var uiContext, facet;
+    uiContext = Exhibit.UIContext.create(configuration, uiContext);
+    facet = new Exhibit.NumericRangeFacet(
         containerElmt,
         uiContext
     );
@@ -179,6 +180,7 @@ Exhibit.NumericRangeFacet.prototype.applyRestrictions = function(restrictions) {
  * @param {Numeric} to
  * @param {Boolean} selected
  * @param {Array} ranges
+ * @returns {Array}
  */
 Exhibit.NumericRangeFacet.prototype.setRange = function(from, to, selected, ranges) {
     var i, range;
@@ -189,7 +191,7 @@ Exhibit.NumericRangeFacet.prototype.setRange = function(from, to, selected, rang
                 return;
             }
         }
-        ranges.push({ from: from, to: to });
+        ranges.push({ "from": from, "to": to });
     } else {
         for (i = 0; i < ranges.length; i++) {
             range = ranges[i];
@@ -236,8 +238,7 @@ Exhibit.NumericRangeFacet.prototype.restrict = function(items) {
  * @param {Exhibit.Set} items
  */
 Exhibit.NumericRangeFacet.prototype.update = function(items) {
-    $(this._dom.valuesContainer).hide();
-    $(this._dom.valuesContainer).empty();
+    $(this._dom.valuesContainer).hide().empty();
     
     this._reconstruct(items);
     $(this._dom.valuesContainer).show();
