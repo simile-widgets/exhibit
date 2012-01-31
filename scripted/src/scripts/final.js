@@ -32,7 +32,6 @@ $(document).ready(function() {
             $LAB.script(localeURLs[i]);
         }
         $(document).trigger("loadExtensions.exhibit");
-        Exhibit.signals["loadExtensions.exhibit"] = true;
     });
 
     $(document).bind("error.exhibit", function(evt, e, msg) {
@@ -55,6 +54,15 @@ $(document).ready(function() {
     $(document).one("exhibitConfigured.exhibit", function(evt, ex) {
         Exhibit.Bookmark.init();
         Exhibit.History.init(ex);
+    });
+
+    // Signal recording
+    $(document).one("loadExtensions.exhibit", function(evt) {
+        Exhibit.signals["loadExtensions.exhibit"] = true;
+    });
+
+    $(document).one("exhibitConfigured.exhibit", function(evt) {
+        Exhibit.signals["exhibitConfigured.exhibit"] = true;
     });
 
     Exhibit.checkBackwardsCompatibility();
