@@ -37,7 +37,8 @@ var Exhibit = {
      * extensions.
      */
     signals: {
-        "loadExtensions.exhibit": false
+        "loadExtensions.exhibit": false,
+        "exhibitConfigured.exhibit": false
     },
 
     /**
@@ -74,32 +75,23 @@ var Exhibit = {
     },
 
     _dependencies: {
-        "lib/jquery-1.7.1.js": "$",
+        "lib/jquery-1.7.1.min.js": "$",
         "lib/json2.js": "JSON",
         "lib/base64.js": "Base64",
         "lib/sprintf.js": "sprintf",
-// History fails to load correctly in Safari through this mechanism
-//        "lib/history.js": "History.init",
-//        "lib/history.adapter.jquery.js": "History.Adapter",
-//        "lib/history.html4.js": "History.initHtml4",
-// SIMILE jQuery plugins fail to load under nonconflicting circumstances
-// because jQuery hasn't been made available yet
-//        "lib/jquery.simile.dom.js": "jQuery.simileDOM",
-//        "lib/jquery.simile.bubble.js": "jQuery.simileBubble",
+        // History fails to load correctly in Safari through this mechanism
+        "lib/jquery.history.js": undefined, // "History.init",
+        "lib/jquery.history.shim.js": undefined, //always load?
+        // SIMILE jQuery plugins fail to load under nonconflicting
+        // circumstances because jQuery hasn't been made available yet
+        "lib/jquery.simile.dom.js": undefined, // "jQuery.simileDOM",
+        "lib/jquery.simile.bubble.js": undefined // "jQuery.simileBubble"
     },
 
     /**
      * Scripts Exhibit will load.
      */
     scripts: [
-        "lib/jquery-1.7.1.js",
-        "lib/json2.js",
-        "lib/jquery.history.js",
-        "lib/jquery.history.shim.js",
-        "lib/base64.js",
-        "lib/jquery.simile.dom.js",
-        "lib/jquery.simile.bubble.js",
-        "lib/sprintf.js",
         "scripts/exhibit.js",
         "scripts/bc/bc.js",
         "scripts/bc/attributes.js",
@@ -396,7 +388,7 @@ Exhibit.load = function() {
                                        paramTypes);
         }
     } else {
-        var url = Exhibit.findScript(document, "/exhibit-api.js");
+        url = Exhibit.findScript(document, "/exhibit-api.js");
         Exhibit.urlPrefix = url.substr(0, url.indexOf("exhibit-api.js"));
         Exhibit.parseURLParameters(url, Exhibit.params, paramTypes);
     }
@@ -462,20 +454,14 @@ Exhibit.load = function() {
         AllowDuplicates: false
     });
 
-    scr = Exhibit.scripts;
-    for (i = 0; i < scr.length; i++) {
-        if (!Exhibit._dependencies.hasOwnProperty(scr[i])) {
-            if (scr[i].indexOf("/") === 0 ||
-                (scr[i].indexOf(":") > 0 && scr[i].indexOf("//") > 0)) {
-                    $LAB.script(scr[i]);
-                } else {
-                    $LAB.script(Exhibit.urlPrefix + scr[i]);
-                }
-        } else if (Exhibit._dependencies.hasOwnProperty(scr[i])) {
-            dep = Exhibit._dependencies[scr[i]].split(".");
+    for (i in Exhibit._dependencies) {
+        if (typeof Exhibit._dependencies[i] === "undefined") {
+            $LAB.script(Exhibit.urlPrefix + i);
+        } else if (Exhibit._dependencies.hasOwnProperty(i)) {
+            dep = Exhibit._dependencies[i].split(".");
             if (dep.length === 1) {
                 if (!Object.prototype.hasOwnProperty.call(window, dep[0])) {
-                    $LAB.script(Exhibit.urlPrefix + scr[i]);
+                    $LAB.script(Exhibit.urlPrefix + i);
                 }
             } else {
                 for (j = 0; j < dep.length; j++) {
@@ -485,13 +471,23 @@ Exhibit.load = function() {
                     }
                     if (!o.hasOwnProperty(dep[j])) {
                         if (j === dep.length - 1) {
-                            $LAB.script(Exhibit.urlPrefix + scr[i]);
+                            $LAB.script(Exhibit.urlPrefix + i);
                         } else {
                             break;
                         }
                     }
                 }
             }
+        }
+    }
+
+    scr = Exhibit.scripts;
+    for (i = 0; i < scr.length; i++) {
+        if (scr[i].indexOf("/") === 0 ||
+            (scr[i].indexOf(":") > 0 && scr[i].indexOf("//") > 0)) {
+            $LAB.script(scr[i]);
+        } else {
+            $LAB.script(Exhibit.urlPrefix + scr[i]);
         }
     }
 };

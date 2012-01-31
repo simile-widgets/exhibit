@@ -101,14 +101,6 @@
 
     <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
       <filelist dir="${src}/">
-        <file name="lib/base64.js"/>
-        <file name="lib/jquery-1.7.1.js"/>
-        <file name="lib/jquery.history.js"/>
-        <file name="lib/jquery.history.shim.js"/>
-        <file name="lib/jquery.simile.bubble.js"/>
-        <file name="lib/jquery.simile.dom.js"/>
-        <file name="lib/polyfill.js"/>
-        <file name="lib/sprintf.js"/>
         <file name="scripts/exhibit.js"/>
         <file name="scripts/bc/bc.js"/>
         <file name="scripts/bc/attributes.js"/>
