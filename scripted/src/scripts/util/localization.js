@@ -229,6 +229,22 @@ Exhibit.Localization.importExtensionLocale = function(locale, hash) {
 };
 
 /**
+ * Decodes UTF-8 strings to output in HTML
+ * @param {String} s
+ * @returns {String}
+ * @see http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
+ */
+Exhibit.Localization.decodeUTF8 = function(s) {
+    var r;
+    try {
+        r = decodeURIComponent(escape(s));
+    } catch (e) {
+        r = s;
+    }
+    return r;
+};
+
+/**
  * Looks up a key in the set of localization and returns the corresponding
  * message; may return undefined if not found.
  * @param {String} key
@@ -240,7 +256,7 @@ Exhibit.Localization.lookup = function(key) {
         locale = Exhibit.Localization._loadedLocales[i];
         if (typeof Exhibit.l10n[locale] !== "undefined") {
             if (typeof Exhibit.l10n[locale][key] !== "undefined") {
-                return Exhibit.l10n[locale][key];
+                return Exhibit.Localization.decodeUTF8(Exhibit.l10n[locale][key]);
             }
         }
     }
