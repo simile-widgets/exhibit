@@ -29,6 +29,13 @@ Exhibit.UIContext = function() {
         "bubbleWidth": { type: "int" },
         "bubbleHeight": { type: "int" }
     };
+
+    // This used to be localized but it is unclear as to why; moving it
+    // here.
+    this.initialSettings = {
+        "bubbleWidth": 400,
+        "bubbleHeight": 300
+    };
 };
 
 /**
@@ -42,12 +49,7 @@ Exhibit.UIContext.createRootContext = function(configuration, exhibit) {
     context = new Exhibit.UIContext();
     context._exhibit = exhibit;
     
-    // This used to be localized but it is unclear as to why; moving it
-    // here.
-    settings = {
-        "bubbleWidth": 400,
-        "bubbleHeight": 300
-    };
+    settings = Exhibit.UIContext.initialSettings;
 
     for (n in settings) {
         if (settings.hasOwnProperty(n)) {
