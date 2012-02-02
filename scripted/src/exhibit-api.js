@@ -74,6 +74,11 @@ var Exhibit = {
         locale: undefined
     },
 
+    /**
+     * @namespace Prepare for official Exhibit extensions.
+     */
+    Extension: {},
+
     _dependencies: {
         "lib/jquery-1.7.1.min.js": "$",
         "lib/json2.js": "JSON",
