@@ -155,6 +155,7 @@ var Exhibit = {
         "scripts/ui/facets/alpha-range-facet.js",
         "scripts/ui/facets/cloud-facet.js",
         "scripts/ui/facets/text-search-facet.js",
+        "scripts/ui/facets/hierarchical-facet.js",
         "scripts/ui/views/view.js",
         "scripts/ui/views/view-panel.js",
         "scripts/ui/views/ordered-view-frame.js",

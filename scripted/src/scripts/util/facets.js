@@ -334,7 +334,7 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
     
     $(dom.elmt).bind("click", onSelectOnly);
     if (facetHasSelection) {
-        $(dom.inner).children(":first-child").bind("click", onSelect);
+        $(dom.elmt).children(":first-child").bind("click", onSelect);
     }
     if (hasChildren) {
         dom.showChildren = function(show) {
@@ -425,7 +425,7 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
     
     $(dom.elmt).bind("click", onSelectOnly);
     if (facetHasSelection) {
-        $(dom.inner).children(":first-child").bind("click", onSelect);
+        $(dom.elmt).children(":first-child").bind("click", onSelect);
     }
     if (hasChildren) {
         dom.showChildren = function(show) {
