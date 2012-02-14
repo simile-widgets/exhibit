@@ -79,6 +79,11 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
                 label = Exhibit._("%viewPanel.noViewLabel");
             }
             
+            // @@@ if viewClassName is null, Tile View will come up as the
+            //     default in all cases but this one, where the tooltip used
+            //     is just the view name again.  There were hacks here too
+            //     eval()-like to be future proof.  To get tooltip and view to
+            //     match in the default case is going to take some work.
             tooltip = null;
             if (typeof viewConfig.tooltip !== "undefined") {
                 tooltip = viewConfig.tooltip;
@@ -145,6 +150,8 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
                     label = Exhibit._("%viewPanel.noViewLabel");
                 }
             }
+
+            // @@@ see note in above create method
             if (typeof tooltip === "undefined" || tooltip === null) {
                 if (Exhibit.ViewPanel.getViewTooltip(viewClassName) !== null) {
                     tooltip = Exhibit.ViewPanel.getViewTooltip(viewClassName);
@@ -213,7 +220,7 @@ Exhibit.ViewPanel._getLocalized = function(viewClass, type) {
             viewClass += "View";
         }
         if (viewClass.indexOf("Exhibit.") === 0) {
-            viewClass.substr("Exhibit.".length);
+            viewClass = viewClass.substring("Exhibit.".length);
         }
         return Exhibit._("%" + viewClass + "." + type);
     }
@@ -302,8 +309,8 @@ Exhibit.ViewPanel.prototype._internalValidate = function() {
     if (this._viewConstructors.length === 0) {
         this._viewConstructors.push(Exhibit.TileView);
         this._viewConfigs.push({});
-        this._viewLabels.push(Exhibit._("%tileView.viewLabel"));
-        this._viewTooltips.push(Exhibit._("%tileView.viewTooltip"));
+        this._viewLabels.push(Exhibit._("%TileView.label"));
+        this._viewTooltips.push(Exhibit._("%TileView.tooltip"));
         this._viewDomConfigs.push(null);
     }
     
