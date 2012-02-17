@@ -35,7 +35,7 @@ Exhibit.checkBackwardsCompatibility = function() {
  * Retrieve an Exhibit-specific attribute from an element.
  *
  * @static
- * @param {Element} elmt
+ * @param {jQuery|Element} elmt
  * @param {String} name Full attribute name or Exhibit attribute (without any
  *    prefix), e.g., "id" or "itemTypes".  "item-types" or "data-ex-item-types"
  *    are equivalent to "itemTypes", but "itemTypes" is the preferred form.
@@ -47,7 +47,7 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
     var value, i, values;
 
     try {
-        value = elmt.getAttribute(name);
+        value = $(elmt).attr(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
             value = $(elmt).data("ex-"+name);
             if (typeof value === "undefined" || value === null || value.length === 0) {

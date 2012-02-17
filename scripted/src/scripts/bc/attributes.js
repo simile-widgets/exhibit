@@ -29,7 +29,7 @@ Exhibit.Backwards.Attributes.enable = function() {
 /**
  * A backwards compatible mechanism for retrieving an Exhibit attribute value.
  * @static
- * @param {Element} elmt
+ * @param {jQuery|Element} elmt
  * @param {String} name
  * @param {String} splitOn
  * @returns {String|Array}
@@ -38,7 +38,7 @@ Exhibit.Backwards.Attributes.getAttribute = function(elmt, name, splitOn) {
     var value, i, values;
 
     try {
-        value = elmt.getAttribute(name);
+        value = $(elmt).attr(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
             value = $(elmt).attr(Exhibit.Backwards.Attributes.prefix+name);
             if (typeof value === "undefined" || value === null || value.length === 0) {
