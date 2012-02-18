@@ -1,8 +1,11 @@
 body {
+    padding:        0;
+    background: #ffffff;
+}
+
+#content {
     font-family: "Gill Sans", "Trebuchet MS", "Helvetica", "Arial", "sans serif";
     font-size:      11pt;
-    padding:        0.5in;
-    background: #ffffff;
 }
 
 table {
