@@ -113,9 +113,17 @@ Exhibit.TimelineView._accessorSpecs = [
         "attributeName":  "eventLabel",
         "type":           "text"
     },
+    // hoverText is deprecated in Timeline, does not work at all with an event.
+    // It will still work here as an attribute name, but it will be overridden
+    // by caption.  Eventually hoverText will disappear as an option.
     {
         "accessorName":   "getHoverText",
         "attributeName":  "hoverText",
+        "type":           "text"
+    },
+    {
+        "accessorName":   "getCaption",
+        "attributeName":  "caption",
         "type":           "text"
     }
 ];    
@@ -385,7 +393,7 @@ Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
  *
  */
 Exhibit.TimelineView.prototype._reconstruct = function() {
-    var self, collection, database, settings, accessors, currentSize, unplottableItems, currentSet, hasColorKey, hasIconKey, hasHoverText, colorCodingFlags, iconCodingFlags, events, addEvent, legendWidget, colorCoder, keys, k, key, color, iconCoder, icon, plottableSize, band, centerDate, earliest, latest;
+    var self, collection, database, settings, accessors, currentSize, unplottableItems, currentSet, hasColorKey, hasIconKey, hasHoverText, hasCaption, colorCodingFlags, iconCodingFlags, events, addEvent, legendWidget, colorCoder, keys, k, key, color, iconCoder, icon, plottableSize, band, centerDate, earliest, latest;
 
     self = this;
     collection = this.getUIContext().getCollection();
@@ -406,7 +414,8 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
         currentSet = collection.getRestrictedItems();
         hasColorKey = (this._accessors.getColorKey !== null);
         hasIconKey = (this._accessors.getIconKey !== null && this._iconCoder !== null);
-        hasHoverText = (this._accessors.getHoverText !== null);
+        hasHoverText = this._accessors.getHoverText !== null;
+        hasCaption = this._accessors.getCaption !== null;
         colorCodingFlags = { mixed: false, missing: false, others: false, keys: new Exhibit.Set() };
         iconCodingFlags = { mixed: false, missing: false, others: false, keys: new Exhibit.Set() };
         events = [];
@@ -426,7 +435,7 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
                 icon:           icon,
                 color:          color,
                 textColor:      color,
-                hoverText:      hoverText
+                caption:        hoverText
             });
             evt._itemID = itemID;
             evt.getProperty = function(name) {
@@ -463,9 +472,21 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
                     icon = self._iconCoder.translateSet(iconKeys, iconCodingFlags);
                 }
 
+                // deprecated, will be overwritten by caption if caption is used
                 if (hasHoverText) {
                     hoverKeys = new Exhibit.Set();
                     accessors.getHoverText(itemID, database, function(key) { hoverKeys.add(key); });
+                    for (i in hoverKeys._hash) {
+                        if (hoverKeys._hash.hasOwnProperty(i)) {
+                            hoverText = i;
+                        }
+                    }
+                }
+
+                // caption supercedes hoverText
+                if (hasCaption) {
+                    hoverKeys = new Exhibit.Set();
+                    accessors.getCaption(itemID, database, function(key) { hoverKeys.add(key); });
                     for (i in hoverKeys._hash) {
                         if (hoverKeys._hash.hasOwnProperty(i)) {
                             hoverText = i;
