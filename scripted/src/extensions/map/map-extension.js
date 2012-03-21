@@ -1,0 +1,161 @@
+/**
+ * @fileOverview An extension to Exhibit adding a map view with options for
+ *    different mapping services.
+ * @author David Huynh
+ * @author <a href="mailto:karger@mit.edu">David Karger</a>
+ * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
+ * @example Load this file like so:
+ * <script src="http://host/exhibit/3.0.0/exhibit-api.js"></script>
+ * <script src="http://host/exhibit/3.0.0/extensions/map-extension.js"></script>
+ * where "host" is wherever the Exhibit files are based on the web.  Valid
+ * parameters are:
+ *  bundle [true|false]: load extension files one by one or bundled in one file,
+ *       defaults to true
+ *  service [google|google2|openlayers|ve]: which mapping service to draw upon,
+ *       defaults to google (v3)
+ *  gmapKey: only necessary when using google2 service
+ *  mapPrefix <String>: Which host to find Timeline, defaults to
+ *    "http://api.simile-widgets.org"
+ */
+
+(function loadMapExtension() {
+    setTimeout(function() {
+        var loader;
+        if (typeof jQuery === "undefined") {
+            loadMapExtension();
+        } else {
+            loader = function() {
+                var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad;
+                delayID = Exhibit.generateDelayID();
+                $(document).trigger(
+                    "delayCreation.exhibit",
+                    delayID
+                );
+
+                Exhibit.MapExtension = {
+                    "params": {
+                        "bundle": true,
+                        "gmapKey": null,
+                        "service": "google",
+                        "mapPrefix": "http://api.simile-widgets.org"
+                    },
+                    "urlPrefix": null,
+                    "initialized": false, // used in the view
+                    "hasCanvas": false, // used in the view
+                    "locales": [
+                        "en",
+                        "de",
+                        "es",
+                        "fr",
+                        "nl",
+                        "sv"
+                    ],
+                    "noop": function() { } // so google maps v3 will load
+                };
+                javascriptFiles = [
+                    "map-view.js"
+//                    "google-maps-v2-view.js",
+//                    "vemap-view.js",
+//                    "olmap-view.js"
+                ];
+                cssFiles = [
+                    "map-view.css"
+//                    "olmap-view.css"
+                ];
+                paramTypes = {
+                    "bundle": Boolean,
+                    "service": String,
+                    "gmapKey": String,
+                    "mapPrefix": String
+                };
+
+                if (typeof Exhibit_MapExtension_urlPrefix === "string") {
+                    Exhibit.MapExtension.urlPrefix = Exhibit_MapExtension_urlPrefix;
+                    if (typeof Exhibit_MapExtension_parameters !== "undefined") {
+                        Exhibit.parseURLParameters(
+                            Exhibit_MapExtension_parameters,
+                            Exhibit.MapExtension.params,
+                            paramTypes
+                        );
+                    }
+                } else {
+                    url = Exhibit.findScript(document, "/map-extension.js");
+                    if (url === null) {
+                        Exhibit.Debug.exception(new Error("Failed to derive URL prefix for SIMILE Exhibit Map Extension files"));
+                        return;
+                    }
+                    Exhibit.MapExtension.urlPrefix = url.substr(0, url.indexOf("map-extension.js"));
+                    
+                    Exhibit.parseURLParameters(
+                        url,
+                        Exhibit.MapExtension.params,
+                        paramTypes
+                    );
+                }
+
+                scriptURLs = [];
+                cssURLs = [];
+                if (Exhibit.MapExtension.params.service === "google" &&
+	                (typeof google === "undefined" ||
+                     (typeof google !== "undefined" && typeof google.map === "undefined"))) {
+	                scriptURLs.push("http://maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.noop");
+                } else if (Exhibit.MapExtension.params.service === "google2" &&
+                           typeof GMap2 === "undefined") {
+                    if (typeof Exhibit.params.gmapkey !== "undefined") {
+	                    scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + Exhibit.params.gmapkey);
+                    } else if (typeof Exhibit.MapExtension.params.gmapkey !== "undefined") {
+	                    scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + Exhibit.MapExtension.params.gmapkey);
+                    } else {
+	                    scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false");
+                    }
+                } else if (Exhibit.MapExtension.params.service === "openlayers" &&
+                          typeof OpenLayers === "undefined") {
+	                scriptURLs.push("http://www.openlayers.org/api/OpenLayers.js");
+                    scriptURLs.push("http://www.openstreetmap.org/openlayers/OpenStreetMap.js");
+                } else if (Exhibit.MapExtension.params.service === "ve" &&
+                           typeof VEMap === "undefined") {
+                    scriptURLs.push("http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=5");
+                } else {
+                    // @@@ undefined mapping service
+                }
+
+                if (Exhibit.MapExtension.params.bundle) {
+                    scriptURLs.push(Exhibit.MapExtension.urlPrefix + "map-extension-bundle.js");
+                    cssURLs.push(Exhibit.MapExtension.urlPrefix + "map-extension-bundle.css");
+                } else {
+                    Exhibit.prefixURLs(scriptURLs, Exhibit.MapExtension.urlPrefix + "scripts/", javascriptFiles);
+                    Exhibit.prefixURLs(cssURLs, Exhibit.MapExtension.urlPrefix + "styles/", cssFiles);
+                }
+
+                localesToLoad = Exhibit.Localization.getLoadableLocales(Exhibit.MapExtension.locales);
+                for (i = 0; i < localesToLoad.length; i++) {
+                    scriptURLs.push(Exhibit.MapExtension.urlPrefix + "locales/" + localesToLoad[i] + "/locale.js");
+                }
+
+                Exhibit.includeCssFiles(document, "", cssURLs);
+                Exhibit.includeJavascriptFiles(document, "", scriptURLs);
+
+                finishedLoading = function() {
+                    setTimeout(function() {
+                        if ((typeof google === "undefined" ||
+                             (typeof google !== "undefined" && typeof google.maps === "undefined")) &&
+                            typeof GMap2 === "undefined" &&
+                            typeof OpenLayers === "undefined" &&
+                            typeof VEMap === "undefined") {
+                            finishedLoading();
+                        } else {
+                            $(document).trigger("delayFinished.exhibit", delayID);
+                        }
+                    }, 500);
+                };
+                finishedLoading();
+            };
+
+            if (Exhibit.signals["loadExtensions.exhibit"]) {
+                loader();
+            } else {
+                $(document).one("loadExtensions.exhibit", loader);
+            }
+        }
+    }, 500);
+}());
