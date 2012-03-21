@@ -325,7 +325,7 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
         return function(itemID, database, visitor, tuple) {
             expression.evaluateOnItem(itemID, database).values.visit(
                 function(v) {
-                    var a, tuple2, n, j, makeVisitFunction;
+                    var a, tuple2, n, j;
                     a = v.split(separator);
                     if (a.length === parsers.length) {
                         tuple2 = {};
@@ -337,14 +337,9 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
                             }
                         }
 
-                        makeVisitFunction = function(key) {
-                            return function(v) {
-                                key = v;
-                            };
-                        };
                         for (j = 0; j < bindingNames.length; j++) {
                             tuple2[bindingNames[j]] = null;
-                            parsers[j](a[j], makeVisitFunction(tuple2[bindingNames[j]]));
+                            parsers[j](a[j], function(v) { tuple2[bindingNames[j]] = v; });
                         }
                         visitor(tuple2);
                     }
@@ -507,8 +502,9 @@ Exhibit.SettingsUtilities._evaluateBindings = function(value, database, visitor,
         var binding, visited, recurse, bindingName;
         binding = bindings[index];
         visited = false;
-        
-        recurse = index === maxIndex ? function() { visitor(tuple); } : function() { f(tuple, index + 1); };
+        recurse = (index === maxIndex) ?
+            function() { visitor(tuple); } :
+            function() { f(tuple, index + 1); };
         if (binding.isTuple) {
             /*
                 The tuple accessor will copy existing fields out of "tuple" into a new
