@@ -42,7 +42,7 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
     }
     
     if (arrayOfItemIDs.length > 1) {
-        bubbleElmt.addClass("exhibit-views-bubbleWithItems");
+        $(bubbleElmt).addClass("exhibit-views-bubbleWithItems");
         
         ul = $("<ul>");
         makeItem = function(elmt) {
@@ -54,14 +54,14 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
         for (i = 0; i < arrayOfItemIDs.length; i++) {
             uiContext.format(arrayOfItemIDs[i], "item", makeItem);
         }
-        bubbleElmt.append(ul);
+        $(bubbleElmt).append(ul);
     } else {
         itemLensDiv = $("<div>").get(0);
         itemLens = uiContext.getLensRegistry().createLens(arrayOfItemIDs[0], itemLensDiv, uiContext);
-        bubbleElmt.append(itemLensDiv);
+        $(bubbleElmt).append(itemLensDiv);
     }
     
-    return bubbleElmt.get(0);
+    return $(bubbleElmt).get(0);
 };
 
 /**
