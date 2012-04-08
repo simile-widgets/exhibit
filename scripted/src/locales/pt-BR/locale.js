@@ -217,7 +217,7 @@ Exhibit.Localization.importLocale("en", {
     "%formatter.shortDaysOfWeek": [ "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb" ],
     "%formatter.daysOfWeek": [ "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado" ],
     "%formatter.shortMonths": [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
-    "%formatter.months": [ "Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"]
+    "%formatter.months": [ "Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],
 
     "%formatter.commonEra": "CE",
     "%formatter.beforeCommonEra": "BCE",
