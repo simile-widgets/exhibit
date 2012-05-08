@@ -206,5 +206,5 @@ Exhibit.ViewUtilities.makePagingActionTitle = function(index) {
  * @returns {String}
  */
 Exhibit.ViewUtilities.makePagingLinkTooltip = function(index) {
-    return Exhibit._("%orderedViewFrame.pagingActionTooltip", index + 1);
+    return Exhibit._("%orderedViewFrame.pagingLinkTooltip", index + 1);
 };
