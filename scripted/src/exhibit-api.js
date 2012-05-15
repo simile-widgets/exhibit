@@ -94,6 +94,11 @@ var Exhibit = {
     },
 
     /**
+     * One instance of LABjs to coordinate all loading in series
+     */
+    loader: null,
+
+    /**
      * Scripts Exhibit will load.
      */
     scripts: [
@@ -352,7 +357,7 @@ Exhibit.includeCssFiles = function(doc, urlPrefix, filenames) {
 Exhibit.includeJavascriptFiles = function(doc, urlPrefix, filenames) {
     var i;
     for (i = 0; i < filenames.length; i++) {
-        $LAB.script(urlPrefix + filenames[i]);
+        Exhibit.loader.script(urlPrefix + filenames[i]);
     }
 };
 
@@ -444,7 +449,6 @@ Exhibit.load = function() {
         }
     };
 
-
     // load styles first
     docHead = document.getElementsByTagName("head")[0];
     for (i = 0; i < Exhibit.styles.length; i++) {
@@ -460,15 +464,16 @@ Exhibit.load = function() {
         UseLocalXHR: false,
         AllowDuplicates: false
     });
+    Exhibit.loader = $LAB.setOptions({"AlwaysPreserveOrder": true});
 
     for (i in Exhibit._dependencies) {
         if (typeof Exhibit._dependencies[i] === "undefined") {
-            $LAB.script(Exhibit.urlPrefix + i);
+            Exhibit.loader.script(Exhibit.urlPrefix + i);
         } else if (Exhibit._dependencies.hasOwnProperty(i)) {
             dep = Exhibit._dependencies[i].split(".");
             if (dep.length === 1) {
                 if (!Object.prototype.hasOwnProperty.call(window, dep[0])) {
-                    $LAB.script(Exhibit.urlPrefix + i);
+                    Exhibit.loader.script(Exhibit.urlPrefix + i);
                 }
             } else {
                 for (j = 0; j < dep.length; j++) {
@@ -478,7 +483,7 @@ Exhibit.load = function() {
                     }
                     if (!o.hasOwnProperty(dep[j])) {
                         if (j === dep.length - 1) {
-                            $LAB.script(Exhibit.urlPrefix + i);
+                            Exhibit.loader.script(Exhibit.urlPrefix + i);
                         } else {
                             break;
                         }
@@ -492,9 +497,9 @@ Exhibit.load = function() {
     for (i = 0; i < scr.length; i++) {
         if (scr[i].indexOf("/") === 0 ||
             (scr[i].indexOf(":") > 0 && scr[i].indexOf("//") > 0)) {
-            $LAB.script(scr[i]);
+            Exhibit.loader.script(scr[i]);
         } else {
-            $LAB.script(Exhibit.urlPrefix + scr[i]);
+            Exhibit.loader.script(Exhibit.urlPrefix + scr[i]);
         }
     }
 };

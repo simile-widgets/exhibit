@@ -29,7 +29,7 @@ $(document).ready(function() {
     $(document).bind("localeSet.exhibit", function(evt, localeURLs) {
         var i;
         for (i = 0; i < localeURLs.length; i++) {
-            $LAB.script(localeURLs[i]);
+            Exhibit.loader.script(localeURLs[i]);
         }
         $(document).trigger("loadExtensions.exhibit");
     });
@@ -67,5 +67,12 @@ $(document).ready(function() {
 
     Exhibit.checkBackwardsCompatibility();
     Exhibit.staticRegistry = new Exhibit.Registry(true);
-    $(document).trigger("registerLocalization.exhibit", Exhibit.staticRegistry);
+
+    $("link[rel='exhibit-extension']").each(function(idx, el) {
+        Exhibit.loader.script($(el).attr("href"));
+    });
+
+    Exhibit.loader.wait(function() {
+        $(document).trigger("registerLocalization.exhibit", Exhibit.staticRegistry);
+    });
 });
