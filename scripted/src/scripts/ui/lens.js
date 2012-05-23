@@ -545,7 +545,7 @@ Exhibit.Lens._performConstructFromLensTemplateJob = function(job) {
         job.opts
     );
 
-    node = job.div.get(0).tagName.toLowerCase() === "table" ? job.div.get(0).rows[job.div.get(0).rows.length - 1] : job.div.get(0).lastChild;
+    node = $(job.div).get(0).tagName.toLowerCase() === "table" ? $(job.div).get(0).rows[$(job.div).get(0).rows.length - 1] : $(job.div).get(0).lastChild;
     $(document).trigger("onItemShow.exhibit", [job.itemID, node]);
     $(node).show();
     node.setAttribute(Exhibit.makeExhibitAttribute("itemID"), job.itemID);
