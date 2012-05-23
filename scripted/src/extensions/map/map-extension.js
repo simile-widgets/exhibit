@@ -48,15 +48,14 @@
             ],
             "noop": function() { } // so google maps v3 will load
         };
+        // Only the shared files are listed here. The service-
+        // specific files are loaded with the service-specific library.
         javascriptFiles = [
-            "map-view.js"
-            //                    "google-maps-v2-view.js",
-            //                    "vemap-view.js",
-            //                    "olmap-view.js"
+            "canvas.js",
+            "painter.js"
         ];
         cssFiles = [
             "map-view.css"
-            //                    "olmap-view.css"
         ];
         paramTypes = {
             "bundle": Boolean,
@@ -95,6 +94,9 @@
 	        (typeof google === "undefined" ||
              (typeof google !== "undefined" && typeof google.map === "undefined"))) {
 	        scriptURLs.push("http://maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.noop");
+            if (!Exhibit.MapExtension.params.bundle) {
+                javascriptFiles.push("map-view.js");
+            }
         } else if (Exhibit.MapExtension.params.service === "google2" &&
                    typeof GMap2 === "undefined") {
             if (typeof Exhibit.params.gmapkey !== "undefined") {
@@ -104,17 +106,30 @@
             } else {
 	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false");
             }
+            if (!Exhibit.MapExtension.params.bundle) {
+                javascriptFiles.push("google-maps-v2-view.js");
+            }
         } else if (Exhibit.MapExtension.params.service === "openlayers" &&
                    typeof OpenLayers === "undefined") {
 	        scriptURLs.push("http://www.openlayers.org/api/OpenLayers.js");
             scriptURLs.push("http://www.openstreetmap.org/openlayers/OpenStreetMap.js");
+            if (!Exhibit.MapExtension.params.bundle) {
+                javascriptFiles.push("olmap-view.js");
+            }
         } else if (Exhibit.MapExtension.params.service === "ve" &&
                    typeof VEMap === "undefined") {
             scriptURLs.push("http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=5");
+            if (!Exhibit.MapExtension.params.bundle) {
+                javascriptFiles.push("vemap-view.js");
+                cssFiles.push("olmap-view.css");
+            }
         } else {
-            // @@@ undefined mapping service
+            // @@@ undefined service
+            // show warning
         }
         
+        // @@@ ideally these bundles would be service-specific instead of
+        // loading everything
         if (Exhibit.MapExtension.params.bundle) {
             scriptURLs.push(Exhibit.MapExtension.urlPrefix + "map-extension-bundle.js");
             cssURLs.push(Exhibit.MapExtension.urlPrefix + "map-extension-bundle.css");
