@@ -24,18 +24,14 @@ Exhibit.UIContext = function() {
     this._editModeRegistry = {};
     
     this._popupFunc = null;
+};
 
-    this._settingSpecs = {
-        "bubbleWidth": { type: "int" },
-        "bubbleHeight": { type: "int" }
-    };
-
-    // This used to be localized but it is unclear as to why; moving it
-    // here.
-    this.initialSettings = {
-        "bubbleWidth": 400,
-        "bubbleHeight": 300
-    };
+/**
+ * @constant
+ */
+Exhibit.UIContext._settingSpecs = {
+    "bubbleWidth": { "type": "int", "defaultValue": 400 },
+    "bubbleHeight": { "type": "int", "defaultValue": 300 }
 };
 
 /**
