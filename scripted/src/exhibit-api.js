@@ -170,6 +170,7 @@ var Exhibit = {
         "scripts/ui/coders/coder.js",
         "scripts/ui/coders/color-coder.js",
         "scripts/ui/coders/default-color-coder.js",
+        "scripts/ui/coders/size-gradient-coder.js",
         "scripts/ui/control-panel.js",
         "scripts/ui/widgets/collection-summary-widget.js",
         "scripts/ui/widgets/option-widget.js",

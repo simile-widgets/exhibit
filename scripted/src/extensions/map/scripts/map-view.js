@@ -7,7 +7,8 @@
  */
 
 /**
- *
+ * @param {Element} containerElmt
+ * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.MapView = function(containerElmt, uiContext) {
     Exhibit.MapView._initialize();
@@ -376,7 +377,7 @@ Exhibit.MapView.prototype._internalValidate = function() {
     if (typeof this._accessors.getSizeKey !== "undefined" && this._accessors.getSizeKey !== null) {  
         if (typeof this._settings.sizeCoder !== "undefined" && this._settings.sizeCoder !== null) {
             this._sizeCoder = exhibit.getComponent(this._settings.sizeCoder);
-            if (typeof this._settings.markerScale !== "undefined") {
+            if (typeof this._settings.markerScale !== "undefined" && this._settings.markerScale !== null) {
                 this._sizeCoder._settings.markerScale = this._settings.markerScale;
             }
         }
@@ -598,7 +599,7 @@ Exhibit.MapView.prototype._reconstruct = function() {
  * @param {Array} unplottableItems
  */
 Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
-    var self, collection, database, settings, accessors, currentSet, locationToData, hasColorKey, hasSizeKey, hasIconKey, hasIcon, hasPoints, hasPolygons, hasPolylines, makeLatLng, bounds, maxAutoZoom, colorCodingFlags, sizeCodingFlags, iconCodingFlats, addMarkerAtLocation, latlngKey, legendWidget, colorCoder, keys, legendGradientWidget, k, key, color, sizeCoder, points, space, i, size, iconCoder, icon;
+    var self, collection, database, settings, accessors, currentSet, locationToData, hasColorKey, hasSizeKey, hasIconKey, hasIcon, hasPoints, hasPolygons, hasPolylines, makeLatLng, bounds, maxAutoZoom, colorCodingFlags, sizeCodingFlags, iconCodingFlags, addMarkerAtLocation, latlngKey, legendWidget, colorCoder, keys, legendGradientWidget, k, key, color, sizeCoder, points, space, i, size, iconCoder, icon;
 
     self = this;
     collection = this.getUIContext().getCollection();

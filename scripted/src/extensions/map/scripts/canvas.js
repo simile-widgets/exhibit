@@ -45,13 +45,21 @@ Exhibit.MapExtension.Canvas.makeShadow = function(icon, settings) {
  * @param {String} color
  * @param {String} label
  * @param {String} iconImg
- * @param {Numeric} iconSize Unused
+ * @param {Numeric} iconSize
  * @param {Object} settings
  * @returns {Object}
  */
 Exhibit.MapExtension.Canvas.makeIcon = function(width, height, color, label, iconImg, iconSize, settings) {
     var pin, pinWidth, pinHeight, lineWidth, lineColor, alpha, bodyWidth, bodyHeight, markerHeight, radius, canvas, context, meetAngle, topY, botY, rightX, scale, heightScale, widthScale, shadow;
+
     pin = settings.pin;
+
+    if (iconSize > 0) {
+        width = iconSize;
+        height = iconSize;
+        pin = false;
+    }
+
     pinWidth = settings.pinWidth;
     pinHeight = settings.pinHeight;
     lineWidth = 1; //maybe settings.borderWidth but may clash with polyline width usage

@@ -1,16 +1,23 @@
 Exhibit.MapExtension.Painter = {};
 
 /**
- * @param {} width
- * @param {} height
- * @param {} color
- * @param {} label
- * @param {} iconURL
- * @param {} iconSize
- * @param {} settings
+ * @param {Numeric} width
+ * @param {Numeric} height
+ * @param {String} color
+ * @param {String} label
+ * @param {String} iconURL
+ * @param {Numeric} iconSize
+ * @param {Object} settings
  */
 Exhibit.MapExtension.Painter.makeIcon = function(width, height, color, label, iconURL, iconSize, settings) {
     var imageParameters, shadowParameters, pinParameters, pinHeight, pinHalfWidth;
+
+    if (iconSize > 0) {
+        width = iconSize;
+        height = iconSize;
+        settings.pin = false;
+    }
+
     imageParameters = [
         "renderer=map-marker",
         "shape=" + settings.shape,
