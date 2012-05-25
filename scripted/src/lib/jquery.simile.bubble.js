@@ -72,7 +72,7 @@
         
                 // create a scroll div if needed
                 if (scrollDivW > 0) {
-                    scrollDiv = $("<div></div>");
+                    scrollDiv = $("<div>");
                     div.css("width", null);
                     scrollDiv.css("width", scrollDivW + "px");
                     scrollDiv.append(div);
@@ -104,12 +104,12 @@
             /*
              *  Render container divs
              */
-            div = $("<div></div>").
+            div = $("<div>").
                 attr("class", generatePngSensitiveClass(bubbleConfig.containerCSSClass)).
                 css("width", contentWidth + "px").
                 css("height", contentHeight + "px");
 
-            divInnerContainer = $("<div></div>").
+            divInnerContainer = $("<div>").
                 attr("class", generatePngSensitiveClass(bubbleConfig.innerContainerCSSClass));
             div.append(divInnerContainer);
     
@@ -134,7 +134,7 @@
              *  Render border graphics
              */
             createBorder = function(classNameSuffix) {
-                var divBorderGraphic = $("<div></div>").
+                var divBorderGraphic = $("<div>").
                     attr("class",generatePngSensitiveClass(bubbleConfig.borderGraphicCSSClassPrefix + classNameSuffix));
                 divInnerContainer.append(divBorderGraphic);
             };
@@ -151,7 +151,7 @@
             /*
              *  Render content
              */
-            divContentContainer = $("<div></div>").
+            divContentContainer = $("<div>").
                 attr("class", generatePngSensitiveClass(bubbleConfig.contentContainerCSSClass));
             divInnerContainer.append(divContentContainer);
             bubble.content = divContentContainer.get(0);
@@ -159,7 +159,7 @@
             /*
              *  Render close button
              */
-            divClose = $("<div></div>").
+            divClose = $("<div>").
                 attr("class", generatePngSensitiveClass(bubbleConfig.closeGraphicCSSClass));
             divInnerContainer.append(divClose);
             divClose.bind("click", bubble.close);
@@ -172,7 +172,7 @@
                 halfArrowGraphicWidth = Math.ceil(bubbleConfig.arrowGraphicWidth / 2);
         
                 createArrow = function(classNameSuffix) {
-                    var divArrowGraphic = $("<div></div>").
+                    var divArrowGraphic = $("<div>").
                         attr("class", generatePngSensitiveClass(bubbleConfig.arrowGraphicCSSClassPrefix + "point-" + classNameSuffix));
                     divInnerContainer.append(divArrowGraphic);
                     return divArrowGraphic;
@@ -274,44 +274,44 @@
         "createMessageBubble": function() {
             var containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv;
 
-            containerDiv = $("<div></div>");
+            containerDiv = $("<div>");
             if (!pngFail) {
-                topDiv = $("<div></div>").css({
+                topDiv = $("<div>").css({
                     "height": 33,
                     "background": "url(" + Exhibit.urlPrefix + "images/message-top-left.png) top left no-repeat",
                     "padding-left": 44
                 });
                 containerDiv.append(topDiv);
         
-                topRightDiv = $("<div></div>").css({
+                topRightDiv = $("<div>").css({
                     "height": 33,
                     "background": "url(" + Exhibit.urlPrefix + "images/message-top-right.png) top right no-repeat"
                 });
                 topDiv.append(topRightDiv);
         
-                middleDiv = $("<div></div>").css({
+                middleDiv = $("<div>").css({
                     "background": "url(" + Exhibit.urlPrefix + "images/message-left.png) top left repeat-y",
                     "padding-left": 44
                 });
                 containerDiv.append(middleDiv);
         
-                middleRightDiv = $("<div></div>").css({
+                middleRightDiv = $("<div>").css({
                     "background": "url(" + Exhibit.urlPrefix + "images/message-right.png) top right repeat-y",
                     "padding-right": 44
                 });
                 middleDiv.append(middleRightDiv);
         
-                contentDiv = $("<div></div>");
+                contentDiv = $("<div>");
                 middleRightDiv.append(contentDiv);
         
-                bottomDiv = $("<div></div>").css({
+                bottomDiv = $("<div>").css({
                     "height": 55,
                     "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-left.png) bottom left no-repeat",
                     "padding-left": 44
                 });
                 containerDiv.append(bottomDiv);
         
-                bottomRightDiv = $("<div></div>").css({
+                bottomRightDiv = $("<div>").css({
                     "height": 55,
                     "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-right.png) bottom right no-repeat"
                 });
@@ -324,7 +324,7 @@
                     "opacity": 0.9
                 });
         
-                contentDiv = $("<div></div>");
+                contentDiv = $("<div>");
                 containerDiv.append(contentDiv);
             }
             
