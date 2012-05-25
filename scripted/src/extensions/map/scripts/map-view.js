@@ -4,7 +4,6 @@
  * @author <a href="mailto:karger@mit.edu">David Karger</a>
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  * @example
- * @@@ unplottableitems not working correctly
  */
 
 /**
