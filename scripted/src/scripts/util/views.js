@@ -49,7 +49,6 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
             $("<li>")
                 .append(elmt)
                 .appendTo(ul);
-                
         };
         for (i = 0; i < arrayOfItemIDs.length; i++) {
             uiContext.format(arrayOfItemIDs[i], "item", makeItem);
@@ -74,7 +73,7 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
  * @returns {Object}
  */
 Exhibit.ViewUtilities.constructPlottingViewDom = function(
-    div, 
+    div,
     uiContext, 
     showSummary,
     resizableDivWidgetSettings, 
