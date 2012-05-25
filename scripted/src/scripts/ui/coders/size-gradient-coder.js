@@ -10,8 +10,12 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.SizeGradientCoder = function(uiContext) {
+    this._div = null;
     this._uiContext = uiContext;
     this._settings = {};
+
+    this._id = null;
+    this._registered = false;
     
     this._log = { 
         func: function(size) { return Math.ceil(Math.log(size)); },
@@ -59,6 +63,8 @@ Exhibit.SizeGradientCoder.create = function(configuration, uiContext) {
     var coder = new Exhibit.SizeGradientCoder(Exhibit.UIContext.create(configuration, uiContext));
     
     Exhibit.SizeGradientCoder._configure(coder, configuration);
+    coder._setIdentifier();
+    coder.register();
     return coder;
 };
 
@@ -74,6 +80,7 @@ Exhibit.SizeGradientCoder.createFromDOM = function(configElmt, uiContext) {
     
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     coder = new Exhibit.SizeGradientCoder(Exhibit.UIContext.create(configuration, uiContext));
+    coder._div = configElmt;
     
     Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.SizeGradientCoder._settingSpecs, coder._settings);
     
@@ -103,6 +110,8 @@ Exhibit.SizeGradientCoder.createFromDOM = function(configElmt, uiContext) {
     }
     
     Exhibit.SizeGradientCoder._configure(coder, configuration);
+    coder._setIdentifier();
+    coder.register();
     return coder;
 };
 
@@ -124,9 +133,59 @@ Exhibit.SizeGradientCoder._configure = function(coder, configuration) {
 };
 
 /**
+ * @private
+ */
+Exhibit.SizeGradientCoder.prototype._setIdentifier = function() {
+    this._id = $(this._div).attr("id");
+
+    if (typeof this._id === "undefined") {
+        this._id = "sizeGradientCoder"
+            + "-"
+            + Exhibit.Coder._registryKey
+            + "-"
+            + this._uiContext.getCollection().getID()
+            + "-"
+            + this._uiContext.getMain().getRegistry().generateIdentifier(
+                Exhibit.Coder._registryKey
+            );
+    }
+};
+
+/**
+ * @returns {String}
+ */
+Exhibit.SizeGradientCoder.prototype.getID = function() {
+    return this._id;
+};
+
+/**
+ *
+ */
+Exhibit.SizeGradientCoder.prototype.register = function() {
+    this._uiContext.getMain().getRegistry().register(
+        Exhibit.Coder._registryKey,
+        this.getID(),
+        this
+    );
+    this._registered = true;
+};
+
+/**
+ *
+ */
+Exhibit.SizeGradientCoder.prototype.unregister = function() {
+    this._uiContext.getMain().getRegistry().unregister(
+        Exhibit.Coder._registryKey,
+        this.getID()
+    );
+    this._registered = false;
+};
+
+/**
  *
  */
 Exhibit.SizeGradientCoder.prototype.dispose = function() {
+    this.unregister();
     this._uiContext = null;
     this._settings = null;
 };

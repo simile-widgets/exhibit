@@ -153,6 +153,7 @@ Exhibit.ColorCoder.prototype.unregister = function() {
  *
  */
 Exhibit.ColorCoder.prototype.dispose = function() {
+    this.unregister();
     this._uiContext = null;
     this._settings = null;
 };
