@@ -11,7 +11,7 @@
             "label": "Daniel K. Akaka",
             "party": "D",
             "state": "HI",
-            "stateLatLng" :     "44.980957,-123.103183",
+            "stateLatLng" :     "21.3069,-157.8583",
             "committeeMember": [
                 "Committee on Indian Affairs",
                 "Committee on Armed Services",
@@ -71,7 +71,7 @@
             "label": "John Barrasso",
             "party": "R",
             "state": "WY",
-            "stateLatLng" :     "44.980957,-123.103183",
+            "stateLatLng" :     "41.1400,-104.8197",
             "committeeMember": [
                 "Committee on Indian Affairs",
                 "Committee on Energy and Natural Resources",
@@ -617,7 +617,7 @@
             "label": "Michael B. Enzi",
             "party": "R",
             "state": "WY",
-            "stateLatLng" :     "44.980957,-123.103183",
+            "stateLatLng" :     "41.1400,-104.8197",
             "committeeMember": [
                 "Committee on the Budget",
                 "Committee on Finance",
@@ -866,7 +866,7 @@
             "label": "Daniel K. Inouye",
             "party": "D",
             "state": "HI",
-            "stateLatLng" :     "44.980957,-123.103183",
+            "stateLatLng" :     "21.3069,-157.8583",
             "committeeMember": [
                 "Committee on Indian Affairs",
                 "Committee on Appropriations",
