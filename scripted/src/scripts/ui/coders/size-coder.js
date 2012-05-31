@@ -7,11 +7,16 @@
 /**
  * @class
  * @constructor
+ * @param {Element|jQuery} containerElmt
  * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.SizeCoder = function(uiContext) {
-    this._uiContext = uiContext;
-    this._settings = {};
+Exhibit.SizeCoder = function(containerElmt, uiContext) {
+    $.extend(this, new Exhibit.Coder(
+        "size",
+        containerElmt,
+        uiContext
+    ));
+    this.addSettingSpecs(Exhibit.SizeCoder._settingSpecs);
     
     this._map = {};
     this._mixedCase = {
@@ -26,8 +31,13 @@ Exhibit.SizeCoder = function(uiContext) {
         "label": Exhibit._("%coders.othersCaseLabel"),
         "size": 10
     };
+
+    this.register();
 };
 
+/**
+ * @constant
+ */
 Exhibit.SizeCoder._settingSpecs = {
 };
 
@@ -37,7 +47,14 @@ Exhibit.SizeCoder._settingSpecs = {
  * @returns {Exhibit.SizeCoder}
  */
 Exhibit.SizeCoder.create = function(configuration, uiContext) {
-    var coder = new Exhibit.SizeCoder(Exhibit.UIContext.create(configuration, uiContext));
+    var coder, div;
+    div = $("<div>")
+        .hide()
+        .appendTo("body");
+    coder = new Exhibit.SizeCoder(
+        div,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
     Exhibit.SizeCoder._configure(coder, configuration);
     return coder;
@@ -54,9 +71,16 @@ Exhibit.SizeCoder.createFromDOM = function(configElmt, uiContext) {
     $(configElmt).hide();
     
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    coder = new Exhibit.SizeCoder(Exhibit.UIContext.create(configuration, uiContext));
+    coder = new Exhibit.SizeCoder(
+        configElmt,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.SizeCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(
+        configElmt,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     try {
         $(configElmt).children().each(function(index, elmt) {
@@ -81,7 +105,11 @@ Exhibit.SizeCoder.createFromDOM = function(configElmt, uiContext) {
 Exhibit.SizeCoder._configure = function(coder, configuration) {
     var entries, i;
 
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.SizeCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettings(
+        configuration,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     if (typeof configuration.entries !== "undefined") {
         entries = configuration.entries;
@@ -95,8 +123,8 @@ Exhibit.SizeCoder._configure = function(coder, configuration) {
  *
  */
 Exhibit.SizeCoder.prototype.dispose = function() {
-    this._uiContext = null;
-    this._settings = null;
+    this._map = null;
+    this._dispose();
 };
 
 /**

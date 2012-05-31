@@ -4,26 +4,169 @@
  */
 
 /**
- * @namespace
+ * @class
+ * @constructor
+ * @param {String} key
+ * @param {Element|jQuery} div
+ * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.Coder = {
+Exhibit.Coder = function(key, div, uiContext) {
+    var self, _instanceKey, _registered, _id, _uiContext, _div, _settingSpecs, _setIdentifier;
+
     /**
      * @private
-     * @constant
      */
-    _registryKey: "coder"
+    self = this;
+
+    /**
+     * @private
+     */
+    _div = $(div);
+
+    /**
+     * @private
+     */
+    _uiContext = uiContext;
+
+    /**
+     * @private
+     */
+    _instanceKey = key;
+
+    /**
+     * @private
+     */
+    _registered = false;
+
+    /**
+     * @private
+     */
+    _id = null;
+
+    /**
+     * @private
+     */
+    _settingSpecs = {};
+
+    /**
+     * @public
+     */
+    this._settings = {};
+
+    /**
+     * @public
+     * @param {Object} specs
+     */
+    this.addSettingSpecs = function(specs) {
+        $.extend(true, _settingSpecs, specs);
+    };
+
+    /**
+     * @public
+     * @returns {Object}
+     */
+    this.getSettingSpecs = function() {
+        return _settingSpecs;
+    };
+
+    /**
+     * @public
+     * @returns {String}
+     */
+    this.getID = function() {
+        return _id;
+    };
+
+    /**
+     * @public
+     * @returns {Exhibit.UIContext}
+     */
+    this.getUIContext = function() {
+        return _uiContext;
+    };
+
+    /**
+     * Returns the containing element for this view.
+     * @public
+     * @returns {jQuery}
+     */
+    this.getContainer = function() {
+        return _div;
+    };
+
+    this.register = function() {
+        this.getUIContext().getMain().getRegistry().register(
+            Exhibit.Coder.getRegistryKey(),
+            this.getID(),
+            this
+        );
+        _registered = true;
+    };
+
+    this.unregister = function() {
+        self.getUIContext().getMain().getRegistry().unregister(
+            Exhibit.Coder.getRegistryKey(),
+            self.getID()
+        );
+        _registered = false;
+    };
+
+    this._dispose = function() {
+        _settingSpecs = null;
+
+        this._settings = null;
+        $(_div).empty();
+        _div = null;
+
+        this.unregister();
+        _uiContext = null;
+    };
+
+    /**
+     * @private
+     */
+    _setIdentifier = function() {
+        _id = $(_div).attr("id");
+        if (typeof _id === "undefined" || _id === null) {
+            _id = _instanceKey
+                + "-"
+                + self.getUIContext().getCollection().getID()
+                + "-"
+                + self.getUIContext().getMain().getRegistry().generateIdentifier(Exhibit.Coder.getRegistryKey());
+        }
+    };
+
+    _setIdentifier();
 };
 
 /**
  * @private
+ * @constant
+ */
+Exhibit.Coder._registryKey = "coder";
+
+/**
+ * @public
+ * @static
+ * @returns {String}
+ */
+Exhibit.Coder.getRegistryKey = function() {
+    return Exhibit.Coder._registryKey;
+};
+
+/**
+ * @static
+ * @public
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
  */
-Exhibit.Coder._registerComponent = function(evt, reg) {
-    if (!reg.hasRegistry(Exhibit.Coder._registryKey)) {
-        reg.createRegistry(Exhibit.Coder._registryKey);
+Exhibit.Coder.registerComponent = function(evt, reg) {
+    if (!reg.hasRegistry(Exhibit.Coder.getRegistryKey())) {
+        reg.createRegistry(Exhibit.Coder.getRegistryKey());
     }
 };
 
-$(document).one("registerComponents.exhibit",
-                Exhibit.Coder._registerComponent);
+$(document).one(
+    "registerComponents.exhibit",
+    Exhibit.Coder.registerComponent
+);

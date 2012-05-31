@@ -7,11 +7,16 @@
 /**
  * @constructor
  * @class
+ * @param {Element|jQuery} containerElmt
  * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.IconCoder = function(uiContext) {
-    this._uiContext = uiContext;
-    this._settings = {};
+Exhibit.IconCoder = function(containerElmt, uiContext) {
+    $.extend(this, new Exhibit.Coder(
+        "icon",
+        containerElmt,
+        uiContext
+    ));
+    this.addSettingSpecs(Exhibit.IconCoder._settingSpecs);
     
     this._map = {};
     this._mixedCase = {
@@ -26,11 +31,19 @@ Exhibit.IconCoder = function(uiContext) {
         "label": Exhibit._("%coders.othersCaseLabel"),
         "icon": null
     };
+
+    this.register();
 };
 
+/**
+ * @constant
+ */
 Exhibit.IconCoder._settingSpecs = {
 };
 
+/**
+ * @constant
+ */
 Exhibit.IconCoder._iconTable = {
     // add built-in icons?
 };
@@ -41,7 +54,14 @@ Exhibit.IconCoder._iconTable = {
  * @returns {Exhibit.IconCoder}
  */
 Exhibit.IconCoder.create = function(configuration, uiContext) {
-    var coder = new Exhibit.IconCoder(Exhibit.UIContext.create(configuration, uiContext));
+    var coder, div;
+    div = $("<div>")
+        .hide()
+        .appendTo("body");
+    coder = new Exhibit.IconCoder(
+        div,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
     Exhibit.IconCoder._configure(coder, configuration);
     return coder;
@@ -58,9 +78,16 @@ Exhibit.IconCoder.createFromDOM = function(configElmt, uiContext) {
     $(configElmt).hide();
     
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    coder = new Exhibit.IconCoder(Exhibit.UIContext.create(configuration, uiContext));
+    coder = new Exhibit.IconCoder(
+        configElmt,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.IconCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(
+        configElmt,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     try {
         $(configElmt).children().each(function(index, elmt) {
@@ -85,7 +112,11 @@ Exhibit.IconCoder.createFromDOM = function(configElmt, uiContext) {
 Exhibit.IconCoder._configure = function(coder, configuration) {
     var entries, i;
 
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.IconCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettings(
+        configuration,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     if (typeof configuration.entries !== "undefined") {
         entries = configuration.entries;
@@ -99,8 +130,8 @@ Exhibit.IconCoder._configure = function(coder, configuration) {
  *
  */
 Exhibit.IconCoder.prototype.dispose = function() {
-    this._uiContext = null;
-    this._settings = null;
+    this._map = null;
+    this._dispose();
 };
 
 /**

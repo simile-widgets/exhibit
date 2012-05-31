@@ -7,17 +7,19 @@
 /**
  * @constructor
  * @class
+ * @param {Element|jQuery} containerElmt 
  * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.ColorCoder = function(uiContext) {
-    this._div = null;
-    this._uiContext = uiContext;
-    this._settings = {};
+Exhibit.ColorCoder = function(containerElmt, uiContext) {
+    $.extend(this, new Exhibit.Coder(
+        "color",
+        containerElmt,
+        uiContext
+    ));
+    this.addSettingSpecs(Exhibit.ColorCoder._settingSpecs);
 
-    this._id = null;
-    this._registered = false;
-    
     this._map = {};
+
     this._mixedCase = { 
         "label": Exhibit._("%coders.mixedCaseLabel"),
         "color": Exhibit.Coders.mixedCaseColor
@@ -30,8 +32,13 @@ Exhibit.ColorCoder = function(uiContext) {
         "label": Exhibit._("%coders.othersCaseLabel"),
         "color": Exhibit.Coders.othersCaseColor 
     };
+
+    this.register();
 };
 
+/**
+ * @constant
+ */
 Exhibit.ColorCoder._settingSpecs = {
 };
 
@@ -41,11 +48,13 @@ Exhibit.ColorCoder._settingSpecs = {
  * @returns {Exhibit.ColorCoder}
  */
 Exhibit.ColorCoder.create = function(configuration, uiContext) {
-    var coder = new Exhibit.ColorCoder(Exhibit.UIContext.create(configuration, uiContext));
+    var coder, div;
+    div = $("<div>")
+        .hide()
+        .appendTo("body");
+    coder = new Exhibit.ColorCoder(div, Exhibit.UIContext.create(configuration, uiContext));
     
     Exhibit.ColorCoder._configure(coder, configuration);
-    coder._setIdentifier();
-    coder.register();
     return coder;
 };
 
@@ -60,10 +69,16 @@ Exhibit.ColorCoder.createFromDOM = function(configElmt, uiContext) {
     $(configElmt).hide();
 
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    coder = new Exhibit.ColorCoder(Exhibit.UIContext.create(configuration, uiContext));
-    coder._div = configElmt;
+    coder = new Exhibit.ColorCoder(
+        configElmt,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.ColorCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(
+        configElmt,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     try {
         $(configElmt).children().each(function(index, elmt) {
@@ -78,8 +93,6 @@ Exhibit.ColorCoder.createFromDOM = function(configElmt, uiContext) {
     }
     
     Exhibit.ColorCoder._configure(coder, configuration);
-    coder._setIdentifier();
-    coder.register();
     return coder;
 };
 
@@ -90,7 +103,11 @@ Exhibit.ColorCoder.createFromDOM = function(configElmt, uiContext) {
 Exhibit.ColorCoder._configure = function(coder, configuration) {
     var entries, i;
 
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.ColorCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettings(
+        configuration,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     if (typeof configuration["entries"] !== "undefined") {
         entries = configuration.entries;
@@ -101,61 +118,11 @@ Exhibit.ColorCoder._configure = function(coder, configuration) {
 };
 
 /**
- * @private
- */
-Exhibit.ColorCoder.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
-
-    if (typeof this._id === "undefined") {
-        this._id = "colorCoder"
-            + "-"
-            + Exhibit.Coder._registryKey
-            + "-"
-            + this._uiContext.getCollection().getID()
-            + "-"
-            + this._uiContext.getMain().getRegistry().generateIdentifier(
-                Exhibit.Coder._registryKey
-            );
-    }
-};
-
-/**
- * @returns {String}
- */
-Exhibit.ColorCoder.prototype.getID = function() {
-    return this._id;
-};
-
-/**
- *
- */
-Exhibit.ColorCoder.prototype.register = function() {
-    this._uiContext.getMain().getRegistry().register(
-        Exhibit.Coder._registryKey,
-        this.getID(),
-        this
-    );
-    this._registered = true;
-};
-
-/**
- *
- */
-Exhibit.ColorCoder.prototype.unregister = function() {
-    this._uiContext.getMain().getRegistry().unregister(
-        Exhibit.Coder._registryKey,
-        this.getID()
-    );
-    this._registered = false;
-};
-
-/**
  *
  */
 Exhibit.ColorCoder.prototype.dispose = function() {
-    this.unregister();
-    this._uiContext = null;
-    this._settings = null;
+    this._map = null;
+    this._dispose();
 };
 
 /**

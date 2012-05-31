@@ -13,11 +13,16 @@
 /**
  * @constructor
  * @class
+ * @param {Element|jQuery} containerElmt
  * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.OrderedColorCoder = function(uiContext) {
-    this._uiContext = uiContext;
-    this._settings = {};
+Exhibit.OrderedColorCoder = function(containerElmt, uiContext) {
+    $.extend(this, new Exhibit.Coder(
+        "orderedcolor",
+        containerElmt,
+        uiContext
+    ));
+    this.addSettingSpecs(Exhibit.OrderedColorCoder._settingSpecs);
     
     this._map = {};
     this._order = new Exhibit.OrderedColorCoder._OrderedHash();
@@ -37,6 +42,8 @@ Exhibit.OrderedColorCoder = function(uiContext) {
         "color": Exhibit.Coders.othersCaseColor,
 	    "isDefault": true
     };
+
+    this.register();
 };
 
 /**
@@ -71,6 +78,9 @@ Exhibit.OrderedColorCoder._OrderedHash.prototype.get = function(key) {
     return this.hash[key];
 };
 
+/**
+ * @constant
+ */
 Exhibit.OrderedColorCoder._settingSpecs = {
 };
 
@@ -80,7 +90,14 @@ Exhibit.OrderedColorCoder._settingSpecs = {
  * @returns {Exhibit.OrderedColorCoder}
  */
 Exhibit.OrderedColorCoder.create = function(configuration, uiContext) {
-    var coder = new Exhibit.OrderedColorCoder(Exhibit.UIContext.create(configuration, uiContext));
+    var coder, div;
+    div = $("<div>")
+        .hide()
+        .appendTo("body");
+    coder = new Exhibit.OrderedColorCoder(
+        div,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
     Exhibit.OrderedColorCoder._configure(coder, configuration);
     return coder;
@@ -94,12 +111,19 @@ Exhibit.OrderedColorCoder.create = function(configuration, uiContext) {
 Exhibit.OrderedColorCoder.createFromDOM = function(configElmt, uiContext) {
     var configuration, coder;
 
-    configElmt.style.display = "none";
+    $(configElmt).hide();
     
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    coder = new Exhibit.OrderedColorCoder(Exhibit.UIContext.create(configuration, uiContext));
+    coder = new Exhibit.OrderedColorCoder(
+        configElmt,
+        Exhibit.UIContext.create(configuration, uiContext)
+    );
     
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, Exhibit.OrderedColorCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(
+        configElmt,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     try {
 	    this._usePriority = coder._settings.usePriority;
@@ -137,7 +161,11 @@ Exhibit.OrderedColorCoder.createFromDOM = function(configElmt, uiContext) {
 Exhibit.OrderedColorCoder._configure = function(coder, configuration) {
     var entires, i;
 
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.OrderedColorCoder._settingSpecs, coder._settings);
+    Exhibit.SettingsUtilities.collectSettings(
+        configuration,
+        coder.getSettingSpecs(),
+        coder._settings
+    );
     
     if (typeof configuration.entries !== "undefined") {
         entries = configuration.entries;
@@ -163,8 +191,9 @@ Exhibit.OrderedColorCoder._configure = function(coder, configuration) {
  *
  */
 Exhibit.OrderedColorCoder.prototype.dispose = function() {
-    this._uiContext = null;
-    this._settings = null;
+    this._map = null;
+    this._order = null;
+    this._dispose();
 };
 
 /**

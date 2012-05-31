@@ -1,5 +1,8 @@
 /**
  * @fileOverview Color coder to use when none is provided but one is needed.
+ *     Does NOT extend Exhibit.Coder as it cannot be configured and has no
+ *     need to inherit any of the structure used by other user-configured
+ *     coders.
  * @author David Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
@@ -25,7 +28,15 @@ Exhibit.DefaultColorCoder.colors = [
     "#29447B",
     "#543C1C"
 ];
+
+/**
+ * @private
+ */
 Exhibit.DefaultColorCoder._map = {};
+
+/**
+ * @private
+ */
 Exhibit.DefaultColorCoder._nextColor = 0;
 
 /**
