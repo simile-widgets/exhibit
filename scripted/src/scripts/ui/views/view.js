@@ -272,7 +272,7 @@ Exhibit.View.getRegistryKey = function() {
 
 /**
  * @static
- * @private
+ * @public
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
  */
@@ -281,6 +281,7 @@ Exhibit.View.registerComponent = function(evt, reg) {
         reg.createRegistry(Exhibit.View.getRegistryKey());
     }
 };
+
 
 /**
  * @static
