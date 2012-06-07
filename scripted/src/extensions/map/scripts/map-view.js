@@ -7,6 +7,8 @@
  */
 
 /**
+ * @class
+ * @constructor
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
  */
@@ -35,6 +37,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
     
     this._selectListener = null;
     this._itemIDToMarker = {};
+    this._markerCache = {};
 
     this._shown = false;
     
@@ -46,17 +49,6 @@ Exhibit.MapView = function(containerElmt, uiContext) {
         view._onItemsChanged
     );
 };
-
-/**
- * Unused unless the browser doesn't support the canvas element.
- * @constant
- */
-Exhibit.MapView._markerUrlPrefix = "http://service.simile-widgets.org/painter/painter?";
-
-/**
- * @constant
- */
-Exhibit.MapView.markerCache = {};
 
 /**
  * @constant
@@ -185,17 +177,11 @@ Exhibit.MapView._initialize = function() {
         $('head link').each(function(i, el) {
             rel = $(el).attr("rel");
             if (rel.match(/\b(exhibit-map-painter|exhibit\/map-painter)\b/)) {
-                Exhibit.MapView._markerUrlPrefix = $(el).attr("href") + "?";
+                Exhibit.MapExtension.markerUrlPrefix = $(el).attr("href") + "?";
             }
         });
 
-        // @@@ replace
-        canvas = $('<canvas>');
-        Exhibit.MapExtension.hasCanvas =
-            (typeof canvas.get(0).getContext !== "undefined"
-             && canvas.get(0).getContext("2d") !== null);
-        canvas = null;
-
+        Exhibit.MapExtension.Marker.detectCanvas();
         Exhibit.MapExtension.initialized = true;
     }
 };
@@ -310,7 +296,6 @@ Exhibit.MapView.lookupLatLng = function(set, addressExpressionString, outputProp
                     if (typeof json.Placemark !== "undefined" && 
                         json.Placemark.length > 0 && 
                         json.Placemark[0].AddressDetails.Accuracy >= accuracy) {
-                        
                         coords = json.Placemark[0].Point.coordinates;
                         lat = coords[1];
                         lng = coords[0];
@@ -419,7 +404,7 @@ Exhibit.MapView.prototype._initializeUI = function() {
         this._settings.showSummary && this._settings.showHeader,
         {
             "onResize": function() { 
-	            google.maps.event.trigger(self._map, 'resize');
+	            google.maps.event.trigger(self._map, "resize");
             }
         },
         legendWidgetSettings
@@ -461,7 +446,7 @@ Exhibit.MapView.prototype._constructGMap = function(mapDiv) {
 
 	    if (settings.size === "small") {
 	        mapOptions.zoomControl.style = google.maps.ZoomControlStyle.SMALL;
-	    } else if (settings.size == "large") {
+	    } else if (settings.size === "large") {
 	        mapOptions.zoomControl.style = google.maps.ZoomControlStyle.LARGE;
         }
 
@@ -791,7 +776,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         }
         bounds.extend(point);
 
-        marker = Exhibit.MapView._makeMarker(
+        marker = self._makeMarker(
 	        point,
             shape, 
             color, 
@@ -1093,125 +1078,62 @@ Exhibit.MapView.prototype._createInfoWindow = function(items) {
  */
 
 /**
- * @param {} position
- * @param {} shape
- * @param {} color
- * @param {} iconSize
- * @param {} iconURL
- * @param {} label
- * @param {} settings
+ * @static
+ * @param {Exhibit.MapExtension.Marker}
+ * @param {Object} position
+ * @param {Numeric} position.lat
+ * @param {Numeric} position.lng
+ * @returns {google.maps.Marker}
  */
-Exhibit.MapView._makeMarker = function(position, shape, color, iconSize, iconURL, label, settings) {
-    var key, cached, extra, halfWidth, bodyHeight, width, height, pin, markerImage, markerShape, shadowImage, pinHeight, pinHalfWidth, markerPair, marker, image;
-    key = "#"+shape+"#"+color+"#"+iconSize+"#"+iconURL+"#"+label;
-    cached = Exhibit.MapView.markerCache[key];
+Exhibit.MapView.markerToMap = function(marker, position) {
+    var icon, shadow;
+    icon = marker.getIcon();
+    shadow = marker.getShadow();
+    return new google.maps.Marker({
+	    "icon": new google.maps.MarkerImage(
+            icon.url,
+            new google.maps.Size(icon.size[0], icon.size[1]),
+            null,
+            new google.maps.Point(icon.anchor[0], icon.anchor[1]),
+            null
+        ),
+	    "shadow": new google.maps.MarkerImage(
+            shadow.url,
+            new google.maps.Size(shadow.size[0], shadow.size[1]),
+            null,
+            new google.maps.Point(shadow.anchor[0], shadow.anchor[1]),
+            null
+        ),
+	    "shape": marker.getShape(),
+	    "position": position
+	});
+};
+
+/**
+ * @private
+ * @param {Object} position
+ * @param {String} shape
+ * @param {String} color
+ * @param {Numeric} iconSize
+ * @param {String} iconURL
+ * @param {String} label
+ * @param {Object} settings
+ * @returns {Exhibit.MapExtension.Marker}
+ */
+Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSize, iconURL, label, settings) {
+    var key, cached, marker, gmarker;
+
+    key = Exhibit.MapExtension.Marker._makeMarkerKey(shape, color, iconSize, iconURL, label);
+
+    cached = this._markerCache[key];
+
+    // @@@ settings comparison is of dubious use
     if (typeof cached !== "undefined" && (cached.settings === settings)) {
-	    return new google.maps.Marker({
-	        "icon": cached.markerImage,
-	        "shadow": cached.shadowImage,
-	        "shape": cached.markerShape,
-	        "position": position
-	    });
-    }
-
-    extra = label.length * 3;
-    halfWidth = Math.ceil(settings.shapeWidth / 2) + extra;
-    bodyHeight = settings.shapeHeight+2*extra; // try to keep circular
-    width = halfWidth * 2;
-    height = bodyHeight;
-    pin = settings.pin;
-
-    if (iconSize > 0) {
-        width = iconSize;
-        halfWidth = Math.ceil(iconSize / 2);
-        height = iconSize;
-        bodyHeight = iconSize;
-    }   
-
-    markerImage = {};
-    markerShape = { "type": "poly" };
-    shadowImage = {};
-
-    if (pin) {
-        pinHeight = settings.pinHeight;
-        pinHalfWidth = Math.ceil(settings.pinWidth / 2);
-        
-        height += pinHeight;
-
-        markerImage.anchor = new google.maps.Point(halfWidth, height);
-        shadowImage.anchor = new google.maps.Point(halfWidth, height);
-	
-	    markerShape.coords = [
-	        0, 0, 
-	        0, bodyHeight, 
-	        halfWidth - pinHalfWidth, bodyHeight,
-	        halfWidth, height,
-	        halfWidth + pinHalfWidth, bodyHeight,
-	        width, bodyHeight,
-	        width, 0
-        ];
+	    gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {
-        markerImage.anchor = new google.maps.Point(halfWidth, Math.ceil(height / 2));
-        shadowImage.anchor = new google.maps.Point(halfWidth, Math.ceil(height / 2));
-        markerShape.coords = [ 
-	        0, 0, 
-	        0, bodyHeight, 
-	        width, bodyHeight,
-	        width, 0
-        ];
+        marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, null, label, settings, this);
+	    this._markerCache[key] = marker;
+        gmarker = Exhibit.MapView.markerToMap(marker, position);
     }
-
-    markerImage.size = new google.maps.Size(width, height);
-    shadowImage.size = new google.maps.Size(width + height / 2, height);
-   
-    if (!Exhibit.MapExtension.hasCanvas || (iconURL === null)) {
-	    // easy cases
-	    if (!Exhibit.MapExtension.hasCanvas) {
-	        markerPair = Exhibit.MapExtension.Painter.makeIcon(width, bodyHeight, color, label, iconURL, iconSize, settings);
-	    } else {
-	        markerPair = Exhibit.MapExtension.Canvas.makeIcon(width, bodyHeight, color, label, null, iconSize, settings);
-	    }
-	    markerImage.url = markerPair.iconURL;
-	    shadowImage.url = markerPair.shadowURL;
-
-	    cached = Exhibit.MapView.markerCache[key] = {
-	        "markerImage": markerImage,
-            "shadowImage": shadowImage,
-	        "markerShape": markerShape
-        };
-
-        return new google.maps.Marker({
-	        "icon": cached.markerImage,
-	        "shadow": cached.shadowImage,
-	        "shape": cached.markerShape,
-	        "position": position
-	    });
-    } else {
-	    // hard case: canvas needs to fetch image
-	    // return a marker without the image
-	    // add a callback that adds the image when available.
-	    marker = Exhibit.MapView._makeMarker(position, shape, color, iconSize, null, label, settings);
-	    cached = {
-	        "markerImage": marker.getIcon(),
-	        "shadowImage": marker.getShadow(),
-	        "markerShape": marker.getShape(),
-	        "settings": settings
-	    };
-
-	    image = new Image();
-	    image.onload = function() {
-	        try {
-		        cached.markerImage.url = Exhibit.MapExtension.Canvas.makeIcon(width, bodyHeight, color, label, image, iconSize, settings).iconURL;
-	        } catch(e) {
-		        //remote icon fetch caused canvas tainting
-		        cached.markerImage.url = Exhibit.MapExtension.Painter.makeIcon(width, bodyHeight, color, label, iconURL, iconSize, settings).iconURL;
-	        }
-            
-	        Exhibit.MapView.markerCache[key] = cached;
-	        marker.setIcon(cached.markerImage);
-        };
-	    image.src = iconURL;
-	    
-	    return marker;
-    }
+    return gmarker;
 };

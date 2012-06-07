@@ -1,17 +1,6 @@
 Exhibit.MapExtension.Canvas = {};
 
 /**
- *
- */
-Exhibit.MapExtension.Canvas.setHasCanvas = function() {
-    var canvas = $('<canvas>');
-    Exhibit.MapExtension.hasCanvas =
-        (typeof canvas.get(0).getContext !== "undefined"
-         && canvas.get(0).getContext("2d") !== null);
-    canvas = null;
-};
-
-/**
  * @param {Element} icon A canvas element
  * @param {Object} settings
  * @returns {Element} A canvas element

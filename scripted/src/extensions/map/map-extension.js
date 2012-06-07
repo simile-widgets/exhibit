@@ -36,6 +36,7 @@
                 "mapPrefix": "http://api.simile-widgets.org"
             },
             "urlPrefix": null,
+            "markerUrlPrefix" :"http://service.simile-widgets.org/painter/painter?",
             "initialized": false, // used in the view
             "hasCanvas": false, // used in the view
             "locales": [
@@ -52,7 +53,8 @@
         // specific files are loaded with the service-specific library.
         javascriptFiles = [
             "canvas.js",
-            "painter.js"
+            "painter.js",
+            "marker.js"
         ];
         cssFiles = [
             "map-view.css"
@@ -90,14 +92,7 @@
         
         scriptURLs = [];
         cssURLs = [];
-        if (Exhibit.MapExtension.params.service === "google" &&
-	        (typeof google === "undefined" ||
-             (typeof google !== "undefined" && typeof google.map === "undefined"))) {
-	        scriptURLs.push("http://maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.noop");
-            if (!Exhibit.MapExtension.params.bundle) {
-                javascriptFiles.push("map-view.js");
-            }
-        } else if (Exhibit.MapExtension.params.service === "google2" &&
+        if (Exhibit.MapExtension.params.service === "google2" &&
                    typeof GMap2 === "undefined") {
             if (typeof Exhibit.params.gmapkey !== "undefined") {
 	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + Exhibit.params.gmapkey);
@@ -124,8 +119,14 @@
                 cssFiles.push("olmap-view.css");
             }
         } else {
-            // @@@ undefined service
-            // show warning
+            // if author is referring to an unknown service, default to google
+	        if (typeof google === "undefined" ||
+                (typeof google !== "undefined" && typeof google.map === "undefined")) {
+	            scriptURLs.push("http://maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.noop");
+                if (!Exhibit.MapExtension.params.bundle) {
+                    javascriptFiles.push("map-view.js");
+                }
+            }
         }
         
         // @@@ ideally these bundles would be service-specific instead of

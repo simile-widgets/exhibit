@@ -61,7 +61,7 @@ Exhibit.MapExtension.Painter.makeIcon = function(width, height, color, label, ic
     }
 
     return {
-	    "iconURL": Exhibit.MapView._markerUrlPrefix + imageParameters.concat(pinParameters).join("&") + "&.png",
-	    "shadowURL": Exhibit.MapView._markerUrlPrefix + shadowParameters.concat(pinParameters).join("&") + "&.png" 
+	    "iconURL": Exhibit.MapExtension.markerUrlPrefix + imageParameters.concat(pinParameters).join("&") + "&.png",
+	    "shadowURL": Exhibit.MapExtension.markerUrlPrefix + shadowParameters.concat(pinParameters).join("&") + "&.png" 
     };
 };
