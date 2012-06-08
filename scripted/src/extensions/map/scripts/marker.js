@@ -112,6 +112,10 @@ Exhibit.MapExtension.Marker.makeMarker = function(shape, color, iconSize, iconUR
 	        width, bodyHeight,
 	        width, 0
         ];
+
+        markerImage.infoWindowAnchor = (settings.bubbleTip === "bottom") ?
+            [halfWidth, height] :
+            [halfWidth, 0];
     } else {
         markerImage.anchor = [halfWidth, Math.ceil(height / 2)];
         shadowImage.anchor = [halfWidth, Math.ceil(height / 2)];
@@ -121,6 +125,7 @@ Exhibit.MapExtension.Marker.makeMarker = function(shape, color, iconSize, iconUR
 	        width, bodyHeight,
 	        width, 0
         ];
+        markerImage.infoWindowAnchor = [halfWidth, 0];
     }
 
     markerImage.size = [width, height];
