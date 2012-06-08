@@ -492,8 +492,7 @@ Exhibit.MapView.prototype._constructGMap = function(mapDiv) {
  * @returns {Function}
  */
 Exhibit.MapView.prototype._createColorMarkerGenerator = function() {
-    var settings;
-    settings = this._settings;
+    var settings = this._settings;
 
     return function(color) {
         return $.simileBubble(
@@ -523,6 +522,7 @@ Exhibit.MapView.prototype._createSizeMarkerGenerator = function() {
 };
 
 /**
+ * @private
  * @returns {Function}
  */
 Exhibit.MapView.prototype._createIconMarkerGenerator = function() {
@@ -559,11 +559,11 @@ Exhibit.MapView.prototype._reconstruct = function() {
 
     this._clearOverlays();
 
-    if (this._dom.legendWidget) {
+    if (typeof this._dom.legendWidget !== "undefined" && this._dom.legendWidget !== null) {
 	    this._dom.legendWidget.clear();
     }
 
-    if (this._dom.legendGradientWidget) {
+    if (typeof this._dom.legendGradientWidget !== "undefined" && this._dom.legendWidgetGradient !== null) {
 	    this._dom.legendGradientWidget.clear();
     }
 
@@ -617,18 +617,18 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         "keys": new Exhibit.Set()
     };
 
-    sizeCodingFlags = {
-        mixed: false,
-        missing: false,
-        others: false,
-        keys: new Exhibit.Set()
+     sizeCodingFlags = {
+        "mixed": false,
+        "missing": false,
+        "others": false,
+        "keys": new Exhibit.Set()
     };
 
     iconCodingFlags = {
-        mixed: false,
-        missing: false,
-        others: false,
-        keys: new Exhibit.Set()
+        "mixed": false,
+        "missing": false,
+        "others": false,
+        "keys": new Exhibit.Set()
     };
 
     bounds = Infinity;
@@ -665,7 +665,6 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         
         if (latlngs.length > 0 || polygons.length > 0 || polylines.length > 0) {
             color = self._settings.color;
-            
             colorKeys = null;
             if (hasColorKey) {
                 colorKeys = new Exhibit.Set();
@@ -727,11 +726,11 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
                 }
             }
             
-            for (p = 0; p < polygons.length; p++) {
-                self._plotPolygon(itemID, polygons[p], color, makeLatLng); 
+            for (n = 0; n < polygons.length; n++) {
+                self._plotPolygon(itemID, polygons[n], color, makeLatLng); 
             }
-            for (p = 0; p < polylines.length; p++) {
-                self._plotPolyline(itemID, polylines[p], color, makeLatLng); 
+            for (n = 0; n < polylines.length; n++) {
+                self._plotPolyline(itemID, polylines[n], color, makeLatLng); 
             }
         } else {
             unplottableItems.push(itemID);
@@ -806,7 +805,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
 	            addMarkerAtLocation(locationToData[latlngKey]);
             }
 	    }
-    } catch(e) {
+    } catch (e) {
 	    // @@@ handle this properly
     }
 
@@ -1024,15 +1023,15 @@ Exhibit.MapView.prototype._select = function(selection) {
     var itemID, marker;
     itemID = selection.itemIDs[0];
     marker = this._itemIDToMarker[itemID];
-    if (marker) {
+    if (typeof marker !== "undefined" && marker !== null) {
 	    this._showInfoWindow([itemID], null, marker);
     }
 };
 
 /**
- * @param {} items
- * @param {} pos
- * @param {} marker
+ * @param {Array} items
+ * @param {google.maps.Point} pos
+ * @param {google.maps.Marker} marker
  */
 Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
     var content, win;
@@ -1043,8 +1042,12 @@ Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
 
     content= this._createInfoWindow(items);
 
+    // @@@ ignores maps v3 method of settings.bubbleTip, which is already built
+    // in to Exhibit.MapExtension.Marker().getIcon().infoWindowAnchor - but
+    // that's not what's being passed to this method
     win = new google.maps.InfoWindow({
 	    "content": content
+        //, "pixelOffset": new google.maps.Size()
     });
 
     if (typeof pos !== "undefined" && pos !== null) {
@@ -1057,7 +1060,8 @@ Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
 };
 
 /**
- * @param {} items
+ * @param {Array} items
+ * @returns {Element}
  */
 Exhibit.MapView.prototype._createInfoWindow = function(items) {
     return Exhibit.ViewUtilities.fillBubbleWithItems(
@@ -1068,18 +1072,8 @@ Exhibit.MapView.prototype._createInfoWindow = function(items) {
 };
 
 /**
- * Two cases here are easy.  
- *   If canvas isn't implemented, we need to use painter
- *   If canvas is implemented and there is no image, we can easily use canvas
- * It gets more complicated if we have canvas but need to include images.  Most of the time we can use canvas, fetching the image and drawing it on the canvas.  But if the image is from a different site, html's XSS protections may prevent us from extracting the resulting drawing.  In which case we need to revert to painter.
- *
- * Even worse is the need to fetch images asynchronously and only add them to the marker after they arrive.  I also want to assure that _some_ marker gets plotted even if the image is not available.  To support this, the code will start by plotting the marker without the image, but place a callback that adds the image to the marker if it is successfully fetched.  We also want to cache the resulting icon so we don't have to fetch again.
- *
- */
-
-/**
  * @static
- * @param {Exhibit.MapExtension.Marker}
+ * @param {Exhibit.MapExtension.Marker} marker
  * @param {Object} position
  * @param {Numeric} position.lat
  * @param {Numeric} position.lng
@@ -1118,7 +1112,7 @@ Exhibit.MapView.markerToMap = function(marker, position) {
  * @param {String} iconURL
  * @param {String} label
  * @param {Object} settings
- * @returns {Exhibit.MapExtension.Marker}
+ * @returns {google.maps.Marker}
  */
 Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSize, iconURL, label, settings) {
     var key, cached, marker, gmarker;
