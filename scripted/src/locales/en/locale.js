@@ -62,6 +62,7 @@ Exhibit.Localization.importLocale("en", {
     "%import.httpError": "Failed to access %1$s (HTTP %2$d)",
     "%import.failedAccess": "Failed to access %1$s%2$s",
     "%import.failedAccessHttpStatus": " (HTTP %1$d)",
+    "%import.missingFragment": "Failed to locate fragment in %1$s",
 
     "%database.itemType.label": "Item",
     "%database.itemType.pluralLabel": "Items",
