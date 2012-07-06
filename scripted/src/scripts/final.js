@@ -36,6 +36,7 @@ $(document).ready(function() {
 
     $(document).bind("error.exhibit", function(evt, e, msg) {
         Exhibit.UI.hideBusyIndicator();
+
         Exhibit.Debug.exception(e, msg);
         alert(msg);
     });

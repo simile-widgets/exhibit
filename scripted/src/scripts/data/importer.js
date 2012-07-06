@@ -167,21 +167,21 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
  * @param {Function} callback
  */
 Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
-    var fError, self;
+    var self = this,
+        callbackOrig,
+        fragmentId,
+        fragmentStart = url.indexOf('#'),
 
-    self = this;
+        fError = function(jqxhr, textStatus, e) {
+            var msg;
+            if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
+                msg = Exhibit._("%import.missingOrFilesystem", url);
+            } else {
+                msg = Exhibit._("%import.httpError", url, jqxhr.status);
+            }
+            $(document).trigger("error.exhibit", [e, msg]);
+        };
 
-    fError = function(jqxhr, textStatus, e) {
-        var msg;
-        if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
-            msg = Exhibit._("%import.missingOrFilesystem", url);
-        } else {
-            msg = Exhibit._("%import.httpError", url, jqxhr.status);
-        }
-        $(document).trigger("error.exhibit", [e, msg]);
-    };
-
-    fragmentStart = url.indexOf('#');
     if ((fragmentStart >= 0) && (fragmentStart < url.length - 1)) {
         callbackOrig = callback;
         fragmentId = url.substring(fragmentStart);
@@ -191,7 +191,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
             var msg, fragment = $(data).find(fragmentId).andSelf().filter(fragmentId);
             if (fragment.length < 1) {
                 msg = Exhibit._("%import.missingFragment", url);
-                $(document).trigger("error.exhibit", [new Error(), msg]);
+                $(document).trigger("error.exhibit", [new Error(msg), msg]);
             } else {
                 callbackOrig(fragment.text(), status, jqXHR);
             }
@@ -229,7 +229,7 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
     if (converter !== null && typeof converter.preprocessURL !== "undefined") {
         url = converter.preprocessURL(url);
     }
-    
+
     fDone = function(s, textStatus, jqxhr) {
         callback(converter.transformJSON(s), textStatus, jqxhr);
     };

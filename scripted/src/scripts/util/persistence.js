@@ -37,18 +37,18 @@ Exhibit.Persistence.getBaseURL = function(url) {
     try {
         if (url.indexOf("://") < 0) {
             url2 = Exhibit.Persistence.getBaseURL(document.location.href);
-            if (url.substr(0,1) === "/") {
+            if (url.substr(0, 1) === "/") {
                 url = url2.substr(0, url2.indexOf("/", url2.indexOf("://") + 3)) + url;
             } else {
                 url = url2 + url;
             }
         }
-        
+
         i = url.lastIndexOf("/");
         if (i < 0) {
             return "";
         } else {
-            return url.substr(0, i+1);
+            return url.substr(0, i + 1);
         }
     } catch (e) {
         return url;
@@ -63,9 +63,9 @@ Exhibit.Persistence.getBaseURL = function(url) {
  * @returns {String} The resolved URL.
  */
 Exhibit.Persistence.resolveURL = function (url) {
-    var url2;
+    var url2, hash;
     if (url.indexOf('#') === 0) {  //resolving a fragment identifier
-        var hash = document.location.href.indexOf('#');
+        hash = document.location.href.indexOf('#');
         if (hash < 0) {  //no current fragment
             url = document.location.href + url;
         } else {
@@ -94,7 +94,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         url = Exhibit.Persistence._urlWithoutQueryAndHash;
     } else {
         url = document.location.href;
-        
+
         hash = url.indexOf("#");
         question = url.indexOf("?");
         if (question >= 0) {
@@ -102,7 +102,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         } else if (hash >= 0) {
             url = url.substr(0, hash);
         }
-        
+
         Exhibit.Persistence._urlWithoutQueryAndHash = url;
     }
     return url;
@@ -120,12 +120,12 @@ Exhibit.Persistence.getURLWithoutQuery = function() {
         url = Exhibit.Persistence._urlWithoutQuery;
     } else {
         url = document.location.href;
-        
+
         question = url.indexOf("?");
         if (question >= 0) {
             url = url.substr(0, question);
         }
-        
+
         Exhibit.Persistence._urlWithoutQuery = url;
     }
     return url;
