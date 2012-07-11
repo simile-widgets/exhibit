@@ -168,9 +168,9 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
  */
 Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
     var self = this,
-        callbackOrig,
-        fragmentId,
+        callbackOrig = callback,
         fragmentStart = url.indexOf('#'),
+        fragmentId = url.substring(fragmentStart),
 
         fError = function(jqxhr, textStatus, e) {
             var msg;
@@ -183,17 +183,18 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
         };
 
     if ((fragmentStart >= 0) && (fragmentStart < url.length - 1)) {
-        callbackOrig = callback;
-        fragmentId = url.substring(fragmentStart);
         url = url.substring(0, fragmentStart);
 
-        callback = function(data, status, jqXHR) {
-            var msg, fragment = $(data).find(fragmentId).andSelf().filter(fragmentId);
+        callback = function(data, status, jqxhr) {
+            var msg,
+	        fragment = $(data).find(fragmentId)
+	                          .andSelf()
+	                          .filter(fragmentId);
             if (fragment.length < 1) {
                 msg = Exhibit._("%import.missingFragment", url);
                 $(document).trigger("error.exhibit", [new Error(msg), msg]);
             } else {
-                callbackOrig(fragment.text(), status, jqXHR);
+                callbackOrig(fragment.text(), status, jqxhr);
             }
         };
     }
