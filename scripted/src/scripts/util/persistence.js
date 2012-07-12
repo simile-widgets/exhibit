@@ -43,7 +43,7 @@ Exhibit.Persistence.getBaseURL = function(url) {
                 url = url2 + url;
             }
         }
-
+        
         i = url.lastIndexOf("/");
         if (i < 0) {
             return "";
@@ -90,11 +90,9 @@ Exhibit.Persistence.resolveURL = function (url) {
  */
 Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
     var url, hash, question;
-    if (Exhibit.Persistence._urlWithoutQueryAndHash !== null) {
-        url = Exhibit.Persistence._urlWithoutQueryAndHash;
-    } else {
+    if (Exhibit.Persistence._urlWithoutQueryAndHash == null) {
         url = document.location.href;
-
+        
         hash = url.indexOf("#");
         question = url.indexOf("?");
         if (question >= 0) {
@@ -102,10 +100,10 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         } else if (hash >= 0) {
             url = url.substr(0, hash);
         }
-
+        
         Exhibit.Persistence._urlWithoutQueryAndHash = url;
     }
-    return url;
+    return Exhibit.Persistence._urlWithoutQueryAndHash;
 };
 
 /**
@@ -116,19 +114,17 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
  */
 Exhibit.Persistence.getURLWithoutQuery = function() {
     var url, question;
-    if (Exhibit.Persistence._urlWithoutQuery !== null) {
-        url = Exhibit.Persistence._urlWithoutQuery;
-    } else {
+    if (Exhibit.Persistence._urlWithoutQuery == null) {
         url = document.location.href;
-
+        
         question = url.indexOf("?");
         if (question >= 0) {
             url = url.substr(0, question);
         }
-
+        
         Exhibit.Persistence._urlWithoutQuery = url;
     }
-    return url;
+    return Exhibit.Persistence._urlWithoutQuery;
 };
 
 /**
