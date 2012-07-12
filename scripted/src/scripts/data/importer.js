@@ -187,7 +187,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
 
         callback = function(data, status, jqxhr) {
             var msg,
-	        fragment = $(data).find(fragmentId)
+                fragment = $(data).find(fragmentId)
 	                          .andSelf()
 	                          .filter(fragmentId);
             if (fragment.length < 1) {
@@ -230,7 +230,7 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
     if (converter !== null && typeof converter.preprocessURL !== "undefined") {
         url = converter.preprocessURL(url);
     }
-
+    
     fDone = function(s, textStatus, jqxhr) {
         callback(converter.transformJSON(s), textStatus, jqxhr);
     };
