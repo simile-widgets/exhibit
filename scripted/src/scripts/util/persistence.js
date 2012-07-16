@@ -90,7 +90,7 @@ Exhibit.Persistence.resolveURL = function (url) {
  */
 Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
     var url, hash, question;
-    if (Exhibit.Persistence._urlWithoutQueryAndHash == null) {
+    if (Exhibit.Persistence._urlWithoutQueryAndHash === null) {
         url = document.location.href;
         
         hash = url.indexOf("#");
@@ -114,7 +114,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
  */
 Exhibit.Persistence.getURLWithoutQuery = function() {
     var url, question;
-    if (Exhibit.Persistence._urlWithoutQuery == null) {
+    if (Exhibit.Persistence._urlWithoutQuery === null) {
         url = document.location.href;
         
         question = url.indexOf("?");
