@@ -37,7 +37,7 @@ Exhibit.Persistence.getBaseURL = function(url) {
     try {
         if (url.indexOf("://") < 0) {
             url2 = Exhibit.Persistence.getBaseURL(document.location.href);
-            if (url.substr(0,1) === "/") {
+            if (url.substr(0, 1) === "/") {
                 url = url2.substr(0, url2.indexOf("/", url2.indexOf("://") + 3)) + url;
             } else {
                 url = url2 + url;
@@ -48,7 +48,7 @@ Exhibit.Persistence.getBaseURL = function(url) {
         if (i < 0) {
             return "";
         } else {
-            return url.substr(0, i+1);
+            return url.substr(0, i + 1);
         }
     } catch (e) {
         return url;
@@ -62,11 +62,18 @@ Exhibit.Persistence.getBaseURL = function(url) {
  * @param {String} url The orignal URL to resolve.
  * @returns {String} The resolved URL.
  */
-Exhibit.Persistence.resolveURL = function(url) {
-    var url2;
-    if (url.indexOf("://") < 0) {
+Exhibit.Persistence.resolveURL = function (url) {
+    var url2, hash;
+    if (url.indexOf('#') === 0) {  //resolving a fragment identifier
+        hash = document.location.href.indexOf('#');
+        if (hash < 0) {  //no current fragment
+            url = document.location.href + url;
+        } else {
+            url = document.location.href.substring(0, hash) + url;
+        }
+    } else if (url.indexOf("://") < 0) {
         url2 = Exhibit.Persistence.getBaseURL(document.location.href);
-        if (url.substr(0,1) === "/") {
+        if (url.substr(0, 1) === "/") {
             url = url2.substr(0, url2.indexOf("/", url2.indexOf("://") + 3)) + url;
         } else {
             url = url2 + url;
@@ -83,9 +90,7 @@ Exhibit.Persistence.resolveURL = function(url) {
  */
 Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
     var url, hash, question;
-    if (Exhibit.Persistence._urlWithoutQueryAndHash !== null) {
-        url = Exhibit.Persistence._urlWithoutQueryAndHash;
-    } else {
+    if (Exhibit.Persistence._urlWithoutQueryAndHash === null) {
         url = document.location.href;
         
         hash = url.indexOf("#");
@@ -98,7 +103,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         
         Exhibit.Persistence._urlWithoutQueryAndHash = url;
     }
-    return url;
+    return Exhibit.Persistence._urlWithoutQueryAndHash;
 };
 
 /**
@@ -109,9 +114,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
  */
 Exhibit.Persistence.getURLWithoutQuery = function() {
     var url, question;
-    if (Exhibit.Persistence._urlWithoutQuery !== null) {
-        url = Exhibit.Persistence._urlWithoutQuery;
-    } else {
+    if (Exhibit.Persistence._urlWithoutQuery === null) {
         url = document.location.href;
         
         question = url.indexOf("?");
@@ -121,7 +124,7 @@ Exhibit.Persistence.getURLWithoutQuery = function() {
         
         Exhibit.Persistence._urlWithoutQuery = url;
     }
-    return url;
+    return Exhibit.Persistence._urlWithoutQuery;
 };
 
 /**

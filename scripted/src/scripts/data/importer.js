@@ -167,19 +167,37 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
  * @param {Function} callback
  */
 Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
-    var fError, self;
+    var self = this,
+        callbackOrig = callback,
+        fragmentStart = url.indexOf('#'),
+        fragmentId = url.substring(fragmentStart),
 
-    self = this;
+        fError = function(jqxhr, textStatus, e) {
+            var msg;
+            if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
+                msg = Exhibit._("%import.missingOrFilesystem", url);
+            } else {
+                msg = Exhibit._("%import.httpError", url, jqxhr.status);
+            }
+            $(document).trigger("error.exhibit", [e, msg]);
+        };
 
-    fError = function(jqxhr, textStatus, e) {
-        var msg;
-        if (Exhibit.Importer.checkFileURL(url) && jqxhr.status === 404) {
-            msg = Exhibit._("%import.missingOrFilesystem", url);
-        } else {
-            msg = Exhibit._("%import.httpError", url, jqxhr.status);
-        }
-        $(document).trigger("error.exhibit", [e, msg]);
-    };
+    if ((fragmentStart >= 0) && (fragmentStart < url.length - 1)) {
+        url = url.substring(0, fragmentStart);
+
+        callback = function(data, status, jqxhr) {
+            var msg,
+                fragment = $(data).find(fragmentId)
+	                          .andSelf()
+	                          .filter(fragmentId);
+            if (fragment.length < 1) {
+                msg = Exhibit._("%import.missingFragment", url);
+                $(document).trigger("error.exhibit", [new Error(msg), msg]);
+            } else {
+                callbackOrig(fragment.text(), status, jqxhr);
+            }
+        };
+    }
 
     $.ajax({
         "url": url,
@@ -196,7 +214,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
  * @param {Element} link
  */
 Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) {
-    var charset, convertType, jsonpCallback, converter, fDone, ajaxArgs;
+    var charset, convertType, jsonpCallback, converter, fDone, fError, ajaxArgs;
 
     if (typeof link !== "string") {
         convertType = Exhibit.getAttribute(link, "converter");
