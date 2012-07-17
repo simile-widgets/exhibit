@@ -43,7 +43,10 @@ Exhibit.Persistence.getBaseURL = function(url) {
                 url = url2 + url;
             }
         }
-        
+        i = url.indexOf("#");
+        if (i >= 0) {
+            url = url.substr(0, i);
+        }
         i = url.lastIndexOf("/");
         if (i < 0) {
             return "";
