@@ -80,7 +80,7 @@ var Exhibit = {
     Extension: {},
 
     _dependencies: {
-        "lib/jquery-1.7.1.min.js": "$",
+        "lib/jquery-1.7.2.min.js": "jQuery",
         "lib/json2.js": "JSON",
         "lib/base64.js": "Base64",
         "lib/sprintf.js": "sprintf",
@@ -97,6 +97,11 @@ var Exhibit = {
      * One instance of LABjs to coordinate all loading in series
      */
     loader: null,
+
+    /**
+     * How Exhibit refers to jQuery
+     */
+    jQuery: undefined,
 
     /**
      * Scripts Exhibit will load.
