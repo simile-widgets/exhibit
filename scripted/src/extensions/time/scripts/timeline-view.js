@@ -303,7 +303,7 @@ Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
         theme.event.bubble.height = this.getUIContext().getSetting("bubbleHeight");
         
         if ((typeof settings.topBandUnit !== "undefined" && settings.topBandUnit !== null) || (typeof settings.bottomBandUnit !== "undefined" && settings.bottomBandUnit !== null)) {
-            if (typeof Exhibit.TimelineView._intervalLabelMap === "undefined" ||| Exhibit.TimelineView._intervalLabelMap === null) {
+            if (typeof Exhibit.TimelineView._intervalLabelMap === "undefined" || Exhibit.TimelineView._intervalLabelMap === null) {
                 Exhibit.TimelineView._intervalLabelMap = {
                     "millisecond":      Exhibit.DateTime.MILLISECOND,
                     "second":           Exhibit.DateTime.SECOND,
