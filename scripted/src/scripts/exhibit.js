@@ -5,6 +5,11 @@
  */
 
 /**
+ * Starting using Exhibit.jQuery instead of jQuery or $
+ */
+Exhibit.jQuery = jQuery.noConflict();
+
+/**
  * @static
  * @param {Exhibit.Database} database
  * @returns {Exhibit._Impl}
