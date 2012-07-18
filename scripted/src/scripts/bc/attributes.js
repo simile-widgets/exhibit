@@ -38,9 +38,9 @@ Exhibit.Backwards.Attributes.getAttribute = function(elmt, name, splitOn) {
     var value, i, values;
 
     try {
-        value = $(elmt).attr(name);
+        value = Exhibit.jQuery(elmt).attr(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
-            value = $(elmt).attr(Exhibit.Backwards.Attributes.prefix+name);
+            value = Exhibit.jQuery(elmt).attr(Exhibit.Backwards.Attributes.prefix+name);
             if (typeof value === "undefined" || value === null || value.length === 0) {
                 return null;
             }

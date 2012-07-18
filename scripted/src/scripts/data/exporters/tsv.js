@@ -71,5 +71,5 @@ Exhibit.Exporter.TSV._register = function() {
     );
 };
 
-$(document).one("registerExporters.exhibit",
+Exhibit.jQuery(document).one("registerExporters.exhibit",
                 Exhibit.Exporter.TSV._register);

@@ -183,8 +183,8 @@ Exhibit.Collection.createFromDOM2 = function(id, elmt, uiContext) {
 Exhibit.Collection._initializeBasicCollection = function(collection, database) {
     var update = function() { collection._update(); };
 
-    $(document).bind('onAfterLoadingItems.exhibit', update);
-    $(document).bind('onAfterRemovingAllStatements.exhibit', update);
+    Exhibit.jQuery(document).bind('onAfterLoadingItems.exhibit', update);
+    Exhibit.jQuery(document).bind('onAfterRemovingAllStatements.exhibit', update);
         
     collection._update();
 };
@@ -200,7 +200,7 @@ Exhibit.Collection._initializeBasicCollection = function(collection, database) {
 Exhibit.Collection._initializeBasedCollection = function(collection) {
     collection._update = Exhibit.Collection._basedCollection_update;
     
-    $(this._elmt).bind('onItemsChanged.exhibit', function(evt) {
+    Exhibit.jQuery(this._elmt).bind('onItemsChanged.exhibit', function(evt) {
         collection._update();
     });
     
@@ -348,7 +348,7 @@ Exhibit.Collection.prototype.getID = function() {
 Exhibit.Collection.prototype._setElement = function(el) {
     if (typeof el === "undefined" || el === null) {
         if (this.getID() !== "default") {
-            this._elmt = $("<div>")
+            this._elmt = Exhibit.jQuery("<div>")
                 .attr("id", this.getID())
                 .attr(Exhibit.makeExhibitAttribute("role"), "exhibit-collection")
                 .css("display", "none")
@@ -417,7 +417,7 @@ Exhibit.Collection.prototype.addFacet = function(facet) {
     if (facet.hasRestrictions()) {
         this._computeRestrictedItems();
         this._updateFacets();
-        $(this._elmt).trigger("onItemsChanged.exhibit");
+        Exhibit.jQuery(this._elmt).trigger("onItemsChanged.exhibit");
     } else {
         facet.update(this.getRestrictedItems());
     }
@@ -437,7 +437,7 @@ Exhibit.Collection.prototype.removeFacet = function(facet) {
             if (facet.hasRestrictions()) {
                 this._computeRestrictedItems();
                 this._updateFacets();
-                $(this._elmt).trigger("onItemsChanged.exhibit");
+                Exhibit.jQuery(this._elmt).trigger("onItemsChanged.exhibit");
             }
             break;
         }
@@ -532,7 +532,7 @@ Exhibit.Collection.prototype.onFacetUpdated = function() {
     if (!this._updating) {
         this._computeRestrictedItems();
         this._updateFacets();
-        $(this._elmt).trigger("onItemsChanged.exhibit");
+        Exhibit.jQuery(this._elmt).trigger("onItemsChanged.exhibit");
     }
 };
 
@@ -544,12 +544,12 @@ Exhibit.Collection.prototype.onFacetUpdated = function() {
  * @private
  */
 Exhibit.Collection.prototype._onRootItemsChanged = function() {
-    $(this._elmt).trigger("onRootItemsChanged.exhibit");
+    Exhibit.jQuery(this._elmt).trigger("onRootItemsChanged.exhibit");
     
     this._computeRestrictedItems();
     this._updateFacets();
     
-    $(this._elmt).trigger("onItemsChanged.exhibit");
+    Exhibit.jQuery(this._elmt).trigger("onItemsChanged.exhibit");
 };
 
 /**

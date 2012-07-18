@@ -37,7 +37,7 @@ Exhibit.OptionWidget.create = function(configuration, containerElmt, uiContext) 
  *
  */
 Exhibit.OptionWidget.prototype.dispose = function() {
-    $(this._containerElmt).empty();
+    Exhibit.jQuery(this._containerElmt).empty();
     
     this._dom = null;
     this._containerElmt = null;
@@ -71,25 +71,25 @@ Exhibit.OptionWidget.checkedTemplate =
  */
 Exhibit.OptionWidget.prototype._initializeUI = function() {
     this._containerElmt.className = "exhibit-optionWidget";
-    this._dom = $.simileDOM(
+    this._dom = Exhibit.jQuery.simileDOM(
         "string",
         this._containerElmt,
         sprintf(
             Exhibit.OptionWidget.uncheckedTemplate + Exhibit.OptionWidget.checkedTemplate,
             this._label
         ),
-        {   uncheckedImage: $.simileBubble("createTranslucentImage", Exhibit.OptionWidget.uncheckedImageURL),
-            checkedImage:   $.simileBubble("createTranslucentImage", Exhibit.OptionWidget.checkedImageURL)
+        {   uncheckedImage: Exhibit.jQuery.simileBubble("createTranslucentImage", Exhibit.OptionWidget.uncheckedImageURL),
+            checkedImage:   Exhibit.jQuery.simileBubble("createTranslucentImage", Exhibit.OptionWidget.checkedImageURL)
         }
     );
     
     if (this._checked) {
-        $(this._dom.checkedSpan).show();
+        Exhibit.jQuery(this._dom.checkedSpan).show();
     } else {
-        $(this._dom.uncheckedSpan).show();
+        Exhibit.jQuery(this._dom.uncheckedSpan).show();
     }
 
-    $(this._containerElmt).bind("click", this._onToggle);
+    Exhibit.jQuery(this._containerElmt).bind("click", this._onToggle);
 };
 
 /**
@@ -106,11 +106,11 @@ Exhibit.OptionWidget.prototype.setChecked = function(checked) {
     if (checked !== this._checked) {
         this._checked = checked;
         if (checked) {
-            $(this._dom.checkedSpan).show();
-            $(this._dom.uncheckedSpan).hide();
+            Exhibit.jQuery(this._dom.checkedSpan).show();
+            Exhibit.jQuery(this._dom.uncheckedSpan).hide();
         } else {
-            $(this._dom.checkedSpan).hide();
-            $(this._dom.uncheckedSpan).show();
+            Exhibit.jQuery(this._dom.checkedSpan).hide();
+            Exhibit.jQuery(this._dom.uncheckedSpan).show();
         }
     }
 };

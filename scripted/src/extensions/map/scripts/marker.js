@@ -31,7 +31,7 @@ Exhibit.MapExtension.Marker = function(icon, shadow, shape, settings) {
  * Sets Exhibit.MapExtension.hasCanvas
  */
 Exhibit.MapExtension.Marker.detectCanvas = function() {
-    var canvas = $('<canvas>');
+    var canvas = Exhibit.jQuery('<canvas>');
     Exhibit.MapExtension.hasCanvas =
         (typeof canvas.get(0).getContext !== "undefined"
          && canvas.get(0).getContext("2d") !== null);

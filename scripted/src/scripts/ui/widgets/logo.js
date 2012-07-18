@@ -70,16 +70,16 @@ Exhibit.Logo.prototype._initializeUI = function() {
     var logoURL, img, id, a;
 
     logoURL = Exhibit.urlPrefix + "images/logos/exhibit-small-" + this._color + ".png";
-    img = $.simileBubble("createTranslucentImage", logoURL);
+    img = Exhibit.jQuery.simileBubble("createTranslucentImage", logoURL);
     id = "exhibit-logo-image";
-    if ($('#' + id).length === 0) {
-        $(img).attr("id", id);
+    if (Exhibit.jQuery('#' + id).length === 0) {
+        Exhibit.jQuery(img).attr("id", id);
     }
-    a = $("<a>")
+    a = Exhibit.jQuery("<a>")
         .attr("href", Exhibit.exhibitLink)
         .attr("title", Exhibit.exhibitLink)
         .attr("targe", "_blank")
         .append(img);
     
-    $(this._elmt).append(a);
+    Exhibit.jQuery(this._elmt).append(a);
 };

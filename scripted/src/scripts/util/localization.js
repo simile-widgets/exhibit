@@ -104,7 +104,7 @@ Exhibit.Localization._registerComponent = function(evt, reg) {
 
     if (!reg.hasRegistry(Exhibit.Localization._registryKey)) {
         reg.createRegistry(Exhibit.Localization._registryKey);
-        $(document).trigger("registerLocales.exhibit");
+        Exhibit.jQuery(document).trigger("registerLocales.exhibit");
     }
 };
 
@@ -123,7 +123,7 @@ Exhibit.Localization.registerLocale = function(locale, l10n) {
             locale,
             l10n
         );
-        $(document).trigger("localeRegistered.exhibit");
+        Exhibit.jQuery(document).trigger("localeRegistered.exhibit");
         return true;
     } else {
         return false;
@@ -170,7 +170,7 @@ Exhibit.Localization.setLocale = function(locales) {
         }
     }
 
-    $(document).trigger(
+    Exhibit.jQuery(document).trigger(
         "localeSet.exhibit",
         [urls]
     );
@@ -211,7 +211,7 @@ Exhibit.Localization.getLoadableLocales = function(possibles) {
 Exhibit.Localization.importLocale = function(locale, hash) {
     if (typeof Exhibit.l10n[locale] === "undefined") {
         Exhibit.l10n[locale] = hash;
-        $(document).trigger("localeLoaded.exhibit", [locale]);
+        Exhibit.jQuery(document).trigger("localeLoaded.exhibit", [locale]);
     }
 };
 
@@ -222,7 +222,7 @@ Exhibit.Localization.importLocale = function(locale, hash) {
  */
 Exhibit.Localization.importExtensionLocale = function(locale, hash) {
     if (typeof Exhibit.l10n[locale] !== "undefined") {
-        $.extend(Exhibit.l10n[locale], hash);
+        Exhibit.jQuery.extend(Exhibit.l10n[locale], hash);
     } else {
         Exhibit.l10n[locale] = hash;
     }
@@ -263,12 +263,12 @@ Exhibit.Localization.lookup = function(key) {
     return undefined;
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerLocalization.exhibit",
     Exhibit.Localization._registerComponent
 );
 
-$(document).bind(
+Exhibit.jQuery(document).bind(
     "localesRegistered.exhibit",
     function() {
         Exhibit.Localization.setLocale(Exhibit.locales);

@@ -57,7 +57,7 @@ Exhibit.History.init = function(ex) {
         Exhibit.History._originalLocation = Exhibit.Persistence.getURLWithoutQueryAndHash();
         Exhibit.History._registry = ex.getRegistry();
 
-        $(window).bind("statechange", Exhibit.History.stateListener);
+        Exhibit.jQuery(window).bind("statechange", Exhibit.History.stateListener);
         if (Exhibit.Bookmark.runBookmark()) {
             Exhibit.Bookmark.implementBookmark(Exhibit.Bookmark.state);
         } else {
@@ -263,5 +263,5 @@ Exhibit.History.eraseState = function() {
     Exhibit.History.pushState({});
 };
 
-$(document).bind("importReady.exhibit",
+Exhibit.jQuery(document).bind("importReady.exhibit",
                  Exhibit.History.componentStateListener);

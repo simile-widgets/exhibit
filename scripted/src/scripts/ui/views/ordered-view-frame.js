@@ -869,11 +869,11 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
             '<div class="exhibit-collectionView-pagingControls" style="display: none;" id="topPagingDiv"></div>',
         Exhibit._("%orderedViewFrame.sortingControlsTemplate"));
 
-    dom = $.simileDOM("string", headerDiv, template, {});
-    $(headerDiv).attr("class", "exhibit-collectionView-header");
+    dom = Exhibit.jQuery.simileDOM("string", headerDiv, template, {});
+    Exhibit.jQuery(headerDiv).attr("class", "exhibit-collectionView-header");
     
     if (showSummary) {
-        $(dom.collectionSummaryDiv).show();
+        Exhibit.jQuery(dom.collectionSummaryDiv).show();
         dom.collectionSummaryWidget = Exhibit.CollectionSummaryWidget.create(
             {},
             dom.collectionSummaryDiv, 
@@ -881,7 +881,7 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
         );
     }
     if (showControls) {
-        $(dom.controlsDiv).show();
+        Exhibit.jQuery(dom.controlsDiv).show();
         dom.groupOptionWidget = Exhibit.OptionWidget.create(
             {   label:      Exhibit._("%orderedViewFrame.groupedAsSortedOptionLabel"),
                 onToggle:   onGroupToggle
@@ -890,29 +890,29 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
             uiContext
         );
 
-        $(dom.thenSortByAction).bind("click", onThenSortBy);
+        Exhibit.jQuery(dom.thenSortByAction).bind("click", onThenSortBy);
 
         dom.enableThenByAction = function(enabled) {
             Exhibit.UI.enableActionLink(dom.thenSortByAction, enabled);
         };
         dom.setOrders = function(orderElmts) {
             var addDelimter, i;
-            $(dom.ordersSpan).empty();
+            Exhibit.jQuery(dom.ordersSpan).empty();
             
             addDelimiter = Exhibit.Formatter.createListDelimiter(dom.ordersSpan, orderElmts.length, uiContext);
             for (i = 0; i < orderElmts.length; i++) {
                 addDelimiter();
-                $(dom.ordersSpan).append(orderElmts[i]);
+                Exhibit.jQuery(dom.ordersSpan).append(orderElmts[i]);
             }
             addDelimiter();
         };
     }
     dom.renderPageLinks = function(page, totalPage, pageWindow) {
         Exhibit.OrderedViewFrame.renderPageLinks(dom.topPagingDiv, page, totalPage, pageWindow, gotoPage);
-        $(dom.topPagingDiv).show();
+        Exhibit.jQuery(dom.topPagingDiv).show();
     };
     dom.hidePageLinks = function() {
-        $(dom.topPagingDiv).hide();
+        Exhibit.jQuery(dom.topPagingDiv).hide();
     };
     dom.dispose = function() {
         if (typeof dom.collectionSummaryWidget !== "undefined") {
@@ -949,25 +949,25 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
 ) {
     var dom;
     
-    dom = $.simileDOM(
+    dom = Exhibit.jQuery.simileDOM(
         "string",
         footerDiv,
         Exhibit.OrderedViewFrame.footerTemplate +
             '<div class="exhibit-collectionView-pagingControls" style="display: none;" id="bottomPagingDiv"></div>',
         {}
     );
-    $(footerDiv).attr("class", "exhibit-collectionView-footer");
+    Exhibit.jQuery(footerDiv).attr("class", "exhibit-collectionView-footer");
     
     dom.setCounts = function(count, limitCount, showAll, canToggle) {
-        $(dom.showAllSpan).empty();
+        Exhibit.jQuery(dom.showAllSpan).empty();
         if (canToggle && count > limitCount) {
-            $(dom.showAllSpan).show();
+            Exhibit.jQuery(dom.showAllSpan).show();
             if (showAll) {
-                $(dom.showAllSpan).append(
+                Exhibit.jQuery(dom.showAllSpan).append(
                     Exhibit.UI.makeActionLink(
                         Exhibit._("%orderedViewFrame.formatDontShowAll", limitCount), onDontShowAll));
             } else {
-                $(dom.showAllSpan).append(
+                Exhibit.jQuery(dom.showAllSpan).append(
                     Exhibit.UI.makeActionLink(
                         Exhibit._("%orderedViewFrame.formatShowAll", count), onShowAll));
             }
@@ -975,11 +975,11 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
     };
     dom.renderPageLinks = function(page, totalPage, pageWindow) {
         Exhibit.OrderedViewFrame.renderPageLinks(dom.bottomPagingDiv, page, totalPage, pageWindow, gotoPage);
-        $(dom.bottomPagingDiv).show();
-        $(dom.showAllSpan).hide();
+        Exhibit.jQuery(dom.bottomPagingDiv).show();
+        Exhibit.jQuery(dom.showAllSpan).hide();
     };
     dom.hidePageLinks = function() {
-        $(dom.bottomPagingDiv).hide();
+        Exhibit.jQuery(dom.bottomPagingDiv).hide();
     };
     dom.dispose = function() {};
     
@@ -996,17 +996,17 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
 Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount, pageWindow, gotoPage) {
     var self, renderPageLink, renderPageNumber, renderHTML, pageWindowStart, pageWindowEnd, i;
     
-    $(parentElmt).attr("class", "exhibit-collectionView-pagingControls");
-    $(parentElmt).empty();
+    Exhibit.jQuery(parentElmt).attr("class", "exhibit-collectionView-pagingControls");
+    Exhibit.jQuery(parentElmt).empty();
     
     self = this;
     renderPageLink = function(label, index) {
         var elmt, a, handler;
-        elmt = $("<span>")
+        elmt = Exhibit.jQuery("<span>")
             .attr("class", "exhibit-collectionView-pagingControls-page");
-        $(parentElmt).append(elmt);
+        Exhibit.jQuery(parentElmt).append(elmt);
         
-        a = $("<a>")
+        a = Exhibit.jQuery("<a>")
             .html(label)
             .attr("href", "#")
             .attr("title", Exhibit.ViewUtilities.makePagingLinkTooltip(index));
@@ -1022,21 +1022,21 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
 
     renderPageNumber = function(index) {
         if (index === page) {
-            var elmt = $("<span>")
+            var elmt = Exhibit.jQuery("<span>")
                 .attr("class",
                       "exhibit-collectionView-pagingControls-currentPage")
                 .html(index + 1);
             
-            $(parentElmt).append(elmt);
+            Exhibit.jQuery(parentElmt).append(elmt);
         } else {
             renderPageLink(index + 1, index);
         }
     };
     renderHTML = function(html) {
-        var elmt = $("<span>")
+        var elmt = Exhibit.jQuery("<span>")
             .html(html);
         
-        $(parentElmt).append(elmt);
+        Exhibit.jQuery(parentElmt).append(elmt);
     };
     
     if (page > 0) {

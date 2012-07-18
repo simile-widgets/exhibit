@@ -12,7 +12,7 @@
  */
 Exhibit.AlphaRangeFacet = function(containerElmt, uiContext) {
     var self = this;
-    $.extend(this, new Exhibit.Facet("alpharange", containerElmt, uiContext));
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("alpharange", containerElmt, uiContext));
     this.addSettingSpecs(Exhibit.AlphaRangeFacet._settingSpecs);
 
     this._dom = null;
@@ -23,7 +23,7 @@ Exhibit.AlphaRangeFacet = function(containerElmt, uiContext) {
             delete self._rangeIndex;
         }
     };
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -136,7 +136,7 @@ Exhibit.AlphaRangeFacet._configure = function(facet, configuration) {
  */
 Exhibit.AlphaRangeFacet.prototype.dispose = function() {
     this.getUIContext().getCollection().removeFacet(this);
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -157,7 +157,7 @@ Exhibit.AlphaRangeFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.AlphaRangeFacet.prototype.clearAllRestrictions = function() {
-    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
+    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     if (this._ranges.length > 0) {
         this._ranges = [];
         this._notifyCollection();
@@ -225,10 +225,10 @@ Exhibit.AlphaRangeFacet.prototype.restrict = function(items) {
  * @param {Exhibit.Set} items
  */
 Exhibit.AlphaRangeFacet.prototype.update = function(items) {
-    $(this._dom.valuesContainer).hide().empty();
+    Exhibit.jQuery(this._dom.valuesContainer).hide().empty();
     
     this._reconstruct(items);
-    $(this._dom.valuesContainer).show();
+    Exhibit.jQuery(this._dom.valuesContainer).show();
 };
 
 /**
@@ -291,7 +291,7 @@ Exhibit.AlphaRangeFacet.prototype._reconstruct = function(items) {
     
     facetHasSelection = this._ranges.length > 0;
     containerDiv = this._dom.valuesContainer;
-    $(containerDiv).hide();
+    Exhibit.jQuery(containerDiv).hide();
     constructFacetItemFunction = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetItem" : "constructFlowingFacetItem"];
     makeFacetValue = function(from, to, count, selected) {
         var onSelect, onSelectOnly, elmt;
@@ -315,7 +315,7 @@ Exhibit.AlphaRangeFacet.prototype._reconstruct = function(items) {
             onSelectOnly,
             self.getUIContext()
         );
-        $(containerDiv).append(elmt);
+        Exhibit.jQuery(containerDiv).append(elmt);
     };
         
     for (i = 0; i < ranges.length; i++) {
@@ -324,7 +324,7 @@ Exhibit.AlphaRangeFacet.prototype._reconstruct = function(items) {
             makeFacetValue(range.from, range.to, range.count, range.selected);
         }
     }
-    $(containerDiv).show();
+    Exhibit.jQuery(containerDiv).show();
     
     this._dom.setSelectionCount(this._ranges.length);
 };
@@ -352,7 +352,7 @@ Exhibit.AlphaRangeFacet.prototype._initializeUI = function() {
     );
     
     if (typeof this._settings.height !== "undefined" && this._settings.height !== null) {
-        $(this._dom.valuesContainer).css("height", this._settings.height);
+        Exhibit.jQuery(this._dom.valuesContainer).css("height", this._settings.height);
     }
 };
 

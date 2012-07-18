@@ -63,10 +63,10 @@ Exhibit.BookmarkWidget._configure = function(widget, configuration) {
  */
 Exhibit.BookmarkWidget.prototype._initializeUI = function() {
     var popup;
-    popup = $("<div>")
+    popup = Exhibit.jQuery("<div>")
         .attr("class", "exhibit-bookmarkWidget-popup");
     this._fillPopup(popup);
-    $(this.getContainer()).append(popup);
+    Exhibit.jQuery(this.getContainer()).append(popup);
     this._popup = popup;
 };
 
@@ -87,7 +87,7 @@ Exhibit.BookmarkWidget.prototype._fillPopup = function(popup) {
 
     self = this;
     img = Exhibit.UI.createTranslucentImage("images/bookmark-icon.png");
-    $(img)
+    Exhibit.jQuery(img)
         .attr("class", "exhibit-bookmarkWidget-button")
         .attr("title", Exhibit._("%widget.bookmark.tooltip"))
         .bind("click", function(evt) {
@@ -105,22 +105,22 @@ Exhibit.BookmarkWidget.prototype._showBookmark = function(elmt, evt) {
     self = this;
     self._controlPanel.childOpened();
     popupDom = Exhibit.UI.createPopupMenuDom(elmt);
-    el = $('<input type="text" />').
+    el = Exhibit.jQuery('<input type="text" />').
         attr("value", Exhibit.Bookmark.generateBookmark()).
         attr("size", 40);
-    $(popupDom.elmt).append($(el));
-    $(popupDom.elmt).one("closed.exhibit", function(evt) {
+    Exhibit.jQuery(popupDom.elmt).append(Exhibit.jQuery(el));
+    Exhibit.jQuery(popupDom.elmt).one("closed.exhibit", function(evt) {
         self.dismiss();
     });
     popupDom.open(evt);
-    $(el).get(0).select();
+    Exhibit.jQuery(el).get(0).select();
 };
 
 /**
  * @returns {jQuery}
  */
 Exhibit.BookmarkWidget.prototype.getContainer = function() {
-    return $(this._div);
+    return Exhibit.jQuery(this._div);
 };
 
 /**

@@ -12,7 +12,7 @@
  */ 
 Exhibit.TileView = function(containerElmt, uiContext) {
     var view = this;
-    $.extend(this, new Exhibit.View(
+    Exhibit.jQuery.extend(this, new Exhibit.View(
         "tile",
         containerElmt,
         uiContext
@@ -27,7 +27,7 @@ Exhibit.TileView = function(containerElmt, uiContext) {
         view._orderedViewFrame._settings.page = 0;
         view._reconstruct();
     };
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
@@ -107,7 +107,7 @@ Exhibit.TileView.createFromDOM = function(configElmt, containerElmt, uiContext) 
  */
 Exhibit.TileView.prototype.dispose = function() {
     var view = this;
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
@@ -127,9 +127,9 @@ Exhibit.TileView.prototype._initializeUI = function() {
 
     self = this;
     
-    $(this.getContainer()).empty();
+    Exhibit.jQuery(this.getContainer()).empty();
     self._initializeViewUI(function() {
-        return $(self._dom.bodyDiv).html();
+        return Exhibit.jQuery(self._dom.bodyDiv).html();
     });
 
     template = {
@@ -147,7 +147,7 @@ Exhibit.TileView.prototype._initializeUI = function() {
             }
         ]
     };
-    this._dom = $.simileDOM("template", template);
+    this._dom = Exhibit.jQuery.simileDOM("template", template);
     this._orderedViewFrame._divHeader = this._dom.headerDiv;
     this._orderedViewFrame._divFooter = this._dom.footerDiv;
     this._orderedViewFrame.initializeUI();
@@ -175,7 +175,7 @@ Exhibit.TileView.prototype._reconstruct = function() {
 
     closeGroups = function(groupLevel) {
         for (i = groupLevel; i < state.groupDoms.length; i++) {
-            $(state.groupDoms[i].countSpan).html(state.groupCounts[i]);
+            Exhibit.jQuery(state.groupDoms[i].countSpan).html(state.groupCounts[i]);
         }
         state.groupDoms = state.groupDoms.slice(0, groupLevel);
         state.groupCounts = state.groupCounts.slice(0, groupLevel);
@@ -193,7 +193,7 @@ Exhibit.TileView.prototype._reconstruct = function() {
 
         var groupDom = Exhibit.TileView.constructGroup(groupLevel, groupSortKey);
 
-        $(state.div).append(groupDom.elmt);
+        Exhibit.jQuery(state.div).append(groupDom.elmt);
         state.div = groupDom.contentDiv;
 
         state.groupDoms.push(groupDom);
@@ -204,25 +204,25 @@ Exhibit.TileView.prototype._reconstruct = function() {
         var i, itemLensItem, itemLens;
         if (typeof state.contents === "undefined" || state.contents === null) {
             state.contents = Exhibit.TileView.constructList();
-            $(state.div).append(state.contents);
+            Exhibit.jQuery(state.div).append(state.contents);
         }
 
         for (i = 0; i < state.groupCounts.length; i++) {
             state.groupCounts[i]++;
         }
 
-        itemLensItem = $("<li>");
+        itemLensItem = Exhibit.jQuery("<li>");
         itemLens = view.getUIContext().getLensRegistry().createLens(itemID, itemLensItem, view.getUIContext());
         state.contents.append(itemLensItem);
     };
 
-    $(this.getContainer()).hide();
+    Exhibit.jQuery(this.getContainer()).hide();
 
-    $(this._dom.bodyDiv).empty();
+    Exhibit.jQuery(this._dom.bodyDiv).empty();
     this._orderedViewFrame.reconstruct();
     closeGroups(0);
 
-    $(this.getContainer()).show();
+    Exhibit.jQuery(this.getContainer()).show();
 };
 
 /**
@@ -313,12 +313,12 @@ Exhibit.TileView.constructGroup = function(groupLevel, label) {
             }
         ]
     };
-    return $.simileDOM("template", template);
+    return Exhibit.jQuery.simileDOM("template", template);
 };
 
 /**
  * @returns {jQuery}
  */
 Exhibit.TileView.constructList = function() {
-    return $("<ol>").addClass("exhibit-tileView-body");
+    return Exhibit.jQuery("<ol>").addClass("exhibit-tileView-body");
 };

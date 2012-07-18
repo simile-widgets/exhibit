@@ -16,7 +16,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
     Exhibit.MapView._initialize();
 
     var view = this;
-    $.extend(this, new Exhibit.View(
+    Exhibit.jQuery.extend(this, new Exhibit.View(
         "map",
         containerElmt,
         uiContext
@@ -44,7 +44,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
     this._onItemsChanged = function() {
         view._reconstruct(); 
     };
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
@@ -174,10 +174,10 @@ Exhibit.MapView._accessorSpecs = [
 Exhibit.MapView._initialize = function() {
     if (!Exhibit.MapExtension.initialized) {
         var rel, canvas;
-        $('head link').each(function(i, el) {
-            rel = $(el).attr("rel");
+        Exhibit.jQuery('head link').each(function(i, el) {
+            rel = Exhibit.jQuery(el).attr("rel");
             if (rel.match(/\b(exhibit-map-painter|exhibit\/map-painter)\b/)) {
-                Exhibit.MapExtension.markerUrlPrefix = $(el).attr("href") + "?";
+                Exhibit.MapExtension.markerUrlPrefix = Exhibit.jQuery(el).attr("href") + "?";
             }
         });
 
@@ -324,7 +324,7 @@ Exhibit.MapView.lookupLatLng = function(set, addressExpressionString, outputProp
  */
 Exhibit.MapView.prototype.dispose = function() {
     var view = this;
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
@@ -397,7 +397,7 @@ Exhibit.MapView.prototype._initializeUI = function() {
     legendWidgetSettings.sizeMarkerGenerator = this._createSizeMarkerGenerator();
     legendWidgetSettings.iconMarkerGenerator = this._createIconMarkerGenerator();
     
-    $(this.getContainer()).empty();
+    Exhibit.jQuery(this.getContainer()).empty();
     this._dom = Exhibit.ViewUtilities.constructPlottingViewDom(
         this.getContainer(), 
         this.getUIContext(),
@@ -411,7 +411,7 @@ Exhibit.MapView.prototype._initializeUI = function() {
     );
     
     mapDiv = this._dom.plotContainer;
-    $(mapDiv)
+    Exhibit.jQuery(mapDiv)
         .attr("class", "exhibit-mapView-map")
         .css("height", this._settings.mapHeight);
     
@@ -495,7 +495,7 @@ Exhibit.MapView.prototype._createColorMarkerGenerator = function() {
     var settings = this._settings;
 
     return function(color) {
-        return $.simileBubble(
+        return Exhibit.jQuery.simileBubble(
             "createTranslucentImage",
             (Exhibit.MapExtension.hasCanvas) ?
                 Exhibit.MapExtension.Canvas.makeIcon(settings.shapeWidth, settings.shapeHeight, color, null, null, settings.iconSize, settings).iconURL :
@@ -509,10 +509,10 @@ Exhibit.MapView.prototype._createColorMarkerGenerator = function() {
  * @returns {Function}
  */
 Exhibit.MapView.prototype._createSizeMarkerGenerator = function() {
-    var settings = $.extend({}, this._settings);
+    var settings = Exhibit.jQuery.extend({}, this._settings);
     settings.pinHeight = 0;
     return function(iconSize) {
-        return $.simileBubble("createTranslucentImage",
+        return Exhibit.jQuery.simileBubble("createTranslucentImage",
             (Exhibit.MapExtension.hasCanvas) ?
                 Exhibit.MapExtension.Canvas.makeIcon(settings.shapeWidth, settings.shapeHeight, settings.color, null, null, iconSize, settings).iconURL :
                 Exhibit.MapExtension.Painter.makeIcon(settings.shapeWidth, settings.shapeHeight, settings.color, null, null, iconSize, settings).iconURL,
@@ -527,11 +527,11 @@ Exhibit.MapView.prototype._createSizeMarkerGenerator = function() {
  */
 Exhibit.MapView.prototype._createIconMarkerGenerator = function() {
     return function(iconURL) {
-        var elmt = $("img")
+        var elmt = Exhibit.jQuery("img")
             .attr("src", iconURL)
             .css("vertical-align", "middle")
             .css("height", 40);
-        return $(elmt).get(0);
+        return Exhibit.jQuery(elmt).get(0);
     };
 };
 

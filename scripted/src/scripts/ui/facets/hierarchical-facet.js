@@ -13,7 +13,7 @@
  */
 Exhibit.HierarchicalFacet = function(containerElmt, uiContext) {
     var self = this;
-    $.extend(this, new Exhibit.Facet("hierarchical", containerElmt, uiContext));
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("hierarchical", containerElmt, uiContext));
     this.addSettingSpecs(Exhibit.HierarchicalFacet._settingSpecs);
 
     this._colorCoder = null;
@@ -27,7 +27,7 @@ Exhibit.HierarchicalFacet = function(containerElmt, uiContext) {
             delete self._cache;
         }
     };
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -180,7 +180,7 @@ Exhibit.HierarchicalFacet._configure = function(facet, configuration) {
  */
 Exhibit.HierarchicalFacet.prototype.dispose = function() {
     this.getUIContext().getCollection().removeFacet(this);
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -206,7 +206,7 @@ Exhibit.HierarchicalFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.HierarchicalFacet.prototype.clearAllRestrictions = function() {
-    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
+    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     if (this._selections.length > 0) {
         this._selections = [];
         this._notifyCollection();
@@ -386,13 +386,13 @@ Exhibit.HierarchicalFacet.prototype._internalRemoveSelection = function(selectio
 Exhibit.HierarchicalFacet.prototype.update = function(items) {
     var tree;
 
-    $(this._dom.valuesContainer).hide().empty();
+    Exhibit.jQuery(this._dom.valuesContainer).hide().empty();
 
     tree = this._computeFacet(items);
     if (typeof tree !== "undefined" && tree !== null) {
         this._constructBody(tree);
     }
-    $(this._dom.valuesContainer).show();
+    Exhibit.jQuery(this._dom.valuesContainer).show();
 };
 
 /**
@@ -555,7 +555,7 @@ Exhibit.HierarchicalFacet.prototype._initializeUI = function() {
     );
     
     if (typeof this._settings.height !== "undefined" && this._settings.height !== null && this._settings.scroll) {
-        $(this._dom.valuesContainer).css("height", this._settings.height);
+        Exhibit.jQuery(this._dom.valuesContainer).css("height", this._settings.height);
     }
 };
 
@@ -567,7 +567,7 @@ Exhibit.HierarchicalFacet.prototype._constructBody = function(tree) {
     self = this;
     containerDiv = this._dom.valuesContainer;
     
-    $(containerDiv).hide();
+    Exhibit.jQuery(containerDiv).hide();
     
     constructFacetItemFunction = Exhibit.FacetUtilities[this._settings.scroll ? "constructHierarchicalFacetItem" : "constructFlowingHierarchicalFacetItem"];
     facetHasSelection = this._selections.length > 0;
@@ -611,7 +611,7 @@ Exhibit.HierarchicalFacet.prototype._constructBody = function(tree) {
             onToggleChildren,
             self.getUIContext()
         );
-        $(div).append(dom.elmt);
+        Exhibit.jQuery(div).append(dom.elmt);
         
         if (hasChildren) {
             processChildNodes(node.children, dom.childrenContainer);
@@ -626,7 +626,7 @@ Exhibit.HierarchicalFacet.prototype._constructBody = function(tree) {
     
     processChildNodes(tree.children, containerDiv);
     
-    $(containerDiv).show();
+    Exhibit.jQuery(containerDiv).show();
     
     this._dom.setSelectionCount(this._selections.length);
 };

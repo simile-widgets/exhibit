@@ -17,7 +17,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.OrderedColorCoder = function(containerElmt, uiContext) {
-    $.extend(this, new Exhibit.Coder(
+    Exhibit.jQuery.extend(this, new Exhibit.Coder(
         "orderedcolor",
         containerElmt,
         uiContext
@@ -91,7 +91,7 @@ Exhibit.OrderedColorCoder._settingSpecs = {
  */
 Exhibit.OrderedColorCoder.create = function(configuration, uiContext) {
     var coder, div;
-    div = $("<div>")
+    div = Exhibit.jQuery("<div>")
         .hide()
         .appendTo("body");
     coder = new Exhibit.OrderedColorCoder(
@@ -111,7 +111,7 @@ Exhibit.OrderedColorCoder.create = function(configuration, uiContext) {
 Exhibit.OrderedColorCoder.createFromDOM = function(configElmt, uiContext) {
     var configuration, coder;
 
-    $(configElmt).hide();
+    Exhibit.jQuery(configElmt).hide();
     
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     coder = new Exhibit.OrderedColorCoder(
@@ -127,10 +127,10 @@ Exhibit.OrderedColorCoder.createFromDOM = function(configElmt, uiContext) {
     
     try {
 	    this._usePriority = coder._settings.usePriority;
-        $(configElmt).children().each(function(index, element) {
+        Exhibit.jQuery(configElmt).children().each(function(index, element) {
             coder._addEntry(
                 Exhibit.getAttribute(this, "case"), 
-                $(this).text().trim(), 
+                Exhibit.jQuery(this).text().trim(), 
                 Exhibit.getAttribute(this, "color")
             );
         });

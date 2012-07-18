@@ -8,7 +8,7 @@
  *  autoCreate=false when you include exhibit-api.js.
  *======================================================================
  */
-$(document).ready(function() {     
+Exhibit.jQuery(document).ready(function() {     
 
     var fDone = function() {
         window.exhibit = Exhibit.create();
@@ -29,7 +29,7 @@ $(document).ready(function() {
         // silent
     }
 
-    $(document).one("scriptsLoaded.exhibit", function(evt) {
+    Exhibit.jQuery(document).one("scriptsLoaded.exhibit", function(evt) {
         window.database = Exhibit.Database.create();
         window.database.loadLinks(fDone);
     });

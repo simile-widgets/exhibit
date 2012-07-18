@@ -12,7 +12,7 @@
  */
 Exhibit.TextSearchFacet = function(containerElmt, uiContext) {
     var self = this;
-    $.extend(this, new Exhibit.Facet("text", containerElmt, uiContext));
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("text", containerElmt, uiContext));
     this.addSettingSpecs(Exhibit.TextSearchFacet._settingSpecs);
 
     this._text = null;
@@ -24,7 +24,7 @@ Exhibit.TextSearchFacet = function(containerElmt, uiContext) {
             delete self._itemToValue;
         }
     };
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -137,7 +137,7 @@ Exhibit.TextSearchFacet._configure = function(facet, configuration) {
  */
 Exhibit.TextSearchFacet.prototype.dispose = function() {
     this.getUIContext().getCollection().removeFacet(this);
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -161,13 +161,13 @@ Exhibit.TextSearchFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.TextSearchFacet.prototype.clearAllRestrictions = function() {
-    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
+    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     var restrictions = this._text;
     if (this._text !== null) {
         this._text = null;
         this._notifyCollection();
     }
-    $(this._dom.input).val("");
+    Exhibit.jQuery(this._dom.input).val("");
 };
 
 /**
@@ -184,11 +184,11 @@ Exhibit.TextSearchFacet.prototype.applyRestrictions = function(restrictions) {
 Exhibit.TextSearchFacet.prototype.setText = function(text) {
     if (typeof text !== "undefined" && text !== null) {
         text = text.trim();
-        $(this._dom.input).val(text);
+        Exhibit.jQuery(this._dom.input).val(text);
         
         text = text.length > 0 ? text : null;
     } else {
-        $(this._dom.input).val("");
+        Exhibit.jQuery(this._dom.input).val("");
     }
     
     if (text !== this._text) {
@@ -206,7 +206,7 @@ Exhibit.TextSearchFacet.prototype.restrict = function(items) {
     if (this._text === null) {
         return items;
     } else {
-        $(this.getContainer()).trigger(
+        Exhibit.jQuery(this.getContainer()).trigger(
             "onTextSearchFacetSearch.exhibit",
             [ this._text ]
         );
@@ -254,10 +254,10 @@ Exhibit.TextSearchFacet.prototype._initializeUI = function() {
     this._dom = Exhibit.TextSearchFacet.constructFacetFrame(this.getContainer(), this._settings.facetLabel);
 
     if (this._text !== null) {
-        $(this._dom.input).val(this._text);
+        Exhibit.jQuery(this._dom.input).val(this._text);
     }
 
-    $(this._dom.input).bind("keyup", function(evt) {
+    Exhibit.jQuery(this._dom.input).bind("keyup", function(evt) {
         self._onTextInputKeyUp(evt);
     });
 };
@@ -270,7 +270,7 @@ Exhibit.TextSearchFacet.constructFacetFrame = function(div, facetLabel) {
     if (typeof facetLabel !== "undefined"
         && facetLabel !== null
         && facetLabel !== "") {
-        return $.simileDOM("string",
+        return Exhibit.jQuery.simileDOM("string",
             div,
             '<div class="exhibit-facet-header">' +
                 '<span class="exhibit-facet-header-title">' + facetLabel + '</span>' +
@@ -278,7 +278,7 @@ Exhibit.TextSearchFacet.constructFacetFrame = function(div, facetLabel) {
             '<div class="exhibit-text-facet"><input type="text" id="input"></div>'
         );
     } else {
-        return $.simileDOM(
+        return Exhibit.jQuery.simileDOM(
             "string",
             div,
             '<div class="exhibit-text-facet"><input type="text" id="input"></div>'
@@ -300,7 +300,7 @@ Exhibit.TextSearchFacet.prototype._onTextInputKeyUp = function(evt) {
             self._onTimeout();
         }, 500);
     } else {
-        newText = $(this._dom.input).val().trim(); 
+        newText = Exhibit.jQuery(this._dom.input).val().trim(); 
         if (newText.length === 0 || evt.which === 13) { // arbitrary
             this._timerID = window.setTimeout(function() {
                 self._onTimeout();
@@ -317,7 +317,7 @@ Exhibit.TextSearchFacet.prototype._onTimeout = function() {
 
     this._timerID = null;
     
-    newText = $(this._dom.input).val().trim();
+    newText = Exhibit.jQuery(this._dom.input).val().trim();
     if (newText.length === 0) {
         newText = null;
     }

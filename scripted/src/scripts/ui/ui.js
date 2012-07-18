@@ -81,7 +81,7 @@ Exhibit.UI.create = function(configuration, elmt, uiContext) {
         case "controlPanel":
             return Exhibit.ControlPanel.create(configuration, elmt, uiContext);
         case "hiddenContent":
-            $(elmt).hide();
+            Exhibit.jQuery(elmt).hide();
             return null;
         }
     }
@@ -123,7 +123,7 @@ Exhibit.UI.createFromDOM = function(elmt, uiContext) {
     case "logo":
         return Exhibit.Logo.createFromDOM(elmt, uiContext);
     case "hiddenContent":
-        $(elmt).hide();
+        Exhibit.jQuery(elmt).hide();
         return null;
     }
     return null;
@@ -417,8 +417,8 @@ Exhibit.UI.showBusyIndicator = function() {
         
     top = Math.floor(scrollTop + height / 3);
     
-    $(Exhibit.UI._busyIndicator).css("top", top + "px");
-    $(document.body).append(Exhibit.UI._busyIndicator);
+    Exhibit.jQuery(Exhibit.UI._busyIndicator).css("top", top + "px");
+    Exhibit.jQuery(document.body).append(Exhibit.UI._busyIndicator);
 };
 
 /**
@@ -447,7 +447,7 @@ Exhibit.UI.hideBusyIndicator = function() {
  * @param {Element|jQuery} elmt
  */
 Exhibit.UI.protectUI = function(elmt) {
-    $(elmt).addClass("exhibit-ui-protection");
+    Exhibit.jQuery(elmt).addClass("exhibit-ui-protection");
 };
 
 /**
@@ -459,18 +459,18 @@ Exhibit.UI.protectUI = function(elmt) {
 Exhibit.UI.makeActionLink = function(text, handler) {
     var a, handler2;
 
-    a = $("<a>" + text + "</a>").
+    a = Exhibit.jQuery("<a>" + text + "</a>").
         attr("href", "#").
         addClass("exhibit-action");
     
     handler2 = function(evt) {
-        if (typeof $(this).attr("disabled") === "undefined") {
+        if (typeof Exhibit.jQuery(this).attr("disabled") === "undefined") {
             evt.preventDefault();
             handler(evt);
         }
     };
 
-    $(a).bind("click", handler2);
+    Exhibit.jQuery(a).bind("click", handler2);
     
     return a;
 };
@@ -482,11 +482,11 @@ Exhibit.UI.makeActionLink = function(text, handler) {
  */
 Exhibit.UI.enableActionLink = function(a, enabled) {
     if (enabled) {
-        $(a).removeAttr("disabled");
-        $(a).addClass("exhibit-action").removeClass("exhibit-action-disabled");
+        Exhibit.jQuery(a).removeAttr("disabled");
+        Exhibit.jQuery(a).addClass("exhibit-action").removeClass("exhibit-action-disabled");
     } else {
-        $(a).attr("disabled", true);
-        $(a).removeClass("exhibit-action").addClass("exhibit-action-disabled");
+        Exhibit.jQuery(a).attr("disabled", true);
+        Exhibit.jQuery(a).removeClass("exhibit-action").addClass("exhibit-action-disabled");
     }
 };
 
@@ -509,7 +509,7 @@ Exhibit.UI.makeItemSpan = function(itemID, label, uiContext) {
         }
     }
     
-    a = $("<a>" + label + "</a>").
+    a = Exhibit.jQuery("<a>" + label + "</a>").
         attr("href", Exhibit.Persistence.getItemLink(itemID)).
         addClass("exhibit-item");
         
@@ -533,7 +533,7 @@ Exhibit.UI.makeItemSpan = function(itemID, label, uiContext) {
 Exhibit.UI.makeValueSpan = function(label, valueType) {
     var span, url;
 
-    span = $("<span>").addClass("exhibit-value")
+    span = Exhibit.jQuery("<span>").addClass("exhibit-value")
 ;
     if (valueType === "url") {
         url = label;
@@ -560,10 +560,10 @@ Exhibit.UI.makeValueSpan = function(label, valueType) {
  * @param {Element} elmt
  */
 Exhibit.UI.calculatePopupPosition = function(elmt) {
-    var coords = $(elmt).offset();
+    var coords = Exhibit.jQuery(elmt).offset();
     return {
-        x: coords.left + Math.round($(elmt).outerWidth() / 2),
-        y: coords.top + Math.round($(elmt).outerHeight() / 2)
+        x: coords.left + Math.round(Exhibit.jQuery(elmt).outerWidth() / 2),
+        y: coords.top + Math.round(Exhibit.jQuery(elmt).outerHeight() / 2)
     };
 };
 
@@ -577,12 +577,12 @@ Exhibit.UI.calculatePopupPosition = function(elmt) {
 Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
     var itemLensDiv, lensOpts;
 
-    $(document).trigger("closeAllModeless.exhibit");
+    Exhibit.jQuery(document).trigger("closeAllModeless.exhibit");
 
     opts = opts || {};
     opts.coords = opts.coords || Exhibit.UI.calculatePopupPosition(elmt);
     
-    itemLensDiv = $("<div>");
+    itemLensDiv = Exhibit.jQuery("<div>");
 
     lensOpts = {
         inPopup: true,
@@ -599,7 +599,7 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
 
     uiContext.getLensRegistry().createLens(itemID, itemLensDiv, uiContext, lensOpts);
     
-    $.simileBubble("createBubbleForContentAndPoint",
+    Exhibit.jQuery.simileBubble("createBubbleForContentAndPoint",
         itemLensDiv, 
         opts.coords.x,
         opts.coords.y, 
@@ -615,7 +615,7 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
  * @returns {Element}
  */
 Exhibit.UI.createButton = function(name, handler, className) {
-    var button = $("<button>").
+    var button = Exhibit.jQuery("<button>").
         html(name).
         addClass((className || "exhibit-button")).
         addClass("screen");
@@ -631,7 +631,7 @@ Exhibit.UI.createButton = function(name, handler, className) {
 Exhibit.UI.createPopupMenuDom = function(element) {
     var div, dom;
 
-    div = $("<div>").
+    div = Exhibit.jQuery("<div>").
         addClass("exhibit-menu-popup").
         addClass("exhibit-ui-protection");
     
@@ -645,27 +645,27 @@ Exhibit.UI.createPopupMenuDom = function(element) {
             self = this;
             // @@@ exhibit-dialog needs to be set
             if (typeof evt !== "undefined") {
-                if ($(evt.target).parent(".exhibit-dialog").length > 0) {
-                    dom._dialogParent = $(evt.target).parent(".exhibit-dialog:eq(0)").get(0);
+                if (Exhibit.jQuery(evt.target).parent(".exhibit-dialog").length > 0) {
+                    dom._dialogParent = Exhibit.jQuery(evt.target).parent(".exhibit-dialog:eq(0)").get(0);
                 }
                 evt.preventDefault();
             }
                 
-            docWidth = $(document.body).width();
-            docHeight = $(document.body).height();
+            docWidth = Exhibit.jQuery(document.body).width();
+            docHeight = Exhibit.jQuery(document.body).height();
         
-            coords = $(element).offset();
+            coords = Exhibit.jQuery(element).offset();
             this.elmt.css("top", (coords.top + element.scrollHeight) + "px");
             this.elmt.css("right", (docWidth - (coords.left + element.scrollWidth)) + "px");
 
-            $(document.body).append(this.elmt);
+            Exhibit.jQuery(document.body).append(this.elmt);
             this.elmt.trigger("modelessOpened.exhibit");
             evt.stopPropagation();
         },
         appendMenuItem: function(label, icon, onClick) {
             var self, a, container;
             self = this;
-            a = $("<a>").
+            a = Exhibit.jQuery("<a>").
                 attr("href", "#").
                 addClass("exhibit-menu-item").
                 bind("click", function(evt) {
@@ -675,10 +675,10 @@ Exhibit.UI.createPopupMenuDom = function(element) {
                     evt.stopPropagation();
                 });
 
-            container = $("<div>");
+            container = Exhibit.jQuery("<div>");
             a.append(container);
     
-            container.append($.simileBubble("createTranslucentImage",
+            container.append(Exhibit.jQuery.simileBubble("createTranslucentImage",
                 (typeof icon !== "undefined" && icon !== null) ?
                     icon :
                     (Exhibit.urlPrefix + "images/blank-16x16.png")));
@@ -702,44 +702,44 @@ Exhibit.UI.createPopupMenuDom = function(element) {
 Exhibit.UI.createBusyIndicator = function() {
     var urlPrefix, containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv, img;
     urlPrefix = Exhibit.urlPrefix + "images/";
-    containerDiv = $("<div>");
-    if ($.simileBubble("pngIsTranslucent")) {
-        topDiv = $("<div>").css({
+    containerDiv = Exhibit.jQuery("<div>");
+    if (Exhibit.jQuery.simileBubble("pngIsTranslucent")) {
+        topDiv = Exhibit.jQuery("<div>").css({
             "height": "33px",
             "padding-left": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-top-left.png) top left no-repeat"
         });
         containerDiv.append(topDiv);
         
-        topRightDiv = $("<div>").css({
+        topRightDiv = Exhibit.jQuery("<div>").css({
             "height": "33px",
             "background": "url(" + urlPrefix + "message-bubble/message-top-right.png) top right no-repeat"
         });
         topDiv.append(topRightDiv);
         
-        middleDiv = $("<div>").css({
+        middleDiv = Exhibit.jQuery("<div>").css({
             "padding-left": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-left.png) top left repeat-y"
         });
         containerDiv.append(middleDiv);
         
-        middleRightDiv = $("<div>").css({
+        middleRightDiv = Exhibit.jQuery("<div>").css({
             "padding-right": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-right.png) top right repeat-y"
         });
         middleDiv.append(middleRightDiv);
         
-        contentDiv = $("<div>");
+        contentDiv = Exhibit.jQuery("<div>");
         middleRightDiv.append(contentDiv);
         
-        bottomDiv = $("<div>").css({
+        bottomDiv = Exhibit.jQuery("<div>").css({
             "height": "55px",
             "padding-left": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-bottom-left.png) bottom left no-repeat"
         });
         containerDiv.append(bottomDiv);
         
-        bottomRightDiv = $("<div>").css({
+        bottomRightDiv = Exhibit.jQuery("<div>").css({
             "height": "55px",
             "background": "url(" + urlPrefix + "message-bubble/message-bottom-right.png) bottom right no-repeat"
         });
@@ -752,14 +752,14 @@ Exhibit.UI.createBusyIndicator = function() {
             "opacity": 0.9
         });
         
-        contentDiv = $("<div>");
+        contentDiv = Exhibit.jQuery("<div>");
         containerDiv.append(contentDiv);
     }
 
     containerDiv.addClass("exhibit-busyIndicator");
     contentDiv.addClass("exhibit-busyIndicator-content");
     
-    img = $("<img />").attr("src", urlPrefix + "progress-running.gif");
+    img = Exhibit.jQuery("<img />").attr("src", urlPrefix + "progress-running.gif");
     contentDiv.append(img);
     contentDiv.append(document.createTextNode(Exhibit._("%general.busyIndicatorMessage")));
     
@@ -798,7 +798,7 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
     /**
      * @ignore
      */
-    dom = $.simileDOM("template", template);
+    dom = Exhibit.jQuery.simileDOM("template", template);
 
     Exhibit.UI.setupDialog(dom, true);
 
@@ -807,18 +807,18 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
      */
     dom.open = function() {
         var lens;
-        $(document).trigger("modalSuperseded.exhibit");
+        Exhibit.jQuery(document).trigger("modalSuperseded.exhibit");
         lens = new Exhibit.Lens(itemID, dom.viewContainer, exhibit, configuration);
         
-        $(dom.elmt).css("top", (document.body.scrollTop + 100) + "px");
-        $(document.body).append(dom.elmt);
+        Exhibit.jQuery(dom.elmt).css("top", (document.body.scrollTop + 100) + "px");
+        Exhibit.jQuery(document.body).append(dom.elmt);
         
-        $(dom.closeButton).bind("click", function(evt) {
+        Exhibit.jQuery(dom.closeButton).bind("click", function(evt) {
             dom.close();
             evt.preventDefault();
             evt.stopPropagation();
         });
-        $(dom.elmt).trigger("modalOpened.exhibit");
+        Exhibit.jQuery(dom.elmt).trigger("modalOpened.exhibit");
     };
     
     return dom;
@@ -831,7 +831,7 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
  * @returns {Element}
  */
 Exhibit.UI.createTranslucentImage = function(relativeUrl, verticalAlign) {
-    return $.simileBubble("createTranslucentImage", Exhibit.urlPrefix + relativeUrl, verticalAlign);
+    return Exhibit.jQuery.simileBubble("createTranslucentImage", Exhibit.urlPrefix + relativeUrl, verticalAlign);
 };
 
 /**
@@ -841,7 +841,7 @@ Exhibit.UI.createTranslucentImage = function(relativeUrl, verticalAlign) {
  * @returns {Element}
  */
 Exhibit.UI.createTranslucentImageHTML = function(relativeUrl, verticalAlign) {
-    return $.simileBubble("createTranslucentImageHTML", Exhibit.urlPrefix + relativeUrl, verticalAlign);
+    return Exhibit.jQuery.simileBubble("createTranslucentImageHTML", Exhibit.urlPrefix + relativeUrl, verticalAlign);
 };
 
 /**
@@ -851,9 +851,9 @@ Exhibit.UI.createTranslucentImageHTML = function(relativeUrl, verticalAlign) {
  * @returns {Boolean}
  */
 Exhibit.UI._clickInElement = function(x, y, elmt) {
-    var offset = $(elmt).offset();
-    var dims = { "w": $(elmt).outerWidth(),
-                 "h": $(elmt).outerHeight() };
+    var offset = Exhibit.jQuery(elmt).offset();
+    var dims = { "w": Exhibit.jQuery(elmt).outerWidth(),
+                 "h": Exhibit.jQuery(elmt).outerHeight() };
     return (x < offset.left &&
             x > offset.left + dims.w &&
             y < offset.top &&
@@ -909,32 +909,32 @@ Exhibit.UI.setupDialog = function(dom, modal, dialogParent) {
         createdHandler = function(evt) {
             var descendant = evt.target;
             dom._dialogDescendants.push(descendant);
-            $(descendant).bind("cancelModeless.exhibit", function(evt) {
+            Exhibit.jQuery(descendant).bind("cancelModeless.exhibit", function(evt) {
                 dom._dialogDescendants.splice(dom._dialogDescendants.indexOf(descendant), 1);
-                $(descendant).unbind(evt);
+                Exhibit.jQuery(descendant).unbind(evt);
             });
         };
 
         dom.close = function(evt) {
             if (typeof evt !== "undefined") {
                 if (evt.type !== "cancelAllModeless") {
-                    $(dom.elmt).trigger("cancelModeless.exhibit");
+                    Exhibit.jQuery(dom.elmt).trigger("cancelModeless.exhibit");
                 }
             } else {
-                $(dom.elmt).trigger("cancelModeless.exhibit");
+                Exhibit.jQuery(dom.elmt).trigger("cancelModeless.exhibit");
             }
-            $(document.body).unbind("click", clickHandler);
-            $(dom._dialogParent).unbind("cancelModeless.exhibit", cancelHandler);
-            $(document).unbind("cancelAllModeless.exhibit", cancelAllHandler);
-            $(dom.elmt).trigger("closed.exhibit");
-            $(dom.elmt).remove();
+            Exhibit.jQuery(document.body).unbind("click", clickHandler);
+            Exhibit.jQuery(dom._dialogParent).unbind("cancelModeless.exhibit", cancelHandler);
+            Exhibit.jQuery(document).unbind("cancelAllModeless.exhibit", cancelAllHandler);
+            Exhibit.jQuery(dom.elmt).trigger("closed.exhibit");
+            Exhibit.jQuery(dom.elmt).remove();
         };
 
-        $(dom.elmt).bind("modelessOpened.exhibit", createdHandler);
-        $(dom.elmt).one("modelessOpened.exhibit", function(evt) {
-            $(document.body).bind("click", clickHandler);
-            $(dom._dialogParent).bind("cancelModeless.exhibit", cancelHandler);
-            $(document).bind("cancellAllModeless.exhibit", cancelAllHandler);
+        Exhibit.jQuery(dom.elmt).bind("modelessOpened.exhibit", createdHandler);
+        Exhibit.jQuery(dom.elmt).one("modelessOpened.exhibit", function(evt) {
+            Exhibit.jQuery(document.body).bind("click", clickHandler);
+            Exhibit.jQuery(dom._dialogParent).bind("cancelModeless.exhibit", cancelHandler);
+            Exhibit.jQuery(document).bind("cancellAllModeless.exhibit", cancelAllHandler);
         });
     } else {
         dom._superseded = 0;
@@ -955,22 +955,22 @@ Exhibit.UI.setupDialog = function(dom, modal, dialogParent) {
             dom._superseded++;
             // Will be unbound when element issuing this signal removes
             // itself.
-            $(evt.target).bind("cancelModal.exhibit", closedHandler);
+            Exhibit.jQuery(evt.target).bind("cancelModal.exhibit", closedHandler);
         };
 
         // Some UI element or keystroke should bind dom.close now that
         // it's been setup.
         dom.close = function(evt) {
-            $(dom.elmt).trigger("cancelModal.exhibit");
-            $(document).trigger("cancelAllModeless.exhibit");
-            $(dom.elmt).remove();
-            $(document.body).unbind("click", clickHandler);
-            $(document).unbind("modalSuperseded.exhibit", supersededHandler);
+            Exhibit.jQuery(dom.elmt).trigger("cancelModal.exhibit");
+            Exhibit.jQuery(document).trigger("cancelAllModeless.exhibit");
+            Exhibit.jQuery(dom.elmt).remove();
+            Exhibit.jQuery(document.body).unbind("click", clickHandler);
+            Exhibit.jQuery(document).unbind("modalSuperseded.exhibit", supersededHandler);
         };
 
-        $(dom.elmt).one("modalOpened.exhibit", function() {
-            $(document.body).bind("click", clickHandler);
-            $(document).bind("modalSuperseded.exhibit", supersededHandler);
+        Exhibit.jQuery(dom.elmt).one("modalOpened.exhibit", function() {
+            Exhibit.jQuery(document.body).bind("click", clickHandler);
+            Exhibit.jQuery(document).bind("modalSuperseded.exhibit", supersededHandler);
         });
     }
 };

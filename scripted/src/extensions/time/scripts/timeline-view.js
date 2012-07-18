@@ -12,7 +12,7 @@
  */
 Exhibit.TimelineView = function(containerElmt, uiContext) {
     var view = this;
-    $.extend(this, new Exhibit.View(
+    Exhibit.jQuery.extend(this, new Exhibit.View(
         "time",
         containerElmt,
         uiContext
@@ -42,7 +42,7 @@ Exhibit.TimelineView = function(containerElmt, uiContext) {
         view._reconstruct(); 
     };
 
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
@@ -190,7 +190,7 @@ Exhibit.TimelineView._configure = function(view, configuration) {
  *
  */
 Exhibit.TimelineView.prototype.dispose = function() {
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onItemsChanged.exhibit",
         this._onItemsChanged
     );
@@ -249,13 +249,13 @@ Exhibit.TimelineView.prototype._initializeUI = function() {
     
     legendWidgetSettings.colorGradient = (this._colorCoder !== null && typeof this._colorCoder._gradientPoints !== "undefined");
     legendWidgetSettings.iconMarkerGenerator = function(iconURL) {
-        var elmt = $("<img>")
+        var elmt = Exhibit.jQuery("<img>")
             .attr("src", iconURL)
             .css("verticalAlign", "middle");
         return elmt.get(0);
     }
     
-    $(this.getContainer()).empty();
+    Exhibit.jQuery(this.getContainer()).empty();
 
     this._dom = Exhibit.ViewUtilities.constructPlottingViewDom(
         this.getContainer(), 
@@ -294,7 +294,7 @@ Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
     if (settings.timelineConstructor !== null) {
         this._timeline = settings.timelineConstructor(timelineDiv, this._eventSource);
     } else {
-        $(timelineDiv)
+        Exhibit.jQuery(timelineDiv)
             .css("height", settings.timelineHeight + "px")
             .attr("class", "exhibit-timelineView-timeline");
 
@@ -596,5 +596,5 @@ Exhibit.TimelineView.prototype._select = function(selection) {
  * @param {Object} [labeller] Ignored.
  */
 Exhibit.TimelineView.prototype._fillInfoBubble = function(evt, elmt, theme, labeller) {
-    this.getUIContext().getLensRegistry().createLens(evt._itemID, $(elmt), this.getUIContext());
+    this.getUIContext().getLensRegistry().createLens(evt._itemID, Exhibit.jQuery(elmt), this.getUIContext());
 };

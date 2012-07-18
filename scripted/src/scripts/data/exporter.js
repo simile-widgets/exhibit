@@ -47,7 +47,7 @@ Exhibit.Exporter._registerComponent = function(evt, reg) {
     Exhibit.Exporter._registry = reg;
     if (!reg.hasRegistry(Exhibit.Exporter._registryKey)) {
         reg.createRegistry(Exhibit.Exporter._registryKey);
-        $(document).trigger("registerExporters.exhibit");
+        Exhibit.jQuery(document).trigger("registerExporters.exhibit");
     }
 };
 
@@ -201,7 +201,7 @@ Exhibit.Exporter._getPropertiesWithValueTypes = function(database) {
     return map;
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerStaticComponents.exhibit",
     Exhibit.Exporter._registerComponent
 );

@@ -12,7 +12,7 @@
  */
 Exhibit.NumericRangeFacet = function(containerElmt, uiContext) {
     var self = this;
-    $.extend(
+    Exhibit.jQuery.extend(
         this,
         new Exhibit.Facet("numericrange", containerElmt, uiContext)
     );
@@ -26,7 +26,7 @@ Exhibit.NumericRangeFacet = function(containerElmt, uiContext) {
             delete self._rangeIndex;
         }
     };
-    $(uiContext.getCollection().getElement()).bind(
+    Exhibit.jQuery(uiContext.getCollection().getElement()).bind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -139,7 +139,7 @@ Exhibit.NumericRangeFacet._configure = function(facet, configuration) {
  */
 Exhibit.NumericRangeFacet.prototype.dispose = function() {
     this.getUIContext().getCollection().removeFacet(this);
-    $(this.getUIContext().getCollection().getElement()).unbind(
+    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
     );
@@ -160,7 +160,7 @@ Exhibit.NumericRangeFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.NumericRangeFacet.prototype.clearAllRestrictions = function() {
-    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
+    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     if (this._ranges.length > 0) {
         this._ranges = [];
         this._notifyCollection();
@@ -238,10 +238,10 @@ Exhibit.NumericRangeFacet.prototype.restrict = function(items) {
  * @param {Exhibit.Set} items
  */
 Exhibit.NumericRangeFacet.prototype.update = function(items) {
-    $(this._dom.valuesContainer).hide().empty();
+    Exhibit.jQuery(this._dom.valuesContainer).hide().empty();
     
     this._reconstruct(items);
-    $(this._dom.valuesContainer).show();
+    Exhibit.jQuery(this._dom.valuesContainer).show();
 };
 
 /**
@@ -304,7 +304,7 @@ Exhibit.NumericRangeFacet.prototype._reconstruct = function(items) {
     
     facetHasSelection = this._ranges.length > 0;
     containerDiv = this._dom.valuesContainer;
-    $(containerDiv).hide();
+    Exhibit.jQuery(containerDiv).hide();
     constructFacetItemFunction = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetItem" : "constructFlowingFacetItem"];
     makeFacetValue = function(from, to, count, selected) {
         var onSelect, onSelectOnly, elmt;
@@ -328,7 +328,7 @@ Exhibit.NumericRangeFacet.prototype._reconstruct = function(items) {
             onSelectOnly,
             self.getUIContext()
         );
-        $(containerDiv).append(elmt);
+        Exhibit.jQuery(containerDiv).append(elmt);
     };
         
     for (i = 0; i < ranges.length; i++) {
@@ -338,7 +338,7 @@ Exhibit.NumericRangeFacet.prototype._reconstruct = function(items) {
         }
     }
     
-    $(containerDiv).show();
+    Exhibit.jQuery(containerDiv).show();
     
     this._dom.setSelectionCount(this._ranges.length);
 };
@@ -366,7 +366,7 @@ Exhibit.NumericRangeFacet.prototype._initializeUI = function() {
     );
     
     if (typeof this._settings.height !== "undefined" && this._settings.height !== null) {
-        $(this._dom.valuesContainer).css("height", this._settings.height);
+        Exhibit.jQuery(this._dom.valuesContainer).css("height", this._settings.height);
     }
 };
 

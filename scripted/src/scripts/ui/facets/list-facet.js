@@ -11,7 +11,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.ListFacet = function(containerElmt, uiContext) {
-    $.extend(this, new Exhibit.Facet("list", containerElmt, uiContext));
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("list", containerElmt, uiContext));
     this.addSettingSpecs(Exhibit.ListFacet._settingSpecs);
 
     this._colorCoder = null;
@@ -202,7 +202,7 @@ Exhibit.ListFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.ListFacet.prototype.clearAllRestrictions = function() {
-    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
+    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     this._valueSet = new Exhibit.Set();
     this._selectMissing = false;
     this._notifyCollection();
@@ -282,11 +282,11 @@ Exhibit.ListFacet.prototype.update = function(items) {
 		this._delayedUpdateItems = items;
 		return;
 	}
-    $(this._dom.valuesContainer)
+    Exhibit.jQuery(this._dom.valuesContainer)
         .hide()
         .empty();
     this._constructBody(this._computeFacet(items));
-    $(this._dom.valuesContainer).show();
+    Exhibit.jQuery(this._dom.valuesContainer).show();
 };
 
 /**
@@ -318,7 +318,7 @@ Exhibit.ListFacet.prototype._computeFacet = function(items) {
     if (this._settings.showMissing || this._selectMissing) {
         count = this._cache.countItemsMissingValue(items);
         if (count > 0 || this._selectMissing) {
-            span = $("<span>")
+            span = Exhibit.jQuery("<span>")
                 .attr("class", "exhibit-facet-value-missingThisField")
                 .html((typeof this._settings.missingLabel !== "undefined") ? 
                       this._settings.missingLabel :
@@ -328,7 +328,7 @@ Exhibit.ListFacet.prototype._computeFacet = function(items) {
                 value:          null, 
                 count:          count,
                 selected:       this._selectMissing,
-                selectionLabel: $(span).get(0),
+                selectionLabel: Exhibit.jQuery(span).get(0),
                 actionLabel:    Exhibit._("%facets.missingThisField")
             });
         }
@@ -361,7 +361,7 @@ Exhibit.ListFacet.prototype._initializeUI = function() {
     );
 
     if (typeof this._settings.height !== "undefined" && this._settings.scroll) {
-        $(this._dom.valuesContainer).css("height", this._settings.height);
+        Exhibit.jQuery(this._dom.valuesContainer).css("height", this._settings.height);
     }
 };
 
@@ -373,7 +373,7 @@ Exhibit.ListFacet.prototype._constructBody = function(entries) {
     self = this;
     containerDiv = this._dom.valuesContainer;
     
-    $(containerDiv).hide();
+    Exhibit.jQuery(containerDiv).hide();
     
     constructFacetItemFunction = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetItem" : "constructFlowingFacetItem"];
     facetHasSelection = this._valueSet.size() > 0 || this._selectMissing;
@@ -404,14 +404,14 @@ Exhibit.ListFacet.prototype._constructBody = function(entries) {
             self._formatter(elmt);
         }
         
-        $(containerDiv).append(elmt);
+        Exhibit.jQuery(containerDiv).append(elmt);
     };
     
     for (j = 0; j < entries.length; j++) {
         constructValue(entries[j]);
     }
 
-    $(containerDiv).show();
+    Exhibit.jQuery(containerDiv).show();
     
     this._dom.setSelectionCount(this._valueSet.size() + (this._selectMissing ? 1 : 0));
 };

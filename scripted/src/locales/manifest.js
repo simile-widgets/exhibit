@@ -1,5 +1,5 @@
-$(document).bind("registerLocales.exhibit", function() {
-    $(document).trigger("beforeLocalesRegistered.exhibit");
+Exhibit.jQuery(document).bind("registerLocales.exhibit", function() {
+    Exhibit.jQuery(document).trigger("beforeLocalesRegistered.exhibit");
     new Exhibit.Locale("default", Exhibit.urlPrefix + "locales/en/locale.js");
     new Exhibit.Locale("en", Exhibit.urlPrefix + "locales/en/locale.js");
     new Exhibit.Locale("de", Exhibit.urlPrefix + "locales/de/locale.js");
@@ -9,5 +9,5 @@ $(document).bind("registerLocales.exhibit", function() {
     new Exhibit.Locale("no", Exhibit.urlPrefix + "locales/no/locale.js");
     new Exhibit.Locale("sv", Exhibit.urlPrefix + "locales/sv/locale.js");
     new Exhibit.Locale("pt-BR", Exhibit.urlPrefix + "locales/pt-BR/locale.js");
-    $(document).trigger("localesRegistered.exhibit");
+    Exhibit.jQuery(document).trigger("localesRegistered.exhibit");
 });

@@ -7,16 +7,16 @@ Exhibit.MapExtension.Canvas = {};
  */
 Exhibit.MapExtension.Canvas.makeShadow = function(icon, settings) {
     var width, height, shadowWidth, canvas, context;
-	width = $(icon).width();
-	height = $(icon).height();
+	width = Exhibit.jQuery(icon).width();
+	height = Exhibit.jQuery(icon).height();
 	shadowWidth = width + height;
-	canvas = $("<canvas>")
+	canvas = Exhibit.jQuery("<canvas>")
         .css("width", shadowWidth)
         .css("height", height)
         .attr("width", shadowWidth)
         .attr("height", height);
     
-	context = $(canvas).get(0).getContext("2d");
+	context = Exhibit.jQuery(canvas).get(0).getContext("2d");
 	
 	context.scale(1, 1 / 2);
 	context.translate(height / 2, height);
@@ -58,12 +58,12 @@ Exhibit.MapExtension.Canvas.makeIcon = function(width, height, color, label, ico
     bodyHeight = height - lineWidth;
     markerHeight = height + (pin ? pinHeight : 0);
 
-    canvas = $("<canvas>")
+    canvas = Exhibit.jQuery("<canvas>")
         .css("width", width)
         .css("height", markerHeight)
         .attr("width", width)
         .attr("height", markerHeight);
-    context = $(canvas).get(0).getContext("2d");
+    context = Exhibit.jQuery(canvas).get(0).getContext("2d");
     context.clearRect(0, 0, width, markerHeight);
 
     context.beginPath();

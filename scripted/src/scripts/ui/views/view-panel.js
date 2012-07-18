@@ -122,8 +122,8 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
     var viewPanel, role, viewClass, viewClassName, viewLabel, tooltip, label, id, intialView, n;
     viewPanel = new Exhibit.ViewPanel(div, Exhibit.UIContext.createFromDOM(div, uiContext, false));
     
-    $(div).children().each(function(index, elmt) {
-        $(this).hide();
+    Exhibit.jQuery(div).children().each(function(index, elmt) {
+        Exhibit.jQuery(this).hide();
         role = Exhibit.getRoleAttribute(this);
         if (role === "view") {
             viewClass = Exhibit.TileView;
@@ -235,7 +235,7 @@ Exhibit.ViewPanel.prototype.dispose = function() {
         this._view = null;
     }
     
-    $(this._div).empty();
+    Exhibit.jQuery(this._div).empty();
     
     this.unregister();
     this._uiContext.dispose();
@@ -247,14 +247,14 @@ Exhibit.ViewPanel.prototype.dispose = function() {
  * @returns {jQuery}
  */
 Exhibit.ViewPanel.prototype.getContainer = function() {
-    return $(this._div);
+    return Exhibit.jQuery(this._div);
 };
 
 /**
  *
  */
 Exhibit.ViewPanel.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
+    this._id = Exhibit.jQuery(this._div).attr("id");
 
     if (typeof this._id === "undefined" || this._id === null) {
         this._id = Exhibit.ViewPanel._registryKey
@@ -323,16 +323,16 @@ Exhibit.ViewPanel.prototype._internalValidate = function() {
  */
 Exhibit.ViewPanel.prototype._initializeUI = function() {
     var div, self;
-    div = $("<div>");
-    if ($(this._div).children().length > 0) {
-        $(this._div).prepend(div);
+    div = Exhibit.jQuery("<div>");
+    if (Exhibit.jQuery(this._div).children().length > 0) {
+        Exhibit.jQuery(this._div).prepend(div);
     } else {
-        $(this._div).append(div);
+        Exhibit.jQuery(this._div).append(div);
     }
     
     self = this;
     this._dom = Exhibit.ViewPanel.constructDom(
-        $(this._div).children().get(0),
+        Exhibit.jQuery(this._div).children().get(0),
         this._viewLabels,
         this._viewTooltips,
         function(index) {
@@ -349,10 +349,10 @@ Exhibit.ViewPanel.prototype._initializeUI = function() {
 Exhibit.ViewPanel.prototype._createView = function() {
     var viewContainer, viewDiv, index, context;
     viewContainer = this._dom.getViewContainer();
-    $(viewContainer).empty();
+    Exhibit.jQuery(viewContainer).empty();
 
-    viewDiv = $("<div>");
-    $(viewContainer).append(viewDiv);
+    viewDiv = Exhibit.jQuery("<div>");
+    Exhibit.jQuery(viewContainer).append(viewDiv);
     
     index = this._viewIndex;
     context = this._uiContextCache[index] || this._uiContext;
@@ -386,7 +386,7 @@ Exhibit.ViewPanel.prototype._createView = function() {
  * @param {Number} newIndex
  */
 Exhibit.ViewPanel.prototype._switchView = function(newIndex) {
-    $(this.getContainer()).trigger(
+    Exhibit.jQuery(this.getContainer()).trigger(
         "onBeforeViewPanelSwitch.exhibit",
         [ this._viewIndex ]
     );
@@ -396,7 +396,7 @@ Exhibit.ViewPanel.prototype._switchView = function(newIndex) {
     }
     this._viewIndex = newIndex;
     this._createView();
-    $(this.getContainer()).trigger(
+    Exhibit.jQuery(this.getContainer()).trigger(
         "onAfterViewPanelSwitch.exhibit",
         [ this._viewIndex, this._view ]
     );
@@ -498,23 +498,23 @@ Exhibit.ViewPanel.constructDom = function(
             }
         ]
     };
-    dom = $.simileDOM("template", template);
+    dom = Exhibit.jQuery.simileDOM("template", template);
     dom.getViewContainer = function() {
         return dom.viewContainerDiv;
     };
     dom.setViewIndex = function(index) {
         var appendView, i;
         if (viewLabels.length > 1) {
-            $(dom.viewSelectionDiv).empty();
+            Exhibit.jQuery(dom.viewSelectionDiv).empty();
             
             appendView = function(i) {
                 var selected, span, handler;
                 selected = (i === index);
                 if (i > 0) {
-                    $(dom.viewSelectionDiv).append(Exhibit._("%viewPanel.viewSeparator"));
+                    Exhibit.jQuery(dom.viewSelectionDiv).append(Exhibit._("%viewPanel.viewSeparator"));
                 }
                 
-                span = $("<span>");
+                span = Exhibit.jQuery("<span>");
                 span.attr("class", selected ? 
                           "exhibit-viewPanel-viewSelection-selectedView" :
                           "exhibit-viewPanel-viewSelection-view")
@@ -529,7 +529,7 @@ Exhibit.ViewPanel.constructDom = function(
                     };
                     span.bind("click", handler);
                 }
-                $(dom.viewSelectionDiv).append(span);
+                Exhibit.jQuery(dom.viewSelectionDiv).append(span);
             };
             
             for (i = 0; i < viewLabels.length; i++) {
@@ -584,5 +584,5 @@ Exhibit.ViewPanel.prototype.stateDiffers = function(state) {
     return state.viewIndex !== this._viewIndex;
 };
 
-$(document).one("registerComponents.exhibit",
+Exhibit.jQuery(document).one("registerComponents.exhibit",
                 Exhibit.ViewPanel._registerComponent);

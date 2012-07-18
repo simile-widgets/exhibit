@@ -94,14 +94,14 @@ Exhibit.Importer.JSONP._register = function(evt, reg) {
     );
     if (!reg.hasRegistry(Exhibit.Importer.JSONP._registryKey)) {
         reg.createRegistry(Exhibit.Importer.JSONP._registryKey);
-        $(document).trigger(
+        Exhibit.jQuery(document).trigger(
             "registerJSONPImporters.exhibit",
             reg
         );
     }
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerImporters.exhibit",
     Exhibit.Importer.JSONP._register
 );

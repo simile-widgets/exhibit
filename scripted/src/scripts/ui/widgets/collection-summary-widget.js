@@ -20,7 +20,7 @@ Exhibit.CollectionSummaryWidget = function(containerElmt, uiContext) {
     this._onItemsChanged = function() {
         widget._reconstruct();
     };
-    $(this._collection.getElement()).bind(
+    Exhibit.jQuery(this._collection.getElement()).bind(
         "onItemsChanged.exhibit",
         this._onItemsChanged
     );
@@ -61,11 +61,11 @@ Exhibit.CollectionSummaryWidget.createFromDOM = function(configElmt, containerEl
  *
  */
 Exhibit.CollectionSummaryWidget.prototype.dispose = function() {
-    $(this._uiContext.getCollection().getElement()).unbind(
+    Exhibit.jQuery(this._uiContext.getCollection().getElement()).unbind(
         "onItemsChanged.exhibit",
         this._onItemsChanged
     );
-    $(this._div).empty();
+    Exhibit.jQuery(this._div).empty();
     
     this._noResultsDom = null;
     this._allResultsDom = null;
@@ -88,29 +88,29 @@ Exhibit.CollectionSummaryWidget.prototype._initializeUI = function() {
         self._resetCollection();
     };
 
-    $(this._div).hide();
-    this._allResultsDom = $.simileDOM(
+    Exhibit.jQuery(this._div).hide();
+    this._allResultsDom = Exhibit.jQuery.simileDOM(
         "string",
         "span",
         Exhibit._("%widget.collectionSummary.allResultsTemplate", "exhibit-collectionSummaryWidget-results")
     );
-    this._filteredResultsDom = $.simileDOM(
+    this._filteredResultsDom = Exhibit.jQuery.simileDOM(
         "string", 
         "span",
         Exhibit._("%widget.collectionSummary.filteredResultsTemplate", "exhibit-collectionSummaryWidget-results"),
         {   resetActionLink: Exhibit.UI.makeActionLink(Exhibit._("%widget.collectionSummary.resetFiltersLabel"), onClearFilters)
         }
     );
-    this._noResultsDom = $.simileDOM(
+    this._noResultsDom = Exhibit.jQuery.simileDOM(
         "string",
         "span",
         Exhibit._("%widget.collectionSummary.noResultsTemplate", "exhibit-collectionSummaryWidget-results", "exhibit-collectionSummaryWidget-count"),
         {   resetActionLink: Exhibit.UI.makeActionLink(Exhibit._("%widget.collectionSummary.resetFiltersLabel"), onClearFilters)
         }
     );
-    $(this._div).append(this._allResultsDom.elmt);
-    $(this._div).append(this._filteredResultsDom.elmt);
-    $(this._div).append(this._noResultsDom.elmt);
+    Exhibit.jQuery(this._div).append(this._allResultsDom.elmt);
+    Exhibit.jQuery(this._div).append(this._filteredResultsDom.elmt);
+    Exhibit.jQuery(this._div).append(this._noResultsDom.elmt);
     this._reconstruct();
 };
 
@@ -124,14 +124,14 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
     database = this._uiContext.getDatabase();
     dom = this._dom;
 
-    $(this._div).hide();
-    $(this._allResultsDom.elmt).hide();
-    $(this._filteredResultsDom.elmt).hide();
-    $(this._noResultsDom.elmt).hide();
+    Exhibit.jQuery(this._div).hide();
+    Exhibit.jQuery(this._allResultsDom.elmt).hide();
+    Exhibit.jQuery(this._filteredResultsDom.elmt).hide();
+    Exhibit.jQuery(this._noResultsDom.elmt).hide();
     
     if (originalSize > 0) {
         if (currentSize === 0) {
-            $(this._noResultsDom.elmt).show();
+            Exhibit.jQuery(this._noResultsDom.elmt).show();
         } else {
             typeIDs = database.getTypeIDs(this._collection.getRestrictedItems()).toArray();
             typeID = typeIDs.length === 1 ? typeIDs[0] : "Item";
@@ -140,19 +140,19 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
                 database.labelItemsOfType(currentSize, typeID, "exhibit-collectionSummaryWidget-count");
             
             if (currentSize === originalSize) {
-                $(this._allResultsDom.elmt).show();
-                $(this._allResultsDom.resultDescription).empty();
-                $(this._allResultsDom.resultDescription).append(description);
+                Exhibit.jQuery(this._allResultsDom.elmt).show();
+                Exhibit.jQuery(this._allResultsDom.resultDescription).empty();
+                Exhibit.jQuery(this._allResultsDom.resultDescription).append(description);
             } else {
-                $(this._filteredResultsDom.elmt).show();
-                $(this._filteredResultsDom.resultDescription).empty();
-                $(this._filteredResultsDom.resultDescription).append(description);
-                $(this._filteredResultsDom.originalCountSpan).html(originalSize);
+                Exhibit.jQuery(this._filteredResultsDom.elmt).show();
+                Exhibit.jQuery(this._filteredResultsDom.resultDescription).empty();
+                Exhibit.jQuery(this._filteredResultsDom.resultDescription).append(description);
+                Exhibit.jQuery(this._filteredResultsDom.originalCountSpan).html(originalSize);
             }
         }
     }
 
-    $(this._div).show();
+    Exhibit.jQuery(this._div).show();
 };
 
 /**
@@ -162,7 +162,7 @@ Exhibit.CollectionSummaryWidget.prototype._resetCollection = function() {
     var state, collection;
     collection = this._collection;
 
-    $(this._collection.getElement()).trigger("onResetAllFilters.exhibit");
+    Exhibit.jQuery(this._collection.getElement()).trigger("onResetAllFilters.exhibit");
     state = this._collection.clearAllRestrictions();
 
     Exhibit.History.pushState(

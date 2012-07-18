@@ -42,5 +42,5 @@ Exhibit.Importer.ExhibitJSON._register = function() {
     );
 };
 
-$(document).one("registerImporters.exhibit",
+Exhibit.jQuery(document).one("registerImporters.exhibit",
                 Exhibit.Importer.ExhibitJSON._register);

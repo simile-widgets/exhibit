@@ -21,7 +21,7 @@ Exhibit.Coder = function(key, div, uiContext) {
     /**
      * @private
      */
-    _div = $(div);
+    _div = Exhibit.jQuery(div);
 
     /**
      * @private
@@ -58,7 +58,7 @@ Exhibit.Coder = function(key, div, uiContext) {
      * @param {Object} specs
      */
     this.addSettingSpecs = function(specs) {
-        $.extend(true, _settingSpecs, specs);
+        Exhibit.jQuery.extend(true, _settingSpecs, specs);
     };
 
     /**
@@ -115,7 +115,7 @@ Exhibit.Coder = function(key, div, uiContext) {
         _settingSpecs = null;
 
         this._settings = null;
-        $(_div).empty();
+        Exhibit.jQuery(_div).empty();
         _div = null;
 
         this.unregister();
@@ -126,7 +126,7 @@ Exhibit.Coder = function(key, div, uiContext) {
      * @private
      */
     _setIdentifier = function() {
-        _id = $(_div).attr("id");
+        _id = Exhibit.jQuery(_div).attr("id");
         if (typeof _id === "undefined" || _id === null) {
             _id = _instanceKey
                 + "-"
@@ -166,7 +166,7 @@ Exhibit.Coder.registerComponent = function(evt, reg) {
     }
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerComponents.exhibit",
     Exhibit.Coder.registerComponent
 );

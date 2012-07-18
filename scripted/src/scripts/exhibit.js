@@ -23,8 +23,8 @@ Exhibit.create = function(database) {
  */
 Exhibit.checkBackwardsCompatibility = function() {
     var exroles;
-    exroles = $("*").filter(function() {
-        return typeof $(this).attr("ex:role") !== "undefined";
+    exroles = Exhibit.jQuery("*").filter(function() {
+        return typeof Exhibit.jQuery(this).attr("ex:role") !== "undefined";
     });
     if (exroles.length > 0) {
         Exhibit.Backwards.enable("Attributes");
@@ -47,9 +47,9 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
     var value, i, values;
 
     try {
-        value = $(elmt).attr(name);
+        value = Exhibit.jQuery(elmt).attr(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
-            value = $(elmt).data("ex-"+name);
+            value = Exhibit.jQuery(elmt).data("ex-"+name);
             if (typeof value === "undefined" || value === null || value.length === 0) {
                 return null;
             }
@@ -152,7 +152,7 @@ Exhibit.getConfigurationFromDOM = function(elmt) {
 Exhibit.extractOptionsFromElement = function(elmt) {
     var opts, dataset, i;
     opts = {};
-    dataset = $(elmt).data();
+    dataset = Exhibit.jQuery(elmt).data();
     for (i in dataset) {
         if (dataset.hasOwnProperty(i)) {
             if (i.startsWith("ex")) {
@@ -180,7 +180,7 @@ Exhibit._Impl = function(database) {
             
     this._uiContext = Exhibit.UIContext.createRootContext({}, this);
     this._registry = new Exhibit.Registry();
-    $(document).trigger("registerComponents.exhibit", this._registry);
+    Exhibit.jQuery(document).trigger("registerComponents.exhibit", this._registry);
     this._collectionMap = {};
 };
 
@@ -377,7 +377,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
 
     if (controlPanelElmts.length === 0) {
         panel = Exhibit.ControlPanel.createFromDOM(
-            $("<div>").prependTo(document.body),
+            Exhibit.jQuery("<div>").prependTo(document.body),
             null,
             uiContext
         );
@@ -420,7 +420,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             this._showFocusDialogOnItem(itemID);
         }
     }
-    $(document).trigger("exhibitConfigured.exhibit", this);
+    Exhibit.jQuery(document).trigger("exhibitConfigured.exhibit", this);
 };
 
 /**
@@ -429,7 +429,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
  */
 Exhibit._Impl.prototype._showFocusDialogOnItem = function(itemID) {
     var dom, itemLens;
-    dom = $.simileDOM("string",
+    dom = Exhibit.jQuery.simileDOM("string",
         "div",
         "<div class='exhibit-focusDialog-viewContainer' id='lensContainer'>" +
         "</div>" +
@@ -439,16 +439,16 @@ Exhibit._Impl.prototype._showFocusDialogOnItem = function(itemID) {
             "</button>" +
         "</div>"
     );
-    $(dom.elmt).attr("class", "exhibit-focusDialog exhibit-ui-protection");
+    Exhibit.jQuery(dom.elmt).attr("class", "exhibit-focusDialog exhibit-ui-protection");
     Exhibit.UI.setupDialog(dom, true);
     
     itemLens = this._uiContext.getLensRegistry().createLens(itemID, dom.lensContainer, this._uiContext);
     
-    $(dom.elmt).css("top", (document.body.scrollTop + 100) + "px");
-    $(document.body).append($(dom.elmt));
-    $(document).trigger("modalSuperseded.exhibit");
+    Exhibit.jQuery(dom.elmt).css("top", (document.body.scrollTop + 100) + "px");
+    Exhibit.jQuery(document.body).append(Exhibit.jQuery(dom.elmt));
+    Exhibit.jQuery(document).trigger("modalSuperseded.exhibit");
 
-    $(dom.closeButton).bind("click", function(evt) {
+    Exhibit.jQuery(dom.closeButton).bind("click", function(evt) {
         dom.close();
     });
 };

@@ -166,7 +166,7 @@ Exhibit.Importer.JSONP.GoogleSpreadsheet.preprocessURL = function(url) {
     return url.replace(/\/list\//g, "/cells/");
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerJSONPImporters.exhibit",
     Exhibit.Importer.JSONP.GoogleSpreadsheet._register
 );

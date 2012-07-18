@@ -34,7 +34,7 @@
     loader = function() {
         var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad;
         delayID = Exhibit.generateDelayID();
-        $(document).trigger(
+        Exhibit.jQuery(document).trigger(
             "delayCreation.exhibit",
             delayID
         );
@@ -118,7 +118,7 @@
         // Ugly polling hack
         finishedLoading = function() {
             if (typeof Timeline !== "undefined") {
-                $(document).trigger("delayFinished.exhibit", delayID);
+                Exhibit.jQuery(document).trigger("delayFinished.exhibit", delayID);
             } else {
                 setTimeout(finishedLoading, 500);
             }
@@ -126,5 +126,5 @@
         finishedLoading();
     };
 
-    $(document).one("loadExtensions.exhibit", loader);
+    Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);
 }());

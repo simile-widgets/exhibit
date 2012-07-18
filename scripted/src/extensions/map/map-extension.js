@@ -23,7 +23,7 @@
     loader = function() {
         var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad;
         delayID = Exhibit.generateDelayID();
-        $(document).trigger(
+        Exhibit.jQuery(document).trigger(
             "delayCreation.exhibit",
             delayID
         );
@@ -155,11 +155,11 @@
                 typeof VEMap === "undefined") {
                 setTimeout(finishedLoading, 500);
             } else {
-                $(document).trigger("delayFinished.exhibit", delayID);
+                Exhibit.jQuery(document).trigger("delayFinished.exhibit", delayID);
             }
         };
         finishedLoading();
     };
 
-    $(document).one("loadExtensions.exhibit", loader);
+    Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);
 }());

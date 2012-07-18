@@ -78,13 +78,13 @@ Exhibit.ResetHistoryWidget.prototype._initializeUI = function() {
     var img;
 
     img = Exhibit.UI.createTranslucentImage("images/reset-history-icon.png");
-    $(img)
+    Exhibit.jQuery(img)
         .attr("class", "exhibit-resetHistoryWidget-button")
         .attr("title", "Click to clear state and refresh window")
         .bind("click", function(evt) {
             Exhibit.ResetHistoryWidget.resetHistory();
         });
-    $(this._containerElmt).append(img);
+    Exhibit.jQuery(this._containerElmt).append(img);
 };
 
 /**

@@ -75,5 +75,5 @@ Exhibit.Exporter.SemanticWikiText._register = function() {
     );
 };
 
-$(document).one("registerExporters.exhibit",
+Exhibit.jQuery(document).one("registerExporters.exhibit",
                 Exhibit.Exporter.SemanticWikiText._register);

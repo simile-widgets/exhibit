@@ -123,12 +123,12 @@ Exhibit.ControlPanel.registerComponent = function(evt, reg) {
  * @param {jQuery} elmt
  */
 Exhibit.ControlPanel.mouseOutsideElmt = function(evt, elmt) {
-    var coords = $(elmt).offset();
+    var coords = Exhibit.jQuery(elmt).offset();
     return (
         evt.pageX < coords.left
-            || evt.pageX > coords.left + $(elmt).outerWidth()
+            || evt.pageX > coords.left + Exhibit.jQuery(elmt).outerWidth()
             || evt.pageY < coords.top
-            || evt.pageY > coords.top + $(elmt).outerHeight()
+            || evt.pageY > coords.top + Exhibit.jQuery(elmt).outerHeight()
     );
 };
 
@@ -139,12 +139,12 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
     var widget, self;
     self = this;
     if (this._settings.hoverReveal) {
-        $(this.getContainer()).fadeTo(1, 0);
-        $(this.getContainer()).bind("mouseover", function(evt) {
+        Exhibit.jQuery(this.getContainer()).fadeTo(1, 0);
+        Exhibit.jQuery(this.getContainer()).bind("mouseover", function(evt) {
             self._hovering = true;
-            $(this).fadeTo("fast", 1);
+            Exhibit.jQuery(this).fadeTo("fast", 1);
         });
-        $(document.body).bind("mousemove", function(evt) {
+        Exhibit.jQuery(document.body).bind("mousemove", function(evt) {
             if (self._hovering
                 && !self._childOpen
                 && Exhibit.ControlPanel.mouseOutsideElmt(
@@ -152,7 +152,7 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
                     self.getContainer()
                 )) {
                 self._hovering = false;
-                $(self.getContainer()).fadeTo("fast", 0);
+                Exhibit.jQuery(self.getContainer()).fadeTo("fast", 0);
             }
         });
     }
@@ -172,14 +172,14 @@ Exhibit.ControlPanel.prototype._initializeUI = function() {
         );
         this.addWidget(widget, true);
     }
-    $(this.getContainer()).addClass("exhibit-controlPanel");
+    Exhibit.jQuery(this.getContainer()).addClass("exhibit-controlPanel");
 };
 
 /**
  *
  */
 Exhibit.ControlPanel.prototype._setIdentifier = function() {
-    this._id = $(this._div).attr("id");
+    this._id = Exhibit.jQuery(this._div).attr("id");
     if (typeof this._id === "undefined" || this._id === null) {
         this._id = Exhibit.ControlPanel._registryKey
             + "-"
@@ -223,7 +223,7 @@ Exhibit.ControlPanel.prototype.unregister = function() {
  * @returns {jQuery}
  */
 Exhibit.ControlPanel.prototype.getContainer = function() {
-    return $(this._div);
+    return Exhibit.jQuery(this._div);
 };
 
 /**
@@ -254,8 +254,8 @@ Exhibit.ControlPanel.prototype.setCreatedAsDefault = function() {
     var self;
     self = this;
     this._createdAsDefault = true;
-    $(this._div).hide();
-    $(document).one("exhibitConfigured.exhibit", function(evt, ex) {
+    Exhibit.jQuery(this._div).hide();
+    Exhibit.jQuery(document).one("exhibitConfigured.exhibit", function(evt, ex) {
         var keys, component, i, place;
         component = Exhibit.ViewPanel._registryKey;
         keys = ex.getRegistry().getKeys(component);
@@ -270,8 +270,8 @@ Exhibit.ControlPanel.prototype.setCreatedAsDefault = function() {
             // themselves.
             place = ex.getRegistry().get(component, keys[0]);
             if (typeof place._div !== "undefined") {
-                $(place._div).before(self._div);
-                $(self._div).show();
+                Exhibit.jQuery(place._div).before(self._div);
+                Exhibit.jQuery(self._div).show();
             }
         }
     });
@@ -332,7 +332,7 @@ Exhibit.ControlPanel.prototype.removeWidget = function(widget) {
  */
 Exhibit.ControlPanel.prototype.reconstruct = function() {
     var i;
-    $(this._div).empty();
+    Exhibit.jQuery(this._div).empty();
     for (i = 0; i < this._widgets.length; i++) {
         if (typeof this._widgets[i].reconstruct === "function") {
             this._widgets[i].reconstruct(this);
@@ -340,7 +340,7 @@ Exhibit.ControlPanel.prototype.reconstruct = function() {
     }
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerComponents.exhibit",
     Exhibit.ControlPanel.registerComponent
 );

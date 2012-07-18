@@ -12,7 +12,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.CloudFacet = function(containerElmt, uiContext) {
-    $.extend(this, new Exhibit.Facet("cloud", containerElmt, uiContext));
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("cloud", containerElmt, uiContext));
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
@@ -152,7 +152,7 @@ Exhibit.CloudFacet.prototype.hasRestrictions = function() {
  *
  */
 Exhibit.CloudFacet.prototype.clearAllRestrictions = function() {
-    $(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
+    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
     this._valueSet = new Exhibit.Set();
     this._selectMissing = false;
     this._notifyCollection();
@@ -364,17 +364,17 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
         }
         
         if (count > 0 || this._selectMissing) {
-            span = $("<span>");
-            $(span).html((typeof this._settings.missingLabel !== "undefined") ? 
+            span = Exhibit.jQuery("<span>");
+            Exhibit.jQuery(span).html((typeof this._settings.missingLabel !== "undefined") ? 
                          this._settings.missingLabel :
                          Exhibit._("%facets..missingThisField"));
-            $(span).attr("class", "exhibit-facet-value-missingThisField");
+            Exhibit.jQuery(span).attr("class", "exhibit-facet-value-missingThisField");
             
             entries.unshift({
                 value:          null, 
                 count:          count,
                 selected:       this._selectMissing,
-                selectionLabel: $(span).get(0),
+                selectionLabel: Exhibit.jQuery(span).get(0),
                 actionLabel:    Exhibit._("%facets.missingThisField")
             });
         }
@@ -394,10 +394,10 @@ Exhibit.CloudFacet.prototype._notifyCollection = function() {
  *
  */
 Exhibit.CloudFacet.prototype._initializeUI = function() {
-    $(this.getContainer()).empty();
-    $(this.getContainer()).attr("class", "exhibit-cloudFacet");
+    Exhibit.jQuery(this.getContainer()).empty();
+    Exhibit.jQuery(this.getContainer()).attr("class", "exhibit-cloudFacet");
 
-    var dom = $.simileDOM(
+    var dom = Exhibit.jQuery.simileDOM(
         "string",
         this.getContainer(),
         ((typeof this._settings.facetLabel !== "undefined") ?
@@ -421,8 +421,8 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
     self = this;
     containerDiv = this._dom.valuesContainer;
     
-    $(containerDiv).hide();
-    $(containerDiv).empty();
+    Exhibit.jQuery(containerDiv).hide();
+    Exhibit.jQuery(containerDiv).empty();
     
     if (entries.length > 0) {
         min = Number.POSITIVE_INFINITY;
@@ -442,35 +442,35 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                 evt.stopPropagation();
             };
             
-            elmt = $("<span>");
+            elmt = Exhibit.jQuery("<span>");
             
-            $(elmt).append(document.createTextNode("\u00A0"));
+            Exhibit.jQuery(elmt).append(document.createTextNode("\u00A0"));
             if (typeof entry.selectionLabel === "string") {
-                $(elmt).append(document.createTextNode(entry.selectionLabel));
+                Exhibit.jQuery(elmt).append(document.createTextNode(entry.selectionLabel));
             } else {
-                $(elmt).append(entry.selectionLabel);
+                Exhibit.jQuery(elmt).append(entry.selectionLabel);
             }
-            $(elmt).append(document.createTextNode("\u00A0"));
+            Exhibit.jQuery(elmt).append(document.createTextNode("\u00A0"));
             
-            $(elmt).attr("class", entry.selected ? 
+            Exhibit.jQuery(elmt).attr("class", entry.selected ? 
                          "exhibit-cloudFacet-value exhibit-cloudFacet-value-selected" :
                          "exhibit-cloudFacet-value");
                 
             if (entry.count > min) {
-                $(elmt).css("fontSize", Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range)) + "%");
+                Exhibit.jQuery(elmt).css("fontSize", Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range)) + "%");
             }
             
-            $(elmt).bind("click", onSelect);
+            Exhibit.jQuery(elmt).bind("click", onSelect);
         
-            $(containerDiv).append(elmt);
-            $(containerDiv).append(document.createTextNode(" "));
+            Exhibit.jQuery(containerDiv).append(elmt);
+            Exhibit.jQuery(containerDiv).append(document.createTextNode(" "));
         };
     
         for (j = 0; j < entries.length; j++) {
             constructValue(entries[j]);
         }
     
-        $(containerDiv).show();
+        Exhibit.jQuery(containerDiv).show();
     }
 };
 

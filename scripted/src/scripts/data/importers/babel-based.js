@@ -96,7 +96,7 @@ Exhibit.Importer.BabelBased._register = function(evt, reg) {
     );
 };
 
-$(document).one(
+Exhibit.jQuery(document).one(
     "registerImporters.exhibit",
     Exhibit.Importer.BabelBased._register
 );

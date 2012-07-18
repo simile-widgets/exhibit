@@ -127,5 +127,5 @@ Exhibit.Exporter.RDFXML._register = function() {
     );
 };
 
-$(document).one("registerExporters.exhibit",
+Exhibit.jQuery(document).one("registerExporters.exhibit",
                 Exhibit.Exporter.RDFXML._register);

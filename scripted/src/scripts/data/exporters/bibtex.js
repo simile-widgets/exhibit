@@ -92,5 +92,5 @@ Exhibit.Exporter.BibTex._register = function() {
     );
 };
 
-$(document).one("registerExporters.exhibit",
+Exhibit.jQuery(document).one("registerExporters.exhibit",
                 Exhibit.Exporter.BibTex._register);
