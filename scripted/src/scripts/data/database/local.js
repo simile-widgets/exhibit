@@ -239,6 +239,37 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
 };
 
 /**
+ * Prevent browsers from spinning forever while loading data.
+ *
+ * @static
+ * @private
+ * @param {Function} worker Takes one argument, an item to work on
+ * @param {Array} data An array of items fit to pass to the worker function
+ * @param {Numeric} size Chunk size, the number of items to work on in one
+ *     cycle
+ * @param {Numeric} timeout In milliseconds, the time between cycles
+ * @param {Function} [complete] Method to call when done with all data
+ */
+Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout, complete) {
+    var index, length;
+    index = 0;
+    length = data.length;
+    (function() {
+        var remnant, currentSize;
+        remnant = length - index;
+        currentSize = (remnant >= size) ? size : remnant;
+        if (index < length) {
+            while (currentSize-- > 0) {
+                worker(data[index++]);
+            }
+            setTimeout(arguments.callee, timeout);
+        } else if (typeof complete === "function") {
+            complete();
+        }
+    }());
+};
+
+/**
  * Load just the items from the data.
  * 
  * @param {Object} itemEntries The "items" subsection of Exhibit JSON.
@@ -246,7 +277,8 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
  */
 Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI) {
     Exhibit.jQuery(document).trigger("onBeforeLoadingItems.exhibit");
-    var lastChar, spo, ops, indexPut, indexTriple, i, entry;
+    var self, lastChar, spo, ops, indexPut, indexTriple, finish, loader;
+    self = this;
     try {
         lastChar = baseURI.substr(baseURI.length - 1);
         if (lastChar === "#") {
@@ -262,17 +294,19 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
             indexPut(spo, s, p, o);
             indexPut(ops, o, p, s);
         };
-        
-        for (i = 0; i < itemEntries.length; i++) {
-            entry = itemEntries[i];
-            if (typeof entry === "object") {
-                this._loadItem(entry, indexTriple, baseURI);
+
+        finish = function() {
+            self._propertyArray = null;
+            Exhibit.jQuery(document).trigger("onAfterLoadingItems.exhibit");
+        };
+
+        loader = function(item) {
+            if (typeof item === "object") {
+                self._loadItem(item, indexTriple, baseURI);
             }
-        }
-        
-        this._propertyArray = null;
-        
-        Exhibit.jQuery(document).trigger("onAfterLoadingItems.exhibit");
+        };
+
+        Exhibit.Database._LocalImpl._loadChunked(loader, itemEntries, 1000, 10, finish);
     } catch(e) {
         Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
     }
