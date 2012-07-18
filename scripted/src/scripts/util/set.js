@@ -33,11 +33,11 @@ Exhibit.Set = function(a) {
  * Adds the given single String or Number object to this set, assuming it
  * does not already exist.  Other types will be rejected.
  *
- * @param {String|Number} o The object to add.
+ * @param {String|Number|Boolean} o The object to add.
  * @returns {Boolean} True if the object was added, false if not.
  */
 Exhibit.Set.prototype.add = function(o) {
-    if ((typeof o === "number" || typeof o === "string")
+    if ((typeof o === "number" || typeof o === "string" || typeof o === "boolean")
         && typeof this._hash[o] === "undefined") {
         this._hash[o] = true;
         this._count++;
@@ -63,7 +63,7 @@ Exhibit.Set.prototype.addSet = function(set) {
 /**
  * Removes the given single element from this set.
  *
- * @param {String|Number} o The object to remove.
+ * @param {String|Number|Boolean} o The object to remove.
  * @returns {Boolean} True if the object was successfully removed,
  *   false otherwise.
  */

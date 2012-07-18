@@ -15,9 +15,11 @@ test("constructor", function() {
 });
 
 test("add", function() {
-    expect(8);
+    expect(10);
 
     var member = "a";
+    var member2 = 1;
+    var member3 = false;
     var obj = new Exhibit.Set();
 
     ok(obj.add(member), "Exhibit.Set.add('a')");
@@ -27,7 +29,9 @@ test("add", function() {
     ok(!obj.add(undefined), "!Exhibit.Set.add(undefined)");
     ok(!obj.add(null), "!Exhibit.Set.add(null)");
     ok(!obj.add([]), "!Exhibit.Set.add([])");
-    equal(obj.size(), 1, "Exhibit.Set.size()");
+    ok(obj.add(member2), "Exhibit.Set.add(1)");
+    ok(obj.add(member3), "Exhibit.Set.add(false)");
+    equal(obj.size(), 3, "Exhibit.Set.size()");
 });
 
 test("addSet", function() {
@@ -90,14 +94,16 @@ test("retainSet", function() {
 });
 
 test("contains", function() {
-    expect(2);
+    expect(3);
 
     var member = 'a';
+    var member2 = false;
     var nonmember = 'b';
-    var obj = new Exhibit.Set([member]);
+    var obj = new Exhibit.Set([member, member2]);
 
-    ok(obj.contains(member), "Exhibit.Set(['a']).contains('a')");
-    ok(!obj.contains(nonmember), "Exhibit.Set(['a']).contains('b')");
+    ok(obj.contains(member), "Exhibit.Set(['a', false]).contains('a')");
+    ok(!obj.contains(nonmember), "Exhibit.Set(['a', false]).contains('b')");
+    ok(obj.contains(member2), "Exhibit.Set['a', false]).contains(false)");
 });
 
 test("toArray", function() {
