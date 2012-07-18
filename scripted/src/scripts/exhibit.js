@@ -54,6 +54,9 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
                 return null;
             }
         }
+        if (typeof value.toString !== "undefined") {
+            value = value.toString();
+        }
         if (typeof splitOn === "undefined" || splitOn === null) {
             return value;
         }
