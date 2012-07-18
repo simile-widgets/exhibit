@@ -3,8 +3,8 @@
  * Modules.args, or if none, run all.
  */
 
-$(document).ready(function() {
-    $(document).one("scriptsLoaded.exhibit", function(evt) {
+jQuery(document).ready(function() {
+    jQuery(document).one("scriptsLoaded.exhibit", function(evt) {
         if (Modules.args.length === 0) {
             for (var mod in Modules.tests) {
                 Modules.loadScript(Modules.tests[mod]);
