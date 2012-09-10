@@ -26,6 +26,12 @@ var Exhibit = {
     locales: [],
 
     /**
+       Whether to release jQuery after loading exhibit
+     **/
+    jQueryNoConflict: typeof(jQuery) === 'undefined',
+
+
+    /**
      * Whether Exhibit has been loaded yet.
      */
     loaded: false,

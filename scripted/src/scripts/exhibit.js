@@ -7,7 +7,11 @@
 /**
  * Starting using Exhibit.jQuery instead of jQuery or $
  */
-Exhibit.jQuery = jQuery.noConflict();
+
+Exhibit.jQuery = jQuery;
+if (Exhibit.jQueryNoConflict) {
+    jQuery.noConflict();
+}
 
 /**
  * @static
