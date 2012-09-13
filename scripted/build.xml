@@ -14,6 +14,7 @@
   <property name="docs" value="${build}/docs"/>
   <property name="demos" value="${build}/demos"/>
   <property name="bundle" value="${build}/bundle"/>
+  <property name="bundleStyle" value="${bundle}/styles"/>
   <property name="compress" value="${build}/compress"/>
   <property name="node" value="${build}/node"/>
   <property name="demosSrc" value="demos"/>
@@ -98,6 +99,7 @@
   <!-- Code concatenation in prep for compression -->
   <target name="bundle" description="Combine source files in the right order">
     <mkdir dir="${bundle}"/>
+    <mkdir dir="${bundleStyle}"/>
 
     <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
       <filelist dir="${src}/">
@@ -160,7 +162,7 @@
       </filelist>
     </concat>
 
-    <concat destfile="${bundle}/exhibit-scripted-bundle.css" force="no">
+    <concat destfile="${bundleStyle}/exhibit-scripted-bundle.css" force="no">
       <fileset dir="${src}/styles/">
         <include name="**/*.css"/>
       </fileset>
