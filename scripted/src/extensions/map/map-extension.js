@@ -110,13 +110,13 @@
             scriptURLs.push("http://www.openstreetmap.org/openlayers/OpenStreetMap.js");
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("olmap-view.js");
+                cssFiles.push("olmap-view.css");
             }
         } else if (Exhibit.MapExtension.params.service === "ve" &&
                    typeof VEMap === "undefined") {
             scriptURLs.push("http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=5");
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("vemap-view.js");
-                cssFiles.push("olmap-view.css");
             }
         } else {
             // if author is referring to an unknown service, default to google
