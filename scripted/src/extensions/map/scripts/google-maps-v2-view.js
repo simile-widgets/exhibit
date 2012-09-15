@@ -34,6 +34,7 @@ Exhibit.GoogleMaps2View = function(containerElmt, uiContext) {
     
     this._selectListener = null;
     this._itemIDToMarker = {};
+    this._markerLabelExpression = null;
     this._markerCache = {};
     
     this._shown = false;
@@ -52,99 +53,100 @@ Exhibit.GoogleMaps2View = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.MapView._settingSpecs = {
-    "center":           { type: "float",    defaultValue: [20,0],   dimensions: 2 },
-    "zoom":             { type: "float",    defaultValue: 2         },
-    "size":             { type: "text",     defaultValue: "small"   },
-    "scaleControl":     { type: "boolean",  defaultValue: true      },
-    "overviewControl":  { type: "boolean",  defaultValue: false     },
-    "type":             { type: "enum",     defaultValue: "normal", choices: [ "normal", "satellite", "hybrid" ] },
-    "bubbleTip":        { type: "enum",     defaultValue: "top",    choices: [ "top", "bottom" ] },
-    "mapHeight":        { type: "int",      defaultValue: 400       },
-    "mapConstructor":   { type: "function", defaultValue: null      },
-    "color":            { type: "text",     defaultValue: "#FF9000" },
-    "colorCoder":       { type: "text",     defaultValue: null      },
-    "sizeCoder":        { type: "text",     defaultValue: null      },
-    "iconCoder":        { type: "text",     defaultValue: null      },
-    "selectCoordinator":  { type: "text",   defaultValue: null      },
-    "iconSize":         { type: "int",      defaultValue: 0         },
-    "iconFit":          { type: "text",     defaultValue: "smaller" },
-    "iconScale":        { type: "float",    defaultValue: 1         },
-    "iconOffsetX":      { type: "float",    defaultValue: 0         },
-    "iconOffsetY":      { type: "float",    defaultValue: 0         },
-    "shape":            { type: "text",     defaultValue: "circle"  },
-    "shapeWidth":       { type: "int",      defaultValue: 24        },
-    "shapeHeight":      { type: "int",      defaultValue: 24        },
-    "shapeAlpha":       { type: "float",    defaultValue: 0.7       },
-    "pin":              { type: "boolean",  defaultValue: true      },
-    "pinHeight":        { type: "int",      defaultValue: 6         },
-    "pinWidth":         { type: "int",      defaultValue: 6         },
-    "sizeLegendLabel":  { type: "text",     defaultValue: null      },
-    "colorLegendLabel": { type: "text",     defaultValue: null      },
-    "iconLegendLabel":  { type: "text",     defaultValue: null      },
-    "markerScale":      { type: "text",     defaultValue: null      },
-    "showHeader":       { type: "boolean",  defaultValue: true      },
-    "showSummary":      { type: "boolean",  defaultValue: true      },
-    "showFooter":       { type: "boolean",  defaultValue: true      },
+    "center":           { "type": "float",    "defaultValue": [20,0],   "dimensions": 2 },
+    "zoom":             { "type": "float",    "defaultValue": 2         },
+    "size":             { "type": "text",     "defaultValue": "small"   },
+    "scaleControl":     { "type": "boolean",  "defaultValue": true      },
+    "overviewControl":  { "type": "boolean",  "defaultValue": false     },
+    "type":             { "type": "enum",     "defaultValue": "normal", "choices": [ "normal", "satellite", "hybrid" ] },
+    "bubbleTip":        { "type": "enum",     "defaultValue": "top",    "choices": [ "top", "bottom" ] },
+    "mapHeight":        { "type": "int",      "defaultValue": 400       },
+    "mapConstructor":   { "type": "function", "defaultValue": null      },
+    "markerLabel":      { "type": "text",     "defaultValue": ".label"  },
+    "color":            { "type": "text",     "defaultValue": "#FF9000" },
+    "colorCoder":       { "type": "text",     "defaultValue": null      },
+    "sizeCoder":        { "type": "text",     "defaultValue": null      },
+    "iconCoder":        { "type": "text",     "defaultValue": null      },
+    "selectCoordinator":  { "type": "text",   "defaultValue": null      },
+    "iconSize":         { "type": "int",      "defaultValue": 0         },
+    "iconFit":          { "type": "text",     "defaultValue": "smaller" },
+    "iconScale":        { "type": "float",    "defaultValue": 1         },
+    "iconOffsetX":      { "type": "float",    "defaultValue": 0         },
+    "iconOffsetY":      { "type": "float",    "defaultValue": 0         },
+    "shape":            { "type": "text",     "defaultValue": "circle"  },
+    "shapeWidth":       { "type": "int",      "defaultValue": 24        },
+    "shapeHeight":      { "type": "int",      "defaultValue": 24        },
+    "shapeAlpha":       { "type": "float",    "defaultValue": 0.7       },
+    "pin":              { "type": "boolean",  "defaultValue": true      },
+    "pinHeight":        { "type": "int",      "defaultValue": 6         },
+    "pinWidth":         { "type": "int",      "defaultValue": 6         },
+    "sizeLegendLabel":  { "type": "text",     "defaultValue": null      },
+    "colorLegendLabel": { "type": "text",     "defaultValue": null      },
+    "iconLegendLabel":  { "type": "text",     "defaultValue": null      },
+    "markerScale":      { "type": "text",     "defaultValue": null      },
+    "showHeader":       { "type": "boolean",  "defaultValue": true      },
+    "showSummary":      { "type": "boolean",  "defaultValue": true      },
+    "showFooter":       { "type": "boolean",  "defaultValue": true      },
 };
 
 /**
  * @constant
  */
 Exhibit.MapView._accessorSpecs = [
-    {   accessorName:   "getProxy",
-        attributeName:  "proxy"
+    {   "accessorName":   "getProxy",
+        "attributeName":  "proxy"
     },
-    {   accessorName: "getLatlng",
-        alternatives: [
-            {   bindings: [
-                    {   attributeName:  "latlng",
-                        types:          [ "float", "float" ],
-                        bindingNames:   [ "lat", "lng" ]
+    {   "accessorName": "getLatlng",
+        "alternatives": [
+            {   "bindings": [
+                    {   "attributeName":  "latlng",
+                        "types":          [ "float", "float" ],
+                        "bindingNames":   [ "lat", "lng" ]
                     },
-                    {   attributeName:  "maxAutoZoom",
-                        type:           "float",
-                        bindingName:    "maxAutoZoom",
-                        optional:       true
+                    {   "attributeName":  "maxAutoZoom",
+                        "type":           "float",
+                        "bindingName":    "maxAutoZoom",
+                        "optional":       true
                     }
                 ]
             },
-            {   bindings: [
-                    {   attributeName:  "lat",
-                        type:           "float",
-                        bindingName:    "lat"
+            {   "bindings": [
+                    {   "attributeName":  "lat",
+                        "type":           "float",
+                        "bindingName":    "lat"
                     },
-                    {   attributeName:  "lng",
-                        type:           "float",
-                        bindingName:    "lng"
+                    {   "attributeName":  "lng",
+                        "type":           "float",
+                        "bindingName":    "lng"
                     },
-                    {   attributeName:  "maxAutoZoom",
-                        type:           "float",
-                        bindingName:    "maxAutoZoom",
-                        optional:       true
+                    {   "attributeName":  "maxAutoZoom",
+                        "type":           "float",
+                        "bindingName":    "maxAutoZoom",
+                        "optional":       true
                     }
                 ]
             }
         ]
     },
-    {   accessorName:   "getColorKey",
-        attributeName:  "marker", // backward compatibility
-        type:           "text"
+    {   "accessorName":   "getColorKey",
+        "attributeName":  "marker", // backward compatibility
+        "type":           "text"
     },
-    {   accessorName:   "getColorKey",
-        attributeName:  "colorKey",
-        type:           "text"
+    {   "accessorName":   "getColorKey",
+        "attributeName":  "colorKey",
+        "type":           "text"
     },
-    {   accessorName:   "getSizeKey",
-        attributeName:  "sizeKey",
-        type:           "text"
+    {   "accessorName":   "getSizeKey",
+        "attributeName":  "sizeKey",
+        "type":           "text"
     },
-    {   accessorName:   "getIconKey",
-        attributeName:  "iconKey",
-        type:           "text"
+    {   "accessorName":   "getIconKey",
+        "attributeName":  "iconKey",
+        "type":           "text"
     },
-    {   accessorName:   "getIcon",
-        attributeName:  "icon",
-        type:           "url"
+    {   "accessorName":   "getIcon",
+        "attributeName":  "icon",
+        "type":           "url"
     }
 ];
 
@@ -226,6 +228,8 @@ Exhibit.MapView._configure = function(view, configuration) {
             });
         } :
         null;
+
+    view._markerLabelExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabel);
 };
 
 /**
@@ -971,7 +975,8 @@ Exhibit.MapView.prototype._select = function(selection) {
 Exhibit.MapView.prototype._createInfoWindow = function(items) {
     return Exhibit.ViewUtilities.fillBubbleWithItems(
         null, 
-        items, 
+        items,
+        this._settings.markerLabelExpression,
         this.getUIContext()
     );
 };

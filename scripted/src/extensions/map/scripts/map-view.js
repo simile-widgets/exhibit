@@ -25,11 +25,13 @@ Exhibit.MapView = function(containerElmt, uiContext) {
 
     this._overlays=[];
     this._accessors = {
-        getProxy:    function(itemID, database, visitor) { visitor(itemID); },
-        getColorKey: null,
-        getSizeKey:  null,
-        getIconKey:  null,
-        getIcon:     null
+        "getProxy":  function(itemID, database, visitor) {
+            visitor(itemID);
+        },
+        "getColorKey": null,
+        "getSizeKey":  null,
+        "getIconKey":  null,
+        "getIcon":     null
     };
     this._colorCoder = null;
     this._sizeCoder = null;
@@ -37,6 +39,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
     
     this._selectListener = null;
     this._itemIDToMarker = {};
+    this._markerLabelExpression = null;
     this._markerCache = {};
 
     this._shown = false;
@@ -67,6 +70,7 @@ Exhibit.MapView._settingSpecs = {
     "bubbleTip":        { "type": "enum",     "defaultValue": "top",    "choices": [ "top", "bottom" ] },
     "mapHeight":        { "type": "int",      "defaultValue": 400       },
     "mapConstructor":   { "type": "function", "defaultValue": null      },
+    "markerLabel":      { "type": "text",     "defaultValue": ".label"  },
     "color":            { "type": "text",     "defaultValue": "#FF9000" },
     "colorCoder":       { "type": "text",     "defaultValue": null      },
     "sizeCoder":        { "type": "text",     "defaultValue": null      },
@@ -245,6 +249,8 @@ Exhibit.MapView._configure = function(view, configuration) {
             });
         } : 
         null;
+
+    view._markerLabelExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabel);
 };
 
 /**
@@ -1066,7 +1072,8 @@ Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
 Exhibit.MapView.prototype._createInfoWindow = function(items) {
     return Exhibit.ViewUtilities.fillBubbleWithItems(
         null,
-        items, 
+        items,
+        this._markerLabelExpression,
         this.getUIContext()
     );
 };

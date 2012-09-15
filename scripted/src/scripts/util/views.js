@@ -24,7 +24,7 @@ Exhibit.ViewUtilities.openBubbleForItems = function(anchorElmt, arrayOfItemIDs, 
         uiContext.getSetting("bubbleWidth"), // px
         uiContext.getSetting("bubbleHeight") // px
     );
-    Exhibit.ViewUtilities.fillBubbleWithItems(bubble.content, arrayOfItemIDs, uiContext);
+    Exhibit.ViewUtilities.fillBubbleWithItems(bubble.content, arrayOfItemIDs, null, uiContext);
 };
 
 /**
@@ -32,11 +32,12 @@ Exhibit.ViewUtilities.openBubbleForItems = function(anchorElmt, arrayOfItemIDs, 
  * @static
  * @param {Element} bubbleElmt
  * @param {Array} arrayOfItemIDs
+ * @param {Exhibit.Expression._Impl} labelExpression
  * @param {Exhibit.UIContext} uiContext
  * @returns {Element}
  */
-Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs, uiContext) {
-    var ul, i, itemLensDiv, itemLens;
+Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs, labelExpression, uiContext) {
+    var ul, i, makeItem, itemLensDiv, itemLens;
     if (typeof bubbleElmt === "undefined" || bubbleElmt === null) {
         bubbleElmt = Exhibit.jQuery("<div>");
     }
@@ -50,6 +51,9 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
                 .append(elmt)
                 .appendTo(ul);
         };
+        if (typeof labelExpression !== "undefined" && labelExpression !== null) {
+            uiContext.putSetting("format/item/title", labelExpression);
+        }
         for (i = 0; i < arrayOfItemIDs.length; i++) {
             uiContext.format(arrayOfItemIDs[i], "item", makeItem);
         }
