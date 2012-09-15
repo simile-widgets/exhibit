@@ -11,7 +11,7 @@
  * parameters are:
  *  bundle [true|false]: load extension files one by one or bundled in one file,
  *       defaults to true
- *  service [google|google2|openlayers|ve]: which mapping service to draw upon,
+ *  service [google|google2]: which mapping service to draw upon,
  *       defaults to google (v3)
  *  gmapKey: only necessary when using google2 service
  *  mapPrefix <String>: Which host to find Timeline, defaults to
@@ -104,20 +104,6 @@
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("google-maps-v2-view.js");
             }
-        } else if (Exhibit.MapExtension.params.service === "openlayers" &&
-                   typeof OpenLayers === "undefined") {
-	        scriptURLs.push("http://www.openlayers.org/api/OpenLayers.js");
-            scriptURLs.push("http://www.openstreetmap.org/openlayers/OpenStreetMap.js");
-            if (!Exhibit.MapExtension.params.bundle) {
-                javascriptFiles.push("olmap-view.js");
-                cssFiles.push("olmap-view.css");
-            }
-        } else if (Exhibit.MapExtension.params.service === "ve" &&
-                   typeof VEMap === "undefined") {
-            scriptURLs.push("http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=5");
-            if (!Exhibit.MapExtension.params.bundle) {
-                javascriptFiles.push("vemap-view.js");
-            }
         } else {
             // if author is referring to an unknown service, default to google
 	        if (typeof google === "undefined" ||
@@ -150,9 +136,7 @@
         finishedLoading = function() {
             if ((typeof google === "undefined" ||
                  (typeof google !== "undefined" && typeof google.maps === "undefined")) &&
-                typeof GMap2 === "undefined" &&
-                typeof OpenLayers === "undefined" &&
-                typeof VEMap === "undefined") {
+                typeof GMap2 === "undefined") {
                 setTimeout(finishedLoading, 500);
             } else {
                 Exhibit.jQuery(document).trigger("delayFinished.exhibit", delayID);
