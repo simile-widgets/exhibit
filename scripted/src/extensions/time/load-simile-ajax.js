@@ -22,7 +22,6 @@ if (typeof SimileAjax === "undefined") {
         Exhibit.includeJavascriptFiles(prefix, files);
     };
     SimileAjax.includeCssFiles = Exhibit.includeCssFiles;
-    };
     SimileAjax.jQuery = jQuery;
 
     SimileAjax.Platform = new Object();
