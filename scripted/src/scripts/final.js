@@ -29,7 +29,7 @@ Exhibit.jQuery(document).ready(function() {
     Exhibit.jQuery(document).bind("localeSet.exhibit", function(evt, localeURLs) {
         var i;
         for (i = 0; i < localeURLs.length; i++) {
-            Exhibit.loader.script(localeURLs[i]);
+            Exhibit.includeJavascriptFile(null, localeURLs[i]);
         }
         Exhibit.jQuery(document).trigger("loadExtensions.exhibit");
     });
@@ -69,10 +69,10 @@ Exhibit.jQuery(document).ready(function() {
     Exhibit.staticRegistry = new Exhibit.Registry(true);
 
     Exhibit.jQuery("link[rel='exhibit-extension']").each(function(idx, el) {
-        Exhibit.loader.script(Exhibit.jQuery(el).attr("href"));
+        Exhibit.includeJavascriptFile(null, Exhibit.jQuery(el).attr("href"));
     });
 
-    Exhibit.loader.wait(function() {
+    Exhibit.wait(function() {
         Exhibit.jQuery(document).trigger("registerLocalization.exhibit", Exhibit.staticRegistry);
     });
 });

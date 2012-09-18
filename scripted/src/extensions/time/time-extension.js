@@ -112,8 +112,8 @@
             scriptURLs.push(Exhibit.TimeExtension.urlPrefix + "locales/" + localesToLoad[i] + "/locale.js");
         }
         
-        Exhibit.includeCssFiles(document, "", cssURLs);
-        Exhibit.includeJavascriptFiles(document, "", scriptURLs);
+        Exhibit.includeCssFiles(document, null, cssURLs);
+        Exhibit.includeJavascriptFiles(null, scriptURLs);
 
         // Ugly polling hack
         finishedLoading = function() {

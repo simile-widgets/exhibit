@@ -18,8 +18,11 @@ if (typeof SimileAjax === "undefined") {
         version:                "2.2.1"
     };
 
-    SimileAjax.includeJavascriptFiles = Exhibit.includeJavascriptFiles;
+    SimileAjax.includeJavascriptFiles = function(doc, prefix, files) {
+        Exhibit.includeJavascriptFiles(prefix, files);
+    };
     SimileAjax.includeCssFiles = Exhibit.includeCssFiles;
+    };
     SimileAjax.jQuery = jQuery;
 
     SimileAjax.Platform = new Object();
@@ -137,7 +140,7 @@ if (typeof SimileAjax === "undefined") {
     ];
 
     Exhibit.prefixURLs(scriptURLs, Exhibit.TimeExtension.params.timelinePrefix + "/ajax/2.2.1/scripts/", ajaxURLs);
-    Exhibit.includeJavascriptFiles(document, "", scriptURLs);
+    Exhibit.includeJavascriptFiles(null, scriptURLs);
 
     SimileAjax.loaded = true;
 }());
