@@ -221,12 +221,12 @@ Exhibit.ThumbnailView.prototype._reconstructWithFloats = function() {
 
     closeGroups = function(groupLevel) {
         for (i = groupLevel; i < state.groupDoms.length; i++) {
-            state.groupDoms[i].countSpan.innerHTML = state.groupCounts[i];
+            Exhibit.jQuery(state.groupDoms[i].countSpan).html(state.groupCounts[i]);
         }
         state.groupDoms = state.groupDoms.slice(0, groupLevel);
         state.groupCounts = state.groupCounts.slice(0, groupLevel);
 
-        if (groupLevel > 0) {
+        if (groupLevel > 0 && groupLevel <= state.groupDoms.length) {
             state.div = state.groupDoms[groupLevel - 1].contentDiv;
         } else {
             state.div = view._dom.bodyDiv;
