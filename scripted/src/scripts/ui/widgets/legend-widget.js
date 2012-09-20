@@ -100,7 +100,7 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
     var dom, legendDiv;
 
 	type = type || "color";
-    label = (typeof label === "object") ? label.toString() : label;
+    label = (typeof label !== "string") ? label.toString() : label;
 
     if (type === "color") {
 		dom = Exhibit.jQuery.simileDOM("string",
