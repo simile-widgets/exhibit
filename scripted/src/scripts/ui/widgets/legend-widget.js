@@ -4,6 +4,7 @@
  * @author David Huynh
  * @author Johan Sundström
  * @author Margaret Leibovic
+ * @author David Karger
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
 
@@ -69,7 +70,7 @@ Exhibit.LegendWidget.prototype._initializeUI = function() {
  *
  */
 Exhibit.LegendWidget.prototype.clear = function() {
-    Exhibit.jQuery(this._div).html('<div id="exhibit-color-legend"></div><div id="exhibit-size-legend"></div><div id="exhibit-icon-legend"></div>');
+    Exhibit.jQuery(this._div).html('<div class="exhibit-color-legend"></div><div class="exhibit-size-legend"></div><div class="exhibit-icon-legend"></div>');
 };
 
 /**
@@ -80,15 +81,15 @@ Exhibit.LegendWidget.prototype.addLegendLabel = function(label, type) {
     var dom;
 	dom = Exhibit.jQuery.simileDOM("string",
 			"div",
-			'<div id="legend-label">' +
-				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
+			'<div class="legend-label">' +
+				'<span class="label" class="exhibit-legendWidget-entry-title">' + 
 					label.replace(/\s+/g, "&nbsp;") + 
 				"</span>" +
 			"&nbsp;&nbsp; </div>",
 			{ }
 		);
 	Exhibit.jQuery(dom.elmt).attr("class","exhibit-legendWidget-label");
-	Exhibit.jQuery('#exhibit-' + type + '-legend').append(dom.elmt);
+	Exhibit.jQuery('.exhibit-' + type + '-legend', this._div).append(dom.elmt);
 }
 
 /**
@@ -101,6 +102,7 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 
 	type = type || "color";
     label = (typeof label !== "string") ? label.toString() : label;
+    legendDiv = Exhibit.jQuery('.exhibit-' + type + '-legend', this._div);
 
     if (type === "color") {
 		dom = Exhibit.jQuery.simileDOM("string",
@@ -112,7 +114,6 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 				"&nbsp;&nbsp; ",
 			{ marker: this._colorMarkerGenerator(value) }
 		);
-		legendDiv = Exhibit.jQuery("#exhibit-color-legend");
 	}
 
 	if (type === "size") {
@@ -125,7 +126,6 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 				"&nbsp;&nbsp; ",
 			{ marker: this._sizeMarkerGenerator(value) }
 		);
-		legendDiv = Exhibit.jQuery("#exhibit-size-legend");
 	}
 
 	if (type === "icon") {
@@ -138,7 +138,6 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 				"&nbsp; ",
 			{ marker: this._iconMarkerGenerator(value) }
 		);
-		legendDiv = Exhibit.jQuery("#exhibit-icon-legend");
 	}
     Exhibit.jQuery(dom.elmt).attr("class", "exhibit-legendWidget-entry");
     this._labelStyler(dom.label, value);
