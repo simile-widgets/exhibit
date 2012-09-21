@@ -229,6 +229,9 @@
     <antcall target="extension-bundle">
       <param name="extension" value="time"/>
     </antcall>
+    <antcall target="extension-bundle">
+      <param name="extension" value="map"/>
+    </antcall>
     <!-- invalid-json is self contained in one file, no need to add here -->
   </target>
 
