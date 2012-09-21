@@ -34,7 +34,7 @@ Exhibit.MapExtension.Painter.makeIcon = function(width, height, color, label, ic
         "height=" + height
     ];
     pinParameters = [];
-    if (settings.pin && !(iconSize > 0)) {
+    if (settings.pin && iconSize <= 0) {
         pinHeight = settings.pinHeight;
         pinHalfWidth = Math.ceil(settings.pinWidth / 2);
         
@@ -46,16 +46,16 @@ Exhibit.MapExtension.Painter.makeIcon = function(width, height, color, label, ic
 
     if (iconURL !== null) {
         imageParameters.push("icon=" + iconURL);
-        if (settings.iconFit != "smaller") {
+        if (settings.iconFit !== "smaller") {
             imageParameters.push("iconFit=" + settings.iconFit);
         }
-        if (settings.iconScale != 1) {
+        if (settings.iconScale !== 1) {
             imageParameters.push("iconScale=" + settings.iconScale);
         }
-        if (settings.iconOffsetX != 1) {
+        if (settings.iconOffsetX !== 1) {
             imageParameters.push("iconX=" + settings.iconOffsetX);
         }
-        if (settings.iconOffsetY != 1) {
+        if (settings.iconOffsetY !== 1) {
             imageParameters.push("iconY=" + settings.iconOffsetY);
         }
     }

@@ -47,6 +47,8 @@ Exhibit.GoogleMaps2View = function(containerElmt, uiContext) {
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
+
+    this.register();
 };
 
 /**
@@ -86,7 +88,7 @@ Exhibit.MapView._settingSpecs = {
     "markerScale":      { "type": "text",     "defaultValue": null      },
     "showHeader":       { "type": "boolean",  "defaultValue": true      },
     "showSummary":      { "type": "boolean",  "defaultValue": true      },
-    "showFooter":       { "type": "boolean",  "defaultValue": true      },
+    "showFooter":       { "type": "boolean",  "defaultValue": true      }
 };
 
 /**
@@ -154,9 +156,8 @@ Exhibit.MapView._accessorSpecs = [
  *
  */
 Exhibit.MapView._initialize = function() {
-    var links = [];
+    var links = [], rel, canvas;
     if (!Exhibit.MapExtension.initialized) {
-        var rel, canvas;
         Exhibit.jQuery('head link').each(function(i, el) {
             rel = Exhibit.jQuery(el).attr("rel");
             if (rel.match(/\b(exhibit-map-painter|exhibit\/map-painter)\b/)) {
@@ -197,7 +198,7 @@ Exhibit.MapView.createFromDOM = function(configElmt, containerElmt, uiContext) {
     var configuration, view;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     view = new Exhibit.MapView(
-        containerElmt != null ? containerElmt : configElmt, 
+        containerElmt !== null ? containerElmt : configElmt, 
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     
@@ -271,6 +272,7 @@ Exhibit.MapView.lookupLatLng = function(set, addressExpressionString, outputProp
             geocoder.getLocations(
                 job.address,
                 function(json) {
+                    var coords, lat, lng;
                     if (typeof json.Placemark !== "undefined") {
                         json.Placemark.sort(function(p1, p2) {
                             return p2.AddressDetails.Accuracy - p1.AddressDetails.Accuracy;
@@ -316,7 +318,7 @@ Exhibit.MapView.prototype.dispose = function() {
     this._map.clearOverlays();
     this._map = null;
     
-    if (this._selectListener != null) {
+    if (this._selectListener !== null) {
         this._selectListener.dispose();
         this._selectListener = null;
     }
@@ -346,7 +348,7 @@ Exhibit.MapView.prototype._internalValidate = function() {
         }
     }
     if (typeof this._accessors.getSizeKey !== "undefined" && this._accessors.getSizeKey !== null) {
-        if (tyepof this._settings.sizeCoder !== "undefined" && this._esttings.sizeCoder !== null) {
+        if (typeof this._settings.sizeCoder !== "undefined" && this._settings.sizeCoder !== null) {
             this._sizeCoder = exhibit.getComponent(this._settings.sizeCoder);
             if (typeof this._settings.markerScale !== "undefined" && this._settings.markerScale !== null) {
                 this._sizeCoder._settings.markerScale = this._settings.markerScale;
@@ -413,10 +415,10 @@ Exhibit.MapView.prototype._constructGMap = function(mapDiv) {
     var settings, mapOptions, map;
     settings = this._settings;
     if (typeof settings.mapConstructor !== "undefined" &&
-        setings.mapConstructor !== null) {
+        settings.mapConstructor !== null) {
         return settings.mapConstructor(mapDiv);
     } else {
-        var map = new GMap2(mapDiv);
+        map = new GMap2(mapDiv);
         map.enableDoubleClickZoom();
         map.enableContinuousZoom();
 
@@ -528,7 +530,7 @@ Exhibit.MapView.prototype._reconstruct = function() {
  * @param {Array} unplottableItems
  */
 Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
-    var self, collection, database, settings, accessors, currentSet, locationToData, hasColorKey, hasSizeKey, hasIconKey, hasIcon, hasPoints, hasPolygons, hasPolylines, makeLatLng, bounds, maxAutoZoom, colorCodingFlags, sizeCodingFlags, iconCodingFlags, addMarkerAtLocation, latlngKey, legendWidget, colorCoder, keys, legendGradientWidget, k, key, color, sizeCoder, points, space, i, size, iconCoder, icon;
+    var self, collection, database, settings, accessors, currentSet, locationToData, hasColorKey, hasSizeKey, hasIconKey, hasIcon, hasPoints, hasPolygons, hasPolylines, makeLatLng, bounds, maxAutoZoom, colorCodingFlags, sizeCodingFlags, iconCodingFlags, addMarkerAtLocation, latlngKey, legendWidget, colorCoder, keys, legendGradientWidget, k, key, color, sizeCoder, points, space, i, size, iconCoder, icon, zoom;
 
     self = this;
     collection = this.getUIContext().getCollection();
@@ -653,7 +655,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
                             locationData.iconKeys.addSet(iconKeys);
                         }
                     } else {
-                        var locationData = {
+                        locationData = {
                             "latlng":     latlng,
                             "items":      [ itemID ]
                         };
@@ -927,9 +929,9 @@ Exhibit.MapView.prototype._addPolygonOrPolyline = function(itemID, poly) {
 
     self._map.addOverlay(poly);
     GEvent.addListener(poly, "click", function(p) { 
-        map.openInfoWindow(p, self._createInfoWindow(locationData.items));
+        self._map.openInfoWindow(p, self._createInfoWindow([ itemID ]));
         if (self._selectListener !== null) {
-            self._selectListener.fire({ "itemIDs": locationData.items });
+            self._selectListener.fire({ "itemIDs": [itemID] });
         }
     });
     
@@ -1006,7 +1008,7 @@ Exhibit.MapView.markerToMap = function(marker, position) {
         {
 	        "icon": gicon
         }
-	});
+	);
 };
 
 /**
@@ -1031,7 +1033,7 @@ Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSiz
     if (typeof cached !== "undefined" && (cached.settings === settings)) {
 	    gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {
-        marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, null, label, settings, this);
+        marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, iconURL, label, settings, this);
 	    this._markerCache[key] = marker;
         gmarker = Exhibit.MapView.markerToMap(marker, position);
     }

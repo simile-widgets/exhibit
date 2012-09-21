@@ -23,7 +23,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
     ));
     this.addSettingSpecs(Exhibit.MapView._settingSpecs);
 
-    this._overlays=[];
+    this._overlays = [];
     this._accessors = {
         "getProxy":  function(itemID, database, visitor) {
             visitor(itemID);
@@ -51,6 +51,8 @@ Exhibit.MapView = function(containerElmt, uiContext) {
         "onItemsChanged.exhibit",
         view._onItemsChanged
     );
+
+    this.register();
 };
 
 /**
@@ -218,7 +220,7 @@ Exhibit.MapView.createFromDOM = function(configElmt, containerElmt, uiContext) {
     var configuration, view;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     view = new Exhibit.MapView(
-        containerElmt != null ? containerElmt : configElmt, 
+        containerElmt !== null ? containerElmt : configElmt, 
         Exhibit.UIContext.createFromDOM(configElmt, uiContext)
     );
     
@@ -338,12 +340,13 @@ Exhibit.MapView.prototype.dispose = function() {
     this._clearOverlays();
     this._map = null;
     
-    if (this._selectListener != null) {
+    if (this._selectListener !== null) {
         this._selectListener.dispose();
         this._selectListener = null;
     }
 
     this._itemIDToMarker = null;
+    this._markerCache = null;
     
     this._dom.dispose();
     this._dom = null;
@@ -554,7 +557,7 @@ Exhibit.MapView.prototype._clearOverlays = function() {
 	    this._overlays[i].setMap(null);
     }
 
-    this._overlays=[];
+    this._overlays = [];
 };
 
 /**
@@ -1132,7 +1135,7 @@ Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSiz
     if (typeof cached !== "undefined" && (cached.settings === settings)) {
 	    gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {
-        marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, null, label, settings, this);
+        marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, iconURL, label, settings, this);
 	    this._markerCache[key] = marker;
         gmarker = Exhibit.MapView.markerToMap(marker, position);
     }

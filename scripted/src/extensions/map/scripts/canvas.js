@@ -39,7 +39,7 @@ Exhibit.MapExtension.Canvas.makeShadow = function(icon, settings) {
  * @returns {Object}
  */
 Exhibit.MapExtension.Canvas.makeIcon = function(width, height, color, label, iconImg, iconSize, settings) {
-    var pin, pinWidth, pinHeight, lineWidth, lineColor, alpha, bodyWidth, bodyHeight, markerHeight, radius, canvas, context, meetAngle, topY, botY, rightX, scale, heightScale, widthScale, shadow;
+    var pin, pinWidth, pinHeight, lineWidth, lineColor, alpha, bodyWidth, bodyHeight, markerHeight, radius, canvas, context, meetAngle, topY, botY, leftX, rightX, scale, heightScale, widthScale, shadow;
 
     pin = settings.pin;
 
@@ -80,7 +80,7 @@ Exhibit.MapExtension.Canvas.makeIcon = function(width, height, color, label, ico
 	    radius = bodyWidth / 4.0;
 	    topY = leftX = lineWidth / 2.0;
 	    botY = height - lineWidth / 2.0;
-	    rightX = width - lineWidth / 2.0
+	    rightX = width - lineWidth / 2.0;
 
 	    context.moveTo(rightX - radius, topY);
 	    context.arcTo(rightX, topY, rightX, topY + radius, radius);
