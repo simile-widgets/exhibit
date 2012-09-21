@@ -86,6 +86,8 @@ Exhibit.MapView._settingSpecs = {
     "colorLegendLabel": { "type": "text",     "defaultValue": null      },
     "iconLegendLabel":  { "type": "text",     "defaultValue": null      },
     "markerScale":      { "type": "text",     "defaultValue": null      },
+    "markerFontFamily": { "type": "text",     "defaultValue": "12pt sans-serif" },
+    "markerFontColor":  { "type": "text",     "defaultValue": "black"   },
     "showHeader":       { "type": "boolean",  "defaultValue": true      },
     "showSummary":      { "type": "boolean",  "defaultValue": true      },
     "showFooter":       { "type": "boolean",  "defaultValue": true      }
@@ -549,7 +551,6 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
     hasPolygons = (accessors.getPolygon !== null);
     hasPolylines = (accessors.getPolyline !== null);
     
-    // @@@ back down to v2
     makeLatLng = (settings.latlngOrder === "latlng") ?
         function (first, second) {
             return new GLatLng(first, second);

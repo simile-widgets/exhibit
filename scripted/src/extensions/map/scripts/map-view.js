@@ -99,6 +99,8 @@ Exhibit.MapView._settingSpecs = {
     "colorLegendLabel": { "type": "text",     "defaultValue": null      },
     "iconLegendLabel":  { "type": "text",     "defaultValue": null      },
     "markerScale":      { "type": "text",     "defaultValue": null      },
+    "markerFontFamily": { "type": "text",     "defaultValue": "12pt sans-serif" },
+    "markerFontColor":  { "type": "text",     "defaultValue": "black"   },
     "showHeader":       { "type": "boolean",  "defaultValue": true      },
     "showSummary":      { "type": "boolean",  "defaultValue": true      },
     "showFooter":       { "type": "boolean",  "defaultValue": true      }
