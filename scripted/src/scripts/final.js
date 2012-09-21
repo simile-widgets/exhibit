@@ -18,7 +18,7 @@ Exhibit.jQuery(document).ready(function() {
     Exhibit.jQuery(document).bind("delayFinished.exhibit", function(evt, delayID) {
         var idx = delays.indexOf(delayID);
         if (idx >= 0) {
-            delays.splice(idx);
+            delays.splice(idx, 1);
             if (delays.length === 0 && localeLoaded) {
                 delays = null;
                 Exhibit.jQuery(document).trigger("scriptsLoaded.exhibit");
@@ -69,7 +69,7 @@ Exhibit.jQuery(document).ready(function() {
     Exhibit.staticRegistry = new Exhibit.Registry(true);
 
     Exhibit.jQuery("link[rel='exhibit-extension']").each(function(idx, el) {
-        Exhibit.includeJavascriptFile(null, Exhibit.jQuery(el).attr("href"));
+        Exhibit.includeJavascriptFile(null, Exhibit.jQuery(el).attr("href"), false);
     });
 
     Exhibit.wait(function() {

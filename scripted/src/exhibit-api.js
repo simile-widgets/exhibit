@@ -368,11 +368,12 @@ Exhibit.includeCssFiles = function(doc, urlPrefix, filenames) {
  * @param {String} urlPrefix Path prefix to add to the list of filenames; use
  *     null or an empty string if no prefix is needed.
  * @param {Array} filenames
+ * @param {Boolean} [serial]
  */
-Exhibit.includeJavascriptFiles = function(urlPrefix, filenames) {
+Exhibit.includeJavascriptFiles = function(urlPrefix, filenames, serial) {
     var i;
     for (i = 0; i < filenames.length; i++) {
-        Exhibit.includeJavascriptFile(urlPrefix, filenames[i]);
+        Exhibit.includeJavascriptFile(urlPrefix, filenames[i], serial);
     }
 };
 
@@ -382,10 +383,20 @@ Exhibit.includeJavascriptFiles = function(urlPrefix, filenames) {
  *     null or an empty string if no prefix is needed.
  * @param {String} filename The remainder of the script URL following the
  *     urlPrefix; a script to add to Exhibit's ordered loading.
+ * @param {Boolean} [serial] Whether to wait for a script to load before
+ *      loading the next in line.  True by default.
  */
-Exhibit.includeJavascriptFile = function(urlPrefix, filename) {
+Exhibit.includeJavascriptFile = function(urlPrefix, filename, serial) {
+    if (typeof serial === "undefined" || serial === null) {
+        serial = true;
+    }
+
     if (urlPrefix !== null && urlPrefix !== "") {
-        Exhibit.loader.script(urlPrefix + filename);
+        filename = urlPrefix + filename;
+    }
+
+    if (serial) {
+        Exhibit.loader.script(filename).wait();
     } else {
         Exhibit.loader.script(filename);
     }
@@ -499,7 +510,6 @@ Exhibit.load = function() {
     }
 
     $LAB.setGlobalDefaults({
-        AlwaysPreserveOrder: true,
         UseLocalXHR: false,
         AllowDuplicates: false
     });
