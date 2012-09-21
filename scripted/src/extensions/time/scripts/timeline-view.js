@@ -153,7 +153,7 @@ Exhibit.TimelineView.create = function(configuration, containerElmt, uiContext) 
  * @returns {Exhibit.TimelineView}
  */
 Exhibit.TimelineView.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuraton, view;
+    var configuration, view;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     view = new Exhibit.TimelineView(
         containerElmt !== null ? containerElmt : configElmt, 
@@ -212,7 +212,7 @@ Exhibit.TimelineView.prototype.dispose = function() {
  *
  */
 Exhibit.TimelineView.prototype._internalValidate = function() {
-    var selectCoordinator;
+    var selectCoordinator, self;
     if (typeof this._accessors.getColorKey !== "undefined") {
         if (typeof this._settings.colorCoder !== "undefined") {
             this._colorCoder = this.getUIContext().getMain().getComponent(this._settings.colorCoder);
@@ -231,7 +231,7 @@ Exhibit.TimelineView.prototype._internalValidate = function() {
     if (typeof this._settings.selectCoordinator !== "undefined") {
         selectCoordinator = exhibit.getComponent(this._settings.selectCoordinator);
         if (selectCoordinator !== null) {
-            var self = this;
+            self = this;
             this._selectListener = selectCoordinator.addListener(function(o) {
                 self._select(o);
             });
@@ -253,7 +253,7 @@ Exhibit.TimelineView.prototype._initializeUI = function() {
             .attr("src", iconURL)
             .css("verticalAlign", "middle");
         return elmt.get(0);
-    }
+    };
     
     Exhibit.jQuery(this.getContainer()).empty();
 
@@ -383,7 +383,7 @@ Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
         if (self._selectListener !== null) {
             self._selectListener.fire({ itemIDs: [ eventID ] });
         }
-    }
+    };
     for (i = 0; i < this._timeline.getBandCount(); i++) {
         this._timeline.getBand(i).getEventPainter().addOnSelectListener(listener);
     }
@@ -451,7 +451,11 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
         currentSet.visit(function(itemID) {
             var durations, color, icon, hoverText, colorKeys, iconKeys, hoverKeys, i;
             durations = [];
-            self._getDuration(itemID, database, function(duration) { if (typeof duration.start !== "undefined") durations.push(duration); });
+            self._getDuration(itemID, database, function(duration) {
+                if (typeof duration.start !== "undefined") {
+                    durations.push(duration);
+                }
+            });
 
             if (durations.length > 0) {
                 color = null;
