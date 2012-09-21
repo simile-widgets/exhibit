@@ -46,7 +46,7 @@ Exhibit._ = function() {
     if (args.length > 0) {
         key = args.shift();
         s = Exhibit.Localization.lookup(key);
-        if (typeof s !== "undefined") {
+        if (typeof s !== "undefined" &&  typeof s !== "object") {
             return vsprintf(s, args);
         } else {
             return s;
@@ -229,12 +229,33 @@ Exhibit.Localization.importExtensionLocale = function(locale, hash) {
 };
 
 /**
+ * Decodes UTF-8 strings or arrays of strings to output in HTML
+ * @param {String|Array} s A string or array of strings to decode for HTML
+ * @returns {String}
+ */
+Exhibit.Localization.decodeUTF8 = function(s) {
+    var r, i;
+    if (typeof s === "string") {
+        r = Exhibit.Localization._decodeUTF8(s);
+    } else if (typeof s === "object") {
+        r = new Array(s.length);
+        for (i = 0; i < s.length; i++) {
+            r[i] = Exhibit.Localization._decodeUTF8(s[i]);
+        }
+    } else {
+        r = s;
+    }
+    return r;
+};
+
+/**
  * Decodes UTF-8 strings to output in HTML
+ * @private
  * @param {String} s
  * @returns {String}
  * @see http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
  */
-Exhibit.Localization.decodeUTF8 = function(s) {
+Exhibit.Localization._decodeUTF8 = function(s) {
     var r;
     try {
         r = decodeURIComponent(escape(s));
@@ -248,7 +269,7 @@ Exhibit.Localization.decodeUTF8 = function(s) {
  * Looks up a key in the set of localization and returns the corresponding
  * message; may return undefined if not found.
  * @param {String} key
- * @returns {String}
+ * @returns {String|Array}
  */
 Exhibit.Localization.lookup = function(key) {
     var i, locale;
