@@ -531,7 +531,7 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
             legendWidget = this._dom.legendWidget;
             iconCoder = this._iconCoder;
             keys = iconCodingFlags.keys.toArray().sort();    
-            if (settings.iconLegendLabel !== null) {
+            if (typeof settings.iconLegendLabel !== "undefined" && settings.iconLegendLabel !== null) {
                 legendWidget.addLegendLabel(settings.iconLegendLabel, 'icon');
             }
             for (k = 0; k < keys.length; k++) {
