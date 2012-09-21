@@ -272,7 +272,7 @@ Exhibit.MapView.lookupLatLng = function(set, addressExpressionString, outputProp
             geocoder.getLocations(
                 job.address,
                 function(json) {
-                    var coords, lat, lng;
+                    var coords, lat, lng, segments;
                     if (typeof json.Placemark !== "undefined") {
                         json.Placemark.sort(function(p1, p2) {
                             return p2.AddressDetails.Accuracy - p1.AddressDetails.Accuracy;
