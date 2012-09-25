@@ -90,7 +90,7 @@ Exhibit.LegendWidget.prototype.addLegendLabel = function(label, type) {
 		);
 	Exhibit.jQuery(dom.elmt).attr("class","exhibit-legendWidget-label");
 	Exhibit.jQuery('.exhibit-' + type + '-legend', this._div).append(dom.elmt);
-}
+};
 
 /**
  * @param {} value
