@@ -575,7 +575,7 @@ Exhibit.MapView.prototype._reconstruct = function() {
     }
 
     if (typeof this._dom.legendGradientWidget !== "undefined" && this._dom.legendWidgetGradient !== null) {
-	    this._dom.legendGradientWidget.clear();
+        this._dom.legendGradientWidget.reconstruct();
     }
 
     this._itemIDToMarker = {};
@@ -825,26 +825,28 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         legendWidget = this._dom.legendWidget;
         colorCoder = this._colorCoder;
         keys = colorCodingFlags.keys.toArray().sort();
-        if (typeof settings.colorLegendLabel !== "undefined" && settings.colorLegendLabel !== null) {
-            legendWidget.addLegendLabel(settings.colorLegendLabel, "color");
-        }
 
         if (typeof colorCoder._gradientPoints !== "undefined" && colorCoder._gradientPoints !== null) {
-            // @@@ LGW was booted in Exhibit 3 for being crappy code
             legendGradientWidget = this._dom.legendGradientWidget;
             legendGradientWidget.addGradient(this._colorCoder._gradientPoints);
+            if (typeof settings.colorLegendLabel !== "undefined" && settings.colorLegendLabel !== null) {
+                legendGradientWidget.addLegendLabel(settings.colorLegendLabel);
+            }
         } else {
             for (k = 0; k < keys.length; k++) {
                 key = keys[k];
                 color = colorCoder.translate(key);
                 legendWidget.addEntry(color, key);
             }
+            if (typeof settings.colorLegendLabel !== "undefined" && settings.colorLegendLabel !== null) {
+            legendWidget.addLegendLabel(settings.colorLegendLabel, "color");
+            }
         }
-        
+
         if (colorCodingFlags.others) {
             legendWidget.addEntry(colorCoder.getOthersColor(), colorCoder.getOthersLabel());
         }
-
+            
         if (colorCodingFlags.mixed && legendWidget) {
             legendWidget.addEntry(colorCoder.getMixedColor(), colorCoder.getMixedLabel());
         }

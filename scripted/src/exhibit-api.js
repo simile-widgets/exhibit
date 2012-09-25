@@ -189,6 +189,7 @@ var Exhibit = {
         "scripts/ui/widgets/reset-history-widget.js",
         "scripts/ui/widgets/logo.js",
         "scripts/ui/widgets/legend-widget.js",
+        "scripts/ui/widgets/legend-gradient-widget.js",
         "locales/manifest.js",
         "scripts/final.js"
     ],

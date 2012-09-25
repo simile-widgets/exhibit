@@ -109,15 +109,15 @@ Exhibit.ViewUtilities.constructPlottingViewDom = function(
     );
     dom.plotContainer = dom.resizableDivWidget.getContentDiv();
     
+    dom.legendWidget = Exhibit.LegendWidget.create(
+        legendWidgetSettings,
+        dom.legendDiv, 
+        uiContext
+    );
+
     if (legendWidgetSettings.colorGradient === true) {
         dom.legendGradientWidget = Exhibit.LegendGradientWidget.create(
             dom.legendDiv,
-            uiContext
-        );
-    } else {
-        dom.legendWidget = Exhibit.LegendWidget.create(
-            legendWidgetSettings,
-            dom.legendDiv, 
             uiContext
         );
     }
