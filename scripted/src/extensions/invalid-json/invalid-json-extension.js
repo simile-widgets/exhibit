@@ -5,9 +5,7 @@
  *     should not be included under normal operation, only when upgrading
  *     and your data fails to load.
  * @example
- * <script src="http://host/exhibit/3.0.0/exhibit-api.js?autoCreate=false">
- * </script>
- * <script src="http://host/exhibit/3.0.0/extensions/invalid-json-extension.js">
+ * <script src="http://host/exhibit/3.0.0/exhibit-api.js?autoCreate=false&js=http://host/exhibit/3.0.0/extensions/invalid-json/invalid-json-extension.js">
  * </script>
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  */
