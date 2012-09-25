@@ -817,7 +817,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
             }
 	    }
     } catch (e) {
-	    // @@@ handle this properly
+        Exhibit.Debug.exception(e);
     }
 
     // create all legends for the map, one each for icons, colors, and sizes
@@ -1045,20 +1045,23 @@ Exhibit.MapView.prototype._select = function(selection) {
  * @param {google.maps.Marker} marker
  */
 Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
-    var content, win;
+    var content, win, markerSize, winAnchor;
 
     if (typeof this._infoWindow !== "undefined" && this._infoWindow !== null) {
 	    this._infoWindow.setMap(null);
     }
 
-    content= this._createInfoWindow(items);
+    content = this._createInfoWindow(items);
 
-    // @@@ ignores maps v3 method of settings.bubbleTip, which is already built
-    // in to Exhibit.MapExtension.Marker().getIcon().infoWindowAnchor - but
-    // that's not what's being passed to this method
+    markerSize = marker.getIcon().size;
+    // The origin (0, 0) is the top middle
+    winAnchor = new google.maps.Size(
+        0,
+        (this._settings.bubbleTip === "bottom") ? markerSize.height : 0
+    );
     win = new google.maps.InfoWindow({
-	    "content": content
-        //, "pixelOffset": new google.maps.Size()
+	    "content": content,
+        "pixelOffset": winAnchor
     });
 
     if (typeof pos !== "undefined" && pos !== null) {
@@ -1133,7 +1136,10 @@ Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSiz
 
     cached = this._markerCache[key];
 
-    // @@@ settings comparison is of dubious use
+    // The settings comparison is of dubious use; ideally the settings would
+    // be an actual type and have a comparison method instead of assuming all
+    // settings refer to the same location in memory.  Also, it's a bit unclear
+    // under what circumstances it would ever be different.
     if (typeof cached !== "undefined" && (cached.settings === settings)) {
 	    gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {

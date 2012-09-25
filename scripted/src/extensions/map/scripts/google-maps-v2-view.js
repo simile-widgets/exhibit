@@ -754,7 +754,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
             }
         }
     } catch (e) {
-        // @@@ handle this properly
+        Exhibit.Debug.exception(e);
     }
 
     if (hasColorKey) {
@@ -1030,7 +1030,10 @@ Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSiz
 
     cached = this._markerCache[key];
 
-    // @@@ settings comparison is of dubious use
+    // The settings comparison is of dubious use; ideally the settings would
+    // be an actual type and have a comparison method instead of assuming all
+    // settings refer to the same location in memory.  Also, it's a bit unclear
+    // under what circumstances it would ever be different.
     if (typeof cached !== "undefined" && (cached.settings === settings)) {
 	    gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {
