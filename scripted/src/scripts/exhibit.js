@@ -7,11 +7,12 @@
 /**
  * Starting using Exhibit.jQuery instead of jQuery or $
  */
-
-Exhibit.jQuery = jQuery;
-if (Exhibit.jQueryNoConflict) {
-    jQuery.noConflict();
-}
+(function() {
+    Exhibit.jQuery = jQuery;
+    if (!Exhibit._jQueryExists) {
+        jQuery.noConflict();
+    }
+}());
 
 /**
  * @static

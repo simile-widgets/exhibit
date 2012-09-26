@@ -26,12 +26,6 @@ var Exhibit = {
     locales: [],
 
     /**
-       Whether to release jQuery after loading exhibit
-     **/
-    jQueryNoConflict: typeof(jQuery) === 'undefined',
-
-
-    /**
      * Whether Exhibit has been loaded yet.
      */
     loaded: false,
@@ -108,6 +102,11 @@ var Exhibit = {
      * How Exhibit refers to jQuery
      */
     jQuery: undefined,
+
+    /**
+     * Whether jQuery exists in the global context already
+     */
+    _jQueryExists: typeof jQuery !== "undefined",
 
     /**
      * Scripts Exhibit will load.
@@ -403,9 +402,9 @@ Exhibit.includeJavascriptFile = function(urlPrefix, filename, serial) {
     }
 
     if (serial) {
-        Exhibit.loader.script(filename).wait();
+        Exhibit.loader = Exhibit.loader.script(filename).wait();
     } else {
-        Exhibit.loader.script(filename);
+        Exhibit.loader = Exhibit.loader.script(filename);
     }
 };
 
@@ -415,7 +414,7 @@ Exhibit.includeJavascriptFile = function(urlPrefix, filename, serial) {
  *     ordered file loading process.
  */
 Exhibit.wait = function(fn) {
-    Exhibit.loader.wait(fn);
+    Exhibit.loader = Exhibit.loader.wait(fn);
 };
 
 /**
