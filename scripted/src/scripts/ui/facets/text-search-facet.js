@@ -348,8 +348,8 @@ Exhibit.TextSearchFacet.prototype._buildMaps = function() {
         allItems = this.getUIContext().getCollection().getAllItems();
         database = this.getUIContext().getDatabase();
         
-        if (this.getExpression().length > 0) {
-            expressions = this.getExpression();
+        expressions = this.getExpression();
+        if (expressions !== null && expressions.length > 0) {
             allItems.visit(function(item) {
                 var values, x, expression;
                 values = [];
