@@ -493,10 +493,6 @@ Exhibit.load = function() {
         Exhibit.scripts = Exhibit.scripts.concat(Exhibit.params.backstage);
     }
 
-    if (Exhibit.params.autoCreate) {
-        Exhibit.scripts.push("scripts/create.js");
-    }
-
     if (typeof Exhibit.params.js === "object") {
         if (Exhibit.params.postLoad) {
             Exhibit.scripts = Exhibit.scripts.concat(Exhibit.params.js);

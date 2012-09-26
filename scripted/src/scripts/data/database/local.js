@@ -74,13 +74,11 @@ Exhibit.Database._LocalImpl.prototype.createDatabase = function() {
 
 /**
  * Load an array of data links using registered importers into the database.
- *
- * @param {Function} fDone A function to call when finished.
  */
-Exhibit.Database._LocalImpl.prototype.loadLinks = function(fDone) {
+Exhibit.Database._LocalImpl.prototype.loadLinks = function() {
     var links = Exhibit.jQuery("head > link[rel='exhibit-data']")
         .add("head > link[rel='exhibit/data']");
-    this._loadLinks(links.toArray(), this, fDone);
+    this._loadLinks(links.toArray(), this);
 };
 
 /**
@@ -761,9 +759,8 @@ Exhibit.Database._LocalImpl.prototype.removeAllStatements = function() {
  *
  * @param {Array} links An array of DOM link elements.
  * @param {Exhibit.Database} database The database to load into.
- * @param {Function} fDone The function to call when finished loading.
  */
-Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDone) {
+Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database) {
     var fNext, link, type, importer;
     links = [].concat(links);
     fNext = function() {
@@ -783,9 +780,7 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database, fDo
             }
         }
 
-        if (typeof fDone !== "undefined" && fDone !== null) {
-            fDone();
-        }
+        Exhibit.jQuery(document.body).trigger("dataload.exhibit");
     };
     fNext();
 };

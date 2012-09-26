@@ -308,6 +308,7 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
     };
 
     this._orderedViewFrame.onNewGroup = function(groupSortKey, keyType, groupLevel) {
+        // @@@ this may not be algorithmically correct
         closeGroups(groupLevel);
 
         var groupDom = Exhibit.ThumbnailView.constructGroup(

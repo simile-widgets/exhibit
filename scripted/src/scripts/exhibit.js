@@ -24,6 +24,55 @@ Exhibit.create = function(database) {
 };
 
 /**
+ * Code to automatically create the database, load the data links in
+ * <head>, and then to create an exhibit if there's no Exhibit ondataload 
+ * attribute on the body element.
+ *
+ * You can avoid running this code by adding the URL parameter
+ * autoCreate=false when you include exhibit-api.js.
+ * @public
+ * @see Exhibit.Database._LocalImpl.prototype._loadLinks
+ */
+Exhibit.autoCreate = function() {
+    var s, f, fDone;
+
+    fDone = function() {
+        window.exhibit = Exhibit.create();
+        window.exhibit.configureFromDOM();
+        // The semantics of dataload indicate it should wholly replace the
+        // Exhibit initialization steps above; but if autoCreate is true,
+        // perhaps it should run in parallel with them or be fired after
+        // them.  It's unclear how widespread this is and how useful one
+        // alternative is over the other.  If in the future the below block
+        // is eliminated as it should be, wholesale replacement of this fDone
+        // would currently not be possible.
+    };
+
+    try {
+        // Using functions embedded in elements is bad practice and support for
+        // it may disappear in the future.  Convert instances of this usage to
+        // attach to the dataload.exhibit event triggered on your own, as this
+        // now does (see line below this try-catch block).
+        s = Exhibit.getAttribute(document.body, "ondataload");
+        if (s !== null && typeof s === "string" && s.length > 0) {
+            // eval is evil, which is why this is going to disappear.
+            f = eval(s);
+            if (typeof f === "function") {
+                fDone = f;
+            }
+        }
+    } catch (e) {
+        Exhibit.Debug.warn(Exhibit._("%general.error.dataloadExecution"));
+        Exhibit.Debug.warn(e);
+    }
+
+    Exhibit.jQuery(document.body).one("dataload.exhibit", fDone);
+
+    window.database = Exhibit.Database.create();
+    window.database.loadLinks();
+};
+
+/**
  * Check for instances of ex:role and throw into backwards compatibility
  * mode if any are found.  Authors are responsible for converting or using
  * the HTML5 attributes correctly; backwards compatibility is only applicable
@@ -187,7 +236,7 @@ Exhibit.extractOptionsFromElement = function(elmt) {
 Exhibit._Impl = function(database) {
     this._database = (database !== null && typeof database !== "undefined") ? 
         database : 
-        (typeof window["database"] !== "undefined" ?
+        (typeof window.database !== "undefined" ?
             window.database :
             Exhibit.Database.create());
             
@@ -297,8 +346,8 @@ Exhibit._Impl.prototype.getComponent = function(id) {
  * @param {Object} configuration
  */
 Exhibit._Impl.prototype.configure = function(configuration) {
-    var i, config, id;
-    if (typeof configuration["collections"] !== "undefined") {
+    var i, config, id, component;
+    if (typeof configuration.collections !== "undefined") {
         for (i = 0; i < configuration.collections.length; i++) {
             config = configuration.collections[i];
             id = config.id;
@@ -308,7 +357,7 @@ Exhibit._Impl.prototype.configure = function(configuration) {
             this.setCollection(id, Exhibit.Collection.create2(id, config, this._uiContext));
         }
     }
-    if (typeof configuration["components"] !== "undefined") {
+    if (typeof configuration.components !== "undefined") {
         for (i = 0; i < configuration.components.length; i++) {
             config = configuration.components[i];
             component = Exhibit.UI.create(config, config.elmt, this._uiContext);

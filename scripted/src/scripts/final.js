@@ -49,7 +49,14 @@ Exhibit.jQuery(document).ready(function() {
 
     Exhibit.jQuery(document).one("scriptsLoaded.exhibit", function(evt) {
         Exhibit.jQuery(document).trigger("registerStaticComponents.exhibit", Exhibit.staticRegistry);
+        Exhibit.jQuery(document).trigger("staticComponentsRegistered.exhibit");
     });
+
+    if (Exhibit.params.autoCreate) {
+        Exhibit.jQuery(document).one("staticComponentsRegistered.exhibit", function(evt) {
+            Exhibit.autoCreate();
+        });
+    }
 
     Exhibit.jQuery(document).one("exhibitConfigured.exhibit", function(evt, ex) {
         Exhibit.Bookmark.init();

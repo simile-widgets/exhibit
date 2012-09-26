@@ -83,7 +83,6 @@
         <exclude name="lib/*.js"/>
         <exclude name="exhibit-api.js"/>
         <exclude name="scripts/util/util.js"/>
-        <exclude name="scripts/create.js"/>
         <include name="scripts/util/*.js"/>
         <include name="scripts/data/*.js"/>
         <include name="scripts/ui/*.js"/>
