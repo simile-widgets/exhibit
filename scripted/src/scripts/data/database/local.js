@@ -1115,7 +1115,7 @@ Exhibit.Database._LocalImpl.prototype.labelItemsOfType = function(count, typeID,
         }
     }
 
-    span = Exhibit.jQuery("<span>").html(
+    span = Exhibit.jQuery("<span>").append(
         Exhibit.jQuery("<span>")
             .attr("class", countStyleClass)
             .html(count)
