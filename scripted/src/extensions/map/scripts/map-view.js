@@ -508,9 +508,7 @@ Exhibit.MapView.prototype._createColorMarkerGenerator = function() {
     return function(color) {
         return Exhibit.jQuery.simileBubble(
             "createTranslucentImage",
-            (Exhibit.MapExtension.hasCanvas) ?
-                Exhibit.MapExtension.Canvas.makeIcon(settings.shapeWidth, settings.shapeHeight, color, null, null, settings.iconSize, settings).iconURL :
-                Exhibit.MapExtension.Painter.makeIcon(settings.shapeWidth, settings.shapeHeight, color, null, null, settings.iconSize, settings).iconURL,
+            Exhibit.MapExtension.Marker.makeIcon(settings.shapeWidth, settings.shapeHeight, color, null, null, settings.iconSize, settings).iconURL,
             "middle"
         );
     };
@@ -523,10 +521,9 @@ Exhibit.MapView.prototype._createSizeMarkerGenerator = function() {
     var settings = Exhibit.jQuery.extend({}, this._settings);
     settings.pinHeight = 0;
     return function(iconSize) {
-        return Exhibit.jQuery.simileBubble("createTranslucentImage",
-            (Exhibit.MapExtension.hasCanvas) ?
-                Exhibit.MapExtension.Canvas.makeIcon(settings.shapeWidth, settings.shapeHeight, settings.color, null, null, iconSize, settings).iconURL :
-                Exhibit.MapExtension.Painter.makeIcon(settings.shapeWidth, settings.shapeHeight, settings.color, null, null, iconSize, settings).iconURL,
+        return Exhibit.jQuery.simileBubble(
+            "createTranslucentImage",
+            Exhibit.MapExtension.Marker.makeIcon(settings.shapeWidth, settings.shapeHeight, settings.color, null, null, iconSize, settings).iconURL,
             "middle"
         );
     };
@@ -1121,6 +1118,19 @@ Exhibit.MapView.markerToMap = function(marker, position) {
 };
 
 /**
+ * Update a cached marker's display icon.
+ * @param {String} key
+ * @param {String} iconURL
+ */
+Exhibit.MapView.prototype.updateMarkerIcon = function(key, iconURL) {
+    var cached;
+    cached = this._markerCache[key];
+    if (typeof cached !== "undefined" && cached !== null) {
+        cached.setIcon(iconURL);
+    }
+};
+
+/**
  * @private
  * @param {Object} position
  * @param {String} shape
@@ -1146,8 +1156,8 @@ Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSiz
 	    gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {
         marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, iconURL, label, settings, this);
-	    this._markerCache[key] = marker;
         gmarker = Exhibit.MapView.markerToMap(marker, position);
+	    this._markerCache[key] = gmarker;
     }
     return gmarker;
 };

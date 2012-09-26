@@ -47,7 +47,8 @@
                 "nl",
                 "sv"
             ],
-            "noop": function() { } // so google maps v3 will load
+            "noop": function() { }, // so google maps v3 will load
+            "_CORSWarned": false // used in the view
         };
         // Only the shared files are listed here. The service-
         // specific files are loaded with the service-specific library.
@@ -94,12 +95,12 @@
         cssURLs = [];
         if (Exhibit.MapExtension.params.service === "google2" &&
                    typeof GMap2 === "undefined") {
-            if (typeof Exhibit.params.gmapkey !== "undefined") {
-	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + Exhibit.params.gmapkey);
-            } else if (typeof Exhibit.MapExtension.params.gmapkey !== "undefined") {
-	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + Exhibit.MapExtension.params.gmapkey);
+            if (typeof Exhibit.params.gmapKey !== "undefined") {
+	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.noop&async=2&key=" + Exhibit.params.gmapKey);
+            } else if (typeof Exhibit.MapExtension.params.gmapKey !== "undefined") {
+	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.noop&async=2&key=" + Exhibit.MapExtension.params.gmapKey);
             } else {
-	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false");
+	            scriptURLs.push("http://maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.noop&async=2");
             }
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("google-maps-v2-view.js");

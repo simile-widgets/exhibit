@@ -33,7 +33,7 @@ Exhibit.MapExtension.Canvas.makeShadow = function(icon, settings) {
  * @param {Numeric} height
  * @param {String} color
  * @param {String} label
- * @param {String} iconImg
+ * @param {Image} iconImg
  * @param {Numeric} iconSize
  * @param {Object} settings
  * @returns {Object}

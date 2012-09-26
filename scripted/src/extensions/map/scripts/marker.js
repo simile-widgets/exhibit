@@ -39,6 +39,23 @@ Exhibit.MapExtension.Marker.detectCanvas = function() {
 };
 
 /**
+ * Passes icon generation to appropriate service.
+ * @param {Numeric} width
+ * @param {Numeric} height
+ * @param {String} color
+ * @param {String} label
+ * @param {String|Image} icon
+ * @param {Numeric} iconSize
+ * @param {Object} settings
+ * @returns {Object}
+ */
+Exhibit.MapExtension.Marker.makeIcon = function(width, height, color, label, icon, size, settings) {
+    return (Exhibit.MapExtension.hasCanvas) ?
+        Exhibit.MapExtension.Canvas.makeIcon(width, height, color, label, icon, size, settings) :
+        Exhibit.MapExtension.Painter.makeIcon(width, height, color, label, icon, size, settings);
+};
+
+/**
  * @static
  * @param {String} shape
  * @param {String} color
@@ -63,7 +80,7 @@ Exhibit.MapExtension.Marker._makeMarkerKey = function(shape, color, iconSize, ic
  * @returns {Exhibit.MapExtension.Marker}
  */
 Exhibit.MapExtension.Marker.makeMarker = function(shape, color, iconSize, iconURL, label, settings, view) {
-    var extra, halfWidth, bodyHeight, width, height, pin, markerImage, markerShape, shadowImage, pinHeight, pinHalfWidth, markerPair, marker, image;
+    var extra, halfWidth, bodyHeight, width, height, pin, markerImage, markerShape, shadowImage, pinHeight, pinHalfWidth, markerPair, marker, image, resolver;
 
     extra = label.length * 3;
     halfWidth = Math.ceil(settings.shapeWidth / 2) + extra;
@@ -146,22 +163,24 @@ Exhibit.MapExtension.Marker.makeMarker = function(shape, color, iconSize, iconUR
         // - return a marker without the image
         // - add a callback that adds the image when available.
         image = new Image();
-        Exhibit.jQuery(image).attr("crossOrigin", "");
-        Exhibit.jQuery(image).load(function() {
+        // To use CORS would mean adding .attr("crossOrigin", "") here
+        Exhibit.jQuery(image).one("load error", function(evt) {
             var url, icon, key;
-            try {
-	            url = Exhibit.MapExtension.Canvas.makeIcon(width, bodyHeight, color, label, image, iconSize, settings).iconURL;
-            } catch (e) {
-	            // remote icon fetch caused canvas tainting, fall to painter
-	            url = Exhibit.MapExtension.Painter.makeIcon(width, bodyHeight, color, label, iconURL, iconSize, settings).iconURL;
+            if (evt.type !== "error") {
+                try {
+	                url = Exhibit.MapExtension.Canvas.makeIcon(width, bodyHeight, color, label, image, iconSize, settings).iconURL;
+                } catch (e) {
+                    // remote icon fetch caused canvas tainting, fall to painter
+                    if (!Exhibit.MapExtension._CORSWarned) {
+                        Exhibit.MapExtension._CORSWarned = true;
+                        Exhibit.Debug.warn(Exhibit._("%MapView.error.remoteImage", iconURL));
+                    }
+                    url = Exhibit.MapExtension.Painter.makeIcon(width, bodyHeight, color, label, iconURL, iconSize, settings).iconURL;
+                }
+                key = Exhibit.MapExtension.Marker._makeMarkerKey(shape, color, iconSize, iconURL, label);
+                view.updateMarkerIcon(key, url);
             }
-            icon = marker.getIcon();
-            icon.url = url;
-            marker.setIcon(icon);
-            key = Exhibit.MapExtension.Marker._makeMarkerKey(shape, color, iconSize, iconURL, label);
-            view._markerCache[key] = marker;
-        });
-        Exhibit.jQuery(image).attr("src", iconURL);
+        }).attr("src", iconURL);
     }
     return marker;
 };
