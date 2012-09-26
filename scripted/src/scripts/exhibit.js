@@ -317,7 +317,7 @@ Exhibit._Impl.prototype.configure = function(configuration) {
  *                      (defaults to document.body, when none provided)
  */
 Exhibit._Impl.prototype.configureFromDOM = function(root) {
-    var controlPanelElmts, collectionElmts, coderElmts, coordinatorElmts, lensElmts, facetElmts, otherElmts, f, uiContext, i, elmt, id, self, processElmts, exporters, expr, exporter, hash, itemID;
+    var controlPanelElmts, collectionElmts, coderElmts, coordinatorElmts, lensElmts, facetElmts, otherElmts, f, uiContext, i, elmt, id, self, processElmts, panel, exporters, expr, exporter, hash, itemID;
 
     collectionElmts = [];
     coderElmts = [];

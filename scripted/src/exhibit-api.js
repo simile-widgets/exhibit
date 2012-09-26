@@ -295,7 +295,7 @@ Exhibit.parseURLParameters = function(url, to, types) {
  * @returns {String}
  */
 Exhibit.findScript = function(doc, frag) {
-    var scripts, i;
+    var script, scripts, i, url;
     scripts = doc.getElementsByTagName("script");
     for (i = 0; i < scripts.length; i++) {
         script = scripts[i];
@@ -426,7 +426,7 @@ Exhibit.generateDelayID = function() {
  * @static
  */
 Exhibit.load = function() {
-    var i, j, k, o, dep, script, url, paramTypes, scr, docHead, style;
+    var i, j, k, o, dep, url, paramTypes, scr, docHead, style, linkElmts, link;
 
     paramTypes = {
         "bundle": Boolean,

@@ -169,7 +169,7 @@ Exhibit.Database._LocalImpl.prototype.loadTypes = function(typeEntries, baseURI)
  */
 Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries, baseURI) {
     Exhibit.jQuery(document).trigger("onBeforeLoadingProperties.exhibit");
-    var lastChar, propertyID, prpoertyEntry, property;
+    var lastChar, propertyID, propertyEntry, property;
     try {
         lastChar = baseURI.substr(baseURI.length - 1);
         if (lastChar === "#") {

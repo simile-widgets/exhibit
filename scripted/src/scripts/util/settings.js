@@ -204,7 +204,7 @@ Exhibit.SettingsUtilities.createAccessorsFromDOM = function(configElmt, specs, a
  * @param {Object} accessors
  */ 
 Exhibit.SettingsUtilities._internalCreateAccessors = function(f, specs, accessors) {
-    var field, spec, accessorName, acessor, isTuple, createOneAccessor, alternatives, i, noop;
+    var field, spec, accessorName, accessor, isTuple, createOneAccessor, alternatives, i, noop;
 
     noop = function(value, database, visitor) {};
 

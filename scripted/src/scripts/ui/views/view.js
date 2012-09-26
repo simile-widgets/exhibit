@@ -11,7 +11,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.View = function(key, div, uiContext) {
-    var self, _id, _instanceKey, _toolbox, _label, _viewPanel, _settingSpecs, _div, _uiContext, _registered, _setIdentifier;
+    var self, _id, _instanceKey, _toolbox, _label, _viewPanel, _div, _uiContext, _registered, _setIdentifier;
 
     /**
      * @private
@@ -59,9 +59,9 @@ Exhibit.View = function(key, div, uiContext) {
     _viewPanel = null;
 
     /**
-     * @private
+     * @public
      */
-    _settingSpecs = {};
+    this._settingSpecs = {};
 
     /**
      * @public
@@ -105,7 +105,7 @@ Exhibit.View = function(key, div, uiContext) {
      * @param {Object} specs
      */
     this.addSettingSpecs = function(specs) {
-        Exhibit.jQuery.extend(true, _settingSpecs, specs);
+        Exhibit.jQuery.extend(true, this._settingSpecs, specs);
     };
     
     /**
@@ -113,7 +113,7 @@ Exhibit.View = function(key, div, uiContext) {
      * @returns {Object}
      */
     this.getSettingSpecs = function() {
-        return _settingSpecs;
+        return this._settingSpecs;
     };
 
     /**
@@ -194,7 +194,7 @@ Exhibit.View = function(key, div, uiContext) {
     this._dispose = function() {
         _viewPanel = null;
         _label = null;
-        _settingSpecs = null;
+        this._settingSpecs = null;
         if (_toolbox !== null) {
             _toolbox.dispose();
         }

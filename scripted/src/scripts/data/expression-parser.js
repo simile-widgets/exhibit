@@ -54,7 +54,7 @@ Exhibit.ExpressionParser.parseSeveral = function(s, startIndex, results) {
  * @returns {Exhibit.Expression._Impl|Array}
  */
 Exhibit.ExpressionParser._internalParse = function(scanner, several) {
-    var Scanner, token, next, makePosition, parsePath, parseFactor, parseTerm, parseSubExpression, parseExpresion, parseExpressionList, roots, expressions, r;
+    var Scanner, token, next, makePosition, parsePath, parseFactor, parseTerm, parseSubExpression, parseExpression, parseExpressionList, roots, expressions, r;
     Scanner = Exhibit.ExpressionScanner;
     token = scanner.token();
     next = function() { scanner.next(); token = scanner.token(); };

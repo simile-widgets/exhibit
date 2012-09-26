@@ -11,7 +11,7 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.Coder = function(key, div, uiContext) {
-    var self, _instanceKey, _registered, _id, _uiContext, _div, _settingSpecs, _setIdentifier;
+    var self, _instanceKey, _registered, _id, _uiContext, _div, _setIdentifier;
 
     /**
      * @private
@@ -44,9 +44,9 @@ Exhibit.Coder = function(key, div, uiContext) {
     _id = null;
 
     /**
-     * @private
+     * @public
      */
-    _settingSpecs = {};
+    this._settingSpecs = {};
 
     /**
      * @public
@@ -58,7 +58,7 @@ Exhibit.Coder = function(key, div, uiContext) {
      * @param {Object} specs
      */
     this.addSettingSpecs = function(specs) {
-        Exhibit.jQuery.extend(true, _settingSpecs, specs);
+        Exhibit.jQuery.extend(true, this._settingSpecs, specs);
     };
 
     /**
@@ -66,7 +66,7 @@ Exhibit.Coder = function(key, div, uiContext) {
      * @returns {Object}
      */
     this.getSettingSpecs = function() {
-        return _settingSpecs;
+        return this._settingSpecs;
     };
 
     /**
@@ -112,7 +112,7 @@ Exhibit.Coder = function(key, div, uiContext) {
     };
 
     this._dispose = function() {
-        _settingSpecs = null;
+        this._settingSpecs = null;
 
         this._settings = null;
         Exhibit.jQuery(_div).empty();
