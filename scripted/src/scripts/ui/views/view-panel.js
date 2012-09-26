@@ -51,7 +51,7 @@ Exhibit.ViewPanel._registerComponent = function(evt, reg) {
  * @returns {Exhibit.ViewPanel}
  */
 Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
-    var viewPanel, i, viewconfig, viewClass, label, tooltip, id, viewClassName;
+    var viewPanel, i, viewConfig, viewClass, label, tooltip, id, viewClassName;
     viewPanel = new Exhibit.ViewPanel(div, uiContext);
     
     if (typeof configuration.views !== "undefined") {

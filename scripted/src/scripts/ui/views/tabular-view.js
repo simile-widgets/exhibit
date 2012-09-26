@@ -519,7 +519,7 @@ Exhibit.TabularView.prototype._getColumnLabel = function(expression) {
 Exhibit.TabularView.prototype._stabilize = function(f, indexMap)  {
     var stable;
     stable = function(item1, item2) {
-        var cmp = f(item1, item2);
+        var i1, i2, cmp = f(item1, item2);
         if (cmp) {
             return cmp;
         }
