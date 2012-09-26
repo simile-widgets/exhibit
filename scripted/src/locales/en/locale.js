@@ -181,6 +181,7 @@ Exhibit.Localization.importLocale("en", {
     "%orderedViewFrame.error.orderObject": "Bad order object: %1$s",
     "%orderedViewFrame.error.possibleOrderExpression": "Bad possible order expression: %1$s",
     "%orderedViewFrame.error.possibleOrderObject": "Bad possible order object: %1$s",
+    "%orderedViewFrame.error.noSuchPropertyOrderWarning": "No such property %1$s available for ordering",
 
     "%widget.bookmark.tooltip": "Click to generate a bookmark for your current browsing state",
 

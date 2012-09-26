@@ -602,49 +602,53 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
     if (index >= 0) {
         order = configuredOrders[index];
         property = database.getProperty(order.property);
-        propertyLabel = order.forward ? property.getPluralLabel() : property.getReversePluralLabel();
-        valueType = order.forward ? property.getValueType() : "item";
-        sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
+        if (property === null) {
+            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.noSuchPropertyOrderWarning", order.property));
+        } else {
+            propertyLabel = order.forward ? property.getPluralLabel() : property.getReversePluralLabel();
+            valueType = order.forward ? property.getValueType() : "item";
+            sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
 
-        popupDom.appendMenuItem(
-            sortLabels.ascending, 
-            Exhibit.urlPrefix +
-                (order.ascending ? "images/option-check.png" : "images/option.png"),
-            order.ascending ?
-                function() {} :
-                function() {
-                    self._reSort(
-                        index, 
-                        order.property, 
-                        order.forward, 
-                        true,
-                        false
-                    );
-                }
-        );
-        popupDom.appendMenuItem(
-            sortLabels.descending, 
-            Exhibit.urlPrefix +
-                (order.ascending ? "images/option.png" : "images/option-check.png"),
-            order.ascending ?
-                function() {
-                    self._reSort(
-                        index, 
-                        order.property, 
-                        order.forward, 
-                        false,
-                        false
-                    );
-                } :
-                function() {}
-        );
-        if (configuredOrders.length > 1) {
-            popupDom.appendSeparator();
             popupDom.appendMenuItem(
-                Exhibit._("%orderedViewFrame.removeOrderLabel"),
-                null,
-                function() {self._removeOrder(index);}
+                sortLabels.ascending, 
+                Exhibit.urlPrefix +
+                    (order.ascending ? "images/option-check.png" : "images/option.png"),
+                order.ascending ?
+                    function() {} :
+                    function() {
+                        self._reSort(
+                            index, 
+                            order.property, 
+                            order.forward, 
+                            true,
+                            false
+                        );
+                    }
             );
+            popupDom.appendMenuItem(
+                sortLabels.descending, 
+                Exhibit.urlPrefix +
+                    (order.ascending ? "images/option.png" : "images/option-check.png"),
+                order.ascending ?
+                    function() {
+                        self._reSort(
+                            index, 
+                            order.property, 
+                            order.forward, 
+                            false,
+                            false
+                        );
+                    } :
+                    function() {}
+            );
+            if (configuredOrders.length > 1) {
+                popupDom.appendSeparator();
+                popupDom.appendMenuItem(
+                    Exhibit._("%orderedViewFrame.removeOrderLabel"),
+                    null,
+                    function() {self._removeOrder(index);}
+                );
+            }
         }
     }
     
@@ -667,14 +671,16 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
         
         if (!skip) {
             property = database.getProperty(possibleOrder.property);
-            orders.push({
-                property:   possibleOrder.property,
-                forward:    possibleOrder.forward,
-                ascending:  possibleOrder.ascending,
-                label:      possibleOrder.forward ? 
-                                property.getPluralLabel() : 
-                                property.getReversePluralLabel()
-            });
+            if (property !== null) {
+                orders.push({
+                    property:   possibleOrder.property,
+                    forward:    possibleOrder.forward,
+                    ascending:  possibleOrder.ascending,
+                    label:      possibleOrder.forward ? 
+                        property.getPluralLabel() : 
+                        property.getReversePluralLabel()
+                });
+            }
         }
     }
     
