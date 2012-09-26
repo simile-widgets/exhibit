@@ -66,12 +66,13 @@ var Exhibit = {
      * Settable parameters within the query string of loading this file.
      */
     params: {
-        bundle: true,
-        autoCreate: true,
-        safe: false,
-        babel: undefined,
-        backstage: undefined,
-        locale: undefined
+        "bundle": true,
+        "autoCreate": true,
+        "safe": false,
+        "babel": undefined,
+        "backstage": undefined,
+        "locale": undefined,
+        "persist": true
     },
 
     /**
@@ -442,7 +443,8 @@ Exhibit.load = function() {
         "safe": Boolean,
         "babel": String,
         "backstage": String,
-        "locale": String
+        "locale": String,
+        "persist": Boolean
     };
 
     if (typeof Exhibit_urlPrefix === "string") {

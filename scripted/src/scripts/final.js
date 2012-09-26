@@ -60,7 +60,7 @@ Exhibit.jQuery(document).ready(function() {
 
     Exhibit.jQuery(document).one("exhibitConfigured.exhibit", function(evt, ex) {
         Exhibit.Bookmark.init();
-        Exhibit.History.init(ex);
+        Exhibit.History.init(ex, Exhibit.params.persist);
     });
 
     // Signal recording
