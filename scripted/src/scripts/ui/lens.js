@@ -294,7 +294,8 @@ Exhibit.Lens._processTemplateElement = function(elmt, isXML, uiContext) {
     for (i = 0; i < attributes.length; i++) {    
         attribute = attributes[i];
         name = attribute.nodeName;
-        value = attribute.nodeValue;
+        // newer browsers complain about using nodeValue for attributes
+        value = attribute.value || attribute.nodeValue;
         Exhibit.Lens._processTemplateAttribute(uiContext, templateNode, settings, name, value);
     }
     
