@@ -169,6 +169,15 @@ Exhibit.History.getState = function() {
     }
 };
 
+/**
+ * @static
+ * @param {Object} state
+ * @param {Object} component
+ * @param {Exhibit.Registry} registry
+ * @param {Object} data
+ * @param {Boolean} lengthy
+ * @returns {Object}
+ */
 Exhibit.History.setComponentState = function(state, component, registry, data, lengthy) {
     if (typeof state === "undefined" || state === null) {
         state = { "data": { "components": {} } };
@@ -190,6 +199,14 @@ Exhibit.History.setComponentState = function(state, component, registry, data, l
     return state;
 };
 
+/**
+ * @static
+ * @param {Object} component
+ * @param {Exhibit.Registry} registry
+ * @param {Object} data
+ * @param {String} subtitle
+ * @param {Boolean} lengthy
+ */
 Exhibit.History.pushComponentState = function(component, registry, data, subtitle, lengthy) {
     var state = Exhibit.History.getState();
     Exhibit.History.setComponentState(state, component, registry, data, lengthy);
