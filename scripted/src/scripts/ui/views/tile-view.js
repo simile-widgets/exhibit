@@ -180,7 +180,7 @@ Exhibit.TileView.prototype._reconstruct = function() {
         state.groupDoms = state.groupDoms.slice(0, groupLevel);
         state.groupCounts = state.groupCounts.slice(0, groupLevel);
 
-        if (groupLevel > 0) {
+        if (groupLevel > 0 && groupLevel <= state.groupDoms.length) {
             state.div = state.groupDoms[groupLevel - 1].contentDiv;
         } else {
             state.div = view._dom.bodyDiv;
