@@ -1,13 +1,15 @@
 <html>
   <head>
     <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | Senate</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <link rel="stylesheet" href="http://www.simile-widgets.org/styles/common.css" type="text/css" />
     <link rel="stylesheet" href="styles.css" type="text/css" />
     
     <link href="senate-committees.js" type="application/json" rel="exhibit-data" />
     <link href="senate-bills.js" type="application/json" rel="exhibit-data" />
 
-    <script src="http://api.simile-widgets.org/exhibit/3.0.0rc1/exhibit-api.js"></script>
+    <link rel="exhibit-extension" type="text/javscript" href="../src/extensions/map/map-extension.js?service=google&bundle=false" />
+    <script src="../src/exhibit-api.js?bundle=false"></script>
     
     <script type="text/javascript">
         var rowStyler = function(item, database, tr) {
@@ -68,6 +70,16 @@
                             ex:sortAscending="false"
                             ex:rowStyler="rowStyler"
                             ></div>
+                        <div ex:role="exhibit-view"
+                             ex:viewClass="Map"
+                             ex:label="Map"
+                             ex:latlng=".stateLatLng"
+                             ex:latlngPairSeparator=","
+                             ex:colorKey=".party"
+                             ex:colorCoder="party-colors"
+                             ex:center="38.479394673276445, -95.361328125"
+                             ex:zoom="3"
+                             ></div>
                         <div ex:role="exhibit-view"
                             ex:label="Tiles"
                             ex:paginate="true"

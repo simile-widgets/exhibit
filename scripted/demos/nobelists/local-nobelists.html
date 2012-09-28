@@ -1,12 +1,14 @@
 <html>
   <head>
-    <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | MIT Nobel Prize Winners</title>
+    <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | MIT Nobel Prize Winners (local data)</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <link rel="stylesheet" href="http://www.simile-widgets.org/styles/common.css" type="text/css" />
+
     <link href="#indata" type="application/json" rel="exhibit-data"/>
 
-    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-    <script src="../../api/exhibit-api.js?bundle=false"></script>
-    <script src="../../api/extensions/time/time-extension.js?bundle=false"></script>
+    <link rel="exhibit-extension" type="text/javascript" href="../src/extensions/time/time-extension.js?bundle=false" />
+
+    <script src="../src/exhibit-api.js?bundle=false"></script>
     
     <style>
         body {
@@ -784,7 +786,7 @@
       <li><a href="http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a></li>
       <li><a href="http://databench.zepheira.com/">Demos</a></li>
       <li><a href="http://databench.zepheira.com/demos/">Scripted Demos</a></li>
-      <li><span>Examples: MIT Nobelists</span></li>
+      <li><span>Examples: MIT Nobelists (local data)</span></li>
     </ul>
 
     <div id="main-content">
@@ -793,7 +795,7 @@
             <p>The information within this page has been retrieved from
                 <a href="http://web.mit.edu/newsoffice/special/nobels.html" target="_blank">this MIT official source</a>
                 while the thumbnails are included from <a href="http://nobelprize.org/" target="_blank">Nobelprize.org</a>.
-                Here is the <a href="nobelists.js" target="_blank">Exhibit JSON data file</a>.
+                The data is embedded in this page, view its source to see the JSON.
             </p>
         </div>
     
