@@ -232,7 +232,13 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
     }
     
     fDone = function(s, textStatus, jqxhr) {
-        callback(converter.transformJSON(s), textStatus, jqxhr);
+        var json;
+        if (converter !== null && typeof converter.transformJSON !== "undefined") {
+            json = converter.transformJSON(s);
+        } else {
+            json = s;
+        }
+        callback(json, textStatus, jqxhr);
     };
 
     fError = function(jqxhr, textStatus, e) {
