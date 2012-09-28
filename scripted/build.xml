@@ -200,6 +200,7 @@
   <!-- Modular bundling of extensions -->
   <target name="extension-bundle" description="Combine extension source files">
     <mkdir dir="${bundle}/extensions/${extension}"/>
+    <mkdir dir="${bundle}/extensions/${extension}/styles"/>
 
     <concat destfile="${bundle}/extensions/${extension}/${extension}-extension-bundle.js" force="no">
       <fileset dir="${src}/extensions/${extension}">
@@ -211,7 +212,7 @@
       </fileset>
     </concat>
 
-    <concat destfile="${bundle}/extensions/${extension}/${extension}-extension-bundle.css" force="no">
+    <concat destfile="${bundle}/extensions/${extension}/styles/${extension}-extension-bundle.css" force="no">
       <fileset dir="${src}/extensions/${extension}">
         <include name="**/*.css"/>
       </fileset>
