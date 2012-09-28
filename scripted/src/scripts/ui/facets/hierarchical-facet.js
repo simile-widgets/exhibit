@@ -178,8 +178,7 @@ Exhibit.HierarchicalFacet._configure = function(facet, configuration) {
 /**
  *
  */
-Exhibit.HierarchicalFacet.prototype.dispose = function() {
-    this.getUIContext().getCollection().removeFacet(this);
+Exhibit.HierarchicalFacet.prototype._dispose = function() {
     Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
@@ -192,7 +191,6 @@ Exhibit.HierarchicalFacet.prototype.dispose = function() {
     this._selections = null;
     this._cache = null;
     this._expanded = null;
-    this._dispose();
 };
 
 /**

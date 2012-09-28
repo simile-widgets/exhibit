@@ -181,14 +181,13 @@ Exhibit.ListFacet._configure = function(facet, configuration) {
 /**
  *
  */
-Exhibit.ListFacet.prototype.dispose = function() {
+Exhibit.ListFacet.prototype._dispose = function() {
     this._cache.dispose();
     this._cache = null;
     this._colorCoder = null;
     this._dom = null;
     this._valueSet = null;
     this._orderMap = null;
-    this._dispose();
 };
 
 /**

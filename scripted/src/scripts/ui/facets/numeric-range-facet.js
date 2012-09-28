@@ -137,8 +137,7 @@ Exhibit.NumericRangeFacet._configure = function(facet, configuration) {
 /**
  *
  */
-Exhibit.NumericRangeFacet.prototype.dispose = function() {
-    this.getUIContext().getCollection().removeFacet(this);
+Exhibit.NumericRangeFacet.prototype._dispose = function() {
     Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
@@ -146,7 +145,6 @@ Exhibit.NumericRangeFacet.prototype.dispose = function() {
     this._dom = null;
     this._ranges = null;
     this._rangeIndex = null;
-    this._dispose();
 };
 
 /**

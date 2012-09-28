@@ -129,8 +129,7 @@ Exhibit.CloudFacet._configure = function(facet, configuration) {
 /**
  *
  */
-Exhibit.CloudFacet.prototype.dispose = function() {
-    this.getUIContext().getCollection().removeFacet(this);
+Exhibit.CloudFacet.prototype._dispose = function() {
     this._dom = null;
     this._valueSet = null;
     this._itemToValue = null;
@@ -138,7 +137,6 @@ Exhibit.CloudFacet.prototype.dispose = function() {
     this._valueType = null;
     this._missingItems = null;
     this._orderMap = null;
-    this._dispose();
 };
 
 /**

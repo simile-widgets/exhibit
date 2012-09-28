@@ -179,9 +179,13 @@ Exhibit.Facet = function(key, div, uiContext) {
     /**
      * Free up all references to objects, empty related elements, unregister.
      */
-    this._dispose = function() {
+    this.dispose = function() {
         Exhibit.jQuery(_div).empty();
         this.getUIContext().getCollection().removeFacet(this);
+        // if instance defines _dispose for localized material, call it
+        if (typeof this._dispose !== "undefined") {
+            this._dispose();
+        }
         this.unregister();
 
         _id = null;

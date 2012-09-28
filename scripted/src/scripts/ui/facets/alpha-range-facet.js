@@ -134,8 +134,7 @@ Exhibit.AlphaRangeFacet._configure = function(facet, configuration) {
 /**
  *
  */
-Exhibit.AlphaRangeFacet.prototype.dispose = function() {
-    this.getUIContext().getCollection().removeFacet(this);
+Exhibit.AlphaRangeFacet.prototype._dispose = function() {
     Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
@@ -143,7 +142,6 @@ Exhibit.AlphaRangeFacet.prototype.dispose = function() {
     this._dom = null;
     this._ranges = null;
     this._rangeIndex = null;
-    this._dispose();
 };
 
 /**

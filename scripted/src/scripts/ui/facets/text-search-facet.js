@@ -135,8 +135,7 @@ Exhibit.TextSearchFacet._configure = function(facet, configuration) {
 /**
  *
  */
-Exhibit.TextSearchFacet.prototype.dispose = function() {
-    this.getUIContext().getCollection().removeFacet(this);
+Exhibit.TextSearchFacet.prototype._dispose = function() {
     Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
         "onRootItemsChanged.exhibit",
         this._onRootItemsChanged
@@ -146,8 +145,6 @@ Exhibit.TextSearchFacet.prototype.dispose = function() {
     this._dom = null;
     this._itemToValue = null;
     this._timerID = null;
-
-    this._dispose();
 };
 
 /**
