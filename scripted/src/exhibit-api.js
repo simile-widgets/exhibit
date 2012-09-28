@@ -484,7 +484,7 @@ Exhibit.load = function() {
 
     if (Exhibit.params.bundle) {
         Exhibit.scripts = ["exhibit-scripted-bundle.js"];
-        Exhibit.styles = ["exhibit-scripted-bundle.css"];
+        Exhibit.styles = ["styles/exhibit-scripted-bundle.css"];
     }
     
     if (typeof Exhibit.params.backstage !== "undefined") {

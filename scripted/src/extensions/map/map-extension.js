@@ -120,7 +120,7 @@
         // loading everything
         if (Exhibit.MapExtension.params.bundle) {
             scriptURLs.push(Exhibit.MapExtension.urlPrefix + "map-extension-bundle.js");
-            cssURLs.push(Exhibit.MapExtension.urlPrefix + "map-extension-bundle.css");
+            cssURLs.push(Exhibit.MapExtension.urlPrefix + "styles/map-extension-bundle.css");
         } else {
             Exhibit.prefixURLs(scriptURLs, Exhibit.MapExtension.urlPrefix + "scripts/", javascriptFiles);
             Exhibit.prefixURLs(cssURLs, Exhibit.MapExtension.urlPrefix + "styles/", cssFiles);
