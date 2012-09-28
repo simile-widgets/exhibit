@@ -220,19 +220,22 @@ Exhibit.Importer.prototype._loadJSONP = function(url, database, callback, link) 
         convertType = Exhibit.getAttribute(link, "converter");
         jsonpCallback = Exhibit.getAttribute(link, "jsonp-callback");
         charset = Exhibit.getAttribute(link, "charset");
-    }
 
-    converter = Exhibit.Importer._registry.get(
-        Exhibit.Importer.JSONP._registryKey,
-        convertType
-    );
+	converter = Exhibit.Importer._registry.get(
+            Exhibit.Importer.JSONP._registryKey,
+            convertType);
+    }
 
     if (converter !== null && typeof converter.preprocessURL !== "undefined") {
         url = converter.preprocessURL(url);
     }
     
     fDone = function(s, textStatus, jqxhr) {
-        callback(converter.transformJSON(s), textStatus, jqxhr);
+	if (converter !== null && 
+	    typeof converter.transformJSON !== "undefined") {
+            s = converter.transformJSON(s);
+	}
+        callback(s, textStatus, jqxhr);
     };
 
     fError = function(jqxhr, textStatus, e) {
