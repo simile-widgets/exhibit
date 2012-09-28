@@ -351,16 +351,31 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             processNonNumericLevel(items, index, values, valueType) :
             processNumericLevel(items, index, values, valueType);
         
+        grouped = true;
+        // The idea here appears to be to avoid considering a set of
+        // one item a group; but this ends up producing very confusing
+        // grouping with ordering - a single-item set without a group
+        // has no label and subsequent sibling entities (items or groups) then
+        // end up appearing as children instead, depending on position
+        // relative to the end of the supergroup.  The current solution:
+        // consider single items a group.  Comments labelled mono-grouping
+        // optimize this choice.  Consider revisiting it in the future,
+        // possibly as a setting.
+        /** mono-grouping
         grouped = false;
         for (k = 0; k < keys.length; k++) {
             if (keys[k].items.size() > 1) {
                 grouped = true;
             }
         }
+        */
 
+        hasSomeGrouping = true;
+        /** mono-grouping
         if (grouped) {
             hasSomeGrouping = true;
         }
+        */
         
         for (k = 0; k < keys.length; k++) {
             key = keys[k];
