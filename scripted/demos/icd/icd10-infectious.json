@@ -1,0 +1,2837 @@
+{
+    "items": [
+{
+    "kind": "chapter", 
+    "code": "I", 
+    "exclusion": "carrier or suspected carrier of infectious diseaseZ22.-", 
+    "icdId": "http://id.who.int/icd/icd10/I", 
+    "inclusion": "diseases generally recognized as communicable or transmissible", 
+    "label": "Certain infectious and parasitic diseases", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/I", 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A00-A09", 
+        "http://id.who.int/icd/icd10/A15-A19", 
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/I"
+},{
+    "kind": "block", 
+    "code": "A00-A09", 
+    "icdId": "http://id.who.int/icd/icd10/A00-A09", 
+    "label": "Intestinal infectious diseases", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A00-A09", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/I"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A00", 
+        "http://id.who.int/icd/icd10/A01", 
+        "http://id.who.int/icd/icd10/A02", 
+        "http://id.who.int/icd/icd10/A03", 
+        "http://id.who.int/icd/icd10/A04", 
+        "http://id.who.int/icd/icd10/A05", 
+        "http://id.who.int/icd/icd10/A06", 
+        "http://id.who.int/icd/icd10/A07", 
+        "http://id.who.int/icd/icd10/A08", 
+        "http://id.who.int/icd/icd10/A09"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A00-A09"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A00", 
+    "MortL1Code": "1-002", 
+    "icdId": "http://id.who.int/icd/icd10/A00", 
+    "MortL2Code": "2-001", 
+    "MortBCode": "001", 
+    "label": "Cholera", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A00", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A00.0", 
+        "http://id.who.int/icd/icd10/A00.1", 
+        "http://id.who.int/icd/icd10/A00.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A00"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A00.0", 
+    "MortL1Code": "1-002", 
+    "icdId": "http://id.who.int/icd/icd10/A00.0", 
+    "inclusion": "Classical cholera", 
+    "MortL2Code": "2-001", 
+    "MortBCode": "001", 
+    "label": "Cholera due to Vibrio cholerae 01, biovar cholerae", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A00.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A00.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A00.1", 
+    "MortL1Code": "1-002", 
+    "icdId": "http://id.who.int/icd/icd10/A00.1", 
+    "inclusion": "Cholera eltor", 
+    "MortL2Code": "2-001", 
+    "MortBCode": "001", 
+    "label": "Cholera due to Vibrio cholerae 01, biovar eltor", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A00.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A00.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A00.9", 
+    "MortL1Code": "1-002", 
+    "icdId": "http://id.who.int/icd/icd10/A00.9", 
+    "MortL2Code": "2-001", 
+    "MortBCode": "001", 
+    "label": "Cholera, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A00.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A00.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A01", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A01", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "002", 
+    "label": "Typhoid and paratyphoid fevers", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A01", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A01.0", 
+        "http://id.who.int/icd/icd10/A01.1", 
+        "http://id.who.int/icd/icd10/A01.2", 
+        "http://id.who.int/icd/icd10/A01.3", 
+        "http://id.who.int/icd/icd10/A01.4"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A01"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A01.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A01.0", 
+    "inclusion": "Infection due to Salmonella typhi", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "002", 
+    "label": "Typhoid fever", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A01.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A01"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A01.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A01.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A01.1", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "002", 
+    "label": "Paratyphoid fever A", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A01.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A01"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A01.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A01.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A01.2", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "002", 
+    "label": "Paratyphoid fever B", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A01.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A01"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A01.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A01.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A01.3", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "002", 
+    "label": "Paratyphoid fever C", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A01.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A01"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A01.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A01.4", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A01.4", 
+    "inclusion": "Infection due to Salmonella paratyphi NOS", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "002", 
+    "label": "Paratyphoid fever, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A01.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A01"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A01.4"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A02", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A02", 
+    "inclusion": "infection or foodborne intoxication due to any Salmonella species other than S. typhi and S. paratyphi", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other salmonella infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A02", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A02.0", 
+        "http://id.who.int/icd/icd10/A02.1", 
+        "http://id.who.int/icd/icd10/A02.2", 
+        "http://id.who.int/icd/icd10/A02.8", 
+        "http://id.who.int/icd/icd10/A02.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A02"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A02.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A02.0", 
+    "inclusion": "Salmonellosis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Salmonella enteritis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A02.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A02"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A02.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A02.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A02.1", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Salmonella septicaemia", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A02.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A02"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A02.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A02.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A02.2", 
+    "inclusion": "Salmonella:\n\t\t\t\tarthritisM01.3", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Localized salmonella infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A02.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A02"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A02.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A02.8", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A02.8", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other specified salmonella infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A02.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A02"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A02.8"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A02.9", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A02.9", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Salmonella infection, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A02.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A02"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A02.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Shigellosis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A03.0", 
+        "http://id.who.int/icd/icd10/A03.1", 
+        "http://id.who.int/icd/icd10/A03.2", 
+        "http://id.who.int/icd/icd10/A03.3", 
+        "http://id.who.int/icd/icd10/A03.8", 
+        "http://id.who.int/icd/icd10/A03.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03.0", 
+    "inclusion": "Group A shigellosis [Shiga-Kruse dysentery]", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Shigellosis due to Shigella dysenteriae", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A03"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03.1", 
+    "inclusion": "Group B shigellosis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Shigellosis due to Shigella flexneri", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A03"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03.2", 
+    "inclusion": "Group C shigellosis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Shigellosis due to Shigella boydii", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A03"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03.3", 
+    "inclusion": "Group D shigellosis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Shigellosis due to Shigella sonnei", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A03"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03.8", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03.8", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Other shigellosis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A03"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03.8"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A03.9", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A03.9", 
+    "inclusion": "Bacillary dysentery NOS", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "003", 
+    "label": "Shigellosis, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A03.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A03"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A03.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04", 
+    "exclusion": "foodborne intoxications elsewhere classified", 
+    "icdId": "http://id.who.int/icd/icd10/A04", 
+    "MortL2Code": "2-003", 
+    "MortL1Code": "1-004", 
+    "MortBCode": "006", 
+    "label": "Other bacterial intestinal infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A04.0", 
+        "http://id.who.int/icd/icd10/A04.1", 
+        "http://id.who.int/icd/icd10/A04.2", 
+        "http://id.who.int/icd/icd10/A04.3", 
+        "http://id.who.int/icd/icd10/A04.4", 
+        "http://id.who.int/icd/icd10/A04.5", 
+        "http://id.who.int/icd/icd10/A04.6", 
+        "http://id.who.int/icd/icd10/A04.7", 
+        "http://id.who.int/icd/icd10/A04.8", 
+        "http://id.who.int/icd/icd10/A04.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.0", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Enteropathogenic Escherichia coli infection", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.1", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Enterotoxigenic Escherichia coli infection", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.2", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Enteroinvasive Escherichia coli infection", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.3", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Enterohaemorrhagic Escherichia coli infection", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.4", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.4", 
+    "inclusion": "Escherichia coli enteritis NOS", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other intestinal Escherichia coli infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.4"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.5", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.5", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Campylobacter enteritis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.5", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.5"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.6", 
+    "exclusion": "extraintestinal yersiniosisA28.2", 
+    "icdId": "http://id.who.int/icd/icd10/A04.6", 
+    "MortL2Code": "2-003", 
+    "MortL1Code": "1-004", 
+    "MortBCode": "006", 
+    "label": "Enteritis due to Yersinia enterocolitica", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.6", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.6"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.7", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.7", 
+    "inclusion": "Foodborne intoxication by Clostridium difficile", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Enterocolitis due to Clostridium difficile", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.7"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.8", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.8", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other specified bacterial intestinal infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.8"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A04.9", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A04.9", 
+    "inclusion": "Bacterial enteritis NOS", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Bacterial intestinal infection, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A04.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A04"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A04.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05", 
+    "exclusion": "Escherichia coli infectionA04.0-A04.4", 
+    "icdId": "http://id.who.int/icd/icd10/A05", 
+    "MortL2Code": "2-003", 
+    "MortL1Code": "1-004", 
+    "MortBCode": "006", 
+    "label": "Other bacterial foodborne intoxications, not elsewhere classified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A05.0", 
+        "http://id.who.int/icd/icd10/A05.1", 
+        "http://id.who.int/icd/icd10/A05.2", 
+        "http://id.who.int/icd/icd10/A05.3", 
+        "http://id.who.int/icd/icd10/A05.4", 
+        "http://id.who.int/icd/icd10/A05.8", 
+        "http://id.who.int/icd/icd10/A05.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.0", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Foodborne staphylococcal intoxication", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.1", 
+    "inclusion": "Classical foodborne intoxication due to Clostridium botulinum", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Botulism", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.2", 
+    "inclusion": "Enteritis necroticans", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Foodborne Clostridium perfringens [Clostridium welchii] intoxication", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.3", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Foodborne Vibrio parahaemolyticus intoxication", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.4", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.4", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Foodborne Bacillus cereus intoxication", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.4"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.8", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.8", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other specified bacterial foodborne intoxications", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.8"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A05.9", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A05.9", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Bacterial foodborne intoxication, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A05.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A05"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A05.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06", 
+    "exclusion": "other protozoal intestinal diseasesA07.-", 
+    "icdId": "http://id.who.int/icd/icd10/A06", 
+    "inclusion": "infection due to Entamoeba histolytica", 
+    "MortL2Code": "2-003", 
+    "MortL1Code": "1-004", 
+    "MortBCode": "004", 
+    "label": "Amoebiasis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A06.0", 
+        "http://id.who.int/icd/icd10/A06.1", 
+        "http://id.who.int/icd/icd10/A06.2", 
+        "http://id.who.int/icd/icd10/A06.3", 
+        "http://id.who.int/icd/icd10/A06.4", 
+        "http://id.who.int/icd/icd10/A06.5", 
+        "http://id.who.int/icd/icd10/A06.6", 
+        "http://id.who.int/icd/icd10/A06.7", 
+        "http://id.who.int/icd/icd10/A06.8", 
+        "http://id.who.int/icd/icd10/A06.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.0", 
+    "inclusion": "Acute amoebiasis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Acute amoebic dysentery", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.1", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Chronic intestinal amoebiasis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.2", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoebic nondysenteric colitis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.3", 
+    "inclusion": "Amoeboma NOS", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoeboma of intestine", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.4", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.4", 
+    "inclusion": "Hepatic amoebiasis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoebic liver abscess", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.4"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.5", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.5", 
+    "inclusion": "Amoebic abscess of lung (and liver)", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoebic lung abscessJ99.8\n\t\t\t", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.5", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.5"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.6", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.6", 
+    "inclusion": "Amoebic abscess of brain (and liver)(and lung)", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoebic brain abscessG07\n\t\t\t", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.6", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.6"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.7", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.7", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Cutaneous amoebiasis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.7"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.8", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.8", 
+    "inclusion": "Amoebic:\n\t\t\t\tappendicitis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoebic infection of other sites", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.8"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A06.9", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A06.9", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "004", 
+    "label": "Amoebiasis, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A06.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A06"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A06.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other protozoal intestinal diseases", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A07.0", 
+        "http://id.who.int/icd/icd10/A07.1", 
+        "http://id.who.int/icd/icd10/A07.2", 
+        "http://id.who.int/icd/icd10/A07.3", 
+        "http://id.who.int/icd/icd10/A07.8", 
+        "http://id.who.int/icd/icd10/A07.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07.0", 
+    "inclusion": "Balantidial dysentery", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Balantidiasis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A07"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07.1", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Giardiasis [lambliasis]", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A07"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07.2", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Cryptosporidiosis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A07"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07.3", 
+    "inclusion": "Infection due to Isospora belli and Isospora hominis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Isosporiasis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A07"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07.8", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07.8", 
+    "inclusion": "Intestinal trichomoniasis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other specified protozoal intestinal diseases", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A07"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07.8"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A07.9", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A07.9", 
+    "inclusion": "Flagellate diarrhoea", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Protozoal intestinal disease, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A07.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A07"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A07.9"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08", 
+    "exclusion": "influenza with involvement of gastrointestinal tractJ09\n\t\t\t\tJ10.8\n\t\t\t\tJ11.8", 
+    "icdId": "http://id.who.int/icd/icd10/A08", 
+    "MortL2Code": "2-003", 
+    "MortL1Code": "1-004", 
+    "MortBCode": "006", 
+    "label": "Viral and other specified intestinal infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A08.0", 
+        "http://id.who.int/icd/icd10/A08.1", 
+        "http://id.who.int/icd/icd10/A08.2", 
+        "http://id.who.int/icd/icd10/A08.3", 
+        "http://id.who.int/icd/icd10/A08.4", 
+        "http://id.who.int/icd/icd10/A08.5"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08.0", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A08.0", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Rotaviral enteritis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A08"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08.0"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08.1", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A08.1", 
+    "inclusion": "Small round structured virus enteritis", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Acute gastroenteropathy due to Norwalk agent", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A08"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08.1"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08.2", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A08.2", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Adenoviral enteritis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A08"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08.2"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08.3", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A08.3", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other viral enteritis", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A08"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08.3"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08.4", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A08.4", 
+    "inclusion": "Viral:\n\t\t\t\tenteritis NOS", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Viral intestinal infection, unspecified", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A08"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08.4"
+},{
+    "MortL3Code": "3-003", 
+    "kind": "category", 
+    "code": "A08.5", 
+    "MortL1Code": "1-004", 
+    "icdId": "http://id.who.int/icd/icd10/A08.5", 
+    "MortL2Code": "2-003", 
+    "MortBCode": "006", 
+    "label": "Other specified intestinal infections", 
+    "MortL4Code": "4-002", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A08.5", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A08"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A08.5"
+},{
+    "MortL3Code": "3-002", 
+    "kind": "category", 
+    "code": "A09", 
+    "exclusion": "due to bacterial, protozoal, viral and other specified infectious agentsA00-A08", 
+    "icdId": "http://id.who.int/icd/icd10/A09", 
+    "inclusion": "Catarrh, enteric or intestinal", 
+    "MortL2Code": "2-002", 
+    "MortL1Code": "1-003", 
+    "MortBCode": "005", 
+    "label": "Diarrhoea and gastroenteritis of presumed infectious origin", 
+    "MortL4Code": "4-001", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A09", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A00-A09"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A09"
+},{
+    "kind": "block", 
+    "code": "A15-A19", 
+    "exclusion": "congenital tuberculosisP37.0", 
+    "icdId": "http://id.who.int/icd/icd10/A15-A19", 
+    "inclusion": "infections due to Mycobacterium tuberculosis and Mycobacterium bovis", 
+    "label": "Tuberculosis", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15-A19", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/I"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A15", 
+        "http://id.who.int/icd/icd10/A16", 
+        "http://id.who.int/icd/icd10/A17", 
+        "http://id.who.int/icd/icd10/A18", 
+        "http://id.who.int/icd/icd10/A19"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15-A19"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Respiratory tuberculosis, bacteriologically and histologically confirmed", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15-A19"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A15.0", 
+        "http://id.who.int/icd/icd10/A15.1", 
+        "http://id.who.int/icd/icd10/A15.2", 
+        "http://id.who.int/icd/icd10/A15.3", 
+        "http://id.who.int/icd/icd10/A15.4", 
+        "http://id.who.int/icd/icd10/A15.5", 
+        "http://id.who.int/icd/icd10/A15.6", 
+        "http://id.who.int/icd/icd10/A15.7", 
+        "http://id.who.int/icd/icd10/A15.8", 
+        "http://id.who.int/icd/icd10/A15.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.0", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.0", 
+    "inclusion": "Tuberculous:\n\t\t\t\tbronchiectasis\n\t\t\t\tconfirmed by sputum microscopy with or without culture", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, confirmed by sputum microscopy with or without culture", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.0"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.1", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.1", 
+    "inclusion": "Conditions listed in A15.0, confirmed by culture only", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, confirmed by culture only", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.1"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.2", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.2", 
+    "inclusion": "Conditions listed in A15.0, confirmed histologically", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, confirmed histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.2"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.3", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.3", 
+    "inclusion": "Conditions listed in A15.0, confirmed but unspecified whether bacteriologically or histologically", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, confirmed by unspecified means", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.3"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.4", 
+    "exclusion": "specified as primaryA15.7", 
+    "icdId": "http://id.who.int/icd/icd10/A15.4", 
+    "inclusion": "Tuberculosis of lymph nodes:\n\t\t\t\thilar\n\t\t\t\tconfirmed bacteriologically and histologically", 
+    "MortL2Code": "2-004", 
+    "MortL1Code": "1-005", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of intrathoracic lymph nodes, confirmed bacteriologically and histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.4"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.5", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.5", 
+    "inclusion": "Tuberculosis of:\n\t\t\t\tbronchus\n\t\t\t\tconfirmed bacteriologically and histologically", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of larynx, trachea and bronchus, confirmed bacteriologically and histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.5", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.5"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.6", 
+    "exclusion": "in primary respiratory tuberculosis, confirmed bacteriologically and histologicallyA15.7", 
+    "icdId": "http://id.who.int/icd/icd10/A15.6", 
+    "inclusion": "Tuberculosis of pleura\n\t\t\t\tconfirmed bacteriologically and histologically", 
+    "MortL2Code": "2-004", 
+    "MortL1Code": "1-005", 
+    "MortBCode": "007", 
+    "label": "Tuberculous pleurisy, confirmed bacteriologically and histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.6", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.6"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.7", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.7", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Primary respiratory tuberculosis, confirmed bacteriologically and histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.7"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.8", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.8", 
+    "inclusion": "Mediastinal tuberculosis\n\t\t\t\tconfirmed bacteriologically and histologically", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Other respiratory tuberculosis, confirmed bacteriologically and histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.8"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A15.9", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A15.9", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Respiratory tuberculosis unspecified, confirmed bacteriologically and histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A15.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A15.9"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Respiratory tuberculosis, not confirmed bacteriologically or histologically", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15-A19"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A16.0", 
+        "http://id.who.int/icd/icd10/A16.1", 
+        "http://id.who.int/icd/icd10/A16.2", 
+        "http://id.who.int/icd/icd10/A16.3", 
+        "http://id.who.int/icd/icd10/A16.4", 
+        "http://id.who.int/icd/icd10/A16.5", 
+        "http://id.who.int/icd/icd10/A16.7", 
+        "http://id.who.int/icd/icd10/A16.8", 
+        "http://id.who.int/icd/icd10/A16.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.0", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.0", 
+    "inclusion": "Tuberculous:\n\t\t\t\tbronchiectasis\n\t\t\t\tbacteriologically and histologically negative", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, bacteriologically and histologically negative", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.0"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.1", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.1", 
+    "inclusion": "Conditions listed in A16.0, bacteriological and histological examination not done", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, bacteriological and histological examination not done", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.1"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.2", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.2", 
+    "inclusion": "Tuberculosis of lung\n\t\t\t\tNOS (without mention of bacteriological or histological confirmation)", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of lung, without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.2"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.3", 
+    "exclusion": "when specified as primaryA16.7", 
+    "icdId": "http://id.who.int/icd/icd10/A16.3", 
+    "inclusion": "Tuberculosis of lymph nodes:\n\t\t\t\thilar\n\t\t\t\tNOS (without mention of bacteriological or histological confirmation)", 
+    "MortL2Code": "2-004", 
+    "MortL1Code": "1-005", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of intrathoracic lymph nodes, without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.3"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.4", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.4", 
+    "inclusion": "Tuberculosis of:\n\t\t\t\tbronchus\n\t\t\t\tNOS (without mention of bacteriological or histological confirmation)", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Tuberculosis of larynx, trachea and bronchus, without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.4"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.5", 
+    "exclusion": "in primary respiratory tuberculosisA16.7", 
+    "icdId": "http://id.who.int/icd/icd10/A16.5", 
+    "inclusion": "Tuberculosis of pleura\n\t\t\t\tNOS (without mention of bacteriological or histological confirmation)", 
+    "MortL2Code": "2-004", 
+    "MortL1Code": "1-005", 
+    "MortBCode": "007", 
+    "label": "Tuberculous pleurisy, without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.5", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.5"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.7", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.7", 
+    "inclusion": "Primary:\n\t\t\t\trespiratory tuberculosis NOS", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Primary respiratory tuberculosis without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.7"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.8", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.8", 
+    "inclusion": "Mediastinal tuberculosis\n\t\t\t\tNOS (without mention of bacteriological or histological confirmation)", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Other respiratory tuberculosis, without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.8"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A16.9", 
+    "MortL1Code": "1-005", 
+    "icdId": "http://id.who.int/icd/icd10/A16.9", 
+    "inclusion": "Respiratory tuberculosis NOS", 
+    "MortL2Code": "2-004", 
+    "MortBCode": "007", 
+    "label": "Respiratory tuberculosis unspecified, without mention of bacteriological or histological confirmation", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A16.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A16"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A16.9"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A17", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A17", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of nervous system", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A17", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15-A19"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A17.0", 
+        "http://id.who.int/icd/icd10/A17.1", 
+        "http://id.who.int/icd/icd10/A17.8", 
+        "http://id.who.int/icd/icd10/A17.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A17"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A17.0", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A17.0", 
+    "inclusion": "Tuberculosis of meninges (cerebral)(spinal)", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculous meningitisG01\n\t\t\t", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A17.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A17"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A17.0"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A17.1", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A17.1", 
+    "inclusion": "Tuberculoma of meninges", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Meningeal tuberculomaG07\n\t\t\t", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A17.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A17"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A17.1"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A17.8", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A17.8", 
+    "inclusion": "Tuberculoma\n\t\t\t\tof\n\t\t\t\tbrainG07", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Other tuberculosis of nervous system", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A17.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A17"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A17.8"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A17.9", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A17.9", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of nervous system, unspecifiedG99.8\n\t\t\t", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A17.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A17"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A17.9"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A18", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of other organs", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15-A19"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A18.0", 
+        "http://id.who.int/icd/icd10/A18.1", 
+        "http://id.who.int/icd/icd10/A18.2", 
+        "http://id.who.int/icd/icd10/A18.3", 
+        "http://id.who.int/icd/icd10/A18.4", 
+        "http://id.who.int/icd/icd10/A18.5", 
+        "http://id.who.int/icd/icd10/A18.6", 
+        "http://id.who.int/icd/icd10/A18.7", 
+        "http://id.who.int/icd/icd10/A18.8"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.0", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A18.0", 
+    "inclusion": "Tuberculosis of:\n\t\t\t\thipM01.1", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of bones and joints", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.0"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.1", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A18.1", 
+    "inclusion": "Tuberculosis of:\n\t\t\t\tbladderN33.0", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of genitourinary system", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.1"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.2", 
+    "exclusion": "tuberculosis of lymph nodes:\n\t\t\t\tintrathoracicA15.4\n\t\t\t\t\tA16.3", 
+    "icdId": "http://id.who.int/icd/icd10/A18.2", 
+    "inclusion": "Tuberculous adenitis", 
+    "MortL2Code": "2-005", 
+    "MortL1Code": "1-006", 
+    "MortBCode": "008", 
+    "label": "Tuberculous peripheral lymphadenopathy", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.2"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.3", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A18.3", 
+    "inclusion": "Tuberculosis (of):\n\t\t\t\tanus and rectumK93.0", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of intestines, peritoneum and mesenteric glands", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.3"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.4", 
+    "exclusion": "lupus erythematosusL93.-\n\t\t\t\t\n\t\t\t\tsystemicM32.-", 
+    "icdId": "http://id.who.int/icd/icd10/A18.4", 
+    "inclusion": "Erythema induratum, tuberculous", 
+    "MortL2Code": "2-005", 
+    "MortL1Code": "1-006", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of skin and subcutaneous tissue", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.4"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.5", 
+    "exclusion": "lupus vulgaris of eyelidA18.4", 
+    "icdId": "http://id.who.int/icd/icd10/A18.5", 
+    "inclusion": "Tuberculous:\n\t\t\t\tchorioretinitisH32.0", 
+    "MortL2Code": "2-005", 
+    "MortL1Code": "1-006", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of eye", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.5", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.5"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.6", 
+    "exclusion": "tuberculous mastoiditisA18.0", 
+    "icdId": "http://id.who.int/icd/icd10/A18.6", 
+    "inclusion": "Tuberculous otitis mediaH67.0", 
+    "MortL2Code": "2-005", 
+    "MortL1Code": "1-006", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of ear", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.6", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.6"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.7", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A18.7", 
+    "inclusion": "Addison's disease, tuberculous", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of adrenal glandsE35.1\n\t\t\t", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.7"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A18.8", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A18.8", 
+    "inclusion": "Tuberculosis of:\n\t\t\t\tendocardiumI39.8", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Tuberculosis of other specified organs", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A18.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A18"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A18.8"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A19", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A19", 
+    "inclusion": "tuberculosis:\n\t\t\t\tdisseminated", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Miliary tuberculosis", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A19", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A15-A19"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A19.0", 
+        "http://id.who.int/icd/icd10/A19.1", 
+        "http://id.who.int/icd/icd10/A19.2", 
+        "http://id.who.int/icd/icd10/A19.8", 
+        "http://id.who.int/icd/icd10/A19.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A19"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A19.0", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A19.0", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Acute miliary tuberculosis of a single specified site", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A19.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A19"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A19.0"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A19.1", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A19.1", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Acute miliary tuberculosis of multiple sites", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A19.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A19"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A19.1"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A19.2", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A19.2", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Acute miliary tuberculosis, unspecified", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A19.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A19"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A19.2"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A19.8", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A19.8", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Other miliary tuberculosis", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A19.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A19"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A19.8"
+},{
+    "MortL3Code": "3-004", 
+    "kind": "category", 
+    "code": "A19.9", 
+    "MortL1Code": "1-006", 
+    "icdId": "http://id.who.int/icd/icd10/A19.9", 
+    "MortL2Code": "2-005", 
+    "MortBCode": "008", 
+    "label": "Miliary tuberculosis, unspecified", 
+    "MortL4Code": "4-003", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A19.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A19"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A19.9"
+},{
+    "kind": "block", 
+    "code": "A20-A28", 
+    "icdId": "http://id.who.int/icd/icd10/A20-A28", 
+    "label": "Certain zoonotic bacterial diseases", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20-A28", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/I"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A20", 
+        "http://id.who.int/icd/icd10/A21", 
+        "http://id.who.int/icd/icd10/A22", 
+        "http://id.who.int/icd/icd10/A23", 
+        "http://id.who.int/icd/icd10/A24", 
+        "http://id.who.int/icd/icd10/A25", 
+        "http://id.who.int/icd/icd10/A26", 
+        "http://id.who.int/icd/icd10/A27", 
+        "http://id.who.int/icd/icd10/A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20-A28"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20", 
+    "inclusion": "infection due to Yersinia pestis", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Plague", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A20.0", 
+        "http://id.who.int/icd/icd10/A20.1", 
+        "http://id.who.int/icd/icd10/A20.2", 
+        "http://id.who.int/icd/icd10/A20.3", 
+        "http://id.who.int/icd/icd10/A20.7", 
+        "http://id.who.int/icd/icd10/A20.8", 
+        "http://id.who.int/icd/icd10/A20.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.0", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.0", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Bubonic plague", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.1", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.1", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Cellulocutaneous plague", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.2", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.2", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Pneumonic plague", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.2"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.3", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.3", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Plague meningitis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.3"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.7", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.7", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Septicaemic plague", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.7"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.8", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.8", 
+    "inclusion": "Abortive plague", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Other forms of plague", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A20.9", 
+    "MortL1Code": "1-007", 
+    "icdId": "http://id.who.int/icd/icd10/A20.9", 
+    "MortL2Code": "2-006", 
+    "MortBCode": "009", 
+    "label": "Plague, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A20.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A20.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21", 
+    "inclusion": "deer-fly fever", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A21.0", 
+        "http://id.who.int/icd/icd10/A21.1", 
+        "http://id.who.int/icd/icd10/A21.2", 
+        "http://id.who.int/icd/icd10/A21.3", 
+        "http://id.who.int/icd/icd10/A21.7", 
+        "http://id.who.int/icd/icd10/A21.8", 
+        "http://id.who.int/icd/icd10/A21.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.0", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Ulceroglandular tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.1", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.1", 
+    "inclusion": "Ophthalmic tularaemia", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Oculoglandular tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.2", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.2", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Pulmonary tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.2"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.3", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.3", 
+    "inclusion": "Abdominal tularaemia", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Gastrointestinal tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.3"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.7", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.7", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Generalized tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.7"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.8", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.8", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other forms of tularaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A21.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A21.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Tularaemia, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A21.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A21"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A21.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22", 
+    "inclusion": "infection due to Bacillus anthracis", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Anthrax", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A22.0", 
+        "http://id.who.int/icd/icd10/A22.1", 
+        "http://id.who.int/icd/icd10/A22.2", 
+        "http://id.who.int/icd/icd10/A22.7", 
+        "http://id.who.int/icd/icd10/A22.8", 
+        "http://id.who.int/icd/icd10/A22.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22.0", 
+    "inclusion": "Malignant:\n\t\t\t\tcarbuncle", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Cutaneous anthrax", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A22"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22.1", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22.1", 
+    "inclusion": "Inhalation anthrax", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Pulmonary anthrax", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A22"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22.2", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22.2", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Gastrointestinal anthrax", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A22"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22.2"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22.7", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22.7", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Anthrax septicaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A22"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22.7"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22.8", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22.8", 
+    "inclusion": "Anthrax meningitisG01", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other forms of anthrax", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A22"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A22.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A22.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Anthrax, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A22.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A22"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A22.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23", 
+    "inclusion": "fever:\n\t\t\t\tMalta", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Brucellosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A23.0", 
+        "http://id.who.int/icd/icd10/A23.1", 
+        "http://id.who.int/icd/icd10/A23.2", 
+        "http://id.who.int/icd/icd10/A23.3", 
+        "http://id.who.int/icd/icd10/A23.8", 
+        "http://id.who.int/icd/icd10/A23.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23.0", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Brucellosis due to Brucella melitensis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A23"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23.1", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23.1", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Brucellosis due to Brucella abortus", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A23"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23.2", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23.2", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Brucellosis due to Brucella suis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A23"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23.2"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23.3", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23.3", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Brucellosis due to Brucella canis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A23"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23.3"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23.8", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23.8", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Other brucellosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A23"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A23.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A23.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "010", 
+    "label": "Brucellosis, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A23.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A23"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A23.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A24", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A24", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Glanders and melioidosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A24", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A24.0", 
+        "http://id.who.int/icd/icd10/A24.1", 
+        "http://id.who.int/icd/icd10/A24.2", 
+        "http://id.who.int/icd/icd10/A24.3", 
+        "http://id.who.int/icd/icd10/A24.4"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A24"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A24.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A24.0", 
+    "inclusion": "Infection due to Pseudomonas mallei", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Glanders", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A24.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A24"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A24.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A24.1", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A24.1", 
+    "inclusion": "Melioidosis:\n\t\t\t\tpneumonia", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Acute and fulminating melioidosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A24.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A24"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A24.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A24.2", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A24.2", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Subacute and chronic melioidosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A24.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A24"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A24.2"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A24.3", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A24.3", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other melioidosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A24.3", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A24"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A24.3"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A24.4", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A24.4", 
+    "inclusion": "Infection due to Pseudomonas pseudomallei NOS", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Melioidosis, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A24.4", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A24"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A24.4"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A25", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A25", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Rat-bite fevers", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A25", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A25.0", 
+        "http://id.who.int/icd/icd10/A25.1", 
+        "http://id.who.int/icd/icd10/A25.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A25"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A25.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A25.0", 
+    "inclusion": "Sodoku", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Spirillosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A25.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A25"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A25.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A25.1", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A25.1", 
+    "inclusion": "Epidemic arthritic erythema", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Streptobacillosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A25.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A25"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A25.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A25.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A25.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Rat-bite fever, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A25.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A25"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A25.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A26", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A26", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Erysipeloid", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A26", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A26.0", 
+        "http://id.who.int/icd/icd10/A26.7", 
+        "http://id.who.int/icd/icd10/A26.8", 
+        "http://id.who.int/icd/icd10/A26.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A26"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A26.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A26.0", 
+    "inclusion": "Erythema migrans", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Cutaneous erysipeloid", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A26.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A26"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A26.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A26.7", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A26.7", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Erysipelothrix septicaemia", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A26.7", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A26"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A26.7"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A26.8", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A26.8", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other forms of erysipeloid", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A26.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A26"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A26.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A26.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A26.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Erysipeloid, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A26.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A26"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A26.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A27", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A27", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Leptospirosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A27", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A27.0", 
+        "http://id.who.int/icd/icd10/A27.8", 
+        "http://id.who.int/icd/icd10/A27.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A27"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A27.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A27.0", 
+    "inclusion": "Leptospirosis due to Leptospira interrogans serovar icterohaemorrhagiae", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Leptospirosis icterohaemorrhagica", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A27.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A27"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A27.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A27.8", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A27.8", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other forms of leptospirosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A27.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A27"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A27.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A27.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A27.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Leptospirosis, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A27.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A27"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A27.9"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A28", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A28", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other zoonotic bacterial diseases, not elsewhere classified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A28", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A20-A28"
+    ], 
+    "subclasses": [
+        "http://id.who.int/icd/icd10/A28.0", 
+        "http://id.who.int/icd/icd10/A28.1", 
+        "http://id.who.int/icd/icd10/A28.2", 
+        "http://id.who.int/icd/icd10/A28.8", 
+        "http://id.who.int/icd/icd10/A28.9"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A28"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A28.0", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A28.0", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Pasteurellosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A28.0", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A28.0"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A28.1", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A28.1", 
+    "inclusion": "Cat-scratch fever", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Cat-scratch disease", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A28.1", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A28.1"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A28.2", 
+    "exclusion": "enteritis due to Yersinia enterocoliticaA04.6", 
+    "icdId": "http://id.who.int/icd/icd10/A28.2", 
+    "MortL2Code": "2-024", 
+    "MortL1Code": "1-025", 
+    "MortBCode": "018", 
+    "label": "Extraintestinal yersiniosis", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A28.2", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A28.2"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A28.8", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A28.8", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Other specified zoonotic bacterial diseases, not elsewhere classified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A28.8", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A28.8"
+},{
+    "MortL3Code": "3-015", 
+    "kind": "category", 
+    "code": "A28.9", 
+    "MortL1Code": "1-025", 
+    "icdId": "http://id.who.int/icd/icd10/A28.9", 
+    "MortL2Code": "2-024", 
+    "MortBCode": "018", 
+    "label": "Zoonotic bacterial disease, unspecified", 
+    "MortL4Code": "4-014", 
+    "link": "http://apps.who.int/classifications/icd10/browse/2010/en#/A28.9", 
+    "superclasses": [
+        "http://id.who.int/icd/icd10/A28"
+    ], 
+    "id": "http://id.who.int/icd/icd10/A28.9"
+}
+    ]
+}

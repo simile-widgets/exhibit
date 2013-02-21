@@ -1,0 +1,100 @@
+Build Tools
+===========
+
+Rhino
+-----
+ * ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R2.zip
+ * 1.7R2
+ * MPL 1.1
+ * scripted/tools/rhino/js.jar
+
+Env.js
+------
+ * https://github.com/envjs/env-js
+ * 1.2
+ * dual GPLv2/MIT
+ * scripted/lib/env.rhino.js
+
+QUnit
+-----
+ * http://docs.jquery.com/Qunit
+ * derived from commit 761890a9 (one of two on April 15, 2011)
+ * dual GPLv2/MIT
+ * scripted/lib/qunit.{js,css}
+
+JSLint
+------
+ * https://code.google.com/p/jslint4java/
+ * 2.0.1
+ * BSD / custom?
+ * scripted/tools/jslint4java/jslint4java.jar
+
+JsDoc Toolkit
+-------------
+ * https://code.google.com/p/jsdoc-toolkit/
+ * 2.4.0
+ * MIT
+ * scripted/tools/jsdoc-toolkit/
+
+JsDoc Toolkit Ant Task
+----------------------
+ * https://code.google.com/p/jsdoc-toolkit-ant-task/
+ * 1.1.2
+ * Artistic License/GPLv1+
+ * scripted/tools/jsdoc-toolkit-ant/
+
+YUI Compressor
+--------------
+ * http://developer.yahoo.com/yui/compressor/
+ * 2.4.6
+ * BSD
+ * scripted/tools/yuicompressor/
+
+YUI Compressor Ant Task
+-----------------------
+ * https://code.google.com/p/javaflight-code/wiki/YuiCompressorAntTask
+ * 0.5
+ * Apache 2.0
+ * scripted/tools/yuicompressor-ant/
+
+Software Libraries
+==================
+
+LAB.js
+------
+ * http://getify.github.com/LABjs/
+ * 2.0.3
+ * MIT
+ * scripted/src/lib/LAB.min.js
+
+jQuery
+------
+ * http://jquery.com/
+ * 1.7.1
+ * dual GPLv2/MIT
+ * scripted/src/lib/jquery.min.js
+
+History.js
+----------
+ * https://github.com/balupton/History.js
+ * 1.7.1
+ * BSD
+ * scripted/src/lib/jquery.history.js
+
+JSON2.js
+--------
+ * https://github.com/douglascrockford/JSON-js
+ * Public Domain
+ * scripted/src/lib/json2.js
+
+base64.js
+---------
+ * https://ecmanaut.googlecode.com/svn/trunk/lib/base64.js
+ * Public Domain
+ * scripted/src/lib/base64.js
+
+sprintf.js
+----------
+ * http://www.diveintojavascript.com/projects/javascript-sprintf
+ * Modified BSD
+ * scripted/src/lib/sprintf.js

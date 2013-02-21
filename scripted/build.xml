@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    | Exhibit 3.0 build tasks
+     -->
+
+<project name="exhibit3" basedir=".">
+
+  <property name="tools" value="tools"/>
+  <property name="src" value="src"/>
+  <property name="tests" value="tests"/>
+  <property name="lib" value="lib"/>
+  <property name="build" value="build"/>
+  <property name="docs" value="${build}/docs"/>
+  <property name="demos" value="${build}/demos"/>
+  <property name="bundle" value="${build}/bundle"/>
+  <property name="bundleStyle" value="${bundle}/styles"/>
+  <property name="compress" value="${build}/compress"/>
+  <property name="node" value="${build}/node"/>
+  <property name="demosSrc" value="demos"/>
+  <property name="testsOutput" value="${build}/tests"/>
+  <property name="instrument" value="${build}/instrument"/>
+  <property name="coverage" value="${build}/coverage"/>
+  <property name="dist" value="dist"/>
+
+  <property name="modules" value=""/>
+  <property name="lintfile" value=""/>
+  <property name="extension" value=""/>
+
+  <property name="jscoverage.dir" value="/usr/local/bin"/>
+  <property name="jscoverage.port" value="9876"/>
+  <property file="local.build.properties"/>
+
+  <condition property="jscoverage.exists">
+    <and>
+      <resourceexists>
+        <file file="${jscoverage.dir}/jscoverage-server"/>
+      </resourceexists>
+      <resourceexists>
+        <file file="${jscoverage.dir}/jscoverage"/>
+      </resourceexists>
+    </and>
+  </condition>
+
+  <condition property="jscoverage.report.exists">
+    <resourceexists>
+      <file file="${lib}/jscoverage-report.js"/>
+    </resourceexists>
+  </condition>
+
+  <taskdef
+     name="yui-compressor"
+     classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
+     classpath="${tools}/yuicompressor-ant/yui-compressor-ant-task.jar;${tools}/yuicompressor/yuicompressor.jar"
+     />
+
+  <taskdef
+     name="jsdoctoolkit"
+     classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"
+     classpath="${tools}/jsdoc-toolkit-ant/jsdoc-toolkit-ant-task.jar;${tools}/rhino/js.jar"
+     />
+
+  <taskdef
+     name="jslint"
+     classname="com.googlecode.jslint4java.ant.JSLintTask"
+     classpath="${tools}/jslint4java/jslint4java.jar"
+     />
+
+
+
+
+
+  <!-- node.js code compressor - unused -->
+  <target name="node" description="Combine source files as a Node module">
+    <mkdir dir="${node}"/>
+
+    <concat destfile="${node}/exhibit-api.js" force="no">
+      <filelist dir="${src}/"
+                files="node/exhibit.js"/>
+      <filelist dir="${src}/"
+                files="scripts/util/util.js"/>
+      <fileset dir="${src}/">
+        <exclude name="lib/*.js"/>
+        <exclude name="exhibit-api.js"/>
+        <exclude name="scripts/util/util.js"/>
+        <include name="scripts/util/*.js"/>
+        <include name="scripts/data/*.js"/>
+        <include name="scripts/ui/*.js"/>
+      </fileset>
+      <filelist dir="${src}/"
+                files="node/exhibit-post.js"/>
+    </concat>
+  </target>
+
+
+
+
+  <!-- Code concatenation in prep for compression -->
+  <target name="bundle" description="Combine source files in the right order">
+    <mkdir dir="${bundle}"/>
+    <mkdir dir="${bundleStyle}"/>
+
+    <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
+      <filelist dir="${src}/">
+        <file name="scripts/exhibit.js"/>
+        <file name="scripts/bc/bc.js"/>
+        <file name="scripts/bc/attributes.js"/>
+        <file name="scripts/registry.js"/>
+        <file name="scripts/util/util.js"/>
+      </filelist>
+      <fileset dir="${src}">
+        <include name="scripts/util/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/database.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/data/database/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/collection.js"/>
+        <file name="scripts/data/expression.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/data/expression/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/expression-parser.js"/>
+        <file name="scripts/data/exporter.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/data/exporters/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/data/importer.js"/>
+        <file name="scripts/data/importers/json.js"/>
+        <file name="scripts/data/importers/jsonp.js"/>
+        <file name="scripts/data/importers/google-spreadsheet.js"/>
+        <file name="scripts/data/importers/babel-based.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/ui/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="scripts/ui/facets/facet.js"/>
+        <file name="scripts/ui/facets/list-facet.js"/>
+        <file name="scripts/ui/facets/cloud-facet.js"/>
+        <file name="scripts/ui/facets/numeric-range-facet.js"/>
+        <file name="scripts/ui/facets/alpha-range-facet.js"/>
+        <file name="scripts/ui/facets/text-search-facet.js"/>
+        <file name="scripts/ui/facets/hierarchical-facet.js"/>
+      </filelist>
+      <fileset dir="${src}/">
+        <include name="scripts/ui/views/*.js"/>
+        <include name="scripts/ui/coders/*.js"/>
+        <include name="scripts/ui/widgets/*.js"/>
+      </fileset>
+      <filelist dir="${src}/">
+        <file name="locales/manifest.js"/>
+        <file name="scripts/final.js"/>
+      </filelist>
+    </concat>
+
+    <concat destfile="${bundleStyle}/exhibit-scripted-bundle.css" force="no">
+      <fileset dir="${src}/styles/">
+        <include name="**/*.css"/>
+      </fileset>
+    </concat>
+  </target>
+
+
+
+
+  <!-- Code compressor -->
+  <target name="compress" depends="bundle" description="Compress source files">
+    <mkdir dir="${compress}"/>
+
+    <yui-compressor
+       munge="false"
+       warn="false"
+       jssuffix=".js"
+       fromdir="${bundle}/"
+       todir="${compress}/">
+      <include name="**/*.js"/>
+    </yui-compressor>
+
+    <yui-compressor
+       munge="true"
+       warn="false"
+       csssuffix=".css"
+       fromdir="${bundle}/"
+       todir="${compress}/">
+      <include name="**/*.css"/>
+    </yui-compressor>
+  </target>
+
+
+
+
+  <!-- Modular bundling of extensions -->
+  <target name="extension-bundle" description="Combine extension source files">
+    <mkdir dir="${bundle}/extensions/${extension}"/>
+    <mkdir dir="${bundle}/extensions/${extension}/styles"/>
+
+    <concat destfile="${bundle}/extensions/${extension}/${extension}-extension-bundle.js" force="no">
+      <fileset dir="${src}/extensions/${extension}">
+        <exclude name="${extension}-extension.js"/>
+        <exclude name="styles/*"/>
+        <exclude name="locales/*"/>
+        <include name="*.js"/>
+        <include name="scripts/*.js"/>
+      </fileset>
+    </concat>
+
+    <concat destfile="${bundle}/extensions/${extension}/styles/${extension}-extension-bundle.css" force="no">
+      <fileset dir="${src}/extensions/${extension}">
+        <include name="**/*.css"/>
+      </fileset>
+    </concat>
+  </target>
+
+
+
+
+
+  <!-- Bundle everything -->
+  <target name="bundle-all">
+    <antcall target="bundle"/>
+    <antcall target="extension-bundle">
+      <param name="extension" value="time"/>
+    </antcall>
+    <antcall target="extension-bundle">
+      <param name="extension" value="map"/>
+    </antcall>
+    <!-- invalid-json is self contained in one file, no need to add here -->
+  </target>
+
+
+
+
+
+  <!-- Demo builder -->
+  <target name="demos" depends="dist" description="Build demos">
+    <copy todir="${demos}">
+      <fileset dir="${demosSrc}"/>
+    </copy>
+    <copy todir="${demos}/src">
+      <fileset dir="${dist}"/>
+    </copy>
+  </target>
+
+
+
+
+
+  <!-- Distribution builder -->
+  <target name="dist" description="Assemble existing and generated files into a directory that can be served online" depends="bundle-all,compress">
+    <mkdir dir="${dist}"/>
+    <copy todir="${dist}">
+      <fileset dir="${src}"/>
+    </copy>
+    <copy todir="${dist}">
+      <fileset dir="${compress}"/>
+    </copy>
+  </target>
+
+
+
+
+
+  <!-- Documentation generator -->
+  <target name="docs" description="Generate code documentation">
+    <mkdir dir="${docs}"/>
+    <jsdoctoolkit
+       jsdochome="${tools}/jsdoc-toolkit/"
+       template="jsdoc"
+       outputdir="${docs}/">
+      <fileset dir="${src}/" includes="*.js,**/*.js" excludes="lib/*.js,node/*.js" />
+    </jsdoctoolkit>
+  </target>
+
+
+
+
+
+  <!-- Coverage reporting -->
+  <target name="coverage" description="Generate code coverage report">
+    <fail unless="${jscoverage.exists}"
+          message="The JSCoverage server and instrumentation programs could not be located, check the jscoverage.dir setting"/>
+    <fail unless="${jscoverage.report.exists}"
+          message="The JSCoverage report script could not be located at lib/jscoverage-report.js"/>
+    <mkdir dir="${instrument}"/>
+    <mkdir dir="${coverage}"/>
+    <exec dir="." executable="${jscoverage.dir}/jscoverage-server" spawn="true">
+      <arg line="--port=${jscoverage.port} --report-dir=${coverage} --no-instrument=${instrument}/lib/ --no-instrument=${instrument}/tests/ --no-instrument=${instrument}/src/"/>
+    </exec>
+    <exec dir="." executable="${jscoverage.dir}/jscoverage">
+      <arg line="--no-instrument=lib/ ${src} ${instrument}/src"/>
+    </exec>
+    <copy todir="${instrument}/tests">
+      <fileset dir="${tests}"/>
+    </copy>
+    <copy todir="${instrument}/lib">
+      <fileset dir="${lib}"/>
+    </copy>
+    <java
+       classpath="${tools}/rhino/js.jar"
+       classname="org.mozilla.javascript.tools.shell.Main">
+      <arg line="-opt -1 ${lib}/coverage-runner.js ${jscoverage.port}"/>
+    </java>
+    <exec dir="." executable="${jscoverage.dir}/jscoverage-server">
+      <arg line="--port=${jscoverage.port} --shutdown"/>
+    </exec>
+  </target>
+
+
+
+
+
+  <!-- Mono lint -->
+  <target name="lintone" description="Run lint on one file">
+    <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
+    <jslint haltOnFailure="false" options="evil,sloppy,white,plusplus,browser,nomen,devel">
+      <predef>jQuery, $$</predef>
+      <formatter type="plain" />
+      <fileset dir="." includes="${lintfile}" />
+    </jslint>
+  </target>
+
+
+
+
+
+  <!-- Tests -->
+  <target name="lint">
+    <!-- see http://happygiraffe.github.com/jslint4java/ant.html -->
+    <jslint haltOnFailure="false" options="evil,sloppy,white,plusplus,browser,nomen,devel">
+      <predef>jQuery, $$, Exhibit</predef>
+      <formatter type="plain" />
+      <fileset dir="${src}" includes="*.js,**/*.js" excludes="lib/*.js,exhibit-api.js" />
+    </jslint>
+  </target>
+
+  <target name="qunit">
+    <mkdir dir="${testsOutput}"/>
+    <!-- the magic starts in lib/test-runner.js -->
+    <java
+       classpath="${tools}/rhino/js.jar"
+       classname="org.mozilla.javascript.tools.shell.Main">
+      <arg line="-opt -1 ${lib}/test-runner.js ${modules}"/>
+    </java>
+  </target>
+
+  <target name="test" depends="lint,qunit" description="Run all tests"/>
+
+
+
+
+
+  <!-- Cleanup -->
+  <target name="clean-demos">
+    <delete dir="${demos}/" quiet="true"/>
+  </target>
+
+  <target name="clean-docs">
+    <delete dir="${docs}/" quiet="true"/>
+  </target>
+
+  <target name="clean-node">
+    <delete dir="${node}" quiet="true"/>
+  </target>
+
+  <target name="clean-bundle">
+    <delete dir="${bundle}" quiet="true"/>
+  </target>
+
+  <target name="clean-compress">
+    <delete dir="${compress}/" quiet="true"/>
+  </target>
+
+  <target name="clean-dist">
+    <delete dir="${dist}" quiet="true"/>
+  </target>
+
+  <target name="clean-coverage">
+    <delete dir="${coverage}/" quiet="true"/>
+  </target>
+
+  <target name="clean-instrument">
+    <delete dir="${instrument}/" quiet="true"/>
+  </target>
+
+  <target name="clean-jscoverage" depends="clean-coverage,clean-instrument"/>
+
+  <target name="clean-tests">
+    <delete dir="${testsOutput}/" quiet="true"/>
+  </target>
+
+  <target name="clean" depends="clean-demos,clean-node,clean-bundle,clean-compress,clean-dist,clean-docs,clean-jscoverage,clean-tests" description="Remove build artificats"/>
+
+</project>

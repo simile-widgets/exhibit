@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" version="-//W3C//DTD XHTML 1.1//EN" xml:lang="en">
+<head>
+	<title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | 2008 Presidential Election Candidates on the Issues</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="http://www.simile-widgets.org/styles/common.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+    <link href="opinions.js" type="application/json" rel="exhibit-data" />
+	
+    <script src="../src/exhibit-api.js?bundle=false"></script>
+</head> 
+
+<body>
+    <ul id="path">
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a></li>
+      <li><a href="http://databench.zepheira.com/">Demos</a></li>
+      <li><a href="http://databench.zepheira.com/demos/">Scripted Demos</a></li>
+      <li><span>Examples: 2008 Election Decision</span></li>
+    </ul>
+
+    <div ex:itemtypes="Candidate" ex:role="exhibit-collection"></div>
+	<div id="content">
+	    <div id="header" class="title-panel">
+            <div ex:role="exhibit-controlPanel"></div>
+	        <h1>Exhibit 3.0 Scripted Demo: 2008 Presidential Election Candidates on the Issues</h1>
+                <div id="sidebar1">
+                  <div id="f2" ex:role="facet" ex:expression=".Abortion"></div>
+                  <div id="f3" ex:role="facet" ex:expression=".Death-Penalty" ex:facetLabel="Death Penalty"></div>
+                  <div id="f4" ex:role="facet" ex:expression=".Education--No-Child-Left-Behind" ex:facetLabel="Education: No Child Left Behind"></div>
+                  <div id="f5" ex:role="facet" ex:expression=".Embryonic-Stem-Cells" ex:facetLabel="Embryonic Stem Cells"></div>
+                  <div id="f6" ex:role="facet" ex:expression=".Energy-&-Oil--ANWR-Drilling" ex:facetLabel="Energy and Oil: ANWR Drilling"></div>
+                  </div>
+                <div id="sidebar2">
+
+                  <div id="f7" ex:role="facet" ex:expression=".Energy-&-Oil--Kyoto" ex:facetLabel="Energy and Oil: Kyoto"></div>
+                  <div id="f8" ex:role="facet" ex:expression=".Guns--Assault-Weapons-Ban" ex:facetLabel="Guns: Assault Weapons Ban"></div>
+                  <div id="f9" ex:role="facet" ex:expression=".Guns--Background-Checks" ex:facetLabel="Guns: Background Checks"></div>
+                  <div id="f10" ex:role="facet" ex:expression=".Homeland-Security--Patriot-Act" ex:facetLabel="Homeland Security: Patriot Act"></div>
+                  <div id="f11" ex:role="facet" ex:expression=".Homeland-Security--Guantanamo" ex:facetLabel="Homeland Security: Guantanamo"></div>
+                  </div>
+                <div id="sidebar3">
+                  <div id="f12" ex:role="facet" ex:expression=".Homeland-Security--Wiretapping" ex:facetLabel="Homeland Security: Wiretapping"></div>
+                  <div id="f13" ex:role="facet" ex:expression=".Homeland-Security--Torture" ex:facetLabel="Homeland Security: Torture"></div>
+
+                  <div id="f14" ex:role="facet" ex:expression=".Immigration--Border-Fence" ex:facetLabel="Immigration: Border Fence"></div>
+                  <div id="f15" ex:role="facet" ex:expression=".Immigration--Citizenship-Path-for-Illegals" ex:facetLabel="Immigration: Illegals Citizenship Path"></div>
+                  <div id="f16" ex:role="facet" ex:expression=".Internet--Neutrality" ex:facetLabel="Internet: Neutrality"></div>
+                  <div id="f17" ex:role="facet" ex:expression=".Iran--Sanctions" ex:facetLabel="Iran: Sanctions"></div>
+                  </div>
+                <div id="sidebar4">
+                  <div id="f18" ex:role="facet" ex:expression=".Iran--Military-Action-as-Option" ex:facetLabel="Iran: Military Action as Option"></div>
+                  <div id="f19" ex:role="facet" ex:expression=".Iraq-War--Support" ex:facetLabel="Iraq War: Support"></div>
+                  <div id="f20" ex:role="facet" ex:expression=".Iraq-War--Troop-Surge" ex:facetLabel="Iraq War: Troop Surge"></div>
+
+                  <div id="f21" ex:role="facet" ex:expression=".Iraq-War--Withdrawal" ex:facetLabel="Iraq War: Withdrawal"></div>
+                  <div id="f22" ex:role="facet" ex:expression=".Minimum-Wage-Increase" ex:facetLabel="Minimum Wage Increase"></div>
+                  </div>
+                <div id="sidebar5">
+                  <div id="f23" ex:role="facet" ex:expression=".Same-Sex--Marriage" ex:facetLabel="Same Sex: Marriage"></div>
+                  <div id="f24" ex:role="facet" ex:expression=".Same-Sex--Civil-Union" ex:facetLabel="Same Sex: Civil Union"></div>
+                  <div id="f25" ex:role="facet" ex:expression=".Same-Sex--Constitutional-Ban" ex:facetLabel="Same Sex: Constitutional Ban"></div>
+                  <div id="f26" ex:role="facet" ex:expression=".Universal-Healthcare" ex:facetLabel="Universal Healthcare"></div>
+                  <div id="f1" ex:role="facet" ex:expression=".party" ex:facetLabel="Party"></div>
+
+                  </div>
+
+                <!-- View -->
+                <div ex:role="viewPanel" id="candidates">
+        <!-- Details Template w/View -->
+
+        <div id="tl"
+            ex:role="view"
+            ex:label="Details"
+            ex:viewClass="Tile"
+            ex:showAll="true"
+            ex:orders=".label">
+                 <div ex:role="exhibit-lens" class="candidate">
+                  <a class="name" ex:href-content=".site"><span ex:content=".label"></span></a> <span ex:content=".party" class="party"></span>
+
+               </div>
+                     </div>
+        </div>
+        </div>
+
+		<div id="footer" style="clear: both;" class="title-panel">
+	    <p>Built using <a href="http://simile-widgets.org/">The SIMILE Project</a>'s <a href="http://simile-widgets.org/exhibit3/">Exhibit 3.0</a> software.  Based on <a href="http://ryanlee.org/2007/08/decide.html">Ryan's 2008 candidate decision maker</a>.</p>
+		</div>
+</body>
+
+</html>

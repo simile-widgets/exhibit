@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | Senate</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="http://www.simile-widgets.org/styles/common.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" />
+    
+    <link href="senate-committees.js" type="application/json" rel="exhibit-data" />
+    <link href="senate-bills.js" type="application/json" rel="exhibit-data" />
+
+    <link rel="exhibit-extension" type="text/javscript" href="../src/extensions/map/map-extension.js?service=google&bundle=false" />
+    <script src="../src/exhibit-api.js?bundle=false"></script>
+    
+    <script type="text/javascript">
+        var rowStyler = function(item, database, tr) {
+            var party = database.getObject(item, "party");
+            var color = "white";
+            switch (party) {
+                case "D":              color = "#AAAAFF"; break;
+                case "R":              color = "#FFAAAA"; break;
+            }
+            jQuery(tr).css("background-color", color);
+        };
+    </script>
+  </head>
+
+  <body>
+    <ul id="path">
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a></li>
+      <li><a href="http://databench.zepheira.com/">Demos</a></li>
+      <li><a href="http://databench.zepheira.com/demos/">Scripted Demos</a></li>
+      <li><span>Examples: Senate (HTML5)</span></li>
+    </ul>
+
+    <div data-ex-role="exhibit-collection" data-ex-item-types="Senator"></div>
+    <table id="frame">
+        <tr>
+            <td id="content">
+              <div id="title-area">
+                <h1>Exhibit 3.0 Scripted Demo: Recent United States Senate Bills</h1>
+                <p>A continually evolving look at what legislation is passing through Senate committees and thus which states' constituents end up having a preliminary say.  Yesterday's new legislation is presented, unless the Senate was in recess.  Powered by <a href="http://simile.mit.edu/exhibit/">Exhibit</a> and <a href="http://simile.mit.edu/crowbar/">Crowbar</a>.</p>
+                </div>
+                <div id="content-area">
+                  <div data-ex-role="exhibit-controlPanel" data-ex-developer-mode="true" data-ex-hover-reveal="true"></div>
+                    <div class="item" data-ex-role="exhibit-lens" data-ex-item-types="Senator" style="display: none">
+                        <h3><a data-ex-href-content=".homepage"><span data-ex-content=".label"></span> (<span data-ex-content=".party"></span>-<span data-ex-content=".state"></span>)</a></h3>
+                        <div><strong>Committees:</strong> <span data-ex-content=".committeeMember.label"></span></div>
+                        <span data-ex-if-exists="!sponsor.description"><div><strong>Bills (yesterday):</strong> <span data-ex-content="!sponsor.description"></span></div></span>
+                    </div>
+                    <div class="item" data-ex-role="exhibit-lens" data-ex-item-types="Bill" style="display: none">
+                        <p><span data-ex-content=".description"></span></p>
+                        <p>Referred to: <span data-ex-content=".inCommittee"></span></p>
+                        <p>Sponsored by <span data-ex-content=".sponsor"></span>; <span data-ex-content=".cosponsor"></span></p>
+                        <p><a data-ex-href-content=".billHomepage">Read the bill</a></p>
+                    </div>
+                    <div data-ex-role="coder" data-ex-coderClass="Color" id="party-colors" style="display: none">
+                        <span data-ex-color="#AAAAFF">D</span>
+                        <span data-ex-color="#FFAAAA">R</span>
+                    </div>
+                    
+                    <div data-ex-role="exhibit-viewPanel">
+                        <div data-ex-role="exhibit-view"
+                            data-ex-view-class="Exhibit.TabularView"
+                            data-ex-label="Table"
+                            data-ex-columns=".label, .party, .state, .committeeMember.label, !sponsor, !cosponsor"
+                            data-ex-column-labels="name, party, state, member of, sponsored, cosponsored"
+                            data-ex-column-formats="list, list, list, list"
+                            data-ex-sort-column="4"
+                            data-ex-sort-ascending="false"
+                            data-ex-row-styler="rowStyler"
+                            ></div>
+                        <div data-ex-role="exhibit-view"
+                             data-ex-view-class="Map"
+                             data-ex-label="Map"
+                             data-ex-latlng=".stateLatLng"
+                             data-ex-latlng-pair-separator=","
+                             data-ex-color-key=".party"
+                             data-ex-color-coder="party-colors"
+                             data-ex-center="38.479394673276445, -95.361328125"
+                             data-ex-zoom="3"
+                             ></div>
+                        <div data-ex-role="exhibit-view"
+                            data-ex-label="Tiles"
+                            data-ex-paginate="true"
+                            ></div>
+                    </div>
+                </div>
+            </td>
+            <td id="sidebar">
+                <div data-ex-role="logo" data-ex-color="Blue" style="text-align: center;"></div>
+                <div data-ex-role="facet" data-ex-facet-class="TextSearch" data-ex-expressions=".label" data-ex-query="co" data-ex-facet-label="Search"></div>
+                <div data-ex-role="exhibit-facet" data-ex-expression="!sponsor" data-ex-facet-label="Sponsoring"></div>
+                <div data-ex-role="exhibit-facet" data-ex-expression="!cosponsor" data-ex-facet-label="Co-Sponsoring" id="cosponsors-facet"></div>
+                <div data-ex-role="exhibit-facet" data-ex-expression="!hasMember!inCommittee" data-ex-facet-label="On Bill Committee" id="bill-committee-facet"></div>
+                <div data-ex-role="exhibit-facet" data-ex-expression=".state" data-ex-facet-label="State" id="represents-facet"></div>
+                <div data-ex-role="exhibit-facet" data-ex-expression=".party" data-ex-facet-label="Party" id="party-facet"></div>
+                <div data-ex-role="exhibit-facet" data-ex-expression=".committeeMember" data-ex-facet-label="On Committee" id="committee-facet"></div>
+            </td>
+        </tr>
+    </table>
+  </body>
+</html>

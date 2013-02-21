@@ -1,0 +1,46 @@
+body {
+    padding:        0;
+    background: #ffffff;
+}
+
+#content {
+    font-family: "Gill Sans", "Trebuchet MS", "Helvetica", "Arial", "sans serif";
+    font-size:      11pt;
+}
+
+table {
+    font-size:      100%;
+    border-bottom: lightgrey 1pt solid;
+    padding-bottom: 10px;
+}
+
+tr, td {
+    vertical-align: top;
+}
+
+div.thumbnail-lens {
+    width:      280px;
+}
+
+div.title {
+    margin:     5px 0;
+    font-weight: bold;
+    font-size: 130%;
+}
+
+div.definition {
+    margin:     5px 10px;
+}
+
+div.exclusion {
+    margin:     2px 0;
+}
+
+div.inclusion {
+    margin:     2px 0;
+}
+
+span.property {
+    font-weight: bold;
+    padding-right: 3px;
+}	

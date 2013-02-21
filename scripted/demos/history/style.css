@@ -1,0 +1,103 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Verdana", sans-serif;
+}
+
+#header {
+	padding: 1%;
+}
+
+h1 {
+	margin: 0;
+	font-size: 1em;
+}
+
+.title-panel p {
+	font-size: 0.75em;
+}
+
+div.exhibit-facet-header-filterControl {
+	width: 3em;
+}
+
+#sidebar1, #sidebar2, #sidebar3, #sidebar4, #sidebar5 {
+	float: left;
+	width: 19%;
+	margin: 0 1% 0 0;
+	font-size: 0.9em;
+}
+
+#f1 .exhibit-facet-body,
+#f5 .exhibit-facet-body {
+	height: 3.7em;
+	overflow: auto;
+}
+
+#f2 .exhibit-facet-body,
+#f3 .exhibit-facet-body,
+#f6 .exhibit-facet-body,
+#f9 .exhibit-facet-body,
+#f10 .exhibit-facet-body,
+#f11 .exhibit-facet-body,
+#f14 .exhibit-facet-body,
+#f15 .exhibit-facet-body,
+#f16 .exhibit-facet-body,
+#f17 .exhibit-facet-body,
+#f20 .exhibit-facet-body,
+#f23 .exhibit-facet-body,
+#f25 .exhibit-facet-body,
+#f26 .exhibit-facet-body,
+#f12 .exhibit-facet-body {
+	height: 5.6em;
+	overflow: auto;
+}
+
+#f7 .exhibit-facet-body,
+#f13 .exhibit-facet-body,
+#f18 .exhibit-facet-body,
+#f19 .exhibit-facet-body,
+#f21 .exhibit-facet-body,
+#f22 .exhibit-facet-body,
+#f8 .exhibit-facet-body {
+	height: 7.5em;
+	overflow: auto;
+}
+
+#f24 .exhibit-facet-body,
+#f4 .exhibit-facet-body {
+	height: 9.4em;
+	overflow: auto;
+}
+
+#candidates {
+	padding: 0 15%;
+	width: 70%;
+	clear: both;
+	border-top: 1px solid #555;
+	border-bottom: 1px solid #555;
+	background: #eee;
+}
+
+span.exhibit-facet-header-title {
+	font-weight: normal;
+	font-family: "Tahoma";
+	font-size: 1.1em;
+}
+
+.exhibit-ui-protection div.candidate {
+	padding: 0 5px 5px 0;
+}	
+
+.candidate .name {
+	font-size: 1.2em;
+}
+
+.candidate .party {
+	font-size: 0.9em;
+	color: #555;
+}
+
+#footer {
+	text-align: center;
+}
