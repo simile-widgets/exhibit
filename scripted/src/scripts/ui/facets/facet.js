@@ -227,7 +227,7 @@ Exhibit.Facet = function(key, div, uiContext) {
 Exhibit.Facet._registryKey = "facet";
 
 Exhibit.Facet._settingSpecs = {
-    "facetLabel":       { "type": "text" },
+    "facetLabel":       { "type": "text" }
 };
 
 /**
