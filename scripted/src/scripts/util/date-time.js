@@ -577,3 +577,26 @@ Exhibit.DateTime.zeroTimeUTC = function(date) {
     date.setUTCMilliseconds(0);
     return date;
 };
+
+/**
+ * Convert data to ISO8601 format
+ * Now standard in JS, using Date.toISOString()
+ * However, that isn't available in IE < 9
+ * So we provide compatiblility.
+ * An alternative would be to provide an implementation of toISOString
+ * @static
+ * @param {Date} date The Date object to modify.
+ */
+Exhibit.DateTime.makeISO8601DateString = function(date) {
+    var s
+    , pad = function(i) { return i > 9 ? i.toString() : '0'+i };
+
+    date = date || new Date();
+    if (typeof (date.getISOString) === 'function') {
+        s = date.toISOString();
+    } else {
+        s = date.getFullYear() + '-' + pad(date.getMonth() +1)
+        + '-' + pad(date.getDate());
+    }
+    return s;
+}
