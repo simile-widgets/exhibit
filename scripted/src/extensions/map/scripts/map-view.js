@@ -423,7 +423,7 @@ Exhibit.MapView.prototype._initializeUI = function() {
     
     mapDiv = this._dom.plotContainer;
     Exhibit.jQuery(mapDiv)
-        .attr("class", "exhibit-mapView-map")
+        .addClass("exhibit-mapView-map")
         .css("height", this._settings.mapHeight);
     
     this._map = this._constructGMap(mapDiv);
