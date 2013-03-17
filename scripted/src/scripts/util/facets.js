@@ -23,7 +23,7 @@ Exhibit.FacetUtilities = {};
 Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel, onClearAllSelections, uiContext, collapsible, collapsed) {
     var dom, resizableDivWidget;
 
-    Exhibit.jQuery(div).attr("class", "exhibit-facet");
+    Exhibit.jQuery(div).addClass("exhibit-facet");
     dom = Exhibit.jQuery.simileDOM("string", div,
             '<div class="exhibit-facet-header">' +
             '<div class="exhibit-facet-header-filterControl" id="clearSelectionsDiv" title="' + Exhibit._("%facets.clearSelectionsTooltip") + '">' +
@@ -41,7 +41,7 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
     resizableDivWidget = Exhibit.ResizableDivWidget.create({}, dom.frameDiv, uiContext);
     
     dom.valuesContainer = resizableDivWidget.getContentDiv();
-    Exhibit.jQuery(dom.valuesContainer).attr("class", "exhibit-facet-body");
+    Exhibit.jQuery(dom.valuesContainer).addClass("exhibit-facet-body");
     
     dom.setSelectionCount = function(count) {
         Exhibit.jQuery(this.filterCountSpan).html(count);
@@ -134,7 +134,7 @@ Exhibit.FacetUtilities.constructFacetItem = function(
         "</div>"
     );
 
-    Exhibit.jQuery(dom.elmt).attr("class", selected ? "exhibit-facet-value exhibit-facet-value-selected" : "exhibit-facet-value");
+    Exhibit.jQuery(dom.elmt).addClass(selected ? "exhibit-facet-value exhibit-facet-value-selected" : "exhibit-facet-value");
     if (typeof label === "string") {
         Exhibit.jQuery(dom.elmt).attr("title", label);
         Exhibit.jQuery(dom.link).html(label);
@@ -167,7 +167,7 @@ Exhibit.FacetUtilities.constructFacetItem = function(
  * @returns {Object}
  */
 Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, facetLabel, onClearAllSelections, uiContext, collapsible, collapsed) {
-    Exhibit.jQuery(div).attr("class", "exhibit-flowingFacet");
+    Exhibit.jQuery(div).addClass("exhibit-flowingFacet");
     var dom = Exhibit.jQuery.simileDOM("string",
         div,
         '<div class="exhibit-flowingFacet-header">' +
