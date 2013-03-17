@@ -386,6 +386,8 @@ Exhibit.ViewPanel.prototype._createView = function() {
  * @param {Number} newIndex
  */
 Exhibit.ViewPanel.prototype._switchView = function(newIndex) {
+    if (newIndex >=  this._viewConstructors.length)
+        return; //attempt to switch to nonexistent view 
     Exhibit.jQuery(this.getContainer()).trigger(
         "onBeforeViewPanelSwitch.exhibit",
         [ this._viewIndex ]
