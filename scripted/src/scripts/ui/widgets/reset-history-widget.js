@@ -79,7 +79,7 @@ Exhibit.ResetHistoryWidget.prototype._initializeUI = function() {
 
     img = Exhibit.UI.createTranslucentImage("images/reset-history-icon.png");
     Exhibit.jQuery(img)
-        .attr("class", "exhibit-resetHistoryWidget-button")
+        .addClass("exhibit-resetHistoryWidget-button")
         .attr("title", "Click to clear state and refresh window")
         .bind("click", function(evt) {
             Exhibit.ResetHistoryWidget.resetHistory();

@@ -88,7 +88,7 @@ Exhibit.BookmarkWidget.prototype._fillPopup = function(popup) {
     self = this;
     img = Exhibit.UI.createTranslucentImage("images/bookmark-icon.png");
     Exhibit.jQuery(img)
-        .attr("class", "exhibit-bookmarkWidget-button")
+        .addClass("exhibit-bookmarkWidget-button")
         .attr("title", Exhibit._("%widget.bookmark.tooltip"))
         .bind("click", function(evt) {
             self._showBookmark(img, evt);

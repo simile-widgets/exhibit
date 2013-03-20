@@ -896,7 +896,7 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
         Exhibit._("%orderedViewFrame.sortingControlsTemplate"));
 
     dom = Exhibit.jQuery.simileDOM("string", headerDiv, template, {});
-    Exhibit.jQuery(headerDiv).attr("class", "exhibit-collectionView-header");
+    Exhibit.jQuery(headerDiv).addClass("exhibit-collectionView-header");
     
     if (showSummary) {
         Exhibit.jQuery(dom.collectionSummaryDiv).show();
@@ -982,7 +982,7 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
             '<div class="exhibit-collectionView-pagingControls" style="display: none;" id="bottomPagingDiv"></div>',
         {}
     );
-    Exhibit.jQuery(footerDiv).attr("class", "exhibit-collectionView-footer");
+    Exhibit.jQuery(footerDiv).addClass("exhibit-collectionView-footer");
     
     dom.setCounts = function(count, limitCount, showAll, canToggle) {
         Exhibit.jQuery(dom.showAllSpan).empty();
@@ -1022,7 +1022,7 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
 Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount, pageWindow, gotoPage) {
     var self, renderPageLink, renderPageNumber, renderHTML, pageWindowStart, pageWindowEnd, i;
     
-    Exhibit.jQuery(parentElmt).attr("class", "exhibit-collectionView-pagingControls");
+    Exhibit.jQuery(parentElmt).addClass("exhibit-collectionView-pagingControls");
     Exhibit.jQuery(parentElmt).empty();
     
     self = this;

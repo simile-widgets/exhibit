@@ -296,7 +296,7 @@ Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
     } else {
         Exhibit.jQuery(timelineDiv)
             .css("height", settings.timelineHeight + "px")
-            .attr("class", "exhibit-timelineView-timeline");
+            .addClass("exhibit-timelineView-timeline");
 
         theme = Timeline.ClassicTheme.create();
         theme.event.bubble.width = this.getUIContext().getSetting("bubbleWidth");

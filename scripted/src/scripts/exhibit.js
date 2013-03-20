@@ -501,7 +501,7 @@ Exhibit._Impl.prototype._showFocusDialogOnItem = function(itemID) {
             "</button>" +
         "</div>"
     );
-    Exhibit.jQuery(dom.elmt).attr("class", "exhibit-focusDialog exhibit-ui-protection");
+    Exhibit.jQuery(dom.elmt).addClass("exhibit-focusDialog exhibit-ui-protection");
     Exhibit.UI.setupDialog(dom, true);
     
     itemLens = this._uiContext.getLensRegistry().createLens(itemID, dom.lensContainer, this._uiContext);
