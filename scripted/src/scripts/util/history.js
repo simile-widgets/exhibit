@@ -282,7 +282,7 @@ Exhibit.History.replaceState = function(data, subtitle, url) {
  * @static
  */
 Exhibit.History.eraseState = function() {
-    Exhibit.History.pushState({});
+    Exhibit.History.pushState({"components": {}});
 };
 
 Exhibit.jQuery(document).bind(
