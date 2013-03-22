@@ -99,6 +99,7 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
             viewPanel._viewLabels.push(label);
             viewPanel._viewTooltips.push(tooltip);
             viewPanel._viewDomConfigs.push(null);
+            viewPanel._viewDoms.push(null);
         }
     }
     
@@ -314,6 +315,7 @@ Exhibit.ViewPanel.prototype._internalValidate = function() {
         this._viewLabels.push(Exhibit._("%TileView.label"));
         this._viewTooltips.push(Exhibit._("%TileView.tooltip"));
         this._viewDomConfigs.push(null);
+        this._viewDoms.push(null);
     }
     
     this._viewIndex = 
