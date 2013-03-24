@@ -100,7 +100,8 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         question = url.indexOf("?");
         if (question >= 0) {
             url = url.substr(0, question);
-        } else if (hash >= 0) {
+        }
+        if (hash >= 0) {
             url = url.substr(0, hash);
         }
         
