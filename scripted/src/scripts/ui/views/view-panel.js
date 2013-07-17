@@ -20,6 +20,7 @@ Exhibit.ViewPanel = function(div, uiContext) {
     this._viewLabels = [];
     this._viewTooltips = [];
     this._viewDomConfigs = [];
+    this._viewDoms = [];
     
     this._viewIndex = 0;
     this._view = null;
@@ -98,6 +99,7 @@ Exhibit.ViewPanel.create = function(configuration, div, uiContext) {
             viewPanel._viewLabels.push(label);
             viewPanel._viewTooltips.push(tooltip);
             viewPanel._viewDomConfigs.push(null);
+            viewPanel._viewDoms.push(null);
         }
     }
     
@@ -165,6 +167,7 @@ Exhibit.ViewPanel.createFromDOM = function(div, uiContext) {
             viewPanel._viewLabels.push(label);
             viewPanel._viewTooltips.push(tooltip);
             viewPanel._viewDomConfigs.push(this);
+            viewPanel._viewDoms.push(Exhibit.jQuery('<div></div>').appendTo(this));
         }
     });
     
@@ -312,6 +315,7 @@ Exhibit.ViewPanel.prototype._internalValidate = function() {
         this._viewLabels.push(Exhibit._("%TileView.label"));
         this._viewTooltips.push(Exhibit._("%TileView.tooltip"));
         this._viewDomConfigs.push(null);
+        this._viewDoms.push(null);
     }
     
     this._viewIndex = 
@@ -349,24 +353,22 @@ Exhibit.ViewPanel.prototype._initializeUI = function() {
 Exhibit.ViewPanel.prototype._createView = function() {
     var viewContainer, viewDiv, index, context;
     viewContainer = this._dom.getViewContainer();
-    Exhibit.jQuery(viewContainer).empty();
-
-    viewDiv = Exhibit.jQuery("<div>");
-    Exhibit.jQuery(viewContainer).append(viewDiv);
     
     index = this._viewIndex;
+    viewDiv = this._viewDoms[index] || viewContainer;
+    viewDiv.show().parent().show();
     context = this._uiContextCache[index] || this._uiContext;
     try {
         if (this._viewDomConfigs[index] !== null) {
             this._view = this._viewConstructors[index].createFromDOM(
                 this._viewDomConfigs[index],
-                viewContainer, 
+                viewDiv, 
                 context
             );
         } else {
             this._view = this._viewConstructors[index].create(
                 this._viewConfigs[index],
-                viewContainer, 
+                viewDiv, 
                 context
             );
         }
