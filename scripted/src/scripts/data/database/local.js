@@ -251,8 +251,8 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
 Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout, complete) {
     var index, length;
     index = 0;
-    length = data.length;
-    (function() {
+    length = data.length,
+    chunker = function() {
         var remnant, currentSize;
         remnant = length - index;
         currentSize = (remnant >= size) ? size : remnant;
@@ -260,11 +260,12 @@ Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout,
             while (currentSize-- > 0) {
                 worker(data[index++]);
             }
-            setTimeout(arguments.callee, timeout);
+            setTimeout(chunker, timeout);
         } else if (typeof complete === "function") {
             complete();
         }
-    }());
+    };
+    chunker();
 };
 
 /**
@@ -275,7 +276,7 @@ Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout,
  */
 Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI) {
     Exhibit.jQuery(document).trigger("onBeforeLoadingItems.exhibit");
-    var self, lastChar, spo, ops, indexPut, indexTriple, finish, loader;
+    var self, lastChar, indexTriple, finish, loader;
     self = this;
     try {
         lastChar = baseURI.substr(baseURI.length - 1);
@@ -284,15 +285,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
         } else if (lastChar !== "/" && lastChar !== ":") {
             baseURI += "/";
         }
-        
-        spo = this._spo;
-        ops = this._ops;
-        indexPut = Exhibit.Database._indexPut;
-        indexTriple = function(s, p, o) {
-            indexPut(spo, s, p, o);
-            indexPut(ops, o, p, s);
-        };
-
+        indexTriple = function(s,p,o) { self.addStatement(s,p,o); };
         finish = function() {
             self._propertyArray = null;
             Exhibit.jQuery(document).trigger("onAfterLoadingItems.exhibit");
@@ -304,7 +297,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
             }
         };
 
-        Exhibit.Database._LocalImpl._loadChunked(loader, itemEntries, 1000, 10, finish);
+        Exhibit.Database._LocalImpl._loadChunked(loader, itemEntries, 5000, 10, finish);
     } catch(e) {
         Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
     }
@@ -565,13 +558,13 @@ Exhibit.Database._LocalImpl.prototype.countDistinctSubjectsUnion = function(obje
  * @returns {String} One matching object.
  */
 Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
-    var hash, array;
+    var hash, subhash;
 
     hash = this._spo[s];
     if (hash) {
-        array = hash[p];
-        if (array) {
-            return array[0];
+        subhash = hash[p];
+        if (subhash) {
+            return subhash[0];
         }
     }
     return null;
@@ -586,13 +579,13 @@ Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
  * @returns {String} One matching subject identifier.
  */
 Exhibit.Database._LocalImpl.prototype.getSubject = function(o, p) {
-    var hash, array;
+    var hash, subhash;
 
     hash = this._ops[o];
     if (hash) {
-        array = hash[p];
-        if (array) {
-            return array[0];
+        subhash = hash[p];
+        if (subhash) {
+            return subhash[0];
         }
     }
     return null;
@@ -700,8 +693,10 @@ Exhibit.Database._LocalImpl.prototype.removeObjects = function(s, p) {
     if (objects === null) {
         return false;
     } else {
-        for (i = 0; i < objects.length; i++) {
-            indexRemove(this._ops, objects[i], p, s);
+        for (i in objects) {
+            if (objects.hasOwnProperty(i)) {
+                indexRemove(this._ops, objects[i], p, s);
+            }
         }
         return true;
     }
@@ -723,8 +718,10 @@ Exhibit.Database._LocalImpl.prototype.removeSubjects = function(o, p) {
     if (subjects === null) {
         return false;
     } else {
-        for (i = 0; i < subjects.length; i++) {
-            indexRemove(this._spo, subjects[i], p, o);
+        for (i in subjects) {
+            if (subjects.hasOwnProperty(i)) {
+                indexRemove(this._spo, subjects[i], p, o);
+            }
         }
         return true;
     }
@@ -940,21 +937,15 @@ Exhibit.Database._LocalImpl.prototype._ensurePropertyExists = function(propertyI
  * @param {Exhibit.Set} [filter] Only include values in this filter.
  */
 Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set, filter) {
-    var hash, array, i, z;
+    var hash, subhash, i, z;
     hash = index[x];
     if (typeof hash !== "undefined") {
-        array = hash[y];
-        if (typeof array !== "undefined") {
-            if (filter) {
-                for (i = 0; i < array.length; i++) {
-                    z = array[i];
-                    if (filter.contains(z)) {
-                        set.add(z);
-                    }
-                }
-            } else {
-                for (i = 0; i < array.length; i++) {
-                    set.add(array[i]);
+        subhash = hash[y];
+        if (typeof subhash !== "undefined") {
+            for (z in subhash) {
+                if (subhash.hasOwnProperty(z) &&
+                    (!filter || filter.contains(z))) {
+                    set.add(z);
                 }
             }
         }
@@ -972,20 +963,17 @@ Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set,
  * @returns {Number} The count of values.
  */
 Exhibit.Database._LocalImpl.prototype._indexCountDistinct = function(index, x, y, filter) {
-    var count, hash, array, i;
+    var count, hash, subhash, z;
     count = 0;
     hash = index[x];
     if (hash) {
-        array = hash[y];
-        if (array) {
-            if (filter) {
-                for (i = 0; i < array.length; i++) {
-                    if (filter.contains(array[i])) {
-                        count++;
-                    }
+        subhash = hash[y];
+        if (subhash) {
+            for (z in subhash) {
+                if (subhash.hasOwnProperty(z) &&
+                    (!filter || filter.contains(z))) {
+                    count++;
                 }
-            } else {
-                count = array.length;
             }
         }
     }
