@@ -89,7 +89,7 @@ Exhibit.Database._LocalImpl.prototype.loadLinks = function() {
  */
 Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI) {
     if (typeof o === "undefined" || o === null) {
-        throw Error(Exhibit._("%database.error.unloadable"));
+        throw new Error(Exhibit._("%database.error.unloadable"));
     }
     if (typeof baseURI === "undefined") {
         baseURI = location.href;
@@ -249,9 +249,9 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
  * @param {Function} [complete] Method to call when done with all data
  */
 Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout, complete) {
-    var index, length;
+    var index, length, chunker;
     index = 0;
-    length = data.length,
+    length = data.length;
     chunker = function() {
         var remnant, currentSize;
         remnant = length - index;
@@ -558,13 +558,17 @@ Exhibit.Database._LocalImpl.prototype.countDistinctSubjectsUnion = function(obje
  * @returns {String} One matching object.
  */
 Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
-    var hash, subhash;
+    var hash, subhash, v;
 
     hash = this._spo[s];
     if (hash) {
         subhash = hash[p];
         if (subhash) {
-            return subhash[0];
+            for (v in subhash) {
+                if (subhash.hasOwnProperty(v)) {
+                    return v;
+                }
+            }
         }
     }
     return null;
@@ -579,13 +583,17 @@ Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
  * @returns {String} One matching subject identifier.
  */
 Exhibit.Database._LocalImpl.prototype.getSubject = function(o, p) {
-    var hash, subhash;
+    var hash, subhash, v;
 
     hash = this._ops[o];
     if (hash) {
         subhash = hash[p];
         if (subhash) {
-            return subhash[0];
+            for (v in subhash) {
+                if (subhash.hasOwnProperty(v)) {
+                    return v;
+                }
+            }
         }
     }
     return null;
@@ -797,7 +805,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
         typeof itemEntry.id === "undefined") {
         Exhibit.Debug.warn(Exhibit._("%database.error.itemSyntaxError",
                                      JSON.stringify(itemEntry)));
-	    itemEntry.label = "item" + Math.ceil(Math.random()*1000000);
+            itemEntry.label = "item" + Math.ceil(Math.random()*1000000);
     }
     
     if (typeof itemEntry.label === "undefined") {
@@ -1086,14 +1094,14 @@ Exhibit.Database._LocalImpl.prototype._getProperties = function(index, x) {
  */
 Exhibit.Database._LocalImpl.prototype.labelItemsOfType = function(count, typeID, countStyleClass) {
     var label, type, pluralLabel, span;
-    label = Exhibit._((count === 1) ? "" : "");
+    label = Exhibit._("");
     type = this.getType(typeID);
     if (typeof type !== "undefined" && type !== null) {
         label = type.getLabel();
         if (count !== 1) {
             pluralLabel = type.getProperty("pluralLabel");
             if (typeof pluralLabel !== "undefined" && pluralLabel !== null) {
-                label = pluralLabel
+                label = pluralLabel;
             }
         }
     }
