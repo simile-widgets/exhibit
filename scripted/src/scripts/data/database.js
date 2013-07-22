@@ -28,18 +28,18 @@ Exhibit.Database.create = function(type) {
 };
 
 /**
- * Add or initialize an array entry in a two-level hash, such that
- * index[x][y].push(z), given z isn't already in index[x][y].
+ * Add or initialize a subhash entry in a two-level hash, such that
+ * index[x][y][z] = true, given z isn't already in index[x][y].
  *
  * @static
  * @private
  * @param {Object} index Base hash; may be modified as a side-effect.
  * @param {String} x First tier entry key in the base hash.
  * @param {String} y Second tier entry key in a subhash of the base hash.
- * @param {String} z Value to put into an array in the subhash key.
+ * @param {String} z Value to put into the subhash.
  */
 Exhibit.Database._indexPut = function(index, x, y, z) {
-    var hash, array, i;
+    var hash, subhash, i;
 
     hash = index[x];
     if (typeof hash === "undefined") {
@@ -47,23 +47,17 @@ Exhibit.Database._indexPut = function(index, x, y, z) {
         index[x] = hash;
     }
 
-    array = hash[y];
-    if (typeof array === "undefined") {
-        array = [];
-        hash[y] = array;
-    } else {
-        for (i = 0; i < array.length; i++) {
-            if (z === array[i]) {
-                return;
-            }
-        }
+    subhash = hash[y];
+    if (typeof subhash === "undefined") {
+        subhash = [];
+        hash[y] = subhash;
     }
 
-    array.push(z);
+    subhash[z] = true;
 };
 
 /**
- * Add or initialize an array entry in a two-level hash, such that
+ * Add or initialize an subhash entry in a two-level hash, such that
  * index[x][y] = list if undefined or index[x][y].concat(list) if already
  * defined. 
  *
@@ -72,10 +66,10 @@ Exhibit.Database._indexPut = function(index, x, y, z) {
  * @param {Object} index Base hash; may be modified as a side-effect.
  * @param {String} x First tier entry key in the base hash.
  * @param {String} y Second tier entry key in a subhash of the base hash.
- * @param {Array} list List of values to add or assign to the subhash key.
+ * @param {Array} list List of values to add to the subhash key.
  */
 Exhibit.Database._indexPutList = function(index, x, y, list) {
-    var hash, array;
+    var hash, subhash, i;
 
     hash = index[x];
     if (typeof hash === "undefined") {
@@ -83,17 +77,20 @@ Exhibit.Database._indexPutList = function(index, x, y, list) {
         index[x] = hash;
     }
     
-    array = hash[y];
-    if (typeof array === "undefined") {
-        hash[y] = list;
-    } else {
-        hash[y] = hash[y].concat(list);
+    subhash = hash[y];
+    if (typeof subhash === "undefined") {
+        hash[y] = {};
+        subhash = hash[y];
+    }
+
+    for (i=0; i<list.length; i++) {
+        subhash[list[i]] = true;
     }
 };
 
 /**
- * Remove the element z from the array index[x][y]; also remove
- * index[x][y] if the array becomes empty and index[x] if the hash becomes
+ * Remove the element z from the subhash index[x][y]; also remove
+ * index[x][y] if the subhash becomes empty and index[x] if the hash becomes
  * empty as a result.
  *
  * @static
@@ -101,44 +98,40 @@ Exhibit.Database._indexPutList = function(index, x, y, list) {
  * @param {Object} index Base hash; may be modified as a side-effect.
  * @param {String} x First tier entry key in the base hash.
  * @param {String} y Second tier entry key in a subhash of the base hash.
- * @param {String} z Value to remove from an array in the subhash key.
+ * @param {String} z Value to remove from an subhash in the subhash key.
  * @returns {Boolean} True if value removed, false if not.
  */
 Exhibit.Database._indexRemove = function(index, x, y, z) {
-    var hash, array, i, prop, empty;
+    var hash, subhash,
+    isEmpty = function(x) {
+        var p;
+        for (p in x) {
+            if (x.hasOwnProperty(p)) {
+                return false;
+            }
+        }
+        return true;
+    };
 
     hash = index[x];
     if (typeof hash === "undefined") {
         return false;
     }
 
-    array = hash[y];
-    if (typeof array === "undefined") {
+    subhash = hash[y];
+    if (typeof subhash === "undefined") {
         return false;
     }
 
-    for (i = 0; i < array.length; i++) {
-        if (z === array[i]) {
-            array.splice(i, 1);
+    delete subhash[z];
 
-            if (array.length === 0) {
-                delete hash[y];
-
-                empty = true;
-                for (prop in hash) {
-                    if (hash.hasOwnProperty(prop)) {
-                        empty = false;
-                        break;
-                    }
-                }
-                if (empty) {
-                    delete index[x];
-                }
-            }
-
-            return true;
+    if (isEmpty(subhash)) {
+        delete hash[y];
+        if (isEmpty(hash)) {
+            delete index[x];
         }
     }
+    return true;
 };
 
 /**
@@ -149,18 +142,18 @@ Exhibit.Database._indexRemove = function(index, x, y, z) {
  * @param {Object} index Base hash; may be modified as a side-effect.
  * @param {String} x First tier entry key in the base hash.
  * @param {String} y Second tier entry key in a subhash of the base hash.
- * @returns {Array} The removed array, or null if nothing was removed.
+ * @returns {Object} The removed object, or null if nothing was removed.
  */
 Exhibit.Database._indexRemoveList = function(index, x, y) {
-    var hash, array, prop, empty;
+    var hash, res, prop, empty;
 
     hash = index[x];
     if (typeof hash === "undefined") {
         return null;
     }
 
-    array = hash[y];
-    if (typeof array === "undefined") {
+    res = hash[y];
+    if (typeof res === "undefined") {
         return null;
     }
 
@@ -177,5 +170,5 @@ Exhibit.Database._indexRemoveList = function(index, x, y) {
         delete index[x];
     }
     
-    return array;
+    return res;
 };
