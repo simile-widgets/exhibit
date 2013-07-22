@@ -91,7 +91,8 @@ var Exhibit = {
         // SIMILE jQuery plugins fail to load under nonconflicting
         // circumstances because jQuery hasn't been made available yet
         "lib/jquery.simile.dom.js": undefined, // "jQuery.simileDOM",
-        "lib/jquery.simile.bubble.js": undefined // "jQuery.simileBubble"
+        "lib/jquery.simile.bubble.js": undefined, // "jQuery.simileBubble",
+        "lib/es5-shim.js": undefined
     },
 
     /**
