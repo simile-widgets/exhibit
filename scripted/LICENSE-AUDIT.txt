@@ -76,8 +76,8 @@ jQuery
 
 History.js
 ----------
- * https://github.com/balupton/History.js
- * 1.7.1
+ * https://github.com/browserstate/history.js
+ * 1.8b2
  * BSD
  * scripted/src/lib/jquery.history.js
 
