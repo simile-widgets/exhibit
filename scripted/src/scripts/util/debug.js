@@ -3,13 +3,24 @@
  *      keep errors in that system from interfering with this one.
  * @author David Huynh
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
+ * @author Ted Benson <eob@csail.mit.edu>
  */
 
 /**
  * @namespace
  */
 Exhibit.Debug = {
-    silent: false
+    silent: false,
+
+    /**
+     * Stores timers for performance tracking.
+     */
+    timers: {},
+
+    /**
+     * The default timer name
+     */
+    defaultTimerName: "__DEFAULT__"
 };
 
 /**
@@ -127,4 +138,43 @@ Exhibit.Debug._objectToString = function(o, indent) {
     } else {
         return o;
     }
+};
+
+/**
+ * @static
+ * @param {String} label The name of the timer.
+ */
+Exhibit.Debug.tick = function(label) {
+  // If they don't provide a label name, stick to a default.
+  if (typeof label === 'undefined') {
+    label = Exhibit.Debug.defaultTimerName;
+  }
+
+  if (typeof Exhibit.Debug.timers[label] != 'undefined') {
+    Exhibit.Debug.log("Warning: overwriting timer for label: " + label);
+  }
+
+  Exhibit.Debug.timers[label] = (new Date()).getTime();
+};
+
+/**
+ * @static
+ * @param {String} label The name of the timer.
+ * @returns {int} The nmber of milliseconds passed since tick for this timer.
+ */
+Exhibit.Debug.tock = function(label) {
+  // If they don't provide a label name, stick to a default.
+  if (typeof label === 'undefined') {
+    label = Exhibit.Debug.defaultTimerName;
+  }
+
+  if (typeof Exhibit.Debug.timers[label] === 'undefined') {
+    Exhibit.Debug.log("Warning: tock with no tick for label: " + label);
+    return -1;
+  } else {
+    var then = Exhibit.Debug.timers[label];
+    delete Exhibit.Debug.timers[label];
+    var now = (new Date()).getTime();
+    return (now - then);
+  }
 };
