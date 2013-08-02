@@ -9,10 +9,65 @@
  * @class
  * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.Coordinator = function(uiContext) {
+Exhibit.Coordinator = function(uiContext, div) {
     this._uiContext = uiContext;
     this._listeners = [];
+    
+    /**
+     * Returns the programmatic identifier used for this view.
+     * @public
+     * @returns {String}
+     */
+    this.getID = function() {
+        return _id;
+    };
+
+    /**
+     * @private
+     */
+    _setIdentifier = function() {
+        if (typeof div !== "undefined") {
+            _id = Exhibit.jQuery(div).attr("id");
+        }
+        if (typeof _id === "undefined" || _id === null) {
+            _id = self.getUIContext().getCollection().getID()
+                + "-"
+                + self.getUIContext().getMain().getRegistry().generateIdentifier(Exhibit.Coordinator.getRegistryKey());
+        }
+    };
+
+    _setIdentifier();
+    /**
+     * Enter this view into the registry, making it easier to locate.
+     */
+    uiContext.getMain().getRegistry().register(
+        Exhibit.Coordinator.getRegistryKey(),
+        this.getID(),
+        this
+    );
+    this._registered = true;
 };
+
+Exhibit.Coordinator._registryKey = "coordinator";
+/**
+ * @public
+ * @static
+ * @returns {String}
+ */
+Exhibit.Coordinator.getRegistryKey = function() {
+    return Exhibit.Coordinator._registryKey;
+};
+
+Exhibit.Coordinator.registerComponent = function(evt, reg) {
+    if (!reg.hasRegistry(Exhibit.Coordinator.getRegistryKey())) {
+        reg.createRegistry(Exhibit.Coordinator.getRegistryKey());
+    }
+};
+
+Exhibit.jQuery(document).one(
+    "registerComponents.exhibit",
+    Exhibit.Coordinator.registerComponent
+);
 
 /**
  * @static
@@ -31,7 +86,7 @@ Exhibit.Coordinator.create = function(configuration, uiContext) {
  * @returns {Exhibit.Coordinator}
  */
 Exhibit.Coordinator.createFromDOM = function(div, uiContext) {
-    return new Exhibit.Coordinator(Exhibit.UIContext.createFromDOM(div, uiContext, false));
+    return new Exhibit.Coordinator(Exhibit.UIContext.createFromDOM(div, uiContext, false), div);
 };
 
 /**
