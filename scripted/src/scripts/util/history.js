@@ -60,12 +60,6 @@ Exhibit.History.init = function(ex, persist) {
         Exhibit.History._registry = ex.getRegistry();
 
         Exhibit.jQuery(window).bind("statechange", Exhibit.History.stateListener);
-        //hack. in case statechange never triggered, use hashchange
-        //but if statechange gets triggered, stop watching hashchage
-        Exhibit.jQuery(window).bind("hashchange", Exhibit.History.stateListener);
-        Exhibit.jQuery(window).one("statechange",function () {
-                Exhibit.jQuery(window).unbind("hashchange", Exhibit.History.stateListener);
-            })
         if (Exhibit.Bookmark.runBookmark()) {
             Exhibit.Bookmark.implementBookmark(Exhibit.Bookmark.state);
         } else {

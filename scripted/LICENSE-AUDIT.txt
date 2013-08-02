@@ -76,8 +76,8 @@ jQuery
 
 History.js
 ----------
- * https://github.com/balupton/History.js
- * 1.7.1
+ * https://github.com/browserstate/history.js
+ * 1.8b2
  * BSD
  * scripted/src/lib/jquery.history.js
 
@@ -98,3 +98,9 @@ sprintf.js
  * http://www.diveintojavascript.com/projects/javascript-sprintf
  * Modified BSD
  * scripted/src/lib/sprintf.js
+
+es5-shim.js
+----------
+ * https://github.com/kriskowal/es5-shim/
+ * Modified BSD? (free to use/modify while preserving notice)
+ * scripted/src/lib/es5-shim.js
