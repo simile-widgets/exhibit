@@ -297,7 +297,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
             }
         };
 
-        Exhibit.Database._LocalImpl._loadChunked(loader, itemEntries, 5000, 10, finish);
+        Exhibit.Database._LocalImpl._loadChunked(loader, itemEntries, 500, 10, finish);
     } catch(e) {
         Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
     }
