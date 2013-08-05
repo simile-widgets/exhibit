@@ -20,6 +20,18 @@
 <div id="content">
 <p class="blurb">Browse live Exhibit examples.</p>
 
+
+To debug using the demos in this directory, create a soft link from
+"api" in this directory to the directory containing the exhibit api
+you wish to test (for example, the "src" directory or, after you build
+it, the "dist" directory of this repository).  You may also want to
+force exhibit to use the unbundled version of the api, by passing
+"exhibit-debug=true" as an argument in the url of the demo you are
+visiting,
+e.g. <a href="presidents/presidents.html?exhibit-debug=true">"presidents/presidents.html?exhibit-debug=true"</a>
+
+
+
 <ul>
 <li><a href="nobelists/nobelists.html">Nobelists</a>: demonstrates
   thumbnail and Timeline
