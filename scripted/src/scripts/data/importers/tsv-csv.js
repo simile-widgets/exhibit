@@ -33,28 +33,23 @@
 Exhibit.Importer.Tsv = {
     _importer: null
 };
-Exhibit.CsvImporter = {
+Exhibit.Importer.Csv = {
     _importer: null
 };
-Exhibit.TsvCsvImporter = {
+Exhibit.Importer.TsvCsv = {
     _importer: null
 };
 
 
-//the importer will be called with any of the following MIME types
-Exhibit.importers["text/comma-separated-values"] = Exhibit.CsvImporter;
-Exhibit.importers["text/csv"] = Exhibit.CsvImporter;
-Exhibit.importers["text/tab-separated-values"] = Exhibit.TsvImporter;
-Exhibit.importers["text/tsv"] = Exhibit.TsvImporter;
 
-Exhibit.TsvImporter.parse = function(content, link, url) {
-    return Exhibit.TsvCsvImporter.parse(content, link, url, "\t")
-}
-Exhibit.CsvImporter.parse = function(content, link, url) {
-    return Exhibit.TsvCsvImporter.parse(content, link, url, ",")
-}
+Exhibit.Importer.Tsv.parse = function(url, content, callback, link) {
+    callback(Exhibit.Importer.TsvCsv.parse(content, link, url, "\t"));
+};
+Exhibit.Importer.Csv.parse = function(url, content, callback, link) {
+    callback(Exhibit.Importer.TsvCsv.parse(content, link, url, ","));
+};
 
-Exhibit.TsvCsvImporter.parse = function(content, link, url, separator) {
+Exhibit.Importer.TsvCsv.parse = function(content, link, url, separator) {
     var url=link;
     var hasColumnTitles=true;
     var expressionString=null;
@@ -74,15 +69,15 @@ Exhibit.TsvCsvImporter.parse = function(content, link, url, separator) {
 
     var o = null;
     try {
-        o = Exhibit.TsvCsvImporter._parseInternal(content, separator, expressionString, hasColumnTitles, valueSeparator); //text is converted to Exhibit JSON
+        o = Exhibit.Importer.TsvCsv._parseInternal(content, separator, expressionString, hasColumnTitles, valueSeparator); //text is converted to Exhibit JSON
     } catch (e) {
 	SimileAjax.Debug.exception(e, "Error parsing tsv/csv from " + url);
     }
     return o;
 }
 
-Exhibit.TsvCsvImporter._parseInternal = function(text, separator, expressionString, hasColumnTitles, valueSeparator) {
-    var data = Exhibit.TsvCsvImporter.CsvToArray(text, separator);
+Exhibit.Importer.TsvCsv._parseInternal = function(text, separator, expressionString, hasColumnTitles, valueSeparator) {
+    var data = Exhibit.Importer.TsvCsv.CsvToArray(text, separator);
     var exprs= null;
     var propNames = [];
     var properties = [];
@@ -123,7 +118,7 @@ Exhibit.TsvCsvImporter._parseInternal = function(text, separator, expressionStri
 }
 
 
-Exhibit.TsvCsvImporter.CsvToArray =function(text,separator){
+Exhibit.Importer.TsvCsv.CsvToArray =function(text,separator){
     var i;
     if (text.indexOf('"') < 0) { 
 	//fast case: no quotes
@@ -188,3 +183,19 @@ Exhibit.TsvCsvImporter.CsvToArray =function(text,separator){
 return records;
 }
 
+
+Exhibit.Importer.TsvCsv._register = function() {
+    Exhibit.Importer.Tsv._importer = new Exhibit.Importer(
+        "text/tsv",
+        "get",
+        Exhibit.Importer.Tsv.parse
+    );
+    Exhibit.Importer.Csv._importer = new Exhibit.Importer(
+        "text/csv",
+        "get",
+        Exhibit.Importer.Csv.parse
+    );
+};
+
+Exhibit.jQuery(document).one("registerImporters.exhibit",
+                Exhibit.Importer.TsvCsv._register);
