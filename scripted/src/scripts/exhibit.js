@@ -108,7 +108,7 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
     try {
         value = Exhibit.jQuery(elmt).attr(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
-            value = Exhibit.jQuery(elmt).data("ex-"+name);
+            value = Exhibit.jQuery(elmt).data("ex-"+name.toLowerCase());
             if (typeof value === "undefined" || value === null || value.length === 0) {
                 return null;
             }
