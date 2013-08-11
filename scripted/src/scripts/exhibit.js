@@ -103,12 +103,20 @@ Exhibit.checkBackwardsCompatibility = function() {
  * @returns {String|Array}
  */
 Exhibit.getAttribute = function(elmt, name, splitOn) {
-    var value, i, values;
+    var value, i, values,
 
+    //note that hyphenate will also put a hyphen before an initial capital
+    //AbC --> -ab-c
+    //but this obeys the  html5 spec for data-attributes
+    hyphenate = function(str) {
+        return str.replace(/([A-Z])/g, "-$1").toLowerCase();
+    };
+
+    
     try {
         value = Exhibit.jQuery(elmt).attr(name);
         if (typeof value === "undefined" || value === null || value.length === 0) {
-            value = Exhibit.jQuery(elmt).data("ex-"+name);
+            value = Exhibit.jQuery(elmt).attr("data-ex-"+hyphenate(name));
             if (typeof value === "undefined" || value === null || value.length === 0) {
                 return null;
             }
