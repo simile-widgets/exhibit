@@ -30,7 +30,7 @@
   <property name="jscoverage.dir" value="/usr/local/bin"/>
   <property name="jscoverage.port" value="9876"/>
   <property file="local.build.properties"/>
-
+  <!--
   <condition property="jscoverage.exists">
     <and>
       <resourceexists>
@@ -47,6 +47,7 @@
       <file file="${lib}/jscoverage-report.js"/>
     </resourceexists>
   </condition>
+  -->
 
   <taskdef
      name="yui-compressor"
