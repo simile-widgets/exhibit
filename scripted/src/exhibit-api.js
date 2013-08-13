@@ -291,6 +291,7 @@ Exhibit.parseURLParameters = function(url, to, types) {
         }
     }
 
+
     return to;
 };
 
@@ -463,6 +464,17 @@ Exhibit.load = function() {
         Exhibit.urlPrefix = url.substr(0, url.indexOf("exhibit-api.js"));
         Exhibit.parseURLParameters(url, Exhibit.params, paramTypes);
     }
+
+    //allow page url to override exhibit parameters
+    document.location.search.substr(1).split('&').forEach(function (arg) {
+            arg = arg.split('=');
+            if ((arg.length === 2) &&
+                (arg[0]==="exhibit-dev") &&
+                (arg[1]==="true")) {
+                Exhibit.params.bundle = false;
+                Exhibit.params.persist = false;
+            }
+        });
 
     if (typeof Exhibit.params.babel !== "undefined") {
         Exhibit.babelPrefix = Exhibit.params.babel;
