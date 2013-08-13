@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>HTML Table Example</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <link rel='stylesheet' href='http://www.simile-widgets.org/styles/common.css' type='text/css' />
+    
+    <link href="#mydata1" type="text/html" rel="exhibit/data"
+    ex:itemType="Person" ex:pluralLabel="People"/>
+    <link href="#mydata2" type="text/html" rel="exhibit/data"
+    ex:columns="Name,Age" ex:itemType="Person" ex:pluralLabel="People"/>
+
+    <link href="#mydata3" type="text/html" rel="exhibit/data" ex:itemType="Person" ex:pluralLabel="People"/>
+    
+    <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/2.2.0/exhibit-api.js -->
+    <script src="../api/exhibit-api.js?bundle=false"></script>
+  </head>
+  <body>
+  <h1>Html Table Example</h1>
+  This is a demonstration of Exhibit's html table importer.
+
+<h3>Results</h3>
+<div ex:role="view">
+<div ex:role="lens">
+<span ex:content=".Name"></span>, <span ex:content=".Age"></span>
+</div>
+</div>
+
+These results are drawn from tables in this document, shown below (in
+normal use they would be hidden).  By
+default, the importer treats the first row of the table as a &ldquo;header
+row&rdquo; whose contents specify the property names being imported.  There
+are various ways to configure the importer and override this default:
+by specifying parameters in the &lt;link tag&gt;, by specifying
+parameters in &lt;col&gt; tags in the table, or by specifying
+parameters in the &lt;td&gt; elements that make up the header row.
+
+<p>Global settings must appear in the link tag specifying the table
+  to import.  They include </p>
+
+<table border="1">
+  <tr>
+    <th>setting name</th>
+    <th>type of value</th>
+    <th>default</th>
+    <th>choices</th>
+    <th>meaning</th>
+  </tr>
+  <tr>
+    <td>itemType</td>
+    <td>string</td>
+    <td>Item</td>
+    <td></td>
+    <td>The type to assign to items being imported from the table</td>
+  </tr>
+  <tr>
+    <td>label</td>
+    <td>string</td>
+    <td>the type name itself</td>
+    <td></td>
+    <td>The human-readable name of the type</td>
+  </tr>
+  <tr>
+    <td>pluralLabel</td>
+    <td>string</td>
+    <td>Item</td>
+    <td></td>
+    <td>The way to describe multiples of the type, e.g. Person
+    becomes People</td>
+  </tr>
+  <tr>
+    <td>columns</td>
+    <td>string</td>
+    <td></td>
+    <td></td>
+    <td>A comma separated list of the property names to associate
+    with the columns.</td>
+  </tr>
+  <tr>
+    <td>separator</td>
+    <td>string</td>
+    <td>;</td>
+    <td></td>
+    <td>The character (or string) for separating a list of values in a
+    cell of the table</td>
+  </tr>
+</table>
+
+<p>Per-property settings are specified in the &lt;col&gt; tags or in
+  the header-row  &lt;td&gt;, or &lt;td&gt; tags.  The include
+
+<table border="1">
+  <tr>
+    <th>setting name</th>
+    <th>type of value</th>
+    <th>default</th>
+    <th>choices</th>
+    <th>meaning</th>
+  </tr>
+  <tr>
+    <td>property</td>
+    <td>string</td>
+    <td></td>
+    <td></td>
+    <td>The property associated with this column of the table</td>
+  </tr>
+  <tr>
+    <td>hrefPoperty</td>
+    <td>string</td>
+    <td></td>
+    <td></td>
+    <td>If a table cell contains a tag with an href attribute such as
+    an anchor &lt;a&gt; the specified property will capture the link 
+    associated with that tag.</td>
+  </tr>
+  <tr>
+    <td>srcPoperty</td>
+    <td>string</td>
+    <td></td>
+    <td></td>
+    <td>If a table cell contains a tag with a src property such as an image
+    &lt;img&gt; tag, the specified property will capture the link
+    associated with that tag.</td>
+  </tr>
+  <tr>
+    <td>arity</td>
+    <td>string</td>
+    <td>multiple</td>
+    <td>single, multiple</td>
+    <td>If arity is multiple, values are split using the separator
+    character.  If single, no split is performed.</td>
+  </tr>
+  <tr>
+    <td> uri, label, reverseLabel,
+                     pluralLabel, reversePluralLabel,
+                     groupingLabel, reverseGroupingLabel</td>
+    <td>string</td>
+    <td></td>
+    <td></td>
+    <td>Specify various characteristics of the property associated
+    with this column, such as how to describe the property when used
+    in the reverse direction (Parent becomes Child).  See the basic
+    exhibit documentation for details.</td>
+  </tr>
+</table>
+
+<h3>Input tables</h3>
+
+  <div id="mydata1">
+  <table>
+  <tr><td>Name<td>Age</td>
+  <tr><td>David <td>46
+  <tr><td>Joan<td>52
+  </table>
+  </div>
+
+  <div id="mydata2">
+  <table>
+  <tr><td>Alice<td>28
+  <tr><td>Bob<td>91
+  </table>
+  </div>
+
+  <div id="mydata3">
+  <table>
+  <col ex:property="Age"><col ex:property="Name">
+  <tr><td>37<td>Carol<td>28
+  <tr><td>85 <td>Eve
+  </table>
+  </div>
+
+<h3>Raw data</h3>
+  <div ex:role="view">
+  </div>
+  </body>
+</html>
