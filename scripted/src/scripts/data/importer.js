@@ -149,11 +149,12 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
 
     self = this;
     postLoad = function(s, textStatus, jqxhr) {
-        Exhibit.UI.hideBusyIndicator();
         try {
-            self._parse(url, s, postParse);
+            self._parse(url, s, postParse, link);
         } catch(e) {
             Exhibit.jQuery(document).trigger("error.exhibit", [e, Exhibit._("%import.couldNotParse", url)]);
+        } finally {
+            Exhibit.UI.hideBusyIndicator();
         }
     };
 
