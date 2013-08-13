@@ -151,7 +151,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
     postLoad = function(s, textStatus, jqxhr) {
         Exhibit.UI.hideBusyIndicator();
         try {
-            self._parse(url, s, postParse);
+            self._parse(url, s, postParse, link);
         } catch(e) {
             Exhibit.jQuery(document).trigger("error.exhibit", [e, Exhibit._("%import.couldNotParse", url)]);
         }
@@ -194,7 +194,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
                 msg = Exhibit._("%import.missingFragment", url);
                 Exhibit.jQuery(document).trigger("error.exhibit", [new Error(msg), msg]);
             } else {
-                callbackOrig(fragment.text(), status, jqxhr);
+                callbackOrig(fragment.html(), status, jqxhr);
             }
         };
     }

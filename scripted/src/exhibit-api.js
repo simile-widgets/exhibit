@@ -159,6 +159,7 @@ var Exhibit = {
         "scripts/data/importers/jsonp.js",
         "scripts/data/importers/google-spreadsheet.js",
         "scripts/data/importers/babel-based.js",
+        "scripts/data/importers/html-table.js",
         "scripts/ui/ui.js",
         "scripts/ui/ui-context.js",
         "scripts/ui/lens-registry.js",
