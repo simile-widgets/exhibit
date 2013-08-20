@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Italian Soccer - Serie A Champions</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    
+    <link href="italianSoccer.txt" type="text/tsv" rel="exhibit/data" data-ex-properties="label,url:url,image:url,City,Region,latlng,Winners:number,Runner-up:number,ChampionshipSeasons" data-ex-has-column-titles="true"/>
+
+    <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/exhibit-api.js -->
+    <script src="../api/exhibit-api.js"></script>
+    <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/extensions/map/map-extension.js -->
+    <link rel="exhibit-extension" href="../api/extensions/map/map-extension.js"/>
+    
+
+  </head>
+  <body>
+    <h1 align="center">Italian Soccer - Serie A Champions</h1>
+    
+    This example demonstrates importing data from a tsv/csv file.
+    A tutorial/documentation on configuring this importer can be found
+    <a href="tutorial.html">here</a>
+
+    <div data-ex-role="lens" style="display: none" class="lens-wrapper">
+      <div align="center"><a data-ex-content=".label" 
+      data-ex-href-content=".url"><img data-ex-src-content=".image"></a></div>
+      <div class="details">
+	<div align="center" style="font-weight: bold" 
+        data-ex-content=".label"></div>
+	<div align = "center" style="font-weight: italic; color: #888">
+	  <span data-ex-content=".City"></span>, 
+          <span data-ex-content=".Region"></span>
+	</div>
+      </div>
+    </div>
+    
+    
+    <table width="100%">
+      <tr valign="top">
+        <td width="20%">
+	  <div data-ex-role="facet"  data-ex-facet-class="TextSearch"></div>
+	  <br>
+	  <div data-ex-role="facet" data-ex-expression=".Winners" 
+          data-ex-facet-class="NumericRange" data-ex-horizontal="true" 
+          data-ex-precision="1" data-ex-histogram="false" 
+          data-ex-facet-label="# of Championships Won"></div>
+
+	  <br>
+	  <div data-ex-role="facet" data-ex-expression=".label" 
+          data-ex-facet-label="Teams" data-ex-scroll="false"></div>
+	  
+
+        </td>
+        <td data-ex-role="viewPanel" align="center">
+	  <div data-ex-role="view"
+	       data-ex-view-class="Map"
+	       data-ex-shape-width="50"
+	       data-ex-shape-height="50"
+	       data-ex-pin-height="10"
+	       data-ex-icon-fit="larger"
+	       data-ex-color="#FFFFFF"
+               data-ex-map-height="450"
+	       data-ex-latlng=".latlng"
+	       data-ex-center = "43,12.5"
+	       data-ex-zoom = "6"
+	       data-ex-icon=".image"
+	       data-ex-bubblewidth = "150">
+       	  </div>
+	  <div data-ex-role="view" data-ex-view-class="Thumbnail" data-ex-show-all="true">
+	    <div data-ex-role="lens" class="thumbnail-lens">
+	      <table cellpadding="1" cellspacing="1" align="center">
+		<tr class="thumbnail" align="center"><td style="height: 225px; width: 200px"><a data-ex-href-content=".url"><img data-ex-src-content=".image"></a></td></tr>
+		<tr class="thumbnail"><td align="center" style="font-weight: bold" data-ex-content=".label"></td></tr>
+		<tr class="thumbnail"><td align="center" style="font-weight: italic; color: #888" data-ex-content=".City"></td></tr>
+		<tr class="thumbnail"><td  align="center" style="font-weight: italic; color: #888" data-ex-content=".Region"></td></tr>
+		<br/>
+		
+	      </table>
+	    </div>
+	  </div>
+	  <div data-ex-role="view" 
+	       data-ex-view-class="Tabular" 
+	       data-ex-columns=".label, .City, .Region, .Winners, .ChampionshipSeasons"
+	       data-ex-column-labels="Team, City, Region, Number of Championships Won, Championship Seasons"
+	       data-ex-column-formats="text, text, text, number, list"
+	       style= align="center">
+	  </div>  
+        </td>
+	<td width="20%">
+	  <div data-ex-role="facet" data-ex-expression=".City" 
+          data-ex-scroll="false"></div>
+	  <br>
+	  <div data-ex-role="facet" data-ex-expression=".Region" 
+          data-ex-scroll="false"></div>
+	</td>
+      </tr>
+    </table>
+
+  </body>
+</html>
+
