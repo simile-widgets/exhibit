@@ -250,6 +250,9 @@
     <copy todir="${demos}/src">
       <fileset dir="${dist}"/>
     </copy>
+    <copy todir="${demos}/api">
+      <fileset dir="${bundle}" />
+    </copy>
   </target>
 
 
