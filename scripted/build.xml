@@ -139,6 +139,7 @@
         <file name="scripts/data/importers/google-spreadsheet.js"/>
         <file name="scripts/data/importers/babel-based.js"/>
         <file name="scripts/data/importers/html-table.js"/>
+        <file name="scripts/data/importers/tsv-csv.js"/>
       </filelist>
       <fileset dir="${src}/">
         <include name="scripts/ui/*.js"/>
