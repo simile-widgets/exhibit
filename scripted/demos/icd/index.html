@@ -14,8 +14,7 @@
     <ul id="path">
       <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
       <li><a href="http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a></li>
-      <li><a href="http://databench.zepheira.com/">Demos</a></li>
-      <li><a href="http://databench.zepheira.com/demos/">Scripted Demos</a></li>
+      <li><a href="..">Demos</a></li>
       <li><span>Examples: ICD10 Hierarchical Facet</span></li>
     </ul>
 
@@ -25,36 +24,36 @@
     <table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>
         <td width="350px" style="padding-right: 20px;">
 
-          <div ex:role="facet" 
-               ex:facetClass="Hierarchical"
-               ex:expression=".superclasses"
-               ex:uniformGrouping=".superclasses"
-               ex:facetLabel="ICD10 Terms"
-               ex:scroll="false"></div>
+          <div data-ex-role="facet" 
+               data-ex-facet-class="Hierarchical"
+               data-ex-expression=".superclasses"
+               data-ex-uniform-grouping=".superclasses"
+               data-ex-facet-label="ICD10 Terms"
+               data-ex-scroll="false"></div>
         </td>
         <td>
-          <div ex:role="view"
-	       ex:orders=".id"
-	       ex:direction="ascending"
-	       ex:grouped="false"
-	       ex:showAll="false"
-	       ex:abbreviatedCount="20">
+          <div data-ex-role="view"
+	       data-ex-orders=".id"
+	       data-ex-direction="ascending"
+	       data-ex-grouped="false"
+	       data-ex-show-all="false"
+	       data-ex-abbreviated-count="20">
 
-	     <div ex:role="lens" class="icdnode-lens">
+	     <div data-ex-role="lens" class="icdnode-lens">
               <table cellpadding="0" cellspacing="0">
                 <tr class="details">
 	              <td>
-                    <div class="title"><span ex:content=".code"></span> - <span ex:content=".label"></span></div>
-                    <div class="definition" ex:content=".definition"></div>
-                     <div ex:if="exists(.inclusion)">
-		              <div class="inclusion"><span class="property">Inclusion:</span><span ex:content=".inclusion"></span></div>
+                    <div class="title"><span data-ex-content=".code"></span> - <span data-ex-content=".label"></span></div>
+                    <div class="definition" data-ex-content=".definition"></div>
+                     <div data-ex-if="exists(.inclusion)">
+		              <div class="inclusion"><span class="property">Inclusion:</span><span data-ex-content=".inclusion"></span></div>
 		             </div>
 
-                    <div ex:if="exists(.exclusion)">
-		      <div class="exclusion"><span class="property">Exclusion:</span><span ex:content=".exclusion"></span></div>
+                    <div data-ex-if="exists(.exclusion)">
+		      <div class="exclusion"><span class="property">Exclusion:</span><span data-ex-content=".exclusion"></span></div>
 		    </div>
 
-                    <div class="identifier"><span class="property">Identifier:</span><span ex:content=".icdId"></span></div>
+                    <div class="identifier"><span class="property">Identifier:</span><span data-ex-content=".icdId"></span></div>
                   </td>
 		</tr>
               </table>
@@ -66,38 +65,38 @@
 	<td width="200px" style="padding-left: 20px;">
 
 	  <b>Search</b><br />
-          <div ex:role="facet" ex:facetClass="TextSearch"></div>
+          <div data-ex-role="facet" data-ex-facet-class="TextSearch"></div>
           </br>
 	  
-          <div ex:role="facet" 
-               ex:expression=".kind"
-               ex:selection="category"
-	           ex:facetLabel="Grouping"
+          <div data-ex-role="facet" 
+               data-ex-expression=".kind"
+               data-ex-selection="category"
+	           data-ex-facet-label="Grouping"
                ></div>
 
-          <div ex:role="facet" 
-               ex:expression=".MortL1Code"
-	       ex:facetLabel="Mortality 1 Codes"
+          <div data-ex-role="facet" 
+               data-ex-expression=".MortL1Code"
+	       data-ex-facet-label="Mortality 1 Codes"
                ></div>
 	  
-          <div ex:role="facet" 
-               ex:expression=".MortL2Code"
-	       ex:facetLabel="Mortality 2 Codes"
+          <div data-ex-role="facet" 
+               data-ex-expression=".MortL2Code"
+	       data-ex-facet-label="Mortality 2 Codes"
                ></div>
 	  
-          <div ex:role="facet" 
-               ex:expression=".MortL3Code"
-	       ex:facetLabel="Mortality 3 Codes"
+          <div data-ex-role="facet" 
+               data-ex-expression=".MortL3Code"
+	       data-ex-facet-label="Mortality 3 Codes"
                ></div>
 	  
-          <div ex:role="facet" 
-               ex:expression=".MortL4Code"
-	       ex:facetLabel="Mortality 4 Codes"
+          <div data-ex-role="facet" 
+               data-ex-expression=".MortL4Code"
+	       data-ex-facet-label="Mortality 4 Codes"
                ></div>
 	  
-          <div ex:role="facet" 
-               ex:expression=".MortBCode"
-	       ex:facetLabel="Mortality B Codes"
+          <div data-ex-role="facet" 
+               data-ex-expression=".MortBCode"
+	       data-ex-facet-label="Mortality B Codes"
                ></div>
 	</td>
       </tr>
