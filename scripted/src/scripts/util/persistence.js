@@ -35,14 +35,7 @@ Exhibit.Persistence.getBaseURL = function(url) {
     // when this function is called from the RDFa importer. So I put a try catch here.
     var url2, i;
     try {
-        if (url.indexOf("://") < 0) {
-            url2 = Exhibit.Persistence.getBaseURL(document.location.href);
-            if (url.substr(0, 1) === "/") {
-                url = url2.substr(0, url2.indexOf("/", url2.indexOf("://") + 3)) + url;
-            } else {
-                url = url2 + url;
-            }
-        }
+        url = Exhibit.Persistence.resolveURL(url);
         i = url.indexOf("#");
         if (i >= 0) {
             url = url.substr(0, i);
@@ -65,25 +58,14 @@ Exhibit.Persistence.getBaseURL = function(url) {
  * @param {String} url The orignal URL to resolve.
  * @returns {String} The resolved URL.
  */
-Exhibit.Persistence.resolveURL = function (url) {
-    var url2, hash;
-    if (url.indexOf('#') === 0) {  //resolving a fragment identifier
-        hash = document.location.href.indexOf('#');
-        if (hash < 0) {  //no current fragment
-            url = document.location.href + url;
-        } else {
-            url = document.location.href.substring(0, hash) + url;
-        }
-    } else if (url.indexOf("://") < 0) {
-        url2 = Exhibit.Persistence.getBaseURL(document.location.href);
-        if (url.substr(0, 1) === "/") {
-            url = url2.substr(0, url2.indexOf("/", url2.indexOf("://") + 3)) + url;
-        } else {
-            url = url2 + url;
-        }
-    }
-    return url;
-};
+(function () {
+    var a = document.createElement('a');
+
+    Exhibit.Persistence.resolveURL = function (url) {
+        a.href = url; 
+        return a.href; //browser magic converts to absolute
+    };
+})();
 
 /**
  * Return the current document location without the query and hash portions
@@ -92,43 +74,7 @@ Exhibit.Persistence.resolveURL = function (url) {
  * @returns {String} The document's location without query and hash portions.
  */
 Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
-    var url, hash, question;
-    if (Exhibit.Persistence._urlWithoutQueryAndHash === null) {
-        url = document.location.href;
-        
-        hash = url.indexOf("#");
-        question = url.indexOf("?");
-        if (question >= 0) {
-            url = url.substr(0, question);
-        }
-        if (hash >= 0) {
-            url = url.substr(0, hash);
-        }
-        
-        Exhibit.Persistence._urlWithoutQueryAndHash = url;
-    }
-    return Exhibit.Persistence._urlWithoutQueryAndHash;
-};
-
-/**
- * Return the current document location without the query portion of the URL.
- * If there is also a hash, it is also ignored.
- *
- * @returns {String} The document's location without a query portion.
- */
-Exhibit.Persistence.getURLWithoutQuery = function() {
-    var url, question;
-    if (Exhibit.Persistence._urlWithoutQuery === null) {
-        url = document.location.href;
-        
-        question = url.indexOf("?");
-        if (question >= 0) {
-            url = url.substr(0, question);
-        }
-        
-        Exhibit.Persistence._urlWithoutQuery = url;
-    }
-    return Exhibit.Persistence._urlWithoutQuery;
+    return document.location.origin + document.location.pathname;
 };
 
 /**
@@ -139,5 +85,5 @@ Exhibit.Persistence.getURLWithoutQuery = function() {
  * @returns {String} A URL to Exhibit highlighting the item.
  */
 Exhibit.Persistence.getItemLink = function(itemID) {
-    return Exhibit.Persistence.getURLWithoutQueryAndHash() + "#" + encodeURIComponent(itemID);
+    return Exhibit.Persistence.resolveURL("#" + encodeURIComponent(itemID));
 };
