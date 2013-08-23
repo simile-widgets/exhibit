@@ -393,7 +393,7 @@ Exhibit.CloudFacet.prototype._notifyCollection = function() {
  */
 Exhibit.CloudFacet.prototype._initializeUI = function() {
     Exhibit.jQuery(this.getContainer()).empty();
-    Exhibit.jQuery(this.getContainer()).attr("class", "exhibit-cloudFacet");
+    Exhibit.jQuery(this.getContainer()).addClass("exhibit-cloudFacet");
 
     var dom = Exhibit.jQuery.simileDOM(
         "string",
