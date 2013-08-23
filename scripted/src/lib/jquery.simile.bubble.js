@@ -5,9 +5,7 @@
  */
 
 (function($) {
-    var pngFail, defaultBubbleConfig, methods, _init;
-
-    pngFail = $.browser.msie && Number($.browser.version[0]).valueOf() <= 6;
+    var defaultBubbleConfig, methods, _init;
 
     _init = false;
 
@@ -90,9 +88,7 @@
             contentHeight = parseInt(contentHeight, 10);
 
             bubbleConfig = defaultBubbleConfig;
-            pngTransparencyClassSuffix = pngFail ?
-                "pngNotTranslucent" :
-                "pngTranslucent";
+            pngTransparencyClassSuffix = "pngTranslucent";
     
             bubbleWidth = contentWidth + 2 * bubbleConfig.borderGraphicSize;
             bubbleHeight = contentHeight + 2 * bubbleConfig.borderGraphicSize;
@@ -275,7 +271,7 @@
             var containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv;
 
             containerDiv = $("<div>");
-            if (!pngFail) {
+
                 topDiv = $("<div>").css({
                     "height": 33,
                     "background": "url(" + Exhibit.urlPrefix + "images/message-top-left.png) top left no-repeat",
@@ -316,17 +312,6 @@
                     "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-right.png) bottom right no-repeat"
                 });
                 bottomDiv.append(bottomRightDiv);
-            } else {
-                containerDiv.css({
-                    "border":  "2px solid #7777AA",
-                    "padding": "20px",
-                    "background": "white",
-                    "opacity": 0.9
-                });
-        
-                contentDiv = $("<div>");
-                containerDiv.append(contentDiv);
-            }
             
             return {
                 containerDiv:   containerDiv,
@@ -335,14 +320,7 @@
         },
         "createTranslucentImage": function(url, verticalAlign) {
             var elmt = $("<img />");
-            if (pngFail) {
-                elmt.
-                    css("width", "1px").
-                    css("height", "1px").
-                    css("filter", "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + url +"', sizingMethod='image')");
-            } else {
                 elmt.attr("src", url);
-            }
 
             if (typeof verticalAlign !== "undefined" &&
                 verticalAlign !== null) {
@@ -353,20 +331,12 @@
             return elmt.get(0);            
         },
         "createTranslucentImageHTML": function(url, verticalAlign) {
-            if (pngFail) {
-                var style = 
-                    "width: 1px; height: 1px; " +
-                    "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + url +"', sizingMethod='image');" +
-                    (verticalAlign !== null ? " vertical-align: " + verticalAlign + ";" : "");
-                return "<img src='" + url + "' style=\"" + style + "\" />";
-            } else {
                 return "<img src=\"" + url + "\"" +
                     (typeof verticalAlign !== "undefined" && verticalAlign !== null ? " style=\"vertical-align: " + verticalAlign + ";\"" : "") +
                     " />";
-            }
         },
         "pngIsTranslucent": function() {
-            return !pngFail;
+            return true;
         }
     };
 
