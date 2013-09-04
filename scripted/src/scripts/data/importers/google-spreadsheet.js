@@ -108,7 +108,7 @@ Exhibit.Importer.JSONP.GoogleSpreadsheet.transformJSON = function(json, url, lin
             
             for (d = 0; d < fieldDetails.length; d++) {
                 detail = fieldDetails[d].trim();
-                if (typeof valueTypes[detail] !== null) {
+                if (valueTypes[detail] == true) {
                     property.valueType = detail;
                 } else if (detail === "single") {
                     property.single = true;
