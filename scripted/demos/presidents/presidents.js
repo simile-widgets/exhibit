@@ -900,19 +900,19 @@
         },
         
         {   "id": "George Washington",
-            "birthLatLng": "37.585241,-77.497343"
+            "birthLatLng": "38.1556,-76.8321"
         },
         {   "id": "John Adams",
             "birthLatLng": "42.222222,-71"
         },
         {   "id": "Thomas Jefferson",
-            "birthLatLng": "37.585241,-77.497343"
+            "birthLatLng": "39.0300,-78.5353"
         },
         {   "id": "James Madison",
-            "birthLatLng": "37.585241,-77.497343"
+            "birthLatLng": "38.1774,-77.1861"
         },
         {   "id": "James Monroe",
-            "birthLatLng": "37.585241,-77.497343"
+            "birthLatLng": "38.1556,-77.8321"
         },
         {   "id": "John Quincy Adams",
             "birthLatLng": "42.222222,-71"
@@ -924,10 +924,10 @@
             "birthLatLng": "42.395278,-73.698333"
         },
         {   "id": "William Harrison",
-            "birthLatLng": "37.585241,-77.497343"
+            "birthLatLng": "37.3500,-77.0600"
         },
         {   "id": "John Tyler",
-            "birthLatLng": "37.585241,-77.497343"
+            "birthLatLng": "37.3500,-77.0600"
         },
         {   "id": "James Polk",
             "birthLatLng": "35.826542,-78.646372"

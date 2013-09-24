@@ -16,38 +16,39 @@
     <ul id="path">
       <li><a href="/">SIMILE Widgets</a></li>
       <li><a href="/exhibit/">Exhibit</a></li>
+      <li><a href="..">Demos</a></li>
       <li><span>Examples: US Cities by Population</span></li>
     </ul>
     <div id="header">
-        <h1>US Cities by Population</h1>
-        <p style="width: 35em;">
-            Using <a href="http://simile-widgets.org/exhibit/">Exhibit</a>, you can make this map
-            with just the two simple files you see in <a href="./">this directory</a>.
-            Could you have built the same map with as little effort using anything else?
-        </p>
+      <h1>US Cities by Population</h1>
+      <p style="width: 35em;">
+        Using <a href="http://simile-widgets.org/exhibit/">Exhibit</a>, you can make this map
+        with just the two simple files you see in <a href="./">this directory</a>.
+        Could you have built the same map with as little effort using anything else?
+      </p>
     </div>
     <div id="content">
-        <div ex:role="coder" ex:coderClass="SizeGradient" id="pop-coder"
-           ex:gradientPoints="0, 10; 10000000, 100" >
+      <div data-ex-role="coder" data-ex-coder-class="SizeGradient" id="pop-coder"
+           data-ex-gradient-points="0, 10; 10000000, 100" >
+      </div>
+      <div data-ex-role="view"
+           data-ex-view-class="Map"
+           data-ex-label="Cities"
+           data-ex-latlng=".latlng"
+           data-ex-size-key=".pop"
+	   data-ex-pin="false"
+           data-ex-size-coder="pop-coder"
+           data-ex-size-legend-label="Population"
+           data-ex-center="38.62756, -90.19896"
+           data-ex-zoom="4"
+           data-ex-map-height="500"
+           data-ex-show-header="false"
+           >
+        <div class="map-lens" data-ex-role="lens" style="display: none;">
+          <div>#<span data-ex-content=".rank"></span>. <b data-ex-content=".label"></b></div>
+          <div><span data-ex-content=".pop"></span> people</div>
         </div>
-        <div ex:role="view"
-            ex:viewClass="Map"
-            ex:label="Cities"
-            ex:latlng=".latlng"
-            ex:sizeKey=".pop"
-	     ex:pin="false"
-            ex:sizeCoder="pop-coder"
-            ex:sizeLegendLabel="Population"
-            ex:center="38.62756, -90.19896"
-            ex:zoom="4"
-            ex:mapHeight="500"
-            ex:showHeader="false"
-            >
-            <div class="map-lens" ex:role="lens" style="display: none;">
-                <div>#<span ex:content=".rank"></span>. <b ex:content=".label"></b></div>
-                <div><span ex:content=".pop"></span> people</div>
-            </div>
-        </div>
+      </div>
     </div>
   </body>
 </html>

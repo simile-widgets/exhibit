@@ -21,12 +21,13 @@
 
   <body>
     <ul id="path">
-      <li><a href="/">SIMILE Widgets</a></li>
-      <li><a href="/exhibit/">Exhibit</a></li>
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit/">Exhibit</a></li>
+      <li><a href="..">Demos</a></li>
       <li><span>Examples: U.S. Presidents</span></li>
     </ul>
     
-    <div ex:role="collection" ex:itemTypes="President"></div>
+    <div data-ex-role="collection" data-ex-item-types="President"></div>
     <table id="frame">
         <tr>
             <td id="sidebar">
@@ -35,114 +36,114 @@
                 
                 <div id="exhibit-browse-panel">
                     <b>Search:</b>
-                    <div ex:role="facet" ex:facetClass="TextSearch"></div>
+                    <div data-ex-role="facet" data-ex-facet-class="TextSearch"></div>
                     <hr/>
-                    <div ex:role="facet" ex:expression=".religion" ex:facetLabel="Religions" ex:height="20em"></div>
-                    <div ex:role="facet" ex:expression=".party" ex:facetLabel="Political Parties" ex:height="10em" ex:colorCoder="party-colors"></div>
-                    <div ex:role="facet" ex:expression=".dieInOffice" ex:facetLabel="Died In Office" ex:height="4em"></div>
-                    <center ex:role="logo" ex:color="DeepSkyBlue"></center>
+                    <div data-ex-role="facet" data-ex-expression=".religion" data-ex-facet-label="Religions" data-ex-height="20em"></div>
+                    <div data-ex-role="facet" data-ex-expression=".party" data-ex-facet-label="Political Parties" data-ex-height="10em" data-ex-color-coder="party-colors"></div>
+                    <div data-ex-role="facet" data-ex-expression=".dieInOffice" data-ex-facet-label="Died In Office" data-ex-height="4em"></div>
+                    <center data-ex-role="logo" data-ex-color="DeepSkyBlue"></center>
                 </div>
             </td>
             <td id="content">
-                <div ex:role="coder" ex:coderClass="Color" id="party-colors" style="display: none;">
-                    <span ex:color="red">Republican</span>
-                    <span ex:color="blue">Democratic</span>
+                <div data-ex-role="coder" data-ex-coder-class="Color" id="party-colors" style="display: none;">
+                    <span data-ex-color="red">Republican</span>
+                    <span data-ex-color="blue">Democratic</span>
                     
-                    <span ex:case="others"  ex:color="#aaa">Other parties</span>
-                    <span ex:case="mixed"   ex:color="#eee">Many parties</span>
-                    <span ex:case="missing" ex:color="#444">No party</span>
+                    <span data-ex-case="others"  data-ex-color="#aaa">Other parties</span>
+                    <span data-ex-case="mixed"   data-ex-color="#eee">Many parties</span>
+                    <span data-ex-case="missing" data-ex-color="#444">No party</span>
                 </div>
                 
-                <div class="item" ex:role="lens" style="display: none;">
+                <div class="item" data-ex-role="lens" style="display: none;">
                     <table cellpadding="10" width="100%">
                         <tr>
-                            <td width="1"><img ex:src-content=".imageURL" /></td>
+                            <td width="1"><img data-ex-src-content=".imageURL" /></td>
                             <td>
-                                <a ex:href-content=".url"><span ex:content=".label" /></a>
-                                <div>Terms: <span ex:content=".term"></span>, <span ex:content=".party"></span></div>
-                                <div>Religions: <span ex:content=".religion"></span></div>
-                                <div>Birth: <span ex:content=".birth"></span>, <span ex:content=".birthPlace"></span></div>
-                                <div ex:if-exists=".death">Death: <span ex:content=".death"></span>, <span ex:content=".deathPlace"></span></div>
-                                <div ex:control="item-link"></div>
+                                <a data-ex-href-content=".url"><span data-ex-content=".label" /></a>
+                                <div>Terms: <span data-ex-content=".term"></span>, <span data-ex-content=".party"></span></div>
+                                <div>Religions: <span data-ex-content=".religion"></span></div>
+                                <div>Birth: <span data-ex-content=".birth"></span>, <span data-ex-content=".birthPlace"></span></div>
+                                <div data-ex-if-exists=".death">Death: <span data-ex-content=".death"></span>, <span data-ex-content=".deathPlace"></span></div>
+                                <div data-ex-control="item-link"></div>
                             </td>
                         </tr>
                     </table>
                 </div>
-                <div ex:role="coordinator" id="president"></div>
+                <div data-ex-role="coordinator" id="president"></div>
                 
-                <div ex:role="view"
-                    ex:formats="date { mode: medium; show: date }"
-                    ex:viewClass="Timeline"
-                    ex:label="Terms"
-                    ex:proxy=".presidency"
-                    ex:start=".inDate"
-                    ex:end=".outDate"
-                    ex:colorKey=".party"
-                    ex:colorCoder="party-colors"
-		    ex:autoposition="true"
-                    ex:bubbleWidth="320"
-                    ex:topBandPixelsPerUnit="400"
-                    ex:selectCoordinator="president"
-                    ex:showSummary="false"
-                    ex:timelineHeight="170"
+                <div data-ex-role="view"
+                    data-ex-formats="date { mode: medium; show: date }"
+                    data-ex-view-class="Timeline"
+                    data-ex-label="Terms"
+                    data-ex-proxy=".presidency"
+                    data-ex-start=".inDate"
+                    data-ex-end=".outDate"
+                    data-ex-color-key=".party"
+                    data-ex-color-coder="party-colors"
+		    data-ex-autoposition="true"
+                    data-ex-bubble-width="320"
+                    data-ex-top-band-pixels-per-unit="400"
+                    data-ex-select-coordinator="president"
+                    data-ex-show-summary="false"
+                    data-ex-timeline-height="170"
                     >
                 </div>
                     
-                <div ex:role="viewPanel" ex:initialView="0"                         ex:formats="date { mode: medium; show: date }"
+                <div data-ex-role="viewPanel" data-ex-initial-view="0"                         data-ex-formats="date { mode: medium; show: date }"
 >
-                    <div class="map-lens" ex:role="lens" style="display: none;">
-                        <div><img ex:src-content=".imageURL" /></div>
-                        <div ex:content=".label"></div>
-                        <div ex:content=".birthPlace"></div>
-			<div ex:content=".birth"></div>
+                    <div class="map-lens" data-ex-role="lens" style="display: none;">
+                        <div><img data-ex-src-content=".imageURL" /></div>
+                        <div data-ex-content=".label"></div>
+                        <div data-ex-content=".birthPlace"></div>
+			<div data-ex-content=".birth"></div>
                     </div>
-                    <div ex:role="view"
-                        ex:viewClass="Map"
-                        ex:label="Birth Places with Photos"
-			ex:mapHeight="430"
-                        ex:latlng=".birthLatLng"
-                        ex:center="38.479394673276445, -115.361328125"
-                        ex:zoom="3"
-                        ex:bubbleWidth="200"
-                        ex:icon=".imageURL"
-                        ex:shapeWidth="60"
-                        ex:shapeHeight="60"
-                        ex:selectCoordinator="president"
+                    <div data-ex-role="view"
+                        data-ex-view-class="Map"
+                        data-ex-label="Birth Places with Photos"
+			data-ex-mapheight="430"
+                        data-ex-latlng=".birthLatLng"
+                        data-ex-center="38.479394673276445, -115.361328125"
+                        data-ex-zoom="3"
+                        data-ex-bubble-width="200"
+                        data-ex-icon=".imageURL"
+                        data-ex-shape-width="60"
+                        data-ex-shape-height="60"
+                        data-ex-select-coordinator="president"
                         >
                     </div>
-                    <div ex:role="view"
-                        ex:viewClass="Map"
-                        ex:label="Death Places (by Party)"
-                        ex:latlng=".deathLatLng"
-			 ex:autoposition="true"
-			 ex:maxAutoZoom="5"
-                        ex:bubbleWidth="200"
-                        ex:colorKey=".party"
-                        ex:colorCoder="party-colors"
-                        ex:selectCoordinator="president"
+                    <div data-ex-role="view"
+                        data-ex-view-class="Map"
+                        data-ex-label="Death Places (by Party)"
+                        data-ex-latlng=".deathLatLng"
+			 data-ex-autoposition="true"
+			 data-ex-max-auto-zoom="5"
+                        data-ex-bubble-width="200"
+                        data-ex-color-key=".party"
+                        data-ex-color-coder="party-colors"
+                        data-ex-select-coordinator="president"
                         >
                     </div>
-                    <div ex:role="view"
-                        ex:viewClass="Tabular"
-                        ex:label="Details"
-                        ex:columns=".term, .label, .party, .presidency.inDate, .presidency.outDate, add(foreach(.presidency, date-range(.inDate, default(.outDate, now()), 'day'))), .birth, .death"
-                        ex:columnLabels="term, name, party, took office, left office, days in office, age of ascension, age"
-                        ex:formats="date { mode: medium; show: date }"
-                        ex:sortColumn="3"
-                        ex:sortAscending="false"
-                        ex:paginate="true"
-                        ex:pageSize="5"
+                    <div data-ex-role="view"
+                        data-ex-view-class="Tabular"
+                        data-ex-label="Details"
+                        data-ex-columns=".term, .label, .party, .presidency.inDate, .presidency.outDate, add(foreach(.presidency, date-range(.inDate, default(.outDate, now()), 'day'))), .birth, .death"
+                        data-ex-column-labels="term, name, party, took office, left office, days in office, age of ascension, age"
+                        data-ex-formats="date { mode: medium; show: date }"
+                        data-ex-sort-column="3"
+                        data-ex-sort-ascending="false"
+                        data-ex-paginate="true"
+                        data-ex-page-size="5"
                         >
                         <table style="display: none;">
-                            <tr ex:background-style-content="if(exists(.death), '#ccc', 'white')">
-                                <td><span ex:content=".term"></span></td>
-                                <td><b ex:content=".label"></b><br/><img ex:src-content=".imageURL" /></td>
-                                <td><span ex:content=".party"></span></td>
-                                <td><span ex:content=".presidency.inDate"></span></td>
-                                <td><span ex:content=".presidency.outDate"></span></td>
-                                <td><span ex:content="add(foreach(.presidency, date-range(.inDate, default(.outDate, now()), 'day')))"></span></td>
-                                <td><span ex:content="foreach(.presidency, date-range(!presidency.birth, .inDate, 'year')))"></span></td>
-                                <td><span ex:content="date-range(.birth, default(.death, now()), 'year')))"></span></td>
+                            <tr data-ex-background-style-content="if(exists(.death), '#ccc', 'white')">
+                                <td><span data-ex-content=".term"></span></td>
+                                <td><b data-ex-content=".label"></b><br/><img data-ex-src-content=".imageURL" /></td>
+                                <td><span data-ex-content=".party"></span></td>
+                                <td><span data-ex-content=".presidency.inDate"></span></td>
+                                <td><span data-ex-content=".presidency.outDate"></span></td>
+                                <td><span data-ex-content="add(foreach(.presidency, date-range(.inDate, default(.outDate, now()), 'day')))"></span></td>
+                                <td><span data-ex-content="foreach(.presidency, date-range(!presidency.birth, .inDate, 'year')))"></span></td>
+                                <td><span data-ex-content="date-range(.birth, default(.death, now()), 'year')))"></span></td>
                             </tr>
                         </table>
                     </div>
