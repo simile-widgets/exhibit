@@ -32,7 +32,9 @@
 (function() {
     var loader;
     loader = function() {
-        var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad;
+        var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad
+        , proto = document.location.protocol === "https:" ?
+            "https:" : "http:";
         delayID = Exhibit.generateDelayID();
         Exhibit.jQuery(document).trigger(
             "delayCreation.exhibit",
@@ -42,7 +44,7 @@
         Exhibit.TimeExtension = {
             "params": {
                 "bundle": true,
-                "timelinePrefix": "http://api.simile-widgets.org",
+                "timelinePrefix": proto + "//api.simile-widgets.org",
                 "timelineVersion": "2.3.1"
             },
             "urlPrefix": null,
