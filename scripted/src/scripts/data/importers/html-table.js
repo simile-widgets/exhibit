@@ -116,18 +116,21 @@ Exhibit.Importer.HtmlTable.parse = function(url, table, callback, link) {
         var item={};
         var fields=$("td",this);
         fields.each(function(i) {
-                var prop=propertyNames[i];
-                if (prop) {//parse this property
+                var prop=propertyNames[i]
+                , html = $(this).html().trim().replace(/\s\s+/g," ")
+                , text = $(this).text().trim().replace(/\s\s+/g," ");
+                if (prop && (html.length > 0)) {//parse this property
                     var attrs=columnSettings[i] || {};
-                    if (attrs.hrefProperty || attrs.srcProperty) {
+                    if ((attrs.hrefProperty || attrs.srcProperty)
+                        && (text.length > 0)) {
                         //user is extracting links
                         //so can template own html with links from data
                         //so clean up the contents to just text
-                        item[prop]=$(this).text();
+                        item[prop] = text;
                     } 
                     else {
                         //keep html if not separately parsing links
-                        item[prop]=$(this).html();
+                        item[prop]= html;
                     }
                     if (attrs.arity != "single") {
                         item[prop]=item[prop].split(separator);
