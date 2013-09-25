@@ -6,7 +6,7 @@
 
     <link href="#indata" type="application/json" rel="exhibit-data"/>
 
-    <link rel="exhibit-extension" type="text/javascript" href="../src/extensions/time/time-extension.js"/>
+    <link rel="exhibit-extension" type="text/javascript" href="../api/extensions/time/time-extension.js" />
 
     <script src="../api/exhibit-api.js"></script>
     
@@ -783,9 +783,8 @@
 </script>
     <ul id="path">
       <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
-      <li><a href="http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a></li>
-      <li><a href="http://databench.zepheira.com/">Demos</a></li>
-      <li><a href="http://databench.zepheira.com/demos/">Scripted Demos</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit/">Exhibit 3.0</a></li>
+      <li><a href="..">Demos</a></li>
       <li><span>Examples: MIT Nobelists (local data)</span></li>
     </ul>
 
@@ -801,62 +800,62 @@
     
         <div id="top-panels">
             <table width="100%"><tr>
-                <td><div ex:role="facet" ex:expression=".discipline" ex:facetLabel="Discipline"></div></td>
-                <td><div ex:role="facet" ex:expression=".relationship" ex:facetLabel="Relationship"></div></td>
-                <td><div ex:role="facet" ex:expression=".shared" ex:facetLabel="Shared?"></div></td>
-                <td><div ex:role="facet" ex:expression=".deceased" ex:facetLabel="Deceased?"></div></td>
+                <td><div data-ex-role="facet" data-ex-expression=".discipline" data-ex-facet-label="Discipline"></div></td>
+                <td><div data-ex-role="facet" data-ex-expression=".relationship" data-ex-facet-label="Relationship"></div></td>
+                <td><div data-ex-role="facet" data-ex-expression=".shared" data-ex-facet-label="Shared?"></div></td>
+                <td><div data-ex-role="facet" data-ex-expression=".deceased" data-ex-facet-label="Deceased?"></div></td>
             </tr></table>
         </div>
-        <div ex:role="viewPanel" style="padding: 1em 0.5in;">
-            <table ex:role="lens" class="nobelist" style="display: none;"><tr>
-                <td><img ex:src-content=".imageURL" /></td>
+        <div data-ex-role="viewPanel" style="padding: 1em 0.5in;">
+            <table data-ex-role="lens" class="nobelist" style="display: none;"><tr>
+                <td><img data-ex-src-content=".imageURL" /></td>
                 <td>
-                    <div ex:content=".label" class="name"></div>
+                    <div data-ex-content=".label" class="name"></div>
                     <div>
-                        <span ex:content=".discipline" class="discipline"></span>, 
-                        <i ex:content=".nobel-year"></i>
+                        <span data-ex-content=".discipline" class="discipline"></span>, 
+                        <i data-ex-content=".nobel-year"></i>
                     </div>
-                    <div ex:if-exists=".co-winner" class="co-winners">
-                        Co-winners: <span ex:content=".co-winner"></span>
+                    <div data-ex-if-exists=".co-winner" class="co-winners">
+                        Co-winners: <span data-ex-content=".co-winner"></span>
                     </div>
-                    <div ex:content=".relationship-detail" class="relationship"></div>
+                    <div data-ex-content=".relationship-detail" class="relationship"></div>
                 </td>
             </tr></table>
         
-            <div ex:role="view"
-                ex:viewClass="Thumbnail"
-                ex:showAll="true"
-                ex:orders=".discipline"
-                ex:possibleOrders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
-                <div ex:role="exhibit-lens" class="nobelist-thumbnail" style="display: none;">
-                    <img ex:src-content=".imageURL" />
-                    <div><span ex:content=".label"></span></div>
+            <div data-ex-role="view"
+                data-ex-view-class="Thumbnail"
+                data-ex-show-all="true"
+                data-ex-orders=".discipline"
+                data-ex-possible-orders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
+                <div data-ex-role="exhibit-lens" class="nobelist-thumbnail" style="display: none;">
+                    <img data-ex-src-content=".imageURL" />
+                    <div><span data-ex-content=".label"></span></div>
                     <div>
-                        <span ex:content=".discipline" class="discipline"></span>, 
-                        <span ex:content=".nobel-year" class="year"></span>
+                        <span data-ex-content=".discipline" class="discipline"></span>, 
+                        <span data-ex-content=".nobel-year" class="year"></span>
                     </div>
                 </div>
             </div>
-            <div ex:role="view"
-                ex:label="Details"
-                ex:viewClass="Tile"
-                ex:showAll="true"
-                ex:orders=".discipline, .nobel-year"
-                ex:possibleOrders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
+            <div data-ex-role="view"
+                data-ex-label="Details"
+                data-ex-view-class="Tile"
+                data-ex-show-all="true"
+                data-ex-orders=".discipline, .nobel-year"
+                data-ex-possible-orders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
             </div>
-            <div ex:role="view"
-                ex:viewClass="Timeline"
-                ex:start=".nobel-year"
-                ex:colorKey=".discipline"
-                ex:caption=".discipline"
-                ex:bubbleWidth="150"
-                ex:bubbleHeight="150">
-                <div ex:role="lens" class="nobelist-timeline-lens" style="display: none;">
-                    <img ex:src-content=".imageURL" />
-                    <div><span ex:content=".label"></span></div>
+            <div data-ex-role="view"
+                data-ex-view-class="Timeline"
+                data-ex-start=".nobel-year"
+                data-ex-colorKey=".discipline"
+                data-ex-caption=".discipline"
+                data-ex-bubbleWidth="150"
+                data-ex-bubbleHeight="150">
+                <div data-ex-role="lens" class="nobelist-timeline-lens" style="display: none;">
+                    <img data-ex-src-content=".imageURL" />
+                    <div><span data-ex-content=".label"></span></div>
                     <div>
-                        <span ex:content=".discipline" class="discipline"></span>, 
-                        <span ex:content=".nobel-year" class="year"></span>
+                        <span data-ex-content=".discipline" class="discipline"></span>, 
+                        <span data-ex-content=".nobel-year" class="year"></span>
                     </div>
                 </div>
             </div>

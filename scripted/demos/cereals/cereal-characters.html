@@ -41,74 +41,73 @@
                 <tr>
                     <td width="15%">
                         <b>Search</b>
-                        <div ex:role="facet" ex:facetClass="TextSearch"></div>
+                        <div data-ex-role="facet" data-ex-facet-class="TextSearch"></div>
                         <hr/>
-                        <div ex:role="facet" ex:expression=".brand" ex:facetLabel="Brands" ex:height="15em"></div>
-                        <div ex:role="facet" ex:expression=".decade" ex:facetLabel="Decades" ex:height="20em"></div>
+                        <div data-ex-role="facet" data-ex-expression=".brand" data-ex-facet-label="Brands" data-ex-height="15em"></div>
+                        <div data-ex-role="facet" data-ex-expression=".decade" data-ex-facet-label="Decades" data-ex-height="20em"></div>
                     </td>
                     <td>
   
-                        <div ex:role="coder" ex:coderClass="Icon" id="icons">
-                            <span ex:icon="http://www.wybron.com/sml/general_mills.png">General Mills</span>
-                            <span ex:icon="http://www.wybron.com/sml/kellogs.png">Kellog's</span>
-                            <span ex:icon="http://www.wybron.com/sml/nabisco.png">Nabisco</span>
-                            <span ex:icon="http://www.wybron.com/sml/nestle.png">Nestle</span>
-                            <span ex:icon="http://www.wybron.com/sml/post.png">Post</span>
-                            <span ex:icon="http://www.wybron.com/sml/quaker.png">Quaker Oats</span>
-                            <span ex:icon="http://www.wybron.com/sml/ralston.png">Ralston</span>
+                        <div data-ex-role="coder" data-ex-coder-class="Icon" id="icons">
+                            <span data-ex-icon="http://www.wybron.com/sml/general_mills.png">General Mills</span>
+                            <span data-ex-icon="http://www.wybron.com/sml/kellogs.png">Kellog's</span>
+                            <span data-ex-icon="http://www.wybron.com/sml/nabisco.png">Nabisco</span>
+                            <span data-ex-icon="http://www.wybron.com/sml/nestle.png">Nestle</span>
+                            <span data-ex-icon="http://www.wybron.com/sml/post.png">Post</span>
+                            <span data-ex-icon="http://www.wybron.com/sml/quaker.png">Quaker Oats</span>
+                            <span data-ex-icon="http://www.wybron.com/sml/ralston.png">Ralston</span>
                         </div>
                   
-                        <div ex:role="viewPanel">
-                            <div ex:role="lens" class="item" style="display: none;">
+                        <div data-ex-role="viewPanel">
+                            <div data-ex-role="lens" class="item" style="display: none;">
                                 <table cellspacing="5">
                                     <tr>
-                                        <td style="position: relative"><div class="itemThumbnail-blocker"></div><img ex:src-content=".image" /></td>
+                                        <td style="position: relative"><div class="itemThumbnail-blocker"></div><img data-ex-src-content=".image" /></td>
                                         <td>
-                                            <h1><span ex:content=".label" /></h1>
-                                            <h2><span ex:content=".brand"></span> <span ex:content=".cereal"></span></h2>
-                                            <p ex:content=".text"></p>
-                                            <center><a ex:href-content=".url" target="new">More...</a></center>
+                                            <h1><span data-ex-content=".label" /></h1>
+                                            <h2><span data-ex-content=".brand"></span> <span data-ex-content=".cereal"></span></h2>
+                                            <p data-ex-content=".text"></p>
+                                            <center><a data-ex-href-content=".url" target="new">More...</a></center>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div role="view" 
-                                ex:viewClass="Thumbnail"
-                                ex:showAll="true"
-                                ex:columnCount="4"
-                                ex:paginate="true"
-                                ex:possibleOrders=".brand, .decade, .form, .country">
+                                data-ex-view-class="Thumbnail"
+                                data-ex-show-all="true"
+                                data-ex-paginate="true"
+                                data-ex-possible-orders=".brand, .decade, .form, .country">
                           
-                                <table ex:role="lens" class="itemThumbnail" style="display: none;">
+                                <table data-ex-role="lens" class="itemThumbnail" style="display: none;">
                                     <tr>
                                         <td valign="bottom" class="itemThumbnail-thumbnailContainer">
-                                            <div style="position: relative"><div class="itemThumbnail-blocker"></div><img ex:src-content=".thumbnail" /></div>
+                                            <div style="position: relative"><div class="itemThumbnail-blocker"></div><img data-ex-src-content=".thumbnail" /></div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="itemThumbnail-caption"><span ex:content="value" /></td>
+                                        <td class="itemThumbnail-caption"><span data-ex-content="value" /></td>
                                     </tr>
                                 </table>
                             </div>
-                            <div ex:role="view" 
-                                ex:viewClass="Timeline"
-                                ex:start=".decade"
-                                ex:colorKey=".brand"
-                                 ex:iconKey=".brand"
-                                 ex:iconCoder="icons"
-                                ex:topBandUnit="year"
-                                ex:topBandPixelsPerUnit="50"
-                                ex:bottomBandUnit="decade"
-                                ex:bottomBandPixelsPerUnit="50"
-                                ex:bubbleWidth="400"
-                                ex:bubbleHeight="250">
+                            <div data-ex-role="view" 
+                                data-ex-view-class="Timeline"
+                                data-ex-start=".decade"
+                                data-ex-color-key=".brand"
+                                 data-ex-iconkey=".brand"
+                                 data-ex-icon-coder="icons"
+                                data-ex-top-band-unit="year"
+                                data-ex-top-band-pixels-per-unit="50"
+                                data-ex-bottom-band-unit="decade"
+                                data-ex-bottom-band-pixels-per-unit="50"
+                                data-ex-bubble-width="400"
+                                data-ex-bubble-height="250">
                             </div>
                         </div>
                     </td>
                     <td width="15%">
-                        <div ex:role="facet" ex:expression=".country" ex:facetLabel="Countries" ex:height="15em"></div>
-                        <div ex:role="facet" ex:expression=".form" ex:facetLabel="Forms" ex:height="20em"></div>
-                        <center ex:role="logo"></center>
+                        <div data-ex-role="facet" data-ex-expression=".country" data-ex-facet-label="Countries" data-ex-height="15em"></div>
+                        <div data-ex-role="facet" data-ex-expression=".form" data-ex-facet-label="Forms" data-ex-height="20em"></div>
+                        <center data-ex-role="logo"></center>
                     </td>
                 </tr>
             </table>
