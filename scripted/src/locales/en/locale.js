@@ -54,6 +54,7 @@ Exhibit.Localization.importLocale("en", {
     "%export.smwExporterLabel": "Semantic wikitext",
     "%export.exhibitJsonExporterLabel": "Exhibit JSON",
     "%export.tsvExporterLabel": "Tab Separated Values",
+    "%export.HTMLTableExporterLabel": "HTML Table",
     "%export.htmlExporterLabel": "Generated HTML of this view",
     "%export.bibtexExporterLabel": "BibTeX",
 
