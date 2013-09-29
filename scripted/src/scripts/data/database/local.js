@@ -166,8 +166,16 @@ Exhibit.Database._LocalImpl.prototype.loadTypes = function(typeEntries, baseURI)
  * @param {String} baseURI The base URI for normalizing URIs in the object.
  */
 Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries, baseURI) {
+    var lastChar, propertyID, propertyEntry, property
+    , setIf = function(field, val, def) {
+        //field <---- val || field || def
+        if (typeof(val) !== "undefined") {
+            property[field] = val;
+        } else if (def && !property.hasOwnProperty(field)) {
+            property[field] = def;
+        }
+    };
     Exhibit.jQuery(document).trigger("onBeforeLoadingProperties.exhibit");
-    var lastChar, propertyID, propertyEntry, property;
     try {
         lastChar = baseURI.substr(baseURI.length - 1);
         if (lastChar === "#") {
@@ -175,7 +183,7 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
         } else if (lastChar !== "/" && lastChar !== ":") {
             baseURI += "/";
         }
-    
+        
         for (propertyID in propertyEntries) {
             if (propertyEntries.hasOwnProperty(propertyID)) {
                 if (typeof propertyID === "string") {
@@ -187,39 +195,30 @@ Exhibit.Database._LocalImpl.prototype.loadProperties = function(propertyEntries,
                             property = new Exhibit.Database.Property(propertyID, this);
                             this._properties[propertyID] = property;
                         }
-            
-                        property._uri = typeof propertyEntry.uri !== "undefined" ?
-                            propertyEntry.uri :
-                            (baseURI + "property#" + encodeURIComponent(propertyID));
+                        
+                        setIf("_uri", propertyEntry.uri,
+                              baseURI + "property#" + 
+                              encodeURIComponent(propertyID));
 
-                        property._valueType = typeof propertyEntry.valueType !== "undefined" ?
-                            propertyEntry.valueType :
-                            "text";
-            
-                        property._label = typeof propertyEntry.label !== "undefined" ?
-                            propertyEntry.label :
-                            propertyID;
+                        setIf("_valueType", propertyEntry.valueType, "text");
+                        setIf("_label", propertyEntry.label, propertyID);
+                        setIf("_pluralLabel", propertyEntry.pluralLabel,
+                              property._label);
+                        
+                        setIf("_reverseLabel", propertyEntry.reverseLabel,
+                              "!" + property._label);
 
-                        property._pluralLabel = typeof propertyEntry.pluralLabel !== "undefined" ?
-                            propertyEntry.pluralLabel :
-                            property._label;
-            
-                        property._reverseLabel = typeof propertyEntry.reverseLabel !== "undefined" ?
-                            propertyEntry.reverseLabel :
-                            ("!" + property._label);
+                        setIf("_reversePluralLabel", 
+                              propertyEntry.reversePluralLabel,
+                              "!" + property._pluralLabel);
+                        
+                        setIf("_groupingLabel", propertyEntry.groupingLabel,
+                              property._label);
 
-                        property._reversePluralLabel = typeof propertyEntry.reversePluralLabel !== "undefined" ?
-                            propertyEntry.reversePluralLabel :
-                            ("!" + property._pluralLabel);
-            
-                        property._groupingLabel = typeof propertyEntry.groupingLabel !== "undefined" ?
-                            propertyEntry.groupingLabel :
-                            property._label;
-
-                        property._reverseGroupingLabel = typeof propertyEntry.reverseGroupingLabel !== "undefined" ?
-                            propertyEntry.reverseGroupingLabel :
-                            property._reverseLabel;
-            
+                        setIf("_reverseGroupingLabel", 
+                              propertyEntry.reverseGroupingLabel,
+                              property._reverseLabel);
+                        
                         if (typeof propertyEntry.origin !== "undefined") {
                             property._origin = propertyEntry.origin;
                         }
