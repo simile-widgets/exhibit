@@ -19,7 +19,7 @@ Exhibit.Database._LocalImpl = function() {
     /*
      *  Predefined types and properties
      */
-    var itemType, labelProperty, typeProperty, uriProperty;
+    var itemType, labelProperty, idProperty, typeProperty, uriProperty;
      
     itemType = new Exhibit.Database.Type("Item");
     itemType._custom = {
@@ -39,6 +39,16 @@ Exhibit.Database._LocalImpl = function() {
     labelProperty._groupingLabel        = Exhibit._("%database.labelProperty.groupingLabel");
     labelProperty._reverseGroupingLabel = Exhibit._("%database.labelProperty.reverseGroupingLabel");
     this._properties.label              = labelProperty;
+
+    idProperty = new Exhibit.Database.Property("id", this);
+    idProperty._uri = "http://purl.org/dc/terms/identifier";
+    idProperty._valueType            = "text";
+    idProperty._label                = Exhibit._("%database.idProperty.label");
+    idProperty._pluralLabel          = Exhibit._("%database.idProperty.pluralLabel");
+    idProperty._reverseLabel         = Exhibit._("%database.idProperty.reverseLabel");
+    idProperty._reversePluralLabel   = Exhibit._("%database.idProperty.reversePluralLabel");
+    this._properties.id                 = idProperty;
+
     
     typeProperty = new Exhibit.Database.Property("type", this);
     typeProperty._uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
