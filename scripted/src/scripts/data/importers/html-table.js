@@ -28,13 +28,11 @@ Exhibit.ProxyGetter = function(link, database, parser, cont) {
 };
 
 Exhibit.Importer.HtmlTable.parse = function(url, table, callback, link) {
-    var $=Exhibit.jQuery; //since we'll use it a lot
+    var $=Exhibit.jQuery //since we'll use it a lot
 
-    //table can be a string or a dom element
-    var jq=$(table);
-    table = jq.get(0); //now table is for sure of type Element
+    , jq=$(table)
 
-    var readAttributes = function( node, attributes ) {
+    , readAttributes = function( node, attributes ) {
         var result = {}, attr, value, i;
         for( i = 0; attr = attributes[i]; i++ ) {
             value = Exhibit.getAttribute( node, attr );
@@ -46,21 +44,16 @@ Exhibit.Importer.HtmlTable.parse = function(url, table, callback, link) {
     }
 
     // FIXME: it's probably a better idea to ask database.js for these lists:
-    var typeSpecs = [ "uri", "label", "pluralLabel" ];
-    var propertySpecs = [ "uri", "label", "reverseLabel",
-                     "pluralLabel", "reversePluralLabel",
-                     "groupingLabel", "reverseGroupingLabel" ];
-    var columnSpecs = ["arity", "hrefProperty", "srcProperty" ];
-
-    var separator = Exhibit.getAttribute(link, "separator") || ';';
-
-    var types={}, properties={};
-
-    var type = Exhibit.getAttribute(link,'itemType');
-    if( type ) {
-        types[type] =  readAttributes( link, typeSpecs );
-    }
-    
+    , typeSpecs = [ "uri", "label", "pluralLabel" ]
+    , propertySpecs = [ "uri", "label", "reverseLabel",
+                        "pluralLabel", "reversePluralLabel",
+                        "groupingLabel", "reverseGroupingLabel",
+                        "valueType"]
+    , columnSpecs = ["arity", "hrefProperty", "srcProperty" ]
+    , separator = Exhibit.getAttribute(link, "separator") || ';'
+    , types={}
+    , properties={}
+    , type = Exhibit.getAttribute(link,'itemType')
 
     /*heuristic for identifying property names
       The first one to succeed wins.
@@ -74,17 +67,19 @@ Exhibit.Importer.HtmlTable.parse = function(url, table, callback, link) {
       If after all this a particular col has no property, don't parse it
 
     */
-    
-
-    var columnSettings=[]; //rules for parsing each col
-
-    var columns = Exhibit.getAttribute(link, 'columns');
-    var headerRow=Exhibit.getAttribute(link,"headerRow");
-    var hasProps = function() {
-        return Exhibit.getAttribute(this,'property');
+    , columnSettings=[] //rules for parsing each col
+    , columns = Exhibit.getAttribute(link, "columns")
+    , headerRow = Exhibit.getAttribute(link,"headerRow")
+    , hasProps = function() {
+        return Exhibit.getAttribute(this,"property");
     };
+
+    if (type) {
+        types[type] =  readAttributes( link, typeSpecs );
+    }
+    
     if (columns) {
-        propertyNames=columns.split(',');
+        propertyNames = columns.split(',');
     } else {
         if (jq.find("col").filter(hasProps).length > 0) {
             columns = jq.find("col");
@@ -95,7 +90,7 @@ Exhibit.Importer.HtmlTable.parse = function(url, table, callback, link) {
             columns = jq.find("tr").eq(0).children().filter("td,th");
         }
         propertyNames = columns.map(function(i) {
-                var property = Exhibit.getAttribute(this, 'property') ||
+                var property = Exhibit.getAttribute(this, "property") ||
                 $(this).text(); // never null/undefined but maybe ""
                 var propSettings=readAttributes(this, propertySpecs);
                 if (property) {
@@ -116,28 +111,40 @@ Exhibit.Importer.HtmlTable.parse = function(url, table, callback, link) {
         var item={};
         var fields=$("td",this);
         fields.each(function(i) {
-                var prop=propertyNames[i];
+                var prop=propertyNames[i]
+                    , val;
                 if (prop) {//parse this property
                     var attrs=columnSettings[i] || {};
                     if (attrs.hrefProperty || attrs.srcProperty) {
                         //user is extracting links
                         //so can template own html with links from data
                         //so clean up the contents to just text
-                        item[prop]=$(this).text();
+                        val=$(this).text();
                     } 
                     else {
-                        //keep html if not separately parsing links
-                        item[prop]=$(this).html();
+                        //keep inner html if not separately parsing links
+                        val=$(this).html();
                     }
-                    if (attrs.arity != "single") {
-                        item[prop]=item[prop].split(separator);
+                    val = val.trim();
+                    if (val.length > 0) {
+                        if (attrs.arity != "single") {
+                            val=val.split(separator);
+                        }
+                        item[prop] = val;
                     }
                     if (attrs.hrefProperty) {
-                        item[attrs.hrefProperty]=$("[href]",this).attr("href");
+                        val = $("[href]",this).attr("href");
+                        if (val) {
+                            item[attrs.hrefProperty] = val;
+                        }
                     }
                     if (attrs.srcProperty) {
-                        item[attrs.srcProperty]=$("[src]",this).attr("src");
+                        val = $("[src]",this).attr("src");
+                        if (val) {
+                            item[attrs.srcProperty]= val;
+                        }
                     }
+                    //only set type of got some nonempty field above
                     if (type) {
                         item.type=type;
                     }

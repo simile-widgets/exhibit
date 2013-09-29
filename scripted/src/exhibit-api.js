@@ -152,6 +152,7 @@ var Exhibit = {
         "scripts/data/exporters/json.js",
         "scripts/data/exporters/bibtex.js",
         "scripts/data/exporters/tsv.js",
+        "scripts/data/exporters/html-table.js",
         "scripts/data/exporters/rdf-xml.js",
         "scripts/data/exporters/semantic-wikitext.js",
         "scripts/data/importer.js",
