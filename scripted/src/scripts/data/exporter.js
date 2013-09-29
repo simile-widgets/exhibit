@@ -100,13 +100,15 @@ Exhibit.Exporter.prototype.getLabel = function() {
  * @param {Exhibit.Database} database
  * @returns {Object}
  */
-Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID, database) {
-    var allProperties, fn, i, propertyID, property, values, valueType, item;
+Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID,
+                                                            database, 
+                                                            props) {
+    var fn, prop, values, valueType, item;
 
     fn = function(vt, s) {
         if (vt === "item") {
             return function(value) {
-                s.push(database.getObject(value, "label"));
+                s.push(database.getObject(value, "label") || value);
             };
         } else if (vt === "url") {
             return function(value) {
@@ -115,23 +117,24 @@ Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID, database) {
         }
     };
 
-    allProperties = database.getAllProperties();
+    props = props || 
+        Exhibit.Exporter._getPropertyMap(database);
     item = {};
 
-    for (i = 0; i < allProperties.length; i++) {
-        propertyID = allProperties[i];
-        property = database.getProperty(propertyID);
-        values = database.getObjects(itemID, propertyID);
-        valueType = property.getValueType();
-
-        if (values.size() > 0) {
-            if (valueType === "item" || valueType === "url") {
-                strings = [];
-                values.visit(fn(valueType, strings));
-            } else {
-                strings = values.toArray();
+    for (prop in props) {
+        if (props.hasOwnProperty(prop)) {
+            values = database.getObjects(itemID, prop);
+            valueType = props[prop].valueType;
+            
+            if (values.size() > 0) {
+                if (valueType === "item" || valueType === "url") {
+                    strings = [];
+                    values.visit(fn(valueType, strings));
+                } else {
+                    strings = values.toArray();
+                }
+                item[prop] = strings;
             }
-            item[propertyID] = strings;
         }
     }
 
@@ -143,14 +146,16 @@ Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID, database) {
  * @param {Exhibit.Database} database
  * @returns {String}
  */
-Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
+Exhibit.Exporter.prototype.exportOne = function(itemID, database, props) {
+    props = props || Exhibit.Exporter._getPropertyMap(database);
     return this._wrap(
         this._exportOne(
             itemID,
             this.exportOneFromDatabase(itemID, database),
-            Exhibit.Exporter._getPropertiesWithValueTypes(database)
+            props 
         ),
-        database
+        database,
+        props
     );
 };
 
@@ -160,26 +165,28 @@ Exhibit.Exporter.prototype.exportOne = function(itemID, database) {
  * @returns {String}
  */
 Exhibit.Exporter.prototype.exportMany = function(set, database) {
+    var s = "", self = this, count = 0, size = set.size(), props
+    , wraps = [];
+
     if (typeof this._exportMany !== "undefined" && typeof this._exportMany === "function") {
         this.exportMany = this._exportMany;
         return this._exportMany(set, database);
     }
 
-    var s = "", self = this, count = 0, size = set.size(), props;
-
-    props = Exhibit.Exporter._getPropertiesWithValueTypes(database);
+    props = Exhibit.Exporter._getPropertyMap(database);
     set.visit(function(itemID) {
-        s += self._wrapOne(
-            self._exportOne(
-                itemID,
-                self.exportOneFromDatabase(itemID, database),
-                props)
-            ,
-            count === 0,
-            count++ === size - 1
-        );
+        wraps.push( 
+            self._wrapOne(
+                self._exportOne(
+                    itemID,
+                    self.exportOneFromDatabase(itemID, database),
+                    props)
+                ,
+                count === 0,
+                count++ === size - 1
+            ));
     });
-    return this._wrap(s, database);
+    return this._wrap(wraps.join(""), database, props);
 };
 
 /**
@@ -187,15 +194,15 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
  * @static
  * @param {Exhibit.Database} database
  */
-Exhibit.Exporter._getPropertiesWithValueTypes = function(database) {
-    var properties, i, propertyID, property, valueType, map;
+Exhibit.Exporter._getPropertyMap = function(database) {
+    var properties, i, propertyID, property, map;
     map = {};
     properties = database.getAllProperties();
     for (i = 0; i < properties.length; i++) {
         propertyID = properties[i];
         property = database.getProperty(propertyID);
-        valueType = property.getValueType();
-        map[propertyID] = { "valueType": valueType,
+        map[propertyID] = { "label" : property.getLabel(),
+                            "valueType": property.getValueType(),
                             "uri": property.getURI() };
     }
     return map;
