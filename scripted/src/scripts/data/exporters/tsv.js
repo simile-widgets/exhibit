@@ -51,7 +51,11 @@ Exhibit.Exporter.TSV.exportOne = function(itemID, o, props) {
     for (prop in props) {
         if (props.hasOwnProperty(prop)) {
             if (o.hasOwnProperty(prop)) {
-                fields.push(o[prop]);
+                if (Array.isArray(o[prop])) {
+                    fields.push(o[prop].join(";"));
+                } else {
+                    fields.push(o[prop]);
+                }
             } else {
                 fields.push("");
             }
