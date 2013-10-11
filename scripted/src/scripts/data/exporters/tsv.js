@@ -17,20 +17,19 @@ Exhibit.Exporter.TSV = {
  * @param {Exhibit.Database} database
  * @returns {String}
  */
-Exhibit.Exporter.TSV.wrap = function(s, database) {
-    var header, i, allProperties, propertyID, property, valueType;
+Exhibit.Exporter.TSV.wrap = function(s, database, props) {
+    var header, prop, propertyID, property, valueType;
 
-    header = "";
+    header = [];
 
-    allProperties = database.getAllProperties();
-    for (i = 0; i < allProperties.length; i++) {
-        propertyID = allProperties[i];
-        property = database.getProperty(propertyID);
-        valueType = property.getValueType();
-        header += propertyID + ":" + valueType + "\t";
+    for (prop in props) {
+        if (props.hasOwnProperty(prop)) {
+            valueType = props[prop].valueType;
+            header.push(prop + ":" + valueType);
+        }
     }
 
-    return header + "\n" + s;
+    return header.join("\t") + "\n" + s;
 };
 
 /**
@@ -46,16 +45,19 @@ Exhibit.Exporter.TSV.wrapOne = function(s, first, last) {
  * @param {Object} o
  * @returns {String}
  */
-Exhibit.Exporter.TSV.exportOne = function(itemID, o) {
-    var prop, s = "";
+Exhibit.Exporter.TSV.exportOne = function(itemID, o, props) {
+    var prop, s = "", fields=[];
 
-    for (prop in o) {
-        if (o.hasOwnProperty(prop)) {
-            s += o[prop].join("; ") + "\t";
+    for (prop in props) {
+        if (props.hasOwnProperty(prop)) {
+            if (o.hasOwnProperty(prop)) {
+                fields.push(o[prop]);
+            } else {
+                fields.push("");
+            }
         }
     }
-
-    return s;
+    return fields.join("\t");
 };
 
 /**
