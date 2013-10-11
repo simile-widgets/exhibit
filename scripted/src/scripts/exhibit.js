@@ -427,7 +427,7 @@ Exhibit._Impl.prototype.configureFromDOM = function(root) {
             try {
                 Exhibit.UI.createFromDOM(elmt, uiContext);
             } catch (ex1) {
-                Exhibit.Debug.exception(ex1);
+                Exhibit.Debug.warn(ex1);
             }
         }
     };
