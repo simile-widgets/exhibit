@@ -33,7 +33,7 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
             ((collapsible) ?
              '<img src="' + Exhibit.urlPrefix + 'images/collapse.png" class="exhibit-facet-header-collapse" id="collapseImg" />' :
                 '') +
-            '<span class="exhibit-facet-header-title">' + facetLabel + '</span>' +
+            '<span class="exhibit-facet-header-title" id="title">' + facetLabel + '</span>' +
         '</div>' +
         '<div class="exhibit-facet-body-frame" id="frameDiv"></div>',
         { checkImage: Exhibit.UI.createTranslucentImage("images/black-check.png") }
@@ -50,7 +50,8 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
     Exhibit.jQuery(dom.clearSelectionsDiv).bind("click", onClearAllSelections);
     
     if (collapsible) {
-        Exhibit.jQuery(dom.collapseImg).bind("click", function(evt) {
+        Exhibit.jQuery(dom.collapseImg).add(Exhibit.jQuery(dom.title))
+            .bind("click", function(evt) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
         });
         
@@ -174,7 +175,7 @@ Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, face
             ((collapsible) ?
                 '<img src="' + Exhibit.urlPrefix + 'images/collapse.png" class="exhibit-facet-header-collapse" id="collapseImg" />' :
                 "") +
-            '<span class="exhibit-flowingFacet-header-title">' + facetLabel + "</span>" +
+            '<span class="exhibit-flowingFacet-header-title" id="title">' + facetLabel + "</span>" +
         "</div>" +
         '<div id="frameDiv"><div class="exhibit-flowingFacet-body" id="valuesContainer"></div></div>'
     );
@@ -184,7 +185,8 @@ Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, face
     };
 
     if (collapsible) {
-        Exhibit.jQuery(dom.collapseImg).bind("click", function(evt) {
+        Exhibit.jQuery(dom.collapseImg).add(Exhibit.jQuery(dom.title))
+            .bind("click", function(evt) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
         });
         
