@@ -54,6 +54,9 @@ Exhibit.Exporter.BibTex.exportOne = function(itemID, o) {
 
     if (typeof o.key !== "undefined") {
         key = o.key;
+        if (Array.isArray(key)) {
+            key = key[0];
+        }
     } else {
         key = itemID;
     }
