@@ -118,7 +118,7 @@ Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID,
     };
 
     props = props || 
-        Exhibit.Exporter._getPropertiesWithValueTypes(database);
+        Exhibit.Exporter._getPropertyMap(database);
     item = {};
 
     for (prop in props) {
@@ -147,7 +147,7 @@ Exhibit.Exporter.prototype.exportOneFromDatabase = function(itemID,
  * @returns {String}
  */
 Exhibit.Exporter.prototype.exportOne = function(itemID, database, props) {
-    props = props || Exhibit.Exporter._getPropertiesWithValueTypes(database);
+    props = props || Exhibit.Exporter._getPropertyMap(database);
     return this._wrap(
         this._exportOne(
             itemID,
@@ -173,7 +173,7 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
         return this._exportMany(set, database);
     }
 
-    props = Exhibit.Exporter._getPropertiesWithValueTypes(database);
+    props = Exhibit.Exporter._getPropertyMap(database);
     set.visit(function(itemID) {
         wraps.push( 
             self._wrapOne(
@@ -194,15 +194,15 @@ Exhibit.Exporter.prototype.exportMany = function(set, database) {
  * @static
  * @param {Exhibit.Database} database
  */
-Exhibit.Exporter._getPropertiesWithValueTypes = function(database) {
-    var properties, i, propertyID, property, valueType, map;
+Exhibit.Exporter._getPropertyMap = function(database) {
+    var properties, i, propertyID, property, map;
     map = {};
     properties = database.getAllProperties();
     for (i = 0; i < properties.length; i++) {
         propertyID = properties[i];
         property = database.getProperty(propertyID);
-        valueType = property.getValueType();
-        map[propertyID] = { "valueType": valueType,
+        map[propertyID] = { "label" : property.getLabel(),
+                            "valueType": property.getValueType(),
                             "uri": property.getURI() };
     }
     return map;
