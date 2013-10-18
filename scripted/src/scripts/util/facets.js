@@ -504,14 +504,14 @@ Exhibit.FacetUtilities.Cache.prototype.dispose = function() {
  */
 Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, filter) {
     var set, valueToItem;
-    if (this._expression.isPath()) {
-        set = this._expression.getPath().walkBackward(
-            values, 
-            "item",
-            filter, 
-            this._database
-        ).getSet();
-    } else {
+    // if (this._expression.isPath()) {
+    //     set = this._expression.getPath().walkBackward(
+    //         values, 
+    //         "item",
+    //         filter, 
+    //         this._database
+    //     ).getSet();
+    // } else {
         this._buildMaps();
         
         set = new Exhibit.Set();
@@ -519,7 +519,7 @@ Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, fil
         valueToItem = this._valueToItem;
         values.visit(function(value) {
             var itemA, i, item;
-            if (typeof valuetoItem[value] !== "undefined") {
+            if (typeof valueToItem[value] !== "undefined") {
                 itemA = valueToItem[value];
                 for (i = 0; i < itemA.length; i++) {
                     item = itemA[i];
@@ -529,7 +529,7 @@ Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, fil
                 }
             }
         });
-    }
+//    }
     return set;
 };
 
