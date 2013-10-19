@@ -562,18 +562,6 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
     database = this._database;
     valueType = "text";
     
-    if (this._expression.isPath()) {
-        path = this._expression.getPath();
-        facetValueResult = path.walkForward(items, "item", database);
-        valueType = facetValueResult.valueType;
-        
-        if (facetValueResult.size > 0) {
-            facetValueResult.forEachValue(function(facetValue) {
-                var itemSubcollection = path.evaluateBackward(facetValue, valueType, items, database);
-                entries.push({ value: facetValue, count: itemSubcollection.size });
-            });
-        }
-    } else {
         this._buildMaps();
         
         valueType = this._valueType;
@@ -592,7 +580,6 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
                 }
             }
         }
-    }
     return { entries: entries, valueType: valueType };
 };
 
@@ -603,9 +590,6 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
 Exhibit.FacetUtilities.Cache.prototype.getValuesFromItems = function(items) {
     var set, itemToValue;
 
-    if (this._expression.isPath()) {
-        return this._expression.getPath().walkForward(items, "item", database).getSet();
-    } else {
         this._buildMaps();
         
         set = new Exhibit.Set();
@@ -621,7 +605,7 @@ Exhibit.FacetUtilities.Cache.prototype.getValuesFromItems = function(items) {
         });
         
         return set;
-    }
+
 };
 
 /**
