@@ -657,7 +657,7 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
         valueType = "text";
         
         insert = function(x, y, map) {
-            if (typeof map.x !== "undefined") {
+            if (typeof map[x] !== "undefined") {
                 map[x].push(y);
             } else {
                 map[x] = [ y ];
