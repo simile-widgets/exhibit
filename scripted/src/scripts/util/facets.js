@@ -504,14 +504,14 @@ Exhibit.FacetUtilities.Cache.prototype.dispose = function() {
  */
 Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, filter) {
     var set, valueToItem;
-    if (this._expression.isPath()) {
-        set = this._expression.getPath().walkBackward(
-            values, 
-            "item",
-            filter, 
-            this._database
-        ).getSet();
-    } else {
+    // if (this._expression.isPath()) {
+    //     set = this._expression.getPath().walkBackward(
+    //         values, 
+    //         "item",
+    //         filter, 
+    //         this._database
+    //     ).getSet();
+    // } else {
         this._buildMaps();
         
         set = new Exhibit.Set();
@@ -519,7 +519,7 @@ Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, fil
         valueToItem = this._valueToItem;
         values.visit(function(value) {
             var itemA, i, item;
-            if (typeof valuetoItem[value] !== "undefined") {
+            if (typeof valueToItem[value] !== "undefined") {
                 itemA = valueToItem[value];
                 for (i = 0; i < itemA.length; i++) {
                     item = itemA[i];
@@ -529,7 +529,7 @@ Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, fil
                 }
             }
         });
-    }
+//    }
     return set;
 };
 
@@ -562,18 +562,6 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
     database = this._database;
     valueType = "text";
     
-    if (this._expression.isPath()) {
-        path = this._expression.getPath();
-        facetValueResult = path.walkForward(items, "item", database);
-        valueType = facetValueResult.valueType;
-        
-        if (facetValueResult.size > 0) {
-            facetValueResult.forEachValue(function(facetValue) {
-                var itemSubcollection = path.evaluateBackward(facetValue, valueType, items, database);
-                entries.push({ value: facetValue, count: itemSubcollection.size });
-            });
-        }
-    } else {
         this._buildMaps();
         
         valueType = this._valueType;
@@ -592,7 +580,6 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
                 }
             }
         }
-    }
     return { entries: entries, valueType: valueType };
 };
 
@@ -603,9 +590,6 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
 Exhibit.FacetUtilities.Cache.prototype.getValuesFromItems = function(items) {
     var set, itemToValue;
 
-    if (this._expression.isPath()) {
-        return this._expression.getPath().walkForward(items, "item", database).getSet();
-    } else {
         this._buildMaps();
         
         set = new Exhibit.Set();
@@ -621,7 +605,7 @@ Exhibit.FacetUtilities.Cache.prototype.getValuesFromItems = function(items) {
         });
         
         return set;
-    }
+
 };
 
 /**
@@ -657,7 +641,7 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
         valueType = "text";
         
         insert = function(x, y, map) {
-            if (typeof map.x !== "undefined") {
+            if (typeof map[x] !== "undefined") {
                 map[x].push(y);
             } else {
                 map[x] = [ y ];
