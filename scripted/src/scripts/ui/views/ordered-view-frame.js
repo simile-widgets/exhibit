@@ -338,7 +338,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
 
     processLevel = function(items, index) {
         var order, values, valueCounts, valueType
-        , property, keys, grouped, k, key;
+        , property, keys, grouped, k, key, keyItems;
         order = orders[index];
         cacheID = order.forward ? 
             "."+order.property :
@@ -390,23 +390,22 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         }
         // end mono-grouping
         
-        for (k = 0; k < keys.length; k++) {
+        for (k = 0; (k < keys.length && itemIndex < toIndex); k++) {
             key = keys[k];
-            if (key.items.size() > 0) {
+            keyItems = keys.retrieveItems(key);
+            if (keyItems.size() > 0) {
                 if (grouped && settings.grouped) {
                     createGroup(key.display, valueType, index);
                 }
-                
-                items.removeSet(key.items);
-                if (key.items.size() > 1 && index < orders.length - 1) {
-                    processLevel(key.items, index+1);
+                if (keyItems.size() > 1 && index < orders.length - 1) {
+                    processLevel(keyItems, index+1);
                 } else {
-                    key.items.visit(createItem);
+                    keyItems.visit(createItem);
                 }
             }
         }
         
-        if (items.size() > 0) {
+        if ((items.size() > 0) && itemIndex < toIndex) {
             if (grouped && settings.grouped) {
                 createGroup(Exhibit._("%general.missingSortKey"), valueType, index);
             }
@@ -420,7 +419,8 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     };
     
     processNonNumericLevel = function(items, index, values, valueType) {
-        var keys, compareKeys, retrieveItems, order, k, key, vals;
+        var keys, compareKeys, retrieveItems, order, k, key, vals
+        , retrieveRemove;
         keys = [];
         order = orders[index];
         
@@ -460,14 +460,14 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
         });
         
-        for (k = 0; k < keys.length; k++) {
-            key = keys[k];
-            key.items = retrieveItems(key);
+        retrieveRemove = function(key) {
+            var keyItems = retrieveItems(key);
             if (!settings.showDuplicates) {
-                items.removeSet(key.items);
+                items.removeSet(keyItems);
             }
+            return keyItems;
         }
-        
+        keys.retrieveItems = retrieveRemove;
         return keys;
     };
     
