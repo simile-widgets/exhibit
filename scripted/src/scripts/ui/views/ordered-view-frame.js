@@ -337,7 +337,8 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     };
 
     processLevel = function(items, index) {
-        var order, values, valueType, property, keys, grouped, k, key;
+        var order, values, valueCounts, valueType
+        , property, keys, grouped, k, key;
         order = orders[index];
         cacheID = order.forward ? 
             "."+order.property :
@@ -349,7 +350,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             );
         }
         values = caches[cacheID].getValuesFromItems(items);
-        
+
         valueType = "text";
         if (order.forward) {
             property = database.getProperty(order.property);
@@ -375,12 +376,8 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         // when multiple orderings are in play.
 
         // mono-grouping
-        grouped = false;
-        for (k = 0; k < keys.length; k++) {
-            if (keys[k].items.size() > 1) {
-                grouped = true;
-            }
-        }
+        grouped = items.size() > keys.length
+            + ((caches[cacheID].countItemsMissingValue() > 0) ? 1:0);
         // end mono-grouping
 
         /** all-grouping
