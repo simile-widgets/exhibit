@@ -16,9 +16,6 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
-    this._itemToValue = null;
-    this._valueToItem = null;
-    this._missingItems = null;
     this._valueType = null;
     this._orderMap = null;
     this._selectMissing = false;
@@ -141,10 +138,7 @@ Exhibit.CloudFacet.prototype._dispose = function() {
     this._cache = null;
     this._dom = null;
     this._valueSet = null;
-    this._itemToValue = null;
-    this._valueToItem = null;
     this._valueType = null;
-    this._missingItems = null;
     this._orderMap = null;
 };
 
@@ -450,47 +444,6 @@ Exhibit.CloudFacet.prototype._clearSelections = function() {
         Exhibit._("%facets.facetClearSelectionsActionTitle", this.getLabel()),
         true
     );
-};
-
-Exhibit.CloudFacet.prototype._buildMaps = function() {
-    var itemToValue, valueToItem, missingItems, valueType, insert, expression, database;
-
-    if (this._itemToValue === null) {
-        itemToValue = {};
-        valueToItem = {};
-        missingItems = {};
-        valueType = "text";
-        orderMap = this._orderMap;
-        
-        insert = function(x, y, map) {
-            if (typeof map[x] !== "undefined") {
-                map[x].push(y);
-            } else {
-                map[x] = [ y ];
-            }
-        };
-        
-        expression = this.getExpression();
-        database = this.getUIContext().getDatabase();
-        
-        this.getUIContext().getCollection().getAllItems().visit(function(item) {
-            var results = expression.evaluateOnItem(item, database);
-            if (results.values.size() > 0) {
-                valueType = results.valueType;
-                results.values.visit(function(value) {
-                    insert(item, value, itemToValue);
-                    insert(value, item, valueToItem);
-                });
-            } else {
-                missingItems[item] = true;
-            }
-        });
-
-        this._itemToValue = itemToValue;
-        this._valueToItem = valueToItem;
-        this._missingItems = missingItems;
-        this._valueType = valueType;
-    }
 };
 
 /**
