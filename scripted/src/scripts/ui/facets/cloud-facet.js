@@ -264,17 +264,7 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
     }
     
     if (this._settings.showMissing || this._selectMissing) {
-        this._buildMaps();
-        
-        count = 0;
-        for (item in this._missingItems) {
-            if (this._missingItems.hasOwnProperty(item)) {
-                if (items.contains(item)) {
-                    count++;
-                }
-            }
-        }
-        
+        count = this._cache.countItemsMissingValue(items);
         if (count > 0 || this._selectMissing) {
             span = Exhibit.jQuery("<span>");
             span.html((typeof this._settings.missingLabel !== "undefined") ? 
