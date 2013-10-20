@@ -21,6 +21,8 @@ Exhibit.OrderedViewFrame = function(uiContext) {
     // functions to be defined by framed view
     this.parentReconstruct = null;
     this.parentHistoryAction = null;
+
+    this._caches = {};
 };
 
 /**
@@ -312,11 +314,13 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
  * @returns {Boolean}
  */
 Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
-    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex;
+    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, cacheID;
     self = this;
     settings = this._settings;
     database = this._uiContext.getDatabase();
+    collection = this._uiContext.getCollection();
     orders = this._getOrders();
+    caches = this._caches;
     itemIndex = 0;
     
     hasSomeGrouping = false;
@@ -335,9 +339,16 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     processLevel = function(items, index) {
         var order, values, valueType, property, keys, grouped, k, key;
         order = orders[index];
-         values = order.forward ? 
-            database.getObjectsUnion(items, order.property) : 
-            database.getSubjectsUnion(items, order.property);
+        cacheID = order.forward ? 
+            "."+order.property :
+            "!"+order.property;
+        if (!caches.hasOwnProperty(cacheID)) {
+            caches[cacheID] = new Exhibit.FacetUtilities.Cache(
+                database, collection,
+                Exhibit.ExpressionParser.parse(cacheID)
+            );
+        }
+        values = caches[cacheID].getValuesFromItems(items);
         
         valueType = "text";
         if (order.forward) {
@@ -435,7 +446,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             };
         } else { //text
             values.visit(function(value) {
-                keys.push({ display: value });
+                keys.push({display: value});
             });
             
             compareKeys = function(key1, key2) {
