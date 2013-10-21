@@ -408,7 +408,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 createGroup(Exhibit._("%general.missingSortKey"),
                             valueType, index);
             }
-            if (items.size() > 1 && index < orders.length - 1) {
+            if (index < orders.length - 1) {
                 processLevel(items, index+1);
             } else {
                 items.visit(createItem);
@@ -417,7 +417,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     };
     
     processNonNumericLevel = function(items, index, values, valueType) {
-        var keys, compareKeys, retrieveItems, order, k, key, vals
+        var keys, compareKeys, order, k, key, vals
         , retrieveRemove;
         keys = [];
         order = orders[index];
@@ -425,7 +425,8 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         if (valueType === "item") {
             values.visit(function(itemID) {
                 var label = database.getObject(itemID, "label");
-                label = (typeof label !== "undefined" && label !== null) ? label : itemID;
+                label = (typeof label !== "undefined" && label !== null) 
+                    ? label : itemID;
                 keys.push({ itemID: itemID, display: label });
             });
             
@@ -435,9 +436,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             };
             
             retrieveItems = order.forward ? function(key) {
-                return database.getSubjects(key.itemID, order.property, null, items);
+                return database.getSubjects(key.itemID,
+                                            order.property, null, items);
             } : function(key) {
-                return database.getObjects(key.itemID, order.property, null, items);
+                return database.getObjects(key.itemID, 
+                                           order.property, null, items);
             };
         } else { //text
             values.visit(function(value) {
@@ -448,9 +451,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 return key1.display.localeCompare(key2.display);
             };
             retrieveItems = order.forward ? function(key) {
-                return database.getSubjects(key.display, order.property, null, items);
+                return database.getSubjects(key.display,
+                                            order.property, null, items);
             } : function(key) {
-                return database.getObjects(key.display, order.property, null, items);
+                return database.getObjects(key.display, 
+                                           order.property, null, items);
             };
         }
         
@@ -458,14 +463,13 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
         });
         
-        retrieveRemove = function(key) {
+        keys.retrieveItems = function(key) {
             var keyItems = retrieveItems(key);
             if (!settings.showDuplicates) {
                 items.removeSet(keyItems);
             }
             return keyItems;
-        }
-        keys.retrieveItems = retrieveRemove;
+        };
         return keys;
     };
     
@@ -493,7 +497,8 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                     return value.getTime();
                 } else {
                     try {
-                        return Exhibit.DateTime.parseIso8601DateTime(value.toString()).getTime();
+                        return Exhibit.DateTime
+                            .parseIso8601DateTime(value.toString()).getTime();
                     } catch (e) {
                         return null;
                     }
@@ -504,37 +509,38 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         values.visit(function(value) {
             var sortkey, key;
             sortkey = valueParser(value);
-            if (typeof sortKey !== "undefined" && sortkey !== null) {
+            if (typeof sortkey !== "undefined" && sortkey !== null) {
                 key = keyMap[sortkey];
                 if (!key) {
-                    key = { sortkey: sortkey, display: value, values: [], items: new Exhibit.Set() };
+                    key = { sortkey: sortkey, display: value, 
+                            values: new Exhibit.Set() };
                     keyMap[sortkey] = key;
                     keys.push(key);
                 }
-                key.values.push(value);
+                key.values.add(value);
             }
         });
         
         keys.sort(function(key1, key2) { 
             return (order.ascending ? 1 : -1) * (key1.sortkey - key2.sortkey); 
         });
-        
-        for (k = 0; k < keys.length; k++) {
-            key = keys[k];
-            vals = key.values;
-            for (v = 0; v < vals.length; v++) {
+
+        keys.retrieveItems = function(key) {
+            var v, vals = key.values
+            , keyItems = new Exhibit.Set();
+            vals.visit(function(v) {
                 if (order.forward) {
-                    database.getSubjects(vals[v], order.property, key.items, items);
+                    database.getSubjects(v, order.property, keyItems, items);
                 } else {
-                    database.getObjects(vals[v], order.property, key.items, items);
+                    database.getObjects(v, order.property, keyItems, items);
                 }
-            }
-            
+            });
             if (!settings.showDuplicates) {
-                items.removeSet(key.items);
+                items.removeSet(keyItems);
             }
+            return keyItems;
         }
-        
+            
         return keys;
     };
 
