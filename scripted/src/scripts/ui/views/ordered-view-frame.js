@@ -314,7 +314,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
  * @returns {Boolean}
  */
 Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
-    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, cacheID;
+    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, expr, i;
     self = this;
     settings = this._settings;
     database = this._uiContext.getDatabase();
@@ -338,19 +338,21 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
 
     processLevel = function(items, index) {
         var order, values, valueCounts, valueType
-        , property, keys, grouped, k, key, keyItems;
+        , property, keys, grouped, k, key, keyItems, missingCount;
+
         order = orders[index];
-        cacheID = order.forward ? 
+        expr = order.forward ? 
             "."+order.property :
             "!"+order.property;
-        if (!caches.hasOwnProperty(cacheID)) {
-            caches[cacheID] = new Exhibit.FacetUtilities.Cache(
+        if (!caches.hasOwnProperty(expr)) {
+            caches[expr] = new Exhibit.FacetUtilities.Cache(
                 database, collection,
-                Exhibit.ExpressionParser.parse(cacheID)
+                Exhibit.ExpressionParser.parse(expr)
             );
         }
-        values = caches[cacheID].getValuesFromItems(items);
-
+        values = caches[expr].getValuesFromItems(items);
+        missingCount = caches[expr].countItemsMissingValue(items);
+        
         valueType = "text";
         if (order.forward) {
             property = database.getProperty(order.property);
@@ -376,15 +378,9 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         // when multiple orderings are in play.
 
         // mono-grouping
-        grouped = items.size() > keys.length
-            + ((caches[cacheID].countItemsMissingValue() > 0) ? 1:0);
-        // end mono-grouping
+        grouped = items.size() > keys.length + 
+            ((missingCount > 0) ? 1 : 0);
 
-        /** all-grouping
-        hasSomeGrouping = true;
-        */
-
-        // mono-grouping
         if (grouped) {
             hasSomeGrouping = true;
         }
@@ -404,12 +400,14 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 }
             }
         }
+
         
-        if ((items.size() > 0) && itemIndex < toIndex) {
+        if ((itemIndex < toIndex) && (missingCount > 0)) {
+            items = caches[expr].getItemsMissingValue(items);
             if (grouped && settings.grouped) {
-                createGroup(Exhibit._("%general.missingSortKey"), valueType, index);
+                createGroup(Exhibit._("%general.missingSortKey"),
+                            valueType, index);
             }
-            
             if (items.size() > 1 && index < orders.length - 1) {
                 processLevel(items, index+1);
             } else {
