@@ -1,0 +1,36 @@
+Exhibit Releases
+================
+
+Exhibit 3.1 (TBD)
+-----------------
+
+Notes:
+
+David Karger has been on a tear, with the below bug fixes and improvements.
+
+New Features:
+
+* TSV Importer
+* HTML Table Importer
+* HTML Table Exporter
+* Debugging HTML Parameter (?exhibit-dev=true)
+
+Bug Fixes:
+
+* Various fixes to the Cloud Facet
+* Expand/collapse facets by clicking the label in addition to the tiny plus icon
+* Warn instead of halt when a component fails
+* Google Spreadsheet Importer was treating :single as a value type
+* History was removing the url ?query
+* Data attributes had a text case error
+* Coordinaters weren't registering themselves
+
+Documentation:
+
+* Updated demos to HTML5 syntax
+
+
+Exhibit 3.0
+-----------
+
+Initial rewrite of the Exhibit 2.0 code.
