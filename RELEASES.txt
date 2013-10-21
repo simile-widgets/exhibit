@@ -15,6 +15,11 @@ New Features:
 * HTML Table Exporter
 * Debugging HTML Parameter (?exhibit-dev=true)
 
+Perormance Enhancements:
+
+* Database now uses has constant-time index insertion rather than worst-case linear time.
+* Performance monitoring utility code added
+
 Bug Fixes:
 
 * Various fixes to the Cloud Facet
@@ -28,6 +33,7 @@ Bug Fixes:
 Documentation:
 
 * Updated demos to HTML5 syntax
+* Added Big Data demo (to show off faster data load time), TSV and HTML Table import demos.
 
 
 Exhibit 3.0
