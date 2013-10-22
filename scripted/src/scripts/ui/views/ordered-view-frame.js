@@ -11,7 +11,6 @@
  */ 
 Exhibit.OrderedViewFrame = function(uiContext) {
     this._uiContext = uiContext;
-    
     this._orders = null;
     this._possibleOrders = null;
     this._settings = {};
@@ -314,7 +313,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
  * @returns {Boolean}
  */
 Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
-    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, expr, i;
+    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, expr, i, sortTop;
     self = this;
     settings = this._settings;
     database = this._uiContext.getDatabase();
@@ -335,6 +334,57 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             self.onNewGroup(label, valueType, index);
         }
     };
+
+
+    //It's overkill to sort many items if you're just planning to show
+    //the top 10.  This function splits the item set down to roughly
+    //the intended size before sorting.
+    sortTop = function(array, compare, limit) {
+        var nextArray, key
+        , split = function(array, key) {
+            var l = array.length, out = [];
+            for (i=0; i < l; i++) {
+                if (compare(array[i], key) <= 0) {
+                    out.push(array[i]);
+                }
+            }
+            return out;
+        }
+        , nearMedian = function(array) {
+            //choose middle of 3 random keys as pivot
+            var k
+            , key1 = array[Math.floor(Math.random()*array.length)]
+            , key2 = array[Math.floor(Math.random()*array.length)]
+            , key3 = array[Math.floor(Math.random()*array.length)];
+            if (compare(key1, key2) > 0) {
+                k = key1;
+                key1 = key2;
+                key2 = k;
+            }
+            if (compare(key2, key3) > 0) {
+                k = key2;
+                key2 = key3;
+                key3 = k;
+            }
+            if (compare(key1, key2) > 0) {
+                k = key1;
+                key1 = key2;
+                key2 = k;
+            }
+            return key2;
+        }
+        if (limit < 10) {
+            //avoid small-array edge-cases;
+            limit = 10;
+        }
+        nextArray = array;
+        while (nextArray.length >= limit) {
+            array = nextArray;
+            key = nearMedian(array);
+            nextArray = split(array, key);
+        }
+        return array.sort(compare);
+    }
 
     processLevel = function(items, index) {
         var order, values, valueCounts, valueType
@@ -458,11 +508,17 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                                            order.property, null, items);
             };
         }
-        
-        keys.sort(function(key1, key2) { 
-            return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
-        });
-        
+
+//        keys.sort(function(key1, key2) { 
+//            return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
+//        });
+
+        sortTop(keys, 
+                function(key1, key2) { 
+                    return (order.ascending ? 1 : -1) *
+                        compareKeys(key1, key2); 
+                },
+                toIndex);
         keys.retrieveItems = function(key) {
             var keyItems = retrieveItems(key);
             if (!settings.showDuplicates) {
