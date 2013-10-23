@@ -393,7 +393,7 @@ Exhibit.UI._busyIndicatorCount = 0;
 /**
  * @static
  */
-Exhibit.UI.showBusyIndicator = function() {
+Exhibit.UI.showBusyIndicator = function(msg) {
     var scrollTop, height, top;
 
     Exhibit.UI._busyIndicatorCount++;
@@ -419,7 +419,16 @@ Exhibit.UI.showBusyIndicator = function() {
     
     Exhibit.jQuery(Exhibit.UI._busyIndicator).css("top", top + "px");
     Exhibit.jQuery(document.body).append(Exhibit.UI._busyIndicator);
+    if (msg) {
+        Exhibit.UI._busyIndicator.find('.message').text(msg);
+    }
 };
+
+Exhibit.UI.busyMessage = function(msg) {
+    if (Exhibit.UI._busyIndicator) {
+        Exhibit.UI._busyIndicator.find('.message').text(msg);
+    }
+}
 
 /**
  * @static
@@ -432,6 +441,7 @@ Exhibit.UI.hideBusyIndicator = function() {
     
     try {
         Exhibit.UI._busyIndicator.remove();
+        Exhibit.UI._busyIndicator.find('.message').empty();
     } catch(e) {
         // silent
     }
@@ -762,6 +772,7 @@ Exhibit.UI.createBusyIndicator = function() {
     img = Exhibit.jQuery("<img />").attr("src", urlPrefix + "progress-running.gif");
     contentDiv.append(img);
     contentDiv.append(document.createTextNode(Exhibit._("%general.busyIndicatorMessage")));
+    contentDiv.append('<div class="message" style="font-size: x-small"/>');
     
     return containerDiv;
 };
