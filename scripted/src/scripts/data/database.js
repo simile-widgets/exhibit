@@ -172,3 +172,81 @@ Exhibit.Database._indexRemoveList = function(index, x, y) {
     
     return res;
 };
+
+
+/**
+ * Iterates over values that are contained in the two-level index,
+ * index[x][y], exiting early if the iterator function returns false
+ *
+ * @param {Object} index The two-level index.
+ * @param {String} x The first level key.
+ * @param {String} y The second level key.
+ * @param {Function} f The function to execute on each item
+ */
+Exhibit.Database._indexVisit = function(index, x, y, f) {
+    var hash, subhash, i, z;
+    hash = index[x];
+    if (typeof hash !== "undefined") {
+        subhash = hash[y];
+        if (typeof subhash !== "undefined") {
+            for (z in subhash) {
+                if (subhash.hasOwnProperty(z)) {
+                    if (!f(z)) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+/**
+ * Returns a count of the number of objects that would be visited by
+ * _indexFillVisit.
+ *
+ * @param {Object} index The two-level index.
+ * @param {String} x The first-level key.
+ * @param {String} y The second-level key.
+ * @param {Function} [filter] Only include values in this filter.
+ * @returns {Number} The count of values.
+ */
+Exhibit.Database._indexCountDistinct = function(index, x, y, filter) {
+    var count, hash, subhash, z;
+    count = 0;
+    hash = index[x];
+    if (hash) {
+        subhash = hash[y];
+        if (subhash) {
+            for (z in subhash) {
+                if (subhash.hasOwnProperty(z) &&
+                    (!filter || filter(z))) {
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+};
+
+/**
+ * Given an index, iterate over all 2d tier keys associated with index[x].
+ * Exiting early if the function returns false
+ *
+ * @param {Object} index The two-level index.
+ * @param {String} x The first-level key.
+ * @param {Function} f The function to execute on each key
+ */
+Exhibit.Database._indexVisitKeys = function (index, x, f) {
+    var hash, keys;
+    hash = index[x];
+    if (typeof hash !== "undefined") {
+        for (key in hash) {
+            if (hash.hasOwnProperty(key)) {
+                if (!f(key)) {
+                    break;
+                };
+            }
+        }
+    }
+}

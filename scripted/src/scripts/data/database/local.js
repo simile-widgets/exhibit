@@ -963,19 +963,12 @@ Exhibit.Database._LocalImpl.prototype._ensurePropertyExists = function(propertyI
  * @param {Exhibit.Set} [filter] Only include values in this filter.
  */
 Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set, filter) {
-    var hash, subhash, i, z;
-    hash = index[x];
-    if (typeof hash !== "undefined") {
-        subhash = hash[y];
-        if (typeof subhash !== "undefined") {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z) &&
-                    (!filter || filter.contains(z))) {
-                    set.add(z);
-                }
-            }
+    Exhibit.Database._indexVisit(index, x, y, function(z) {
+        if (!filter || filter.contains(z)) {
+            set.add(z);
         }
-    }
+        return true;
+    });
 };
 
 Exhibit.Database._LocalImpl.prototype._visit = function(index, x, y, f) {
@@ -1004,20 +997,13 @@ Exhibit.Database._LocalImpl.prototype._visit = function(index, x, y, f) {
  * @returns {Number} The count of values.
  */
 Exhibit.Database._LocalImpl.prototype._indexCountDistinct = function(index, x, y, filter) {
-    var count, hash, subhash, z;
-    count = 0;
-    hash = index[x];
-    if (hash) {
-        subhash = hash[y];
-        if (subhash) {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z) &&
-                    (!filter || filter.contains(z))) {
-                    count++;
-                }
-            }
+    var count = 0;
+    Exhibit.Database._indexVisit(index, x, y, function (z) {
+        if (!filter || filter.contains(z)) {
+            count++;
         }
-    }
+        return true;
+    });
     return count;
 };
 
@@ -1107,15 +1093,11 @@ Exhibit.Database._LocalImpl.prototype._countDistinct = function(index, x, y, fil
  */
 Exhibit.Database._LocalImpl.prototype._getProperties = function(index, x) {
     var hash, properties, p;
-    hash = index[x];
     properties = [];
-    if (typeof hash !== "undefined") {
-        for (p in hash) {
-            if (hash.hasOwnProperty(p)) {
-                properties.push(p);
-            }
-        }
-    }
+    Exhibit.Database._indexVisitKeys(index, x, function (p) {
+        properties.push(p);
+        return true;
+    });
     return properties;
 };
 
