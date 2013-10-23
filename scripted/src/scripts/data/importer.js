@@ -118,7 +118,13 @@ Exhibit.Importer.prototype.isRegistered = function() {
  * @param {Function} callback
  */
 Exhibit.Importer.prototype.load = function(link, database, callback) {
-    var resolver, url, postLoad, postParse, self;
+    var resolver, url, postLoad, postParse, self, promise
+    , finish = function () {
+        Exhibit.UI.hideBusyIndicator();
+        if (typeof callback === "function") {
+            callback();
+        }
+    };
     url = typeof link === "string" ? link : Exhibit.jQuery(link).attr("href");
     url = Exhibit.Persistence.resolveURL(url);
 
@@ -136,29 +142,27 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
 
     postParse = function(o) {
         try {
-            database.loadData(o, Exhibit.Persistence.getBaseURL(url));
+            Exhibit.UI.busyMessage('inserting');
+            database.loadData(o, Exhibit.Persistence.getBaseURL(url), finish);
         } catch(e) {
             Exhibit.Debug.exception(e);
             Exhibit.jQuery(document).trigger("error.exhibit", [e, Exhibit._("%import.couldNotLoad", url)]);
-        } finally {
-            if (typeof callback === "function") {
-                callback();
-            }
+            finish()
         }
     };
 
     self = this;
     postLoad = function(s, textStatus, jqxhr) {
         try {
+            Exhibit.UI.busyMessage('parsing');
             self._parse(url, s, postParse, link);
         } catch(e) {
             Exhibit.jQuery(document).trigger("error.exhibit", [e, Exhibit._("%import.couldNotParse", url)]);
-        } finally {
-            Exhibit.UI.hideBusyIndicator();
         }
     };
 
     Exhibit.UI.showBusyIndicator();
+    Exhibit.UI.busyMessage('fetching');
     resolver(url, database, postLoad, link);
 };
 

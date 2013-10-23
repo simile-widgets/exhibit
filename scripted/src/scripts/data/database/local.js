@@ -97,7 +97,7 @@ Exhibit.Database._LocalImpl.prototype.loadLinks = function() {
  * @param {Object} o An object that reflects the Exhibit JSON form.
  * @param {String} baseURI The base URI for normalizing URIs in the object.
  */
-Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI) {
+Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI, finish) {
     if (typeof o === "undefined" || o === null) {
         throw new Error(Exhibit._("%database.error.unloadable"));
     }
@@ -111,7 +111,9 @@ Exhibit.Database._LocalImpl.prototype.loadData = function(o, baseURI) {
         this.loadProperties(o.properties, baseURI);
     }
     if (typeof o.items !== "undefined") {
-        this.loadItems(o.items, baseURI);
+        this.loadItems(o.items, baseURI, finish);
+    } else {
+        finish();
     }
 };
 
@@ -264,6 +266,7 @@ Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout,
     chunker = function() {
         var remnant, currentSize;
         remnant = length - index;
+        Exhibit.UI.busyMessage("items: " + remnant);
         currentSize = (remnant >= size) ? size : remnant;
         if (index < length) {
             while (currentSize-- > 0) {
@@ -283,10 +286,16 @@ Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout,
  * @param {Object} itemEntries The "items" subsection of Exhibit JSON.
  * @param {String} baseURI The base URI for normalizing URIs in the object.
  */
-Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI) {
+Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI, finish) {
+    var self, lastChar, indexTriple, wrapFinish, loader;
     Exhibit.jQuery(document).trigger("onBeforeLoadingItems.exhibit");
-    var self, lastChar, indexTriple, finish, loader;
+    Exhibit.UI.busyMessage('items');
     self = this;
+    wrapFinish = function() {
+        self._propertyArray = null;
+        Exhibit.jQuery(document).trigger("onAfterLoadingItems.exhibit");
+        finish();
+    };
     try {
         lastChar = baseURI.substr(baseURI.length - 1);
         if (lastChar === "#") {
@@ -295,10 +304,6 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
             baseURI += "/";
         }
         indexTriple = function(s,p,o) { self.addStatement(s,p,o); };
-        finish = function() {
-            self._propertyArray = null;
-            Exhibit.jQuery(document).trigger("onAfterLoadingItems.exhibit");
-        };
 
         loader = function(item) {
             if (typeof item === "object") {
@@ -306,9 +311,11 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI)
             }
         };
 
-        Exhibit.Database._LocalImpl._loadChunked(loader, itemEntries, 500, 10, finish);
+        Exhibit.Database._LocalImpl
+            ._loadChunked(loader, itemEntries, 1000, 10, wrapFinish);
     } catch(e) {
         Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
+        wrapFinish();
     }
 };
 
