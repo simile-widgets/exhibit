@@ -16,9 +16,6 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
-    this._itemToValue = null;
-    this._valueToItem = null;
-    this._missingItems = null;
     this._valueType = null;
     this._orderMap = null;
     this._selectMissing = false;
@@ -124,18 +121,24 @@ Exhibit.CloudFacet._configure = function(facet, configuration) {
     if (typeof configuration.selectMissing !== "undefined") {
         facet._selectMissing = configuration.selectMissing;
     }
+
+    facet._cache = new Exhibit.FacetUtilities.Cache(
+        facet.getUIContext().getDatabase(),
+        facet.getUIContext().getCollection(),
+        facet.getExpression()
+    );
+
 };
 
 /**
  *
  */
 Exhibit.CloudFacet.prototype._dispose = function() {
+    this._cache.dispose();
+    this._cache = null;
     this._dom = null;
     this._valueSet = null;
-    this._itemToValue = null;
-    this._valueToItem = null;
     this._valueType = null;
-    this._missingItems = null;
     this._orderMap = null;
 };
 
@@ -158,6 +161,8 @@ Exhibit.CloudFacet.prototype.clearAllRestrictions = function() {
 
 /**
  * @param {Array} restrictions
+ * @param {Array} restrictions.selection
+ * @param {Boolean} restrictions.selectMissing
  */
 Exhibit.CloudFacet.prototype.applyRestrictions = function(restrictions) {
     var i;
@@ -198,48 +203,15 @@ Exhibit.CloudFacet.prototype.setSelectMissing = function(selected) {
  * @returns {Exhibit.Set}
  */
 Exhibit.CloudFacet.prototype.restrict = function(items) {
-    var set, itemA, i, item, valueToItem, missingItems;
-
     if (this._valueSet.size() === 0 && !this._selectMissing) {
         return items;
     }
-    
-    if (this.getExpression().isPath()) {
-        set = this.getExpression().getPath().walkBackward(
-            this._valueSet, 
-            "item",
-            items, 
-            this.getUIContext().getDatabase()
-        ).getSet();
-    } else {
-        this._buildMaps();
-        
-        set = new Exhibit.Set();
-        
-        valueToItem = this._valueToItem;
-        this._valueSet.visit(function(value) {
-            if (typeof valueToItem[value] !== "undefined") {
-                itemA = valueToItem[value];
-                for (i = 0; i < itemA.length; i++) {
-                    item = itemA[i];
-                    if (items.contains(item)) {
-                        set.add(item);
-                    }
-                }
-            }
-        });
-    }
-    
+
+    var set = this._cache.getItemsFromValues(this._valueSet, items);
     if (this._selectMissing) {
-        this._buildMaps();
-        
-        missingItems = this._missingItems;
-        items.visit(function(item) {
-            if (typeof missingItems[item] !== "undefined") {
-                set.add(item);
-            }
-        });
+        this._cache.getItemsMissingValue(items, set);
     }
+    
     
     return set;
 };
@@ -256,44 +228,20 @@ Exhibit.CloudFacet.prototype.update = function(items) {
  * @returns {Array}
  */
 Exhibit.CloudFacet.prototype._computeFacet = function(items) {
-    var database, entries, valueType, self, path, facetValueResult, itemSubcollection, value, itemA, count, i, item, sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
+    var database, entries, valueType, self, path, facetValueResult, r, itemSubcollection, value, itemA, count, i, item, sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
     database = this.getUIContext().getDatabase();
+    r = this._cache.getValueCountsFromItems(items);
     entries = [];
-    valueType = "text";
-    self = this;
-    if (this.getExpression().isPath()) {
-        path = this.getExpression().getPath();
-        facetValueResult = path.walkForward(items, "item", database);
-        valueType = facetValueResult.valueType;
-        if (facetValueResult.size > 0) {
-            facetValueResult.forEachValue(function(facetValue) {
-                itemSubcollection = path.evaluateBackward(facetValue, valueType, items, database);
-                if (itemSubcollection.size >= self._settings.minimumCount || self._valueSet.contains(facetValue)) {
-                    entries.push({ value: facetValue, count: itemSubcollection.size });
-                }
-            });
-        }
-    } else {
-        this._buildMaps();
-        
-        valueType = this._valueType;
-        for (value in this._valueToItem) {
-            if (this._valueToItem.hasOwnProperty(value)) {
-                itemA = this._valueToItem[value];
-                count = 0;
-                for (i = 0; i < itemA.length; i++) {
-                    if (items.contains(itemA[i])) {
-                        count++;
-                    }
-                }
-            
-                if (count >= this._settings.minimumCount || this._valueSet.contains(value)) {
-                    entries.push({ value: value, count: count });
-                }
-            }
+
+    for (i=0; i < r.entries.length; i++) {
+        if ((r.entries[i].count >= this._settings.minimumCount) ||
+            (this._valueSet.countains(r.entries[i].value))) {
+            entries.push(r.entries[i]);
         }
     }
-    
+
+    valueType = r.valueType;
+
     if (entries.length > 0) {
         selection = this._valueSet;
         labeler = valueType === "item" ?
@@ -306,61 +254,11 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
             entry.selected = selection.contains(entry.value);
         }
         
-        sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
-        if (this._orderMap !== null) {
-            orderMap = this._orderMap;
-            
-            sortValueFunction = function(a, b) {
-                if (typeof orderMap[a.selectionLabel] !== "undefined") {
-                    if (typeof orderMap[b.selectionLabel] !== "undefined") {
-                        return orderMap[a.selectionLabel] - orderMap[b.selectionLabel];
-                    } else {
-                        return -1;
-                    }
-                } else if (typeof orderMap[b.selectionLabel] !== "undefined") {
-                    return 1;
-                } else {
-                    return a.selectionLabel.localeCompare(b.selectionLabel);
-                }
-            };
-        } else if (valueType === "number") {
-            sortValueFunction = function(a, b) {
-                a = parseFloat(a.value);
-                b = parseFloat(b.value);
-                return a < b ? -1 : a > b ? 1 : 0;
-            };
-        }
-        
-        sortFunction = sortValueFunction;
-        if (this._settings.sortMode === "count") {
-            sortFunction = function(a, b) {
-                var c = b.count - a.count;
-                return c !== 0 ? c : sortValueFunction(a, b);
-            };
-        }
-
-        sortDirectionFunction = sortFunction;
-        if (this._settings.sortDirection === "reverse"){
-            sortDirectionFunction = function(a, b) {
-                return sortFunction(b, a);
-            };
-        }
-
-        entries.sort(sortDirectionFunction);
+        entries.sort(this._createSortFunction(valueType));
     }
     
     if (this._settings.showMissing || this._selectMissing) {
-        this._buildMaps();
-        
-        count = 0;
-        for (item in this._missingItems) {
-            if (this._missingItems.hasOwnProperty(item)) {
-                if (items.contains(item)) {
-                    count++;
-                }
-            }
-        }
-        
+        count = this._cache.countItemsMissingValue(items);
         if (count > 0 || this._selectMissing) {
             span = Exhibit.jQuery("<span>");
             span.html((typeof this._settings.missingLabel !== "undefined") ? 
@@ -548,45 +446,53 @@ Exhibit.CloudFacet.prototype._clearSelections = function() {
     );
 };
 
-Exhibit.CloudFacet.prototype._buildMaps = function() {
-    var itemToValue, valueToItem, missingItems, valueType, insert, expression, database;
-
-    if (this._itemToValue === null) {
-        itemToValue = {};
-        valueToItem = {};
-        missingItems = {};
-        valueType = "text";
+/**
+ * @param {String} valueType
+ * @returns {Function}
+ */
+Exhibit.CloudFacet.prototype._createSortFunction = function(valueType) {
+    var sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
+    sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
+    if (this._orderMap !== null) {
         orderMap = this._orderMap;
         
-        insert = function(x, y, map) {
-            if (typeof map[x] !== "undefined") {
-                map[x].push(y);
+        sortValueFunction = function(a, b) {
+            if (typeof orderMap[a.selectionLabel] !== "undefined") {
+                if (typeof orderMap[b.selectionLabel] !== "undefined") {
+                    return orderMap[a.selectionLabel] - orderMap[b.selectionLabel];
+                } else {
+                    return -1;
+                }
+            } else if (typeof orderMap[b.selectionLabel] !== "undefined") {
+                return 1;
             } else {
-                map[x] = [ y ];
+                return a.selectionLabel.localeCompare(b.selectionLabel);
             }
         };
-        
-        expression = this.getExpression();
-        database = this.getUIContext().getDatabase();
-        
-        this.getUIContext().getCollection().getAllItems().visit(function(item) {
-            var results = expression.evaluateOnItem(item, database);
-            if (results.values.size() > 0) {
-                valueType = results.valueType;
-                results.values.visit(function(value) {
-                    insert(item, value, itemToValue);
-                    insert(value, item, valueToItem);
-                });
-            } else {
-                missingItems[item] = true;
-            }
-        });
-
-        this._itemToValue = itemToValue;
-        this._valueToItem = valueToItem;
-        this._missingItems = missingItems;
-        this._valueType = valueType;
+    } else if (valueType === "number") {
+        sortValueFunction = function(a, b) {
+            a = parseFloat(a.value);
+            b = parseFloat(b.value);
+            return a < b ? -1 : a > b ? 1 : 0;
+        };
     }
+    
+    sortFunction = sortValueFunction;
+    if (this._settings.sortMode === "count") {
+        sortFunction = function(a, b) {
+            var c = b.count - a.count;
+            return c !== 0 ? c : sortValueFunction(a, b);
+        };
+    }
+
+    sortDirectionFunction = sortFunction;
+    if (this._settings.sortDirection === "reverse"){
+        sortDirectionFunction = function(a, b) {
+            return sortFunction(b, a);
+        };
+    }
+    
+    return sortDirectionFunction;
 };
 
 /**
