@@ -136,53 +136,16 @@ Exhibit.OrderedViewFrame.prototype._internalValidate = function() {
 
 /**
  * @param {Array} orders
+ * @param {Array} output object to receive orders
+ * @param {String} error message for unparsable order expr
+ * @param {Strong} error message for invalid order object
  */
-Exhibit.OrderedViewFrame.prototype._configureOrders = function(orders) {
+
+Exhibit.OrderedViewFrame.prototype._internalConfigureOrders =
+    function(orders, output, exprMsg, objMessage) {
     var i, order, expr, ascending, expression, path, segment;
     for (i = 0; i < orders.length; i++) {
         order = orders[i];
-        ascending = true;
-        expr = null;
-
-        if (typeof order === "string") {
-            expr = order;
-        } else if (typeof order === "object") {
-            expr = order.expression;
-            ascending = (typeof order.ascending !== "undefined") ?
-                (order.ascending) :
-                true;
-        }
-
-        if (expr !== null) {
-            try {
-                expression = Exhibit.ExpressionParser.parse(expr);
-                if (expression.isPath()) {
-                    path = expression.getPath();
-                    if (path.getSegmentCount() === 1) {
-                        segment = path.getSegment(0);
-                        this._orders.push({
-                            property:   segment.property,
-                            forward:    segment.forward,
-                            ascending:  ascending
-                        });
-                    }
-                }
-            } catch (e) {
-                Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.orderExpression", expr));
-            }
-        } else {
-            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.orderObject", JSON.stringify(order)));
-        }
-    }
-};
-
-/**
- * @param {Array} possibleOrders
- */
-Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleOrders) {
-    var i, order, expr, ascending, expression, path, segment;
-    for (i = 0; i < possibleOrders.length; i++) {
-        order = possibleOrders[i];
         ascending = true;
         expr = null;
         
@@ -202,7 +165,7 @@ Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleO
                     path = expression.getPath();
                     if (path.getSegmentCount() === 1) {
                         segment = path.getSegment(0);
-                        this._possibleOrders.push({
+                        output.push({
                             property:   segment.property,
                             forward:    segment.forward,
                             ascending:  ascending
@@ -210,12 +173,32 @@ Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleO
                     }
                 }
             } catch (e) {
-                Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.possibleOrderExpression", expr));
+                Exhibit.Debug.warn(Exhibit._(exprMsg, expr));
             }
         }  else {
-            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.possibleOrderObject", JSON.stringify(order)));
+            Exhibit.Debug.warn(Exhibit._(orderMsg, JSON.stringify(order)));
         }
     }
+};
+
+/**
+ * @param {Array} orders
+ */
+Exhibit.OrderedViewFrame.prototype._configureOrders = function(orders) {
+    Exhibit.OrderedViewFrame.prototype
+        ._internalConfigureOrders(orders, this._orders,
+                                  "%orderedViewFrame.error.orderExpression",
+                                  "%orderedViewFrame.error.orderObject");
+};
+
+/**
+ * @param {Array} possibleOrders
+ */
+Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleOrders) {
+    Exhibit.OrderedViewFrame.prototype
+        ._internalConfigureOrders(possibleOrders, this._possibleOrders,
+                                  "%orderedViewFrame.error.possibleOrderExpression", 
+                                  "%orderedViewFrame.error.possibleOrderObject");
 };
 
 /**
