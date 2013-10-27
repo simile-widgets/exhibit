@@ -335,7 +335,6 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         }
     };
 
-
     //It's overkill to sort many items if you're just planning to show
     //the top 10.  This function splits the item set down to roughly
     //the intended size before sorting.
@@ -388,6 +387,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
 
     processLevel = function(items, index) {
         var order, values, valueCounts, valueType
+        , expr
         , property, keys, grouped, k, key, keyItems, missingCount;
 
         order = orders[index];
@@ -467,10 +467,12 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     };
     
     processNonNumericLevel = function(items, index, values, valueType) {
-        var keys, compareKeys, order, k, key, vals
-        , retrieveRemove;
-        keys = [];
-        order = orders[index];
+        var compareKeys, k, key, vals
+        , retrieveRemove
+        , keys = []
+        , order = orders[index]
+        , expr = order.forward ? "."+order.property : "!"+order.property
+        , cache = caches[expr];
         
         if (valueType === "item") {
             values.visit(function(itemID) {
@@ -484,13 +486,10 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 var c = key1.display.localeCompare(key2.display);
                 return c !== 0 ? c : key1.itemID.localeCompare(key2.itemID);
             };
-            
-            retrieveItems = order.forward ? function(key) {
-                return database.getSubjects(key.itemID,
-                                            order.property, null, items);
-            } : function(key) {
-                return database.getObjects(key.itemID, 
-                                           order.property, null, items);
+
+            retrieveItems = function(key) {
+                return cache.getItemsFromValues(new Exhibit.Set([key.itemID]),
+                                                items);
             };
         } else { //text
             values.visit(function(value) {
@@ -500,12 +499,9 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             compareKeys = function(key1, key2) {
                 return key1.display.localeCompare(key2.display);
             };
-            retrieveItems = order.forward ? function(key) {
-                return database.getSubjects(key.display,
-                                            order.property, null, items);
-            } : function(key) {
-                return database.getObjects(key.display, 
-                                           order.property, null, items);
+            retrieveItems = function(key) {
+                return cache.getItemsFromValues(new Exhibit.Set([key.display]),
+                                                items);
             };
         }
 
@@ -530,10 +526,12 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     };
     
     processNumericLevel = function(items, index, values, valueType) {
-        var keys, keyMap, order, valueParser, key, k, v;
-        keys = [];
-        keyMap = {};
-        order = orders[index];
+        var valueParser, key, k, v
+        , keys = []
+        , keyMap = {}
+        , order = orders[index]
+        , expr = order.forward ? "."+order.property : "!"+order.property
+        , cache = caches[expr];
         
         if (valueType === "number") {
             valueParser = function(value) {
@@ -583,14 +581,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
 
         keys.retrieveItems = function(key) {
             var v, vals = key.values
-            , keyItems = new Exhibit.Set();
-            vals.visit(function(v) {
-                if (order.forward) {
-                    database.getSubjects(v, order.property, keyItems, items);
-                } else {
-                    database.getObjects(v, order.property, keyItems, items);
-                }
-            });
+            keyItems = cache.getItemsFromValues(key.values, items);
             if (!settings.showDuplicates) {
                 items.removeSet(keyItems);
             }
