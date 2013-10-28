@@ -451,7 +451,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     
     processNonNumericLevel = function(items, index, values, valueType) {
         var compareKeys, k, key, vals
-        , retrieveRemove
+        , retrieveItems
         , keys = []
         , order = orders[index]
         , expr = order.forward ? "."+order.property : "!"+order.property
