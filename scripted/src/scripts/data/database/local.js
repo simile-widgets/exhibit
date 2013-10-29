@@ -471,6 +471,10 @@ Exhibit.Database._LocalImpl.prototype.getObjects = function(s, p, set, filter) {
     return this._get(this._spo, s, p, set, filter);
 };
 
+Exhibit.Database._LocalImpl.prototype.visitObjects = function(s, p, f) {
+    return this._visit(this._spo, s, p, f);
+};
+
 /**
  * Count the distinct, unique objects (any repeated objects count as one)
  * for a subject-predicate pair. 
@@ -523,6 +527,10 @@ Exhibit.Database._LocalImpl.prototype.countDistinctObjectsUnion = function(subje
  */
 Exhibit.Database._LocalImpl.prototype.getSubjects = function(o, p, set, filter) {
     return this._get(this._ops, o, p, set, filter);
+};
+
+Exhibit.Database._LocalImpl.prototype.visitSubjects = function(o, p, f) {
+    return this._visit(this._ops, o, p, f);
 };
 
 /**
@@ -844,13 +852,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
             itemEntry.type :
             "Item";
                 
-        isArray = function(obj) {
-            if (obj.constructor.toString().indexOf("Array") === -1) {
-                return false;
-            } else {
-                return true;
-            }
-        };
+        isArray = Array.isArray;
 
         if (isArray(label)) {
             label = label[0];
@@ -884,7 +886,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
                     this._ensurePropertyExists(p, baseURI)._onNewData();
                                     
                     v = itemEntry[p];
-                    if (v instanceof Array) {
+                    if (isArray(v)) {
                         for (j = 0; j < v.length; j++) {
                             indexFunction(id, p, v[j]);
                         }
@@ -970,6 +972,21 @@ Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set,
                 if (subhash.hasOwnProperty(z) &&
                     (!filter || filter.contains(z))) {
                     set.add(z);
+                }
+            }
+        }
+    }
+};
+
+Exhibit.Database._LocalImpl.prototype._visit = function(index, x, y, f) {
+    var hash, subhash, i, z;
+    hash = index[x];
+    if (typeof hash !== "undefined") {
+        subhash = hash[y];
+        if (typeof subhash !== "undefined") {
+            for (z in subhash) {
+                if (subhash.hasOwnProperty(z)) {
+                    f(z);
                 }
             }
         }

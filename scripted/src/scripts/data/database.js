@@ -49,7 +49,7 @@ Exhibit.Database._indexPut = function(index, x, y, z) {
 
     subhash = hash[y];
     if (typeof subhash === "undefined") {
-        subhash = [];
+        subhash = {};
         hash[y] = subhash;
     }
 

@@ -632,7 +632,8 @@ Exhibit.FacetUtilities.Cache.prototype.countItemsMissingValue = function(items) 
  *
  */
 Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
-    var itemToValue, valueToItem, missingItems, valueType, insert, expression, database;
+    var itemToValue, valueToItem, missingItems, valueType, getter
+    , insert, expression, database, perItem, fastEval, property;
 
     if (typeof this._itemToValue === "undefined") {
         itemToValue = {};
@@ -650,20 +651,57 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
         
         expression = this._expression;
         database = this._database;
-        
-        this._collection.getAllItems().visit(function(item) {
-            var results = expression.evaluateOnItem(item, database);
-            if (results.values.size() > 0) {
-                valueType = results.valueType;
-                results.values.visit(function(value) {
-                    insert(item, value, itemToValue);
-                    insert(value, item, valueToItem);
-                });
+
+        fastEval = function(items, path) {
+            //rapid eval for length-one paths
+            var write = {}
+            , item, missing
+            , segment, valueType = "text";
+            segment = path.getSegment(0);
+            if (segment.forward) {
+                getter = database.visitObjects;
             } else {
-                missingItems[item] = true;
+                getter = database.visitSubjects;
             }
-        });
+            items.visit(function (item) {
+                missing = true;
+                getter.call(database, item, segment.property, 
+                            function (value) {
+                                insert(item, value, itemToValue);
+                                insert(value, item, valueToItem);
+                                missing = false;
+                            }, 
+                           items);
+                if (missing) {
+                    missingItems[item] = true;
+                }
+            }); 
+            if (segment.forward) {
+                property = database.getProperty(segment.property);
+                valueType = (typeof property !== "undefined" && property !== null) ? property.getValueType() : "text";
+            } else {
+                valueType = "item";
+            }
+
+        };
         
+        if (expression.isPath() &&
+            expression.getPath().getSegmentCount() == 1) {
+            fastEval(this._collection.getAllItems(), expression.getPath());
+        } else {
+            this._collection.getAllItems().visit(function(item) {
+                var results = expression.evaluateOnItem(item, database);
+                if (results.values.size() > 0) {
+                    valueType = results.valueType;
+                    results.values.visit(function(value) {
+                        insert(item, value, itemToValue);
+                        insert(value, item, valueToItem);
+                    });
+                } else {
+                    missingItems[item] = true;
+                }
+            });
+        }
         this._itemToValue = itemToValue;
         this._valueToItem = valueToItem;
         this._missingItems = missingItems;
