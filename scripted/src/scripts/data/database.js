@@ -39,7 +39,7 @@ Exhibit.Database.create = function(type) {
  * @param {String} z Value to put into the subhash.
  */
 Exhibit.Database._indexPut = function(index, x, y, z) {
-    var hash, subhash, i;
+    var hash, subhash, i, nextsub;
 
     hash = index[x];
     if (typeof hash === "undefined") {
@@ -49,11 +49,15 @@ Exhibit.Database._indexPut = function(index, x, y, z) {
 
     subhash = hash[y];
     if (typeof subhash === "undefined") {
-        subhash = {};
-        hash[y] = subhash;
+        hash[y] = z;  //store single value without new object
+    } else if (typeof subhash === "object") {
+        subhash[z] = true; //already storing multiple values
+    } else if (subhash !== z) { 
+        nextsub = {}; //switch from single to multi value (object) store
+        nextsub[subhash] = true;
+        nextsub[z] = true;
+        hash[y] = nextsub;
     }
-
-    subhash[z] = true;
 };
 
 /**
@@ -80,6 +84,10 @@ Exhibit.Database._indexPutList = function(index, x, y, list) {
     subhash = hash[y];
     if (typeof subhash === "undefined") {
         hash[y] = {};
+        subhash = hash[y];
+    } else if (typeof subhash !== "object") {
+        hash[y] = {};
+        hash[y][subhash] = true;
         subhash = hash[y];
     }
 
@@ -119,9 +127,18 @@ Exhibit.Database._indexRemove = function(index, x, y, z) {
     }
 
     subhash = hash[y];
+
     if (typeof subhash === "undefined") {
         return false;
     }
+
+    if (typeof subhash !== "object") {
+        if (subhash === z) {
+            delete hash[y];
+        }
+        return false;
+    }
+
 
     delete subhash[z];
 
@@ -189,10 +206,14 @@ Exhibit.Database._indexVisit = function(index, x, y, f) {
     if (typeof hash !== "undefined") {
         subhash = hash[y];
         if (typeof subhash !== "undefined") {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z)) {
-                    if (!f(z)) {
-                        break;
+            if (typeof subhash !== "object") {
+                f(subhash);
+            } else {
+                for (z in subhash) {
+                    if (subhash.hasOwnProperty(z)) {
+                        if (!f(z)) {
+                            break;
+                        }
                     }
                 }
             }
@@ -218,10 +239,14 @@ Exhibit.Database._indexCountDistinct = function(index, x, y, filter) {
     if (hash) {
         subhash = hash[y];
         if (subhash) {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z) &&
-                    (!filter || filter(z))) {
-                    count++;
+            if (typeof subhash !== "object") {
+                return 1;
+            } else {
+                for (z in subhash) {
+                    if (subhash.hasOwnProperty(z) &&
+                        (!filter || filter(z))) {
+                        count++;
+                    }
                 }
             }
         }
@@ -238,15 +263,15 @@ Exhibit.Database._indexCountDistinct = function(index, x, y, filter) {
  * @param {Function} f The function to execute on each key
  */
 Exhibit.Database._indexVisitKeys = function (index, x, f) {
-    var hash, keys;
+    var hash, key;
     hash = index[x];
     if (typeof hash !== "undefined") {
         for (key in hash) {
             if (hash.hasOwnProperty(key)) {
                 if (!f(key)) {
                     break;
-                };
+                }
             }
         }
     }
-}
+};

@@ -588,6 +588,9 @@ Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
     if (hash) {
         subhash = hash[p];
         if (subhash) {
+            if (typeof subhash !== "object") {
+                return subhash;
+            }
             for (v in subhash) {
                 if (subhash.hasOwnProperty(v)) {
                     return v;
@@ -823,7 +826,7 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database) {
  * @param {String} baseURI The base URI to resolve URI fragments against.
  */
 Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunction, baseURI) {
-    var id, label, uri, type, isArray, p, v, j;
+    var id, label, uri, type, isArray = Array.isArray, p, v, j;
 
     if (typeof itemEntry.label === "undefined" &&
         typeof itemEntry.id === "undefined") {
@@ -852,7 +855,6 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
             itemEntry.type :
             "Item";
                 
-        isArray = Array.isArray;
 
         if (isArray(label)) {
             label = label[0];
@@ -977,9 +979,13 @@ Exhibit.Database._LocalImpl.prototype._visit = function(index, x, y, f) {
     if (typeof hash !== "undefined") {
         subhash = hash[y];
         if (typeof subhash !== "undefined") {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z)) {
-                    f(z);
+            if (typeof subhash !== "object") {
+                f(subhash);
+            } else {
+                for (z in subhash) {
+                    if (subhash.hasOwnProperty(z)) {
+                        f(z);
+                    }
                 }
             }
         }
