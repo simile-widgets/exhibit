@@ -582,9 +582,10 @@ Exhibit.Collection.prototype._onRootItemsChanged = function() {
  */ 
 Exhibit.Collection.prototype._updateFacets = function() {
     var i, facet, items, j, restrictBefore=[], restrictAfter=[]
-    , hasRestrictions, hasRestrictionsBefore, hasRestrictionsAfter
+    , countRestrictions = 0
     , facets = this._facets
     , allItems = this.readAllItems() //getAllItems() wastes a copy
+    , restrictedItems
     , fastIntersect = function(x,y) {
         if (x === allItems) {
             return y;
@@ -595,6 +596,25 @@ Exhibit.Collection.prototype._updateFacets = function() {
         }
         
     };
+
+    for (i = 0; i < facets.length; i++) {
+        if (facets[i].hasRestrictions()) {
+            countRestrictions++;
+        }
+    }
+
+    if (countRestrictions <= 1) {
+        //special fast path avoids computing unnecessary restrictions
+        restrictedItems = this.readRestrictedItems();
+        for (i=0; i < facets.length; i++) {
+            if (facets[i].hasRestrictions()) {
+                facets[i].update(allItems);
+            } else {
+                facets[i].update(restrictedItems);
+            }
+        }
+        return;
+    }
 
     restrictBefore[0] = allItems;
     for (i = 0; i < facets.length-1; i++) {
