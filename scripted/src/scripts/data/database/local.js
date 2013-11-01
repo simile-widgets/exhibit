@@ -472,7 +472,7 @@ Exhibit.Database._LocalImpl.prototype.getObjects = function(s, p, set, filter) {
 };
 
 Exhibit.Database._LocalImpl.prototype.visitObjects = function(s, p, f) {
-    return this._visit(this._spo, s, p, f);
+    return Exhibit.Database._indexVisit(this._spo, s, p, f);
 };
 
 /**
@@ -530,7 +530,7 @@ Exhibit.Database._LocalImpl.prototype.getSubjects = function(o, p, set, filter) 
 };
 
 Exhibit.Database._LocalImpl.prototype.visitSubjects = function(o, p, f) {
-    return this._visit(this._ops, o, p, f);
+    return Exhibit.Database._indexVisit(this._ops, o, p, f);
 };
 
 /**
@@ -582,23 +582,13 @@ Exhibit.Database._LocalImpl.prototype.countDistinctSubjectsUnion = function(obje
  * @returns {String} One matching object.
  */
 Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
-    var hash, subhash, v;
+    var o = null;
 
-    hash = this._spo[s];
-    if (hash) {
-        subhash = hash[p];
-        if (subhash) {
-            if (typeof subhash !== "object") {
-                return subhash;
-            }
-            for (v in subhash) {
-                if (subhash.hasOwnProperty(v)) {
-                    return v;
-                }
-            }
-        }
-    }
-    return null;
+    Exhibit.Database._indexVisit(this._spo, s, p, function (v) {
+        o=v;
+        return false; //terminate iteration
+    });
+    return o;
 };
 
 /**
@@ -610,20 +600,13 @@ Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
  * @returns {String} One matching subject identifier.
  */
 Exhibit.Database._LocalImpl.prototype.getSubject = function(o, p) {
-    var hash, subhash, v;
+    var s = null;
 
-    hash = this._ops[o];
-    if (hash) {
-        subhash = hash[p];
-        if (subhash) {
-            for (v in subhash) {
-                if (subhash.hasOwnProperty(v)) {
-                    return v;
-                }
-            }
-        }
-    }
-    return null;
+    Exhibit.Database._indexVisit(this._spo, o, p, function (v) {
+        s=v;
+        return false; //terminate iteration
+    });
+    return s;
 };
 
 /**
@@ -971,25 +954,6 @@ Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set,
         }
         return true;
     });
-};
-
-Exhibit.Database._LocalImpl.prototype._visit = function(index, x, y, f) {
-    var hash, subhash, i, z;
-    hash = index[x];
-    if (typeof hash !== "undefined") {
-        subhash = hash[y];
-        if (typeof subhash !== "undefined") {
-            if (typeof subhash !== "object") {
-                f(subhash);
-            } else {
-                for (z in subhash) {
-                    if (subhash.hasOwnProperty(z)) {
-                        f(z);
-                    }
-                }
-            }
-        }
-    }
 };
 
 /**

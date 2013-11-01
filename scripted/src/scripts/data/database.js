@@ -39,7 +39,7 @@ Exhibit.Database.create = function(type) {
  * @param {String} z Value to put into the subhash.
  */
 Exhibit.Database._indexPut = function(index, x, y, z) {
-    var hash, subhash, i, nextsub;
+    var hash, subhash, nextsub;
 
     hash = index[x];
     if (typeof hash === "undefined") {
@@ -49,11 +49,11 @@ Exhibit.Database._indexPut = function(index, x, y, z) {
 
     subhash = hash[y];
     if (typeof subhash === "undefined") {
-        hash[y] = z;  //store single value without new object
+        hash[y] = z;  //store bare single value without new object
     } else if (typeof subhash === "object") {
         subhash[z] = true; //already storing multiple values
     } else if (subhash !== z) { 
-        nextsub = {}; //switch from single to multi value (object) store
+        nextsub = {}; //switch from single to multi-value (object) store
         nextsub[subhash] = true;
         nextsub[z] = true;
         hash[y] = nextsub;
@@ -86,6 +86,7 @@ Exhibit.Database._indexPutList = function(index, x, y, list) {
         hash[y] = {};
         subhash = hash[y];
     } else if (typeof subhash !== "object") {
+        //storing bare singleton; must move to object
         hash[y] = {};
         hash[y][subhash] = true;
         subhash = hash[y];
@@ -133,20 +134,19 @@ Exhibit.Database._indexRemove = function(index, x, y, z) {
     }
 
     if (typeof subhash !== "object") {
-        if (subhash === z) {
-            delete hash[y];
+        if (subhash !== z) {
+            return false;
         }
-        return false;
+    } else {
+        delete subhash[z];
+        if (!isEmpty(subhash)) {
+            return true;
+        }
     }
 
-
-    delete subhash[z];
-
-    if (isEmpty(subhash)) {
-        delete hash[y];
-        if (isEmpty(hash)) {
-            delete index[x];
-        }
+    delete hash[y];
+    if (isEmpty(hash)) {
+        delete index[x];
     }
     return true;
 };
@@ -201,12 +201,13 @@ Exhibit.Database._indexRemoveList = function(index, x, y) {
  * @param {Function} f The function to execute on each item
  */
 Exhibit.Database._indexVisit = function(index, x, y, f) {
-    var hash, subhash, i, z;
+    var hash, subhash, z;
     hash = index[x];
     if (typeof hash !== "undefined") {
         subhash = hash[y];
         if (typeof subhash !== "undefined") {
             if (typeof subhash !== "object") {
+                //stored single object
                 f(subhash);
             } else {
                 for (z in subhash) {
@@ -235,22 +236,12 @@ Exhibit.Database._indexVisit = function(index, x, y, f) {
 Exhibit.Database._indexCountDistinct = function(index, x, y, filter) {
     var count, hash, subhash, z;
     count = 0;
-    hash = index[x];
-    if (hash) {
-        subhash = hash[y];
-        if (subhash) {
-            if (typeof subhash !== "object") {
-                return 1;
-            } else {
-                for (z in subhash) {
-                    if (subhash.hasOwnProperty(z) &&
-                        (!filter || filter(z))) {
-                        count++;
-                    }
-                }
-            }
+    Exhibit.Database._indexVisit(index, x, y, function(v) {
+        if (filter(v)) {
+            count++;
         }
-    }
+        return true;
+    });
     return count;
 };
 
