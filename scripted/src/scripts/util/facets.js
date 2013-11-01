@@ -687,9 +687,9 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
         
         if (expression.isPath() &&
             expression.getPath().getSegmentCount() == 1) {
-            fastEval(this._collection.getAllItems(), expression.getPath());
+            fastEval(this._collection.readAllItems(), expression.getPath());
         } else {
-            this._collection.getAllItems().visit(function(item) {
+            this._collection.readAllItems().visit(function(item) {
                 var results = expression.evaluateOnItem(item, database);
                 if (results.values.size() > 0) {
                     valueType = results.valueType;

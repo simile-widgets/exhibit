@@ -133,7 +133,7 @@ Exhibit.CollectionSummaryWidget.prototype._reconstruct = function() {
         if (currentSize === 0) {
             Exhibit.jQuery(this._noResultsDom.elmt).show();
         } else {
-            typeIDs = database.getTypeIDs(this._collection.getRestrictedItems()).toArray();
+            typeIDs = database.getTypeIDs(this._collection.readRestrictedItems()).toArray();
             typeID = typeIDs.length === 1 ? typeIDs[0] : "Item";
             
             description = 

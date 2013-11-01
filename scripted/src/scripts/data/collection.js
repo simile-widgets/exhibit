@@ -497,6 +497,17 @@ Exhibit.Collection.prototype.getAllItems = function() {
 };
 
 /**
+ * Return all items in the collection regardless of restrictions.
+ * Introduced to improve performance by avoiding getAllItems' copy
+ * Invocation involves a promise not to store or modify the set
+ *
+ * @returns {Exhibit.Set} All collection items.
+ */
+Exhibit.Collection.prototype.readAllItems = function() {
+    return this._items;
+};
+
+/**
  * Return the count of all items in the collection regardless of restrictions. 
  *
  * @returns {Number} The count of all collection items.
@@ -513,6 +524,17 @@ Exhibit.Collection.prototype.countAllItems = function() {
 Exhibit.Collection.prototype.getRestrictedItems = function() {
     return new Exhibit.Set(this._restrictedItems);
 };
+
+/**
+ * Return only the items that match current restrictions.
+ * Introduced to improve performance by avoiding getRestrictedItems' copy
+ * Invocation involves a promise not to store or modify the set
+ *
+ * @returns {Exhibit.Set} Restricted items.
+ */
+Exhibit.Collection.prototype.readRestrictedItems = function () {
+    return this._restrictedItems;
+}
 
 
 /**
@@ -562,7 +584,7 @@ Exhibit.Collection.prototype._updateFacets = function() {
     var i, facet, items, j, restrictBefore=[], restrictAfter=[]
     , hasRestrictions, hasRestrictionsBefore, hasRestrictionsAfter
     , facets = this._facets
-    , allItems = this._items //getAllItems() wastes a copy
+    , allItems = this.readAllItems() //getAllItems() wastes a copy
     , fastIntersect = function(x,y) {
         if (x === allItems) {
             return y;
