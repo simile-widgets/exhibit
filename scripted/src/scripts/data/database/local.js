@@ -274,7 +274,8 @@ Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout,
             }
             setTimeout(chunker, timeout);
         } else if (typeof complete === "function") {
-            complete();
+            Exhibit.UI.busyMessage("load complete")
+            setTimeout(complete, timeout);
         }
     };
     chunker();
@@ -312,7 +313,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI,
         };
 
         Exhibit.Database._LocalImpl
-            ._loadChunked(loader, itemEntries, 5000, 10, wrapFinish);
+            ._loadChunked(loader, itemEntries, 2000, 10, wrapFinish);
     } catch(e) {
         Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
         wrapFinish();
