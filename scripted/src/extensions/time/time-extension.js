@@ -29,7 +29,7 @@
  * load-simile-ajax.js.
  */
 
-(function() {
+Exhibit.onjQueryLoaded(function() {
     var loader;
     loader = function() {
         var javascriptFiles, cssFiles, paramTypes, url, scriptURLs, cssURLs, ajaxURLs, i, delayID, finishedLoading, localesToLoad
@@ -129,4 +129,4 @@
     };
 
     Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);
-}());
+});

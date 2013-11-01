@@ -431,6 +431,25 @@ Exhibit.generateDelayID = function() {
     return "delay" + Math.round(Math.random()*100000);
 };
 
+(function () {
+    var listeners = [], jQueryLoaded = false;
+    Exhibit.onjQueryLoaded = function(f) {
+        if (jQueryLoaded) {
+            f();
+        } else {
+            listeners.push(f);
+        }
+    };
+    Exhibit.triggerjQueryLoaded = function() {
+        var i;
+        for (i=0; i < listeners.length; i++) {
+            (listeners[i])();
+        }
+        jQueryLoaded = true;
+    }
+}());
+    
+
 /**
  * Load all scripts associated with Exhibit.
  * 
