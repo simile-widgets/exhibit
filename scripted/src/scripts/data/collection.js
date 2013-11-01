@@ -559,31 +559,42 @@ Exhibit.Collection.prototype._onRootItemsChanged = function() {
  * @private
  */ 
 Exhibit.Collection.prototype._updateFacets = function() {
-    var restrictedFacetCount, i, facet, items, j;
-    restrictedFacetCount = 0;
-    for (i = 0; i < this._facets.length; i++) {
-        if (this._facets[i].hasRestrictions()) {
-            restrictedFacetCount++;
+    var i, facet, items, j, restrictBefore=[], restrictAfter=[]
+    , hasRestrictions, hasRestrictionsBefore, hasRestrictionsAfter
+    , facets = this._facets
+    , allItems = this._items //getAllItems() wastes a copy
+    , fastIntersect = function(x,y) {
+        if (x === allItems) {
+            return y;
+        } else if (y === allItems) {
+            return x;
+        } else {
+            return Exhibit.Set.createIntersection(x, y);
+        }
+        
+    };
+
+    restrictBefore[0] = allItems;
+    for (i = 0; i < facets.length-1; i++) {
+        if (facets[i].hasRestrictions()) {
+            restrictBefore[i+1] = facets[i].restrict(restrictBefore[i]);
+        } else {
+            restrictBefore[i+1] = restrictBefore[i];
         }
     }
     
-    for (i = 0; i < this._facets.length; i++) {
-        facet = this._facets[i];
-        if (facet.hasRestrictions()) {
-            if (restrictedFacetCount <= 1) {
-                facet.update(this.getAllItems());
-            } else {
-                items = this.getAllItems();
-                for (j = 0; j < this._facets.length; j++) {
-                    if (i !== j) {
-                        items = this._facets[j].restrict(items);
-                    }
-                }
-                facet.update(items);
-            }
+    restrictAfter[facets.length-1] = allItems;
+    for (i = facets.length-1; i > 0; i--) {
+        if (facets[i].hasRestrictions()) {
+            restrictAfter[i-1] = facets[i].restrict(restrictAfter[i]);
         } else {
-            facet.update(this.getRestrictedItems());
+            restrictAfter[i-1] = restrictAfter[i];
         }
+    }
+
+    for (i = 0; i < facets.length; i++) {
+        facet = facets[i];
+        facet.update(fastIntersect(restrictBefore[i],restrictAfter[i]));
     }
 };
 
