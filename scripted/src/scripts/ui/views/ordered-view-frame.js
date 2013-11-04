@@ -11,7 +11,6 @@
  */ 
 Exhibit.OrderedViewFrame = function(uiContext) {
     this._uiContext = uiContext;
-    
     this._orders = null;
     this._possibleOrders = null;
     this._settings = {};
@@ -21,6 +20,8 @@ Exhibit.OrderedViewFrame = function(uiContext) {
     // functions to be defined by framed view
     this.parentReconstruct = null;
     this.parentHistoryAction = null;
+
+    this._caches = {};
 };
 
 /**
@@ -135,53 +136,16 @@ Exhibit.OrderedViewFrame.prototype._internalValidate = function() {
 
 /**
  * @param {Array} orders
+ * @param {Array} output object to receive orders
+ * @param {String} error message for unparsable order expr
+ * @param {Strong} error message for invalid order object
  */
-Exhibit.OrderedViewFrame.prototype._configureOrders = function(orders) {
+
+Exhibit.OrderedViewFrame.prototype._internalConfigureOrders =
+    function(orders, output, exprMsg, objMessage) {
     var i, order, expr, ascending, expression, path, segment;
     for (i = 0; i < orders.length; i++) {
         order = orders[i];
-        ascending = true;
-        expr = null;
-
-        if (typeof order === "string") {
-            expr = order;
-        } else if (typeof order === "object") {
-            expr = order.expression;
-            ascending = (typeof order.ascending !== "undefined") ?
-                (order.ascending) :
-                true;
-        }
-
-        if (expr !== null) {
-            try {
-                expression = Exhibit.ExpressionParser.parse(expr);
-                if (expression.isPath()) {
-                    path = expression.getPath();
-                    if (path.getSegmentCount() === 1) {
-                        segment = path.getSegment(0);
-                        this._orders.push({
-                            property:   segment.property,
-                            forward:    segment.forward,
-                            ascending:  ascending
-                        });
-                    }
-                }
-            } catch (e) {
-                Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.orderExpression", expr));
-            }
-        } else {
-            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.orderObject", JSON.stringify(order)));
-        }
-    }
-};
-
-/**
- * @param {Array} possibleOrders
- */
-Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleOrders) {
-    var i, order, expr, ascending, expression, path, segment;
-    for (i = 0; i < possibleOrders.length; i++) {
-        order = possibleOrders[i];
         ascending = true;
         expr = null;
         
@@ -201,7 +165,7 @@ Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleO
                     path = expression.getPath();
                     if (path.getSegmentCount() === 1) {
                         segment = path.getSegment(0);
-                        this._possibleOrders.push({
+                        output.push({
                             property:   segment.property,
                             forward:    segment.forward,
                             ascending:  ascending
@@ -209,12 +173,32 @@ Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleO
                     }
                 }
             } catch (e) {
-                Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.possibleOrderExpression", expr));
+                Exhibit.Debug.warn(Exhibit._(exprMsg, expr));
             }
         }  else {
-            Exhibit.Debug.warn(Exhibit._("%orderedViewFrame.error.possibleOrderObject", JSON.stringify(order)));
+            Exhibit.Debug.warn(Exhibit._(orderMsg, JSON.stringify(order)));
         }
     }
+};
+
+/**
+ * @param {Array} orders
+ */
+Exhibit.OrderedViewFrame.prototype._configureOrders = function(orders) {
+    Exhibit.OrderedViewFrame.prototype
+        ._internalConfigureOrders(orders, this._orders,
+                                  "%orderedViewFrame.error.orderExpression",
+                                  "%orderedViewFrame.error.orderObject");
+};
+
+/**
+ * @param {Array} possibleOrders
+ */
+Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleOrders) {
+    Exhibit.OrderedViewFrame.prototype
+        ._internalConfigureOrders(possibleOrders, this._possibleOrders,
+                                  "%orderedViewFrame.error.possibleOrderExpression", 
+                                  "%orderedViewFrame.error.possibleOrderObject");
 };
 
 /**
@@ -312,11 +296,13 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
  * @returns {Boolean}
  */
 Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
-    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex;
+    var self, settings, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, expr, i, sortTop;
     self = this;
     settings = this._settings;
     database = this._uiContext.getDatabase();
+    collection = this._uiContext.getCollection();
     orders = this._getOrders();
+    caches = this._caches;
     itemIndex = 0;
     
     hasSomeGrouping = false;
@@ -332,12 +318,73 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         }
     };
 
+    //It's overkill to sort many items if you're just planning to show
+    //the top 10.  This function splits the item set down to roughly
+    //the intended size before sorting.
+    sortTop = function(array, compare, limit) {
+        var nextArray, key
+        , split = function(array, key) {
+            var l = array.length, out = [];
+            for (i=0; i < l; i++) {
+                if (compare(array[i], key) <= 0) {
+                    out.push(array[i]);
+                }
+            }
+            return out;
+        }
+        , nearMedian = function(array) {
+            //choose middle of 3 random keys as pivot
+            var k
+            , key1 = array[Math.floor(Math.random()*array.length)]
+            , key2 = array[Math.floor(Math.random()*array.length)]
+            , key3 = array[Math.floor(Math.random()*array.length)];
+            if (compare(key1, key2) > 0) {
+                k = key1;
+                key1 = key2;
+                key2 = k;
+            }
+            if (compare(key2, key3) > 0) {
+                k = key2;
+                key2 = key3;
+                key3 = k;
+            }
+            if (compare(key1, key2) > 0) {
+                k = key1;
+                key1 = key2;
+                key2 = k;
+            }
+            return key2;
+        }
+        if (limit < 10) {
+            //avoid small-array edge-cases;
+            limit = 10;
+        }
+        nextArray = array;
+        while (nextArray.length >= limit) {
+            array = nextArray;
+            key = nearMedian(array);
+            nextArray = split(array, key);
+        }
+        return array.sort(compare);
+    }
+
     processLevel = function(items, index) {
-        var order, values, valueType, property, keys, grouped, k, key;
+        var order, values, valueCounts, valueType
+        , expr
+        , property, keys, grouped, k, key, keyItems, missingCount;
+
         order = orders[index];
-         values = order.forward ? 
-            database.getObjectsUnion(items, order.property) : 
-            database.getSubjectsUnion(items, order.property);
+        expr = order.forward ? 
+            "."+order.property :
+            "!"+order.property;
+        if (!caches.hasOwnProperty(expr)) {
+            caches[expr] = new Exhibit.FacetUtilities.Cache(
+                database, collection,
+                Exhibit.ExpressionParser.parse(expr)
+            );
+        }
+        values = caches[expr].getValuesFromItems(items);
+        missingCount = caches[expr].countItemsMissingValue(items);
         
         valueType = "text";
         if (order.forward) {
@@ -364,46 +411,37 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         // when multiple orderings are in play.
 
         // mono-grouping
-        grouped = false;
-        for (k = 0; k < keys.length; k++) {
-            if (keys[k].items.size() > 1) {
-                grouped = true;
-            }
-        }
-        // end mono-grouping
+        grouped = items.size() > keys.length + 
+            ((missingCount > 0) ? 1 : 0);
 
-        /** all-grouping
-        hasSomeGrouping = true;
-        */
-
-        // mono-grouping
         if (grouped) {
             hasSomeGrouping = true;
         }
         // end mono-grouping
         
-        for (k = 0; k < keys.length; k++) {
+        for (k = 0; (k < keys.length && itemIndex < toIndex); k++) {
             key = keys[k];
-            if (key.items.size() > 0) {
+            keyItems = keys.retrieveItems(key);
+            if (keyItems.size() > 0) {
                 if (grouped && settings.grouped) {
                     createGroup(key.display, valueType, index);
                 }
-                
-                items.removeSet(key.items);
-                if (key.items.size() > 1 && index < orders.length - 1) {
-                    processLevel(key.items, index+1);
+                if (keyItems.size() > 1 && index < orders.length - 1) {
+                    processLevel(keyItems, index+1);
                 } else {
-                    key.items.visit(createItem);
+                    keyItems.visit(createItem);
                 }
             }
         }
+
         
-        if (items.size() > 0) {
+        if ((itemIndex < toIndex) && (missingCount > 0)) {
+            items = caches[expr].getItemsMissingValue(items);
             if (grouped && settings.grouped) {
-                createGroup(Exhibit._("%general.missingSortKey"), valueType, index);
+                createGroup(Exhibit._("%general.missingSortKey"),
+                            valueType, index);
             }
-            
-            if (items.size() > 1 && index < orders.length - 1) {
+            if (index < orders.length - 1) {
                 processLevel(items, index+1);
             } else {
                 items.visit(createItem);
@@ -412,14 +450,18 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     };
     
     processNonNumericLevel = function(items, index, values, valueType) {
-        var keys, compareKeys, retrieveItems, order, k, key, vals;
-        keys = [];
-        order = orders[index];
+        var compareKeys, k, key, vals
+        , retrieveItems
+        , keys = []
+        , order = orders[index]
+        , expr = order.forward ? "."+order.property : "!"+order.property
+        , cache = caches[expr];
         
         if (valueType === "item") {
             values.visit(function(itemID) {
                 var label = database.getObject(itemID, "label");
-                label = (typeof label !== "undefined" && label !== null) ? label : itemID;
+                label = (typeof label !== "undefined" && label !== null) 
+                    ? label : itemID;
                 keys.push({ itemID: itemID, display: label });
             });
             
@@ -427,47 +469,52 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 var c = key1.display.localeCompare(key2.display);
                 return c !== 0 ? c : key1.itemID.localeCompare(key2.itemID);
             };
-            
-            retrieveItems = order.forward ? function(key) {
-                return database.getSubjects(key.itemID, order.property, null, items);
-            } : function(key) {
-                return database.getObjects(key.itemID, order.property, null, items);
+
+            retrieveItems = function(key) {
+                return cache.getItemsFromValues(new Exhibit.Set([key.itemID]),
+                                                items);
             };
         } else { //text
             values.visit(function(value) {
-                keys.push({ display: value });
+                keys.push({display: value});
             });
             
             compareKeys = function(key1, key2) {
                 return key1.display.localeCompare(key2.display);
             };
-            retrieveItems = order.forward ? function(key) {
-                return database.getSubjects(key.display, order.property, null, items);
-            } : function(key) {
-                return database.getObjects(key.display, order.property, null, items);
+            retrieveItems = function(key) {
+                return cache.getItemsFromValues(new Exhibit.Set([key.display]),
+                                                items);
             };
         }
-        
-        keys.sort(function(key1, key2) { 
-            return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
-        });
-        
-        for (k = 0; k < keys.length; k++) {
-            key = keys[k];
-            key.items = retrieveItems(key);
+
+//        keys.sort(function(key1, key2) { 
+//            return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
+//        });
+
+        sortTop(keys, 
+                function(key1, key2) { 
+                    return (order.ascending ? 1 : -1) *
+                        compareKeys(key1, key2); 
+                },
+                toIndex);
+        keys.retrieveItems = function(key) {
+            var keyItems = retrieveItems(key);
             if (!settings.showDuplicates) {
-                items.removeSet(key.items);
+                items.removeSet(keyItems);
             }
-        }
-        
+            return keyItems;
+        };
         return keys;
     };
     
     processNumericLevel = function(items, index, values, valueType) {
-        var keys, keyMap, order, valueParser, key, k, v;
-        keys = [];
-        keyMap = {};
-        order = orders[index];
+        var valueParser, key, k, v
+        , keys = []
+        , keyMap = {}
+        , order = orders[index]
+        , expr = order.forward ? "."+order.property : "!"+order.property
+        , cache = caches[expr];
         
         if (valueType === "number") {
             valueParser = function(value) {
@@ -487,7 +534,8 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                     return value.getTime();
                 } else {
                     try {
-                        return Exhibit.DateTime.parseIso8601DateTime(value.toString()).getTime();
+                        return Exhibit.DateTime
+                            .parseIso8601DateTime(value.toString()).getTime();
                     } catch (e) {
                         return null;
                     }
@@ -498,37 +546,31 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         values.visit(function(value) {
             var sortkey, key;
             sortkey = valueParser(value);
-            if (typeof sortKey !== "undefined" && sortkey !== null) {
+            if (typeof sortkey !== "undefined" && sortkey !== null) {
                 key = keyMap[sortkey];
                 if (!key) {
-                    key = { sortkey: sortkey, display: value, values: [], items: new Exhibit.Set() };
+                    key = { sortkey: sortkey, display: value, 
+                            values: new Exhibit.Set() };
                     keyMap[sortkey] = key;
                     keys.push(key);
                 }
-                key.values.push(value);
+                key.values.add(value);
             }
         });
         
         keys.sort(function(key1, key2) { 
             return (order.ascending ? 1 : -1) * (key1.sortkey - key2.sortkey); 
         });
-        
-        for (k = 0; k < keys.length; k++) {
-            key = keys[k];
-            vals = key.values;
-            for (v = 0; v < vals.length; v++) {
-                if (order.forward) {
-                    database.getSubjects(vals[v], order.property, key.items, items);
-                } else {
-                    database.getObjects(vals[v], order.property, key.items, items);
-                }
-            }
-            
+
+        keys.retrieveItems = function(key) {
+            var v, vals = key.values
+            keyItems = cache.getItemsFromValues(key.values, items);
             if (!settings.showDuplicates) {
-                items.removeSet(key.items);
+                items.removeSet(keyItems);
             }
+            return keyItems;
         }
-        
+            
         return keys;
     };
 
