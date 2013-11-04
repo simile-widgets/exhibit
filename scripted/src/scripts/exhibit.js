@@ -12,6 +12,7 @@
     if (!Exhibit._jQueryExists) {
         jQuery.noConflict();
     }
+    Exhibit.triggerjQueryLoaded();
 }());
 
 /**
