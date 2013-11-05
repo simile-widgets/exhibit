@@ -656,7 +656,7 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
             //rapid eval for length-one paths
             var write = {}
             , item, missing
-            , segment, valueType = "text";
+            , segment;
             segment = path.getSegment(0);
             if (segment.forward) {
                 getter = database.visitObjects;
