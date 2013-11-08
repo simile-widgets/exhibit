@@ -61,7 +61,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
 Exhibit.MapView._settingSpecs = {
     "latlngOrder":      { "type": "enum",     "defaultValue": "latlng", "choices": [ "latlng", "lnglat" ] },
     "latlngPairSeparator": { "type": "text",  "defaultValue": ";"   },
-    "center":           { "type": "float",    "defaultValue": [20,0],   "dimensions": 2 },
+    "center":           { "type": "float",    "defaultValue": [0.0,0.0],   "dimensions": 2 },
     "zoom":             { "type": "float",    "defaultValue": 2         },
     "autoposition":     { "type": "boolean",  "defaultValue": false     },
     "scrollWheelZoom":  { "type": "boolean",  "defaultValue": true      },
@@ -916,7 +916,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
     // on first show, allow map to position itself based on content
     if (typeof bounds !== "undefined" && bounds !== null && settings.autoposition && !this._shown) {
 	    self._map.fitBounds(bounds);
-	    if (self._map.getZoom > maxAutoZoom) {
+	if (self._map.getZoom() > maxAutoZoom) {
 	        self._map_setZoom(maxAutoZoom);
 	    }
     }
@@ -1124,6 +1124,10 @@ Exhibit.MapView.markerToMap = function(marker, position) {
  */
 Exhibit.MapView.prototype.updateMarkerIcon = function(key, iconURL) {
     var cached;
+    if (!this._markerCache) {
+        //vestigial activity for a disposed view; do nothing
+        return;
+    }
     cached = this._markerCache[key];
     if (typeof cached !== "undefined" && cached !== null) {
         cached.setIcon(iconURL);
