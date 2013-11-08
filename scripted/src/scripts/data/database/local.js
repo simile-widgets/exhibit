@@ -274,7 +274,8 @@ Exhibit.Database._LocalImpl._loadChunked = function(worker, data, size, timeout,
             }
             setTimeout(chunker, timeout);
         } else if (typeof complete === "function") {
-            complete();
+            Exhibit.UI.busyMessage("load complete")
+            setTimeout(complete, timeout);
         }
     };
     chunker();
@@ -312,7 +313,7 @@ Exhibit.Database._LocalImpl.prototype.loadItems = function(itemEntries, baseURI,
         };
 
         Exhibit.Database._LocalImpl
-            ._loadChunked(loader, itemEntries, 1000, 10, wrapFinish);
+            ._loadChunked(loader, itemEntries, 2000, 10, wrapFinish);
     } catch(e) {
         Exhibit.Debug.exception(e, Exhibit._("%database.error.loadItemsFailure"));
         wrapFinish();
@@ -471,6 +472,10 @@ Exhibit.Database._LocalImpl.prototype.getObjects = function(s, p, set, filter) {
     return this._get(this._spo, s, p, set, filter);
 };
 
+Exhibit.Database._LocalImpl.prototype.visitObjects = function(s, p, f) {
+    return Exhibit.Database._indexVisit(this._spo, s, p, f);
+};
+
 /**
  * Count the distinct, unique objects (any repeated objects count as one)
  * for a subject-predicate pair. 
@@ -525,6 +530,10 @@ Exhibit.Database._LocalImpl.prototype.getSubjects = function(o, p, set, filter) 
     return this._get(this._ops, o, p, set, filter);
 };
 
+Exhibit.Database._LocalImpl.prototype.visitSubjects = function(o, p, f) {
+    return Exhibit.Database._indexVisit(this._ops, o, p, f);
+};
+
 /**
  * Count the distinct, unique subjects (any repeated subjects count as one)
  * for an object-predicate pair.
@@ -574,20 +583,13 @@ Exhibit.Database._LocalImpl.prototype.countDistinctSubjectsUnion = function(obje
  * @returns {String} One matching object.
  */
 Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
-    var hash, subhash, v;
+    var o = null;
 
-    hash = this._spo[s];
-    if (hash) {
-        subhash = hash[p];
-        if (subhash) {
-            for (v in subhash) {
-                if (subhash.hasOwnProperty(v)) {
-                    return v;
-                }
-            }
-        }
-    }
-    return null;
+    Exhibit.Database._indexVisit(this._spo, s, p, function (v) {
+        o=v;
+        return false; //terminate iteration
+    });
+    return o;
 };
 
 /**
@@ -599,20 +601,13 @@ Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
  * @returns {String} One matching subject identifier.
  */
 Exhibit.Database._LocalImpl.prototype.getSubject = function(o, p) {
-    var hash, subhash, v;
+    var s = null;
 
-    hash = this._ops[o];
-    if (hash) {
-        subhash = hash[p];
-        if (subhash) {
-            for (v in subhash) {
-                if (subhash.hasOwnProperty(v)) {
-                    return v;
-                }
-            }
-        }
-    }
-    return null;
+    Exhibit.Database._indexVisit(this._spo, o, p, function (v) {
+        s=v;
+        return false; //terminate iteration
+    });
+    return s;
 };
 
 /**
@@ -815,7 +810,7 @@ Exhibit.Database._LocalImpl.prototype._loadLinks = function(links, database) {
  * @param {String} baseURI The base URI to resolve URI fragments against.
  */
 Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunction, baseURI) {
-    var id, label, uri, type, isArray, p, v, j;
+    var id, label, uri, type, isArray = Array.isArray, p, v, j;
 
     if (typeof itemEntry.label === "undefined" &&
         typeof itemEntry.id === "undefined") {
@@ -844,13 +839,6 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
             itemEntry.type :
             "Item";
                 
-        isArray = function(obj) {
-            if (obj.constructor.toString().indexOf("Array") === -1) {
-                return false;
-            } else {
-                return true;
-            }
-        };
 
         if (isArray(label)) {
             label = label[0];
@@ -884,7 +872,7 @@ Exhibit.Database._LocalImpl.prototype._loadItem = function(itemEntry, indexFunct
                     this._ensurePropertyExists(p, baseURI)._onNewData();
                                     
                     v = itemEntry[p];
-                    if (v instanceof Array) {
+                    if (isArray(v)) {
                         for (j = 0; j < v.length; j++) {
                             indexFunction(id, p, v[j]);
                         }
@@ -961,19 +949,12 @@ Exhibit.Database._LocalImpl.prototype._ensurePropertyExists = function(propertyI
  * @param {Exhibit.Set} [filter] Only include values in this filter.
  */
 Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set, filter) {
-    var hash, subhash, i, z;
-    hash = index[x];
-    if (typeof hash !== "undefined") {
-        subhash = hash[y];
-        if (typeof subhash !== "undefined") {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z) &&
-                    (!filter || filter.contains(z))) {
-                    set.add(z);
-                }
-            }
+    Exhibit.Database._indexVisit(index, x, y, function(z) {
+        if (!filter || filter.contains(z)) {
+            set.add(z);
         }
-    }
+        return true;
+    });
 };
 
 /**
@@ -987,20 +968,13 @@ Exhibit.Database._LocalImpl.prototype._indexFillSet = function(index, x, y, set,
  * @returns {Number} The count of values.
  */
 Exhibit.Database._LocalImpl.prototype._indexCountDistinct = function(index, x, y, filter) {
-    var count, hash, subhash, z;
-    count = 0;
-    hash = index[x];
-    if (hash) {
-        subhash = hash[y];
-        if (subhash) {
-            for (z in subhash) {
-                if (subhash.hasOwnProperty(z) &&
-                    (!filter || filter.contains(z))) {
-                    count++;
-                }
-            }
+    var count = 0;
+    Exhibit.Database._indexVisit(index, x, y, function (z) {
+        if (!filter || filter.contains(z)) {
+            count++;
         }
-    }
+        return true;
+    });
     return count;
 };
 
@@ -1090,15 +1064,11 @@ Exhibit.Database._LocalImpl.prototype._countDistinct = function(index, x, y, fil
  */
 Exhibit.Database._LocalImpl.prototype._getProperties = function(index, x) {
     var hash, properties, p;
-    hash = index[x];
     properties = [];
-    if (typeof hash !== "undefined") {
-        for (p in hash) {
-            if (hash.hasOwnProperty(p)) {
-                properties.push(p);
-            }
-        }
-    }
+    Exhibit.Database._indexVisitKeys(index, x, function (p) {
+        properties.push(p);
+        return true;
+    });
     return properties;
 };
 

@@ -497,6 +497,17 @@ Exhibit.Collection.prototype.getAllItems = function() {
 };
 
 /**
+ * Return all items in the collection regardless of restrictions.
+ * Introduced to improve performance by avoiding getAllItems' copy
+ * Invocation involves a promise not to store or modify the set
+ *
+ * @returns {Exhibit.Set} All collection items.
+ */
+Exhibit.Collection.prototype.readAllItems = function() {
+    return this._items;
+};
+
+/**
  * Return the count of all items in the collection regardless of restrictions. 
  *
  * @returns {Number} The count of all collection items.
@@ -513,6 +524,17 @@ Exhibit.Collection.prototype.countAllItems = function() {
 Exhibit.Collection.prototype.getRestrictedItems = function() {
     return new Exhibit.Set(this._restrictedItems);
 };
+
+/**
+ * Return only the items that match current restrictions.
+ * Introduced to improve performance by avoiding getRestrictedItems' copy
+ * Invocation involves a promise not to store or modify the set
+ *
+ * @returns {Exhibit.Set} Restricted items.
+ */
+Exhibit.Collection.prototype.readRestrictedItems = function () {
+    return this._restrictedItems;
+}
 
 
 /**
@@ -559,31 +581,62 @@ Exhibit.Collection.prototype._onRootItemsChanged = function() {
  * @private
  */ 
 Exhibit.Collection.prototype._updateFacets = function() {
-    var restrictedFacetCount, i, facet, items, j;
-    restrictedFacetCount = 0;
-    for (i = 0; i < this._facets.length; i++) {
-        if (this._facets[i].hasRestrictions()) {
-            restrictedFacetCount++;
+    var i, facet, items, j, restrictBefore=[], restrictAfter=[]
+    , countRestrictions = 0
+    , facets = this._facets
+    , allItems = this.readAllItems() //getAllItems() wastes a copy
+    , restrictedItems
+    , fastIntersect = function(x,y) {
+        if (x === allItems) {
+            return y;
+        } else if (y === allItems) {
+            return x;
+        } else {
+            return Exhibit.Set.createIntersection(x, y);
+        }
+        
+    };
+
+    for (i = 0; i < facets.length; i++) {
+        if (facets[i].hasRestrictions()) {
+            countRestrictions++;
+        }
+    }
+
+    if (countRestrictions <= 1) {
+        //special fast path avoids computing unnecessary restrictions
+        restrictedItems = this.readRestrictedItems();
+        for (i=0; i < facets.length; i++) {
+            if (facets[i].hasRestrictions()) {
+                facets[i].update(allItems);
+            } else {
+                facets[i].update(restrictedItems);
+            }
+        }
+        return;
+    }
+
+    restrictBefore[0] = allItems;
+    for (i = 0; i < facets.length-1; i++) {
+        if (facets[i].hasRestrictions()) {
+            restrictBefore[i+1] = facets[i].restrict(restrictBefore[i]);
+        } else {
+            restrictBefore[i+1] = restrictBefore[i];
         }
     }
     
-    for (i = 0; i < this._facets.length; i++) {
-        facet = this._facets[i];
-        if (facet.hasRestrictions()) {
-            if (restrictedFacetCount <= 1) {
-                facet.update(this.getAllItems());
-            } else {
-                items = this.getAllItems();
-                for (j = 0; j < this._facets.length; j++) {
-                    if (i !== j) {
-                        items = this._facets[j].restrict(items);
-                    }
-                }
-                facet.update(items);
-            }
+    restrictAfter[facets.length-1] = allItems;
+    for (i = facets.length-1; i > 0; i--) {
+        if (facets[i].hasRestrictions()) {
+            restrictAfter[i-1] = facets[i].restrict(restrictAfter[i]);
         } else {
-            facet.update(this.getRestrictedItems());
+            restrictAfter[i-1] = restrictAfter[i];
         }
+    }
+
+    for (i = 0; i < facets.length; i++) {
+        facet = facets[i];
+        facet.update(fastIntersect(restrictBefore[i],restrictAfter[i]));
     }
 };
 
