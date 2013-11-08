@@ -1,0 +1,163 @@
+<html>
+  <head>
+    <title>Exhibit 3.0 Scripted Demonstrations</title>
+    <link rel="stylesheet" href="http://www.simile-widgets.org/styles/common.css" />
+    <link rel="stylesheet" href="http://www.simile-widgets.org/exhibit3/exhibit3.css" />
+    <link rel="exhibit/data" href="#demo-data" type="text/html"
+    data-ex-item-type="Exhibit" 
+    data-ex-plural-label="Exhibits"
+    />
+    
+    <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/exhibit-api.js -->
+    <script src="../src/exhibit-api.js?bundle=false"></script>
+    <!-- Hack to hide the table *if* exhibit successfully loads -->
+    <script>
+      Exhibit.wait(function () {
+      if ("jQuery" in Exhibit) {
+      //set in exhibit.js , so shows that it loaded
+      Exhibit.jQuery('#demo-data').hide();
+      }
+      });
+    </script>
+    <style>
+      .column {
+      padding: 2ex
+      }
+    </style>
+  </head>
+  <body>
+
+    <ul id="path">
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a></li>
+      <li><a href="/">Demos</a></li>
+      <li><span>Scripted Demos</span></li>
+    </ul>
+
+    <header id="header">
+      <h1>Exhibit 3.0 Scripted Demonstrations</h1>
+    </header>
+
+    <div id="content">
+      <p class="blurb">Browse live Exhibit examples.</p>
+
+      <p>To develop or debug code using the demos in this directory,
+        create a soft link from "api" in this directory to the
+        directory containing the exhibit api source code you wish to
+        test (for example, the "src" directory or, after you build it,
+        the "dist" directory of this repository).  You may also want
+        to force exhibit to use the unbundled version of the api, by
+        passing "exhibit-dev=true" as an argument in the url of the
+        demo you are visiting,
+        e.g. <a href="presidents/presidents.html?exhibit-dev=true">"presidents/presidents.html?exhibit-dev=true"</a>.</p>
+
+      <div class="column" style="width: 200; float: left">
+        <div data-ex-role="facet" data-ex-expression=".Views"></div>
+        <div data-ex-role="facet" data-ex-expression=".Facets"
+        data-ex-missing-label="none"></div>
+      </div>
+
+      <div class="column" style="width: 200; float:right">
+        <div data-ex-role="facet" data-ex-expression=".Data"></div>
+        <div data-ex-role="facet" data-ex-facet-label="Other Features"
+             data-ex-expression=".Other" data-ex-show-missing="false"
+             data-ex-scroll="false"></div>
+      </div>
+
+      <div class="column" style="overflow: hidden; float: none">
+        <div data-ex-role="view" data-ex-show-all="true">
+          <div data-ex-role="lens">
+            <a data-ex-href-content=".Link"><span data-ex-content=".label"></span></a>:
+            <span data-ex-content=".Description"></span>
+            <div>
+              <span data-ex-if-exists=".Views">Views: <span data-ex-content=".Views"></span>.</span>
+              <span data-ex-if-exists=".Facets">Facets: <span data-ex-content=".Facets"></span>.</span>
+              <span data-ex-if-exists=".Data">Data: <span data-ex-content=".Data"></span>.</span>
+              <span data-ex-if-exists=".Other">Other Features: <span data-ex-content=".Other"></span>.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <table id="demo-data">
+      <tr><th>label</th><th>Link</th>
+        <th>Views</th><th>Facets</th><th>Data</th><th>Other</th>
+        <th>Description</th></tr>
+
+      <tr><td>This Meta-Exhibit</td><td>exindex.html</td>
+        <td>Tile</td><td>List</td><td>HTML Table;in-document</td><td></td>
+        <td>MIT nobel prize winners</td></tr>
+
+      <tr><td>Nobelists</td><td>nobelists/nobelists.html</td>
+        <td>Tile;Thumbnail;Timeline</td><td>List</td><td>json</td><td></td>
+        <td>MIT nobel prize winners</td></tr>
+
+      <tr><td>Nobelists Inline</td><td>nobelists/nobelists.html</td>
+        <td>Tile;Thumbnail;Timeline</td><td>List</td><td>json;in-document</td><td></td>
+        <td>MIT nobel prize winners</td></tr>
+
+      <tr><td>Senate</td><td>senate/senate.html</td>
+        <td>Tabular</td><td>List</td><td>json</td><td></td>
+        <td>Recent US Senate Bills</td></tr>
+
+      <tr><td>ICD</td><td>icd/index.html</td>
+        <td>Tile</td><td>List;Hierarchical</td><td>json</td><td></td>
+        <td>ICD10 Medical Terminology demonstrating the Hierarchical Facet</td>
+        </tr>   
+
+      <tr><td>Candidates</td><td>history/decide.html</td>
+        <td>Tile</td><td>List</td><td>json</td><td>History</td>
+        <td>Positions of the US presidential candidates on issues</td></tr>
+
+      <tr><td>Cloud</td><td>cloud/index.html</td>
+        <td>Tile</td><td>Tag Cloud</td><td>json</td><td></td>
+        <td>Demonstration of Tag Cloud Facet</td></tr>
+
+      <tr><td>Thumbnail</td><td>thumbnail/index.html</td>
+        <td>Thumbnail</td><td>Tag Cloud</td><td>json</td><td></td>
+        <td>Demonstration of Thumbnail View</td></tr>
+
+      <tr><td>Thumbnail Columns</td><td>thumbnail/tabled.html</td>
+        <td>Thumbnail</td><td>Tag Cloud</td><td>json</td><td>Columns</td>
+        <td>Demonstration of Thumbnail View with Columns</td></tr>
+
+      <tr><td>Table Import</td><td>htmlTable/table.html</td>
+        <td>Tabular</td><td></td><td>HTML Table;in-document</td><td></td>
+        <td>Demonstration (and documentation) of Importing Data from an (in-document) HTML table</td></tr>
+
+      <tr><td>Big</td><td>big/big.html</td>
+        <td>Tile</td><td>List</td><td>json</td><td></td>
+        <td>Test of Large-Data-Set Loading and Faceting performance</td></tr>
+
+      <tr><td>CSV</td><td>italian-soccer/italian-soccer.html</td>
+        <td>Map;Thumbnail;Tabular</td><td>List</td><td>TSV/CSV</td><td></td>
+        <td>Demonstration of csv/tsv data loading (plus <a href="csv/tutorial.html">Tutorial</a>)</td></tr>
+
+      <tr><td>Presidents</td><td>presidents/presidents.html</td>
+        <td>Map;Timeline;Tabular</td><td>List</td><td>json</td>
+        <td>Image Marker;Color Coder;Coordinator;Exhibit Site</td>
+        <td>US Presidents Map and Timeline</td></tr>
+
+      <tr><td>Cities</td><td>cities/cities.html</td>
+        <td>Map</td><td></td><td>json</td><td>Size Coder;Exhibit Site</td>
+        <td>Map of us cities with markers sized by population</td></tr>
+
+      <tr><td>Billionaires</td><td>billionaires/billionaires.html</td>
+        <td>Map;Tabular</td><td>List</td><td>json</td>
+        <td>Size Coder;Exhibit Site</td>
+        <td>Map of Billionaires by birth with markers sized by wealth</td></tr>
+
+      <tr><td>Flags</td><td>flags/flags.html</td>
+        <td>Map</td><td></td><td>json</td><td>Exhibit Site</td>
+        <td>Map of World Flags as image markers on map</td></tr>
+
+      <tr><td>Cereals</td><td>cereals/cereal-characters.html</td>
+        <td>Thumbnail;Timeline</td><td>List<td>json</td>
+        <td>Exhibit Site</td>
+        <td>A reimagining of Topher's breakfast cereal guide</td></tr>
+    </table>
+  </body>
+</html>
