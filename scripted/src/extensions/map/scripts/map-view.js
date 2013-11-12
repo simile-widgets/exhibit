@@ -63,6 +63,7 @@ Exhibit.MapView._settingSpecs = {
     "latlngPairSeparator": { "type": "text",  "defaultValue": ";"   },
     "center":           { "type": "float",    "defaultValue": [0.0,0.0],   "dimensions": 2 },
     "zoom":             { "type": "float",    "defaultValue": 2         },
+    "maxAutoZoom":      { "type": "int",      "defaultValue": Infinity  },
     "autoposition":     { "type": "boolean",  "defaultValue": false     },
     "scrollWheelZoom":  { "type": "boolean",  "defaultValue": true      },
     "size":             { "type": "text",     "defaultValue": "small"   },
@@ -119,11 +120,6 @@ Exhibit.MapView._accessorSpecs = [
                     {   "attributeName":  "latlng",
                         "types":          [ "float", "float" ],
                         "bindingNames":   [ "lat", "lng" ]
-                    },
-                    {   "attributeName":  "maxAutoZoom",
-                        "type":           "float",
-                        "bindingName":    "maxAutoZoom",
-                        "optional":       true
                     }
                 ]
             },
@@ -135,11 +131,6 @@ Exhibit.MapView._accessorSpecs = [
                     {   "attributeName":  "lng",
                         "type":           "float",
                         "bindingName":    "lng"
-                    },
-                    {   "attributeName":  "maxAutoZoom",
-                        "type":           "float",
-                        "bindingName":    "maxAutoZoom",
-                        "optional":       true
                     }
                 ]
             }
@@ -639,8 +630,6 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         "keys": new Exhibit.Set()
     };
 
-    bounds = Infinity;
-    maxAutoZoom = Infinity;
     currentSet.visit(function(itemID) {
         var latlngs, polygons, polylines, color, colorKeys, sizeKeys, iconKeys, n, latlng, latlngKey, locationData, p;
         latlngs = [];
@@ -749,7 +738,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         var itemCount, shape, color, iconSize, icon, point, marker, x;
 
         itemCount = locationData.items.length;
-        if (typeof bounds === "undefined" || bounds === null || !isFinite(bounds)) {
+        if (typeof bounds === "undefined" || bounds === null) {
             bounds = new google.maps.LatLngBounds();
         }
         
@@ -776,11 +765,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
             icon = self._iconCoder.translateSet(locationData.iconKeys, iconCodingFlags);
         }
 	
-	    point = new google.maps.LatLng(locationData.latlng.lat, locationData.latlng.lng);
-
-	    if (typeof locationData.latlng.maxAutoZoom !== "undefined" && maxAutoZoom > locationData.latlng.maxAutoZoom) {
-            maxAutoZoom = locationData.latlng.maxAutoZoom;
-        }
+	point = new google.maps.LatLng(locationData.latlng.lat, locationData.latlng.lng);
         bounds.extend(point);
 
         marker = self._makeMarker(
@@ -915,9 +900,9 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
 
     // on first show, allow map to position itself based on content
     if (typeof bounds !== "undefined" && bounds !== null && settings.autoposition && !this._shown) {
-	    self._map.fitBounds(bounds);
-	if (self._map.getZoom() > maxAutoZoom) {
-	        self._map_setZoom(maxAutoZoom);
+	self._map.fitBounds(bounds);
+	if (self._map.getZoom() > settings.maxAutoZoom) {
+	        self._map_setZoom(settings.maxAutoZoom);
 	    }
     }
 
