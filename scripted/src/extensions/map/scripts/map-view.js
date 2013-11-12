@@ -900,10 +900,17 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
 
     // on first show, allow map to position itself based on content
     if (typeof bounds !== "undefined" && bounds !== null && settings.autoposition && !this._shown) {
+        //hack.  race conditions mean setzoom doesn't 
+        //work after a call to fitbounds
+        google.maps.event.
+            addListenerOnce(self._map, 'bounds_changed',
+                            function() {
+                                if (self._map.getZoom() >
+                                    settings.maxAutoZoom) {
+                                    self._map.setZoom(settings.maxAutoZoom);
+                                }
+                            });
 	self._map.fitBounds(bounds);
-	if (self._map.getZoom() > settings.maxAutoZoom) {
-	        self._map_setZoom(settings.maxAutoZoom);
-	    }
     }
 
     this._shown = true; //don't reposition map again
