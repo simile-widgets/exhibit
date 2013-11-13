@@ -313,7 +313,7 @@ Exhibit.Formatter._URLFormatter = function(uiContext) {
  * @param {Function} appender
  */
 Exhibit.Formatter._URLFormatter.prototype.format = function(value, appender) {
-    var a = Exhibit.jQuery("a").attr("href", value).html(value);
+    var a = Exhibit.jQuery("<a>").attr("href", value).html(value);
     
     if (this._target !== null) {
         a.attr("target", this._target);
