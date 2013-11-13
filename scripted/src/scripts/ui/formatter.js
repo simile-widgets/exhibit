@@ -277,7 +277,7 @@ Exhibit.Formatter._ImageFormatter.prototype.format = function(value, appender) {
     
     if (this._tooltip !== null) {
         if (typeof this._tooltip === "string") {
-            img.attr("title", this._tootlip);
+            img.attr("title", this._tooltip);
         } else {
             img.attr("title",
                      this._tooltip.evaluateSingleOnItem(
