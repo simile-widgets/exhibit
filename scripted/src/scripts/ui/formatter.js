@@ -277,7 +277,7 @@ Exhibit.Formatter._ImageFormatter.prototype.format = function(value, appender) {
     
     if (this._tooltip !== null) {
         if (typeof this._tooltip === "string") {
-            img.attr("title", this._tootlip);
+            img.attr("title", this._tooltip);
         } else {
             img.attr("title",
                      this._tooltip.evaluateSingleOnItem(
@@ -313,7 +313,7 @@ Exhibit.Formatter._URLFormatter = function(uiContext) {
  * @param {Function} appender
  */
 Exhibit.Formatter._URLFormatter.prototype.format = function(value, appender) {
-    var a = Exhibit.jQuery("a").attr("href", value).html(value);
+    var a = Exhibit.jQuery("<a>").attr("href", value).html(value);
     
     if (this._target !== null) {
         a.attr("target", this._target);
