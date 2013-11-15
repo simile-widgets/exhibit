@@ -49,7 +49,7 @@ Exhibit.onjQueryLoaded(function() {
                 "nl",
                 "sv"
             ],
-            "noop": function() { }, // so google maps v3 will load
+            "gmapCallback": function() { }, // so google maps v3 will load
             "_CORSWarned": false // used in the view
         };
         // Only the shared files are listed here. The service-
@@ -98,11 +98,11 @@ Exhibit.onjQueryLoaded(function() {
         if (Exhibit.MapExtension.params.service === "google2" &&
                    typeof GMap2 === "undefined") {
             if (typeof Exhibit.params.gmapKey !== "undefined") {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.noop&async=2&key=" + Exhibit.params.gmapKey);
+	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.params.gmapKey);
             } else if (typeof Exhibit.MapExtension.params.gmapKey !== "undefined") {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.noop&async=2&key=" + Exhibit.MapExtension.params.gmapKey);
+	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.MapExtension.params.gmapKey);
             } else {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.noop&async=2");
+	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2");
             }
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("google-maps-v2-view.js");
@@ -111,7 +111,7 @@ Exhibit.onjQueryLoaded(function() {
             // if author is referring to an unknown service, default to google
 	        if (typeof google === "undefined" ||
                 (typeof google !== "undefined" && typeof google.map === "undefined")) {
-	            scriptURLs.push(proto + "//maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.noop");
+	            scriptURLs.push(proto + "//maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.gmapCallback");
                 if (!Exhibit.MapExtension.params.bundle) {
                     javascriptFiles.push("map-view.js");
                 }
@@ -132,20 +132,27 @@ Exhibit.onjQueryLoaded(function() {
         for (i = 0; i < localesToLoad.length; i++) {
             scriptURLs.push(Exhibit.MapExtension.urlPrefix + "locales/" + localesToLoad[i] + "/locale.js");
         }
-        
-        Exhibit.includeCssFiles(document, null, cssURLs);
-        Exhibit.includeJavascriptFiles(null, scriptURLs);
-        
-        finishedLoading = function() {
-            if ((typeof google === "undefined" ||
-                 (typeof google !== "undefined" && typeof google.maps === "undefined")) &&
-                typeof GMap2 === "undefined") {
-                setTimeout(finishedLoading, 500);
-            } else {
+
+        if (Exhibit.MapExtension.params.service === "google") {//v3
+            Exhibit.MapExtension.gmapCallback = function () {
                 Exhibit.jQuery(document).trigger("delayFinished.exhibit", delayID);
             }
-        };
-        finishedLoading();
+        } else {
+            pollLoading = function() {
+                if ((typeof google === "undefined" ||
+                     (typeof google !== "undefined" && typeof google.maps === "undefined")) &&
+                    typeof GMap2 === "undefined") {
+                    setTimeout(pollLoading, 500);
+                } else {
+                    Exhibit.jQuery(document).trigger("delayFinished.exhibit", delayID);
+                }
+            };
+            pollLoading();
+        }
+
+        Exhibit.includeCssFiles(document, null, cssURLs);
+        Exhibit.includeJavascriptFiles(null, scriptURLs);
+
     };
 
     Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);
