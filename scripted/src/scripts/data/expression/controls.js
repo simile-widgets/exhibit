@@ -110,7 +110,7 @@ Exhibit.Controls["filter"] = {
             roots["value"] = element;
            
             var collection2 = args[1].evaluate(roots, rootValueTypes, defaultRootName, database);
-            if (collection2.size > 0 && collection2.contains("true")) {
+            if (collection2.size > 0 && collection2.contains(true)) {
                 results.add(element);
             }
         });

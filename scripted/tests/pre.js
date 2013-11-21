@@ -14,7 +14,8 @@ var Modules = {
         'Exhibit.Persistence': 'util/persistence.js',
         'Exhibit.History': 'util/history.js',
         'Exhibit.Bookmark': 'util/bookmark.js',
-        'Exhibit.Database': 'data/database.js'
+        'Exhibit.Database': 'data/database.js',
+        'Exhibit.Controls': 'data/controls.js'
     },
     args: [],
     all: {},
