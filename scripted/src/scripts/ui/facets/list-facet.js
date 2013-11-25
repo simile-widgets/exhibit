@@ -48,17 +48,17 @@ Exhibit.ListFacet._settingSpecs = {
  * @param {Exhibit.UIContext} uiContext
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.create = function(configuration, containerElmt, uiContext) {
-    var facet, thisUIContext;
-    thisUIContext = Exhibit.UIContext.create(configuration, uiContext);
-    facet = new Exhibit.ListFacet(containerElmt, thisUIContext);
-    
-    Exhibit.ListFacet._configure(facet, configuration);
-    
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-    
+Exhibit.ListFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
+ var thisUIContext, facet;
+
+    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
+    facet = new Exhibit.ListFacet(
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt, 
+        thisUIContext
+    );
+
+    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
     return facet;
 };
 
@@ -70,43 +70,10 @@ Exhibit.ListFacet.create = function(configuration, containerElmt, uiContext) {
  * @returns {Exhibit.ListFacet}
  */
 Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuration, thisUIContext, facet, expressionString, selection, selectMissing, i;
-    configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new Exhibit.ListFacet(
-        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt : configElmt, 
-        thisUIContext
-    );
-    
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
-    
-    try {
-        expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
-            facet.setExpression(Exhibit.ExpressionParser.parse(expressionString));
-            facet.setExpressionString(expressionString);
-        }
+    var settingsFromDOM, facet;
 
-        selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
-            for (i = 0; i < selection.length; i++) {
-                facet._valueSet.add(selection[i]);
-            }
-        }
-        
-        selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
-            facet._selectMissing = (selectMissing === "true");
-        }
-    } catch (e) {
-        Exhibit.Debug.exception(e, "ListFacet: Error processing configuration of list facet");
-    }
-    Exhibit.ListFacet._configure(facet, configuration);
-
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
+    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
+    facet = Exhibit.ListFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
 
     return facet;
 };

@@ -4,54 +4,7 @@
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  * @author <a href="mailto:axel@pike.org">Axel Hecht</a>
  */
-
-// Static method stuff
-/*
-Exhibit.CloudFacet.create = function(containerElmt, uiContext, jsonParams) {
-}
-
-Exhibit.CloudFacet.createFromDOM = function(containerElmt, uiContext) {
-  var settings = //do something to get settings from dom
-  return Exhibit.CloudFacet.create(.., settings);
-}
-
-// Constructor
-
-Exhibit.EnumeratedFacet = function(conteinterEl, uiCon) {
-  A
-}
-
-
-Exhibit.CloudFacet = function(conteinterEl, uiCon) {
-  Exhibit.EnumeratedFacet.call(this, containerEl, uiCon);
-  C
-
-}
-
-
-Exhibit.ListFacet = function(conteinterEl, uiCon) {
-  A
-  B
-
-}
-
-function buildSettingsFromDOM = function(spec, elem) {
-    ret = {}
-    for key in spec:
-      if key.defaultValue:
-        ret[key] = key.defaultValue
-      if elem.hasAttr(key):
-        str = elem.attr(key)
-         if key.hasType and int:
-            str = parseInt(str)
-
-
-
-    return ret
-}
-
-*/
-
+ 
 /**
  * @constructor
  * @class
@@ -91,9 +44,8 @@ Exhibit.CloudFacet._settingSpecs = {
  * @returns {Exhibit.CloudFacet}
  */
 Exhibit.CloudFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
-    var facet, thisUIContext, configuration;
+    var facet, thisUIContext;
 
-    configuration = Exhibit.getConfigurationFromDOM(configElmt);
     thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext); 
     facet = new Exhibit.CloudFacet(
         (typeof containerElmt !== "undefined" && containerElmt !== null) ?
@@ -102,36 +54,9 @@ Exhibit.CloudFacet.create = function(configElmt, containerElmt, uiContext, setti
         thisUIContext
     );
 
-    Exhibit.CloudFacet.includeSettingsFromDOM(facet, settingsFromDOM);
-    Exhibit.CloudFacet._configure(facet, configuration);
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-
+    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
     return facet;
 };
-
-/**
- * @param {Exhibit.CloudFacet} facet
- * @param {Object} settingsFromDOM 
- */
-Exhibit.CloudFacet.includeSettingsFromDOM = function(configElmt, facet, settingsFromDOM){
-    if (settingsFromDOM["expression"] !== "undefined" && settingsFromDOM["expressionString"] !== "undefined") {
-        facet.setExpression(Exhibit.ExpressionParser.parse(settingsFromDOM["expressionString"]));
-        facet.setExpressionString(settingsFromDOM["expressionString"]);
-    }
-
-    if (settingsFromDOM["valueSet"] !== "undefined") {
-        for (i = 0; i < settingsFromDOM["valueSet"].length; i++){
-            facet._valueSet.add(settingsFromDOM["valueSet"][i]);
-        }
-    }
-
-    if (settingsFromDOM["selectMissing"] !== "undefined") {
-        facet._selectMissing = (settingsFromDOM["selectMissing"] === "true");
-    }
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
-}
 
 /**
  * @param {Element} configElmt
@@ -140,50 +65,12 @@ Exhibit.CloudFacet.includeSettingsFromDOM = function(configElmt, facet, settings
  * @returns {Exhibit.CloudFacet}
  */
 Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var settingsFromDOM = Exhibit.CloudFacet.buildSettingsFromDOM(configElmt);
-    var facet = Exhibit.CloudFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
+    var settingsFromDOM, facet;
+
+    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
+    facet = Exhibit.CloudFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
     return facet;
 };
-
-/**
- * @param {Element} configElmt
- * @returns {Object} settingsFromDOM
- */
-Exhibit.CloudFacet.buildSettingsFromDOM = function(configElmt) {
-    var settingsFromDOM = {
-        "expression": "undefined",
-        "expressionString" : "undefined",
-        "valueSet" : "undefined",
-        "selectMissing" : "undefined"
-    };
-
-    try {
-        expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0){
-            settingsFromDOM["expression"] = Exhibit.ExpressionParser.parse(expressionString);
-            settingsFromDOM["expressionString"] = expressionString
-        }
-
-        selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
-            settingsFromDOM["valueSet"] = [];
-            for (i = 0; i < selection.length; i++) {
-                settingsFromDOM.push(selection[i]);
-            }
-        }
-
-        selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
-            settingsFromDOM["selectMissing"] = (selectMissing === "true");
-        }
-
-    } catch (e) {
-         Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "CloudFacet"));
-    }
-
-    return settingsFromDOM;
-}
-
 
 /**
  * @param {Exhibit.CloudFacet} facet
