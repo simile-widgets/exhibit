@@ -5,17 +5,20 @@
 */
 
 /**
+* EnumeratedFacet class consolidates methods that are used in CloudFacet and ListFacet. 
 * @constructor
 * @class
-* @param {Facet} object
-* @param {String} key
-* @param {Element} containerElmt
-* @param {Exhibit.UIContext} uiContext
-* @param {String} facetType
 */
 Exhibit.EnumeratedFacet = function(){
 };
 
+/**
+ * @param {Element} configElmt
+ * @param {Element} containerElmt
+ * @param {Object} settingsFromDOM
+ * @param {Exhibit.UIContext} thisUIContext
+ * @returns {Exhibit.CloudFacet}
+ */
 Exhibit.EnumeratedFacet.create = function (configElmt, facet, settingsFromDOM, thisUIContext) {
     var configuration = Exhibit.getConfigurationFromDOM(configElmt);
     
@@ -27,6 +30,7 @@ Exhibit.EnumeratedFacet.create = function (configElmt, facet, settingsFromDOM, t
 }
 
 /**
+ * @param {Element} configElmt
  * @param {Exhibit.EnumeratedFacet} facet
  * @param {Object} settingsFromDOM 
  */
@@ -148,6 +152,9 @@ Exhibit.EnumeratedFacet.prototype._notifyCollection = function() {
     this.getUIContext().getCollection().onFacetUpdated(this);
 };
 
+/**
+ *
+ */
 Exhibit.EnumeratedFacet.prototype._clearSelections = function() {
     Exhibit.History.pushComponentState(
         this,

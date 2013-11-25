@@ -4,7 +4,7 @@
  * @author <a href="mailto:ryanlee@zepheira.com">Ryan Lee</a>
  * @author <a href="mailto:axel@pike.org">Axel Hecht</a>
  */
- 
+
 /**
  * @constructor
  * @class
@@ -340,6 +340,9 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
     }
 };
 
+/**
+*
+*/
 Exhibit.CloudFacet.prototype._buildMaps = function() {
     var itemToValue, valueToItem, missingItems, valueType, insert, expression, database;
 

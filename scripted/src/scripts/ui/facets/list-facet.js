@@ -43,9 +43,10 @@ Exhibit.ListFacet._settingSpecs = {
 
 /**
  * @static
- * @param {Object} configuration
+ * @param {Element} configElmt
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
+ * @param {Object} settingsFromDOM
  * @returns {Exhibit.ListFacet}
  */
 Exhibit.ListFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
