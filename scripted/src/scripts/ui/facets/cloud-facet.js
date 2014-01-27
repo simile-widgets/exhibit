@@ -361,15 +361,21 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                 if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
                     minFontSize = parseInt(this._settings.minFontSize);
                     maxFontSize = parseInt(this._settings.maxFontSize);
+                    fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    fontsize = Math.min(maxFontSize, fontsize);
                 } else if (typeof this._settings.maxFontSize != "undefined") {
-                    minFontSize = 0;
                     maxFontSize = parseInt(this._settings.maxFontSize);
+                    if (maxFontSize > 100) {
+                        fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    }
+                    fontSize = Math.min(maxFontSize, fontSize);
                 } else if (typeof this._settings.minFontSize != "undefined") {
                     minFontSize = parseInt(this.settings.minFontSize);
-                    fontsize = Math.max(fontsize, minFontSize);
-                }
-                if (maxFontSize != null)
-                    fontsize = fontsize * ((maxFontSize - minFontSize) / range) + minFontSize;
+                    if (minFontSize < 100) {
+                        fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    }
+                } 
+
                 Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");           
             }
             
