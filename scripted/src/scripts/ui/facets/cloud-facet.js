@@ -28,7 +28,9 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
 Exhibit.CloudFacet._settingSpecs = {
     "minimumCount":     { "type": "int", "defaultValue": 1 },
     "showMissing":      { "type": "boolean", "defaultValue": true },
-    "missingLabel":     { "type": "text" }
+    "missingLabel":     { "type": "text" },
+    "maxFontSize":      { "type": "text" },
+    "minFontSize":      { "type": "text" } 
 };
 
 /**
@@ -353,7 +355,22 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                          "exhibit-cloudFacet-value");
                 
             if (entry.count > min) {
-                Exhibit.jQuery(elmt).css("fontSize", Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range)) + "%");
+                var fontsize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                var minFontSize = null;
+                var maxFontSize = null;
+                if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
+                    minFontSize = parseInt(this._settings.minFontSize);
+                    maxFontSize = parseInt(this._settings.maxFontSize);
+                } else if (typeof this._settings.maxFontSize != "undefined") {
+                    minFontSize = 0;
+                    maxFontSize = parseInt(this._settings.maxFontSize);
+                } else if (typeof this._settings.minFontSize != "undefined") {
+                    minFontSize = parseInt(this.settings.minFontSize);
+                    fontsize = Math.max(fontsize, minFontSize + fontsize);
+                }
+                if (maxFontSize != null)
+                    fontsize = fontsize * ((maxFontSize - minFontSize) / range) + minFontSize;
+                Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");           
             }
             
             Exhibit.jQuery(elmt).bind("click", onSelect);
