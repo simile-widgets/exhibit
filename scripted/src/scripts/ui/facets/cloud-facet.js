@@ -366,7 +366,7 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                     maxFontSize = parseInt(this._settings.maxFontSize);
                 } else if (typeof this._settings.minFontSize != "undefined") {
                     minFontSize = parseInt(this.settings.minFontSize);
-                    fontsize = Math.max(fontsize, minFontSize + fontsize);
+                    fontsize = Math.max(fontsize, minFontSize);
                 }
                 if (maxFontSize != null)
                     fontsize = fontsize * ((maxFontSize - minFontSize) / range) + minFontSize;
