@@ -22,6 +22,7 @@ Exhibit.ListFacet = function(containerElmt, uiContext) {
     this._orderMap = null;
 };
 
+Exhibit.ListFacet.prototype = new Exhibit.EnumeratedFacet();
 /**
  * @constant
  */
@@ -41,22 +42,23 @@ Exhibit.ListFacet._settingSpecs = {
 
 /**
  * @static
- * @param {Object} configuration
+ * @param {Element} configElmt
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
+ * @param {Object} settingsFromDOM
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.create = function(configuration, containerElmt, uiContext) {
-    var facet, thisUIContext;
-    thisUIContext = Exhibit.UIContext.create(configuration, uiContext);
-    facet = new Exhibit.ListFacet(containerElmt, thisUIContext);
-    
-    Exhibit.ListFacet._configure(facet, configuration);
-    
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-    
+Exhibit.ListFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
+ var thisUIContext, facet;
+
+    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
+    facet = new Exhibit.ListFacet(
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt : configElmt, 
+        thisUIContext
+    );
+
+    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
     return facet;
 };
 
@@ -68,43 +70,10 @@ Exhibit.ListFacet.create = function(configuration, containerElmt, uiContext) {
  * @returns {Exhibit.ListFacet}
  */
 Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuration, thisUIContext, facet, expressionString, selection, selectMissing, i;
-    configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new Exhibit.ListFacet(
-        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt : configElmt, 
-        thisUIContext
-    );
-    
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
-    
-    try {
-        expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
-            facet.setExpression(Exhibit.ExpressionParser.parse(expressionString));
-            facet.setExpressionString(expressionString);
-        }
+    var settingsFromDOM, facet;
 
-        selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
-            for (i = 0; i < selection.length; i++) {
-                facet._valueSet.add(selection[i]);
-            }
-        }
-        
-        selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
-            facet._selectMissing = (selectMissing === "true");
-        }
-    } catch (e) {
-        Exhibit.Debug.exception(e, "ListFacet: Error processing configuration of list facet");
-    }
-    Exhibit.ListFacet._configure(facet, configuration);
-
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
+    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
+    facet = Exhibit.ListFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
 
     return facet;
 };
@@ -188,62 +157,6 @@ Exhibit.ListFacet.prototype._dispose = function() {
     this._dom = null;
     this._valueSet = null;
     this._orderMap = null;
-};
-
-/**
- * @returns {Boolean}
- */
-Exhibit.ListFacet.prototype.hasRestrictions = function() {
-    return this._valueSet.size() > 0 || this._selectMissing;
-};
-
-/**
- *
- */
-Exhibit.ListFacet.prototype.clearAllRestrictions = function() {
-    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
-    this._valueSet = new Exhibit.Set();
-    this._selectMissing = false;
-    this._notifyCollection();
-};
-
-/**
- * @param {Object} restrictions
- * @param {Array} restrictions.selection
- * @param {Boolean} restrictions.selectMissing
- */
-Exhibit.ListFacet.prototype.applyRestrictions = function(restrictions) {
-    var i;
-    this._valueSet = new Exhibit.Set();
-    for (i = 0; i < restrictions.selection.length; i++) {
-        this._valueSet.add(restrictions.selection[i]);
-    }
-    this._selectMissing = restrictions.selectMissing;
-    
-    this._notifyCollection();
-};
-
-/**
- * @param {String} value
- * @param {Boolean} selected
- */
-Exhibit.ListFacet.prototype.setSelection = function(value, selected) {
-    if (selected) {
-        this._valueSet.add(value);
-    } else {
-        this._valueSet.remove(value);
-    }
-    this._notifyCollection();
-};
-
-/**
- * @param {Boolean} selected
- */
-Exhibit.ListFacet.prototype.setSelectMissing = function(selected) {
-    if (selected !== this._selectMissing) {
-        this._selectMissing = selected;
-        this._notifyCollection();
-    }
 };
 
 /**
@@ -339,13 +252,6 @@ Exhibit.ListFacet.prototype._computeFacet = function(items) {
 /**
  *
  */
-Exhibit.ListFacet.prototype._notifyCollection = function() {
-    this.getUIContext().getCollection().onFacetUpdated(this);
-};
-
-/**
- *
- */
 Exhibit.ListFacet.prototype._initializeUI = function() {
     var self = this;
 
@@ -413,203 +319,4 @@ Exhibit.ListFacet.prototype._constructBody = function(entries) {
     Exhibit.jQuery(containerDiv).show();
     
     this._dom.setSelectionCount(this._valueSet.size() + (this._selectMissing ? 1 : 0));
-};
-
-/**
- * @param {String} value
- * @param {String} label
- * @param {Boolean} selectOnly
- */
-Exhibit.ListFacet.prototype._filter = function(value, label, selectOnly) {
-    var self, selected, select, deselect, oldValues, oldSelectMissing, newValues, newSelectMissing, actionLabel, wasSelected, wasOnlyThingSelected, newRestrictions;
-    self = this;
-    
-    oldValues = new Exhibit.Set(this._valueSet);
-    oldSelectMissing = this._selectMissing;
-    if (typeof value === "undefined" || value === null) { // the (missing this field) case
-        wasSelected = oldSelectMissing;
-        wasOnlyThingSelected = wasSelected && (oldValues.size() === 0);
-        
-        if (selectOnly) {
-            if (oldValues.size() === 0) {
-                newSelectMissing = !oldSelectMissing;
-            } else {
-                newSelectMissing = true;
-            }
-            newValues = new Exhibit.Set();
-        } else {
-            newSelectMissing = !oldSelectMissing;
-            newValues = new Exhibit.Set(oldValues);
-        }
-    } else {
-        wasSelected = oldValues.contains(value);
-        wasOnlyThingSelected = wasSelected && (oldValues.size() === 1) && !oldSelectMissing;
-        
-        if (selectOnly) {
-            newSelectMissing = false;
-            newValues = new Exhibit.Set();
-            
-            if (!oldValues.contains(value)) {
-                newValues.add(value);
-            } else if (oldValues.size() > 1 || oldSelectMissing) {
-                newValues.add(value);
-            }
-        } else {
-            newSelectMissing = oldSelectMissing;
-            newValues = new Exhibit.Set(oldValues);
-            if (newValues.contains(value)) {
-                newValues.remove(value);
-            } else {
-                newValues.add(value);
-            }
-        }
-    }
-    
-    newRestrictions = { selection: newValues.toArray(), selectMissing: newSelectMissing };
-
-    Exhibit.History.pushComponentState(
-        this,
-        Exhibit.Facet.getRegistryKey(),
-        newRestrictions,
-        (selectOnly && !wasOnlyThingSelected) ?
-            Exhibit._("%facets.facetSelectOnlyActionTitle", label, this.getLabel()) :
-            Exhibit._(wasSelected ? "%facets.facetUnselectActionTitle" : "%facets.facetSelectActionTitle", label, this.getLabel()),
-        true
-    );
-};
-
-Exhibit.ListFacet.prototype._clearSelections = function() {
-    Exhibit.History.pushComponentState(
-        this,
-        Exhibit.Facet.getRegistryKey(),
-        this.exportEmptyState(),
-        Exhibit._("%facets.facetClearSelectionsActionTitle", this.getLabel()),
-        true
-    );
-};
-
-/**
- * @param {String} valueType
- * @returns {Function}
- */
-Exhibit.ListFacet.prototype._createSortFunction = function(valueType) {
-    var sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
-    sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
-    if (this._orderMap !== null) {
-        orderMap = this._orderMap;
-        
-        sortValueFunction = function(a, b) {
-            if (typeof orderMap[a.selectionLabel] !== "undefined") {
-                if (typeof orderMap[b.selectionLabel] !== "undefined") {
-                    return orderMap[a.selectionLabel] - orderMap[b.selectionLabel];
-                } else {
-                    return -1;
-                }
-            } else if (typeof orderMap[b.selectionLabel] !== "undefined") {
-                return 1;
-            } else {
-                return a.selectionLabel.localeCompare(b.selectionLabel);
-            }
-        };
-    } else if (valueType === "number") {
-        sortValueFunction = function(a, b) {
-            a = parseFloat(a.value);
-            b = parseFloat(b.value);
-            return a < b ? -1 : a > b ? 1 : 0;
-        };
-    }
-    
-    sortFunction = sortValueFunction;
-    if (this._settings.sortMode === "count") {
-        sortFunction = function(a, b) {
-            var c = b.count - a.count;
-            return c !== 0 ? c : sortValueFunction(a, b);
-        };
-    }
-
-    sortDirectionFunction = sortFunction;
-    if (this._settings.sortDirection === "reverse"){
-        sortDirectionFunction = function(a, b) {
-            return sortFunction(b, a);
-        };
-    }
-    
-    return sortDirectionFunction;
-};
-
-/**
- * @returns {Object}
- */
-Exhibit.ListFacet.prototype.exportState = function() {
-    return this._exportState(false);
-};
-
-/**
- * @returns {Object}
- */
-Exhibit.ListFacet.prototype.exportEmptyState = function() {
-    return this._exportState(true);
-};
-
-/**
- * @private
- * @param {Boolean} empty
- * @returns {Object}
- */
-Exhibit.ListFacet.prototype._exportState = function(empty) {
-    var s = [];
-
-    if (!empty) {
-        s = this._valueSet.toArray();
-    }
-
-    return {
-        "selection": s,
-        "selectMissing": empty ? false : this._selectMissing
-    };
-};
-
-/**
- * @param {Object} state
- * @param {Array} state.selection
- * @param {Boolean} state.selectMissing
- */
-Exhibit.ListFacet.prototype.importState = function(state) {
-    if (this.stateDiffers(state)) {
-        if (state.selection.length === 0 && !state.selectMissing) {
-            this.clearAllRestrictions();
-        } else {
-            this.applyRestrictions(state);
-        }
-    }
-};
-
-/**
- * Check if the state being requested for import is any different from the
- * current state.  This is only a worthwhile function to call if the check
- * is always faster than just going through with thei mport.
- * 
- * @param {Object} state
- */
-Exhibit.ListFacet.prototype.stateDiffers = function(state) {
-    var stateSet, stateStartCount, valueStartCount;
-
-    if (state.selectMissing !== this._selectMissing) {
-        return true;
-    }
-
-    stateStartCount = state.selection.length;
-    valueStartCount = this._valueSet.size();
-
-    if (stateStartCount !== valueStartCount) {
-        return true;
-    } else {
-        stateSet = new Exhibit.Set(state.selection);
-        stateSet.addSet(this._valueSet);
-        if (stateSet.size() !== stateStartCount) {
-            return true;
-        }
-    }
-
-    return false;
 };

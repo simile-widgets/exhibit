@@ -16,11 +16,16 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
+    this._itemToValue = null;
+    this._valueToItem = null;
+    this._missingItems = null;
     this._valueType = null;
     this._orderMap = null;
     this._selectMissing = false;
     this._dom = null;
 };
+
+Exhibit.CloudFacet.prototype = new Exhibit.EnumeratedFacet();
 
 /**
  * @constant
@@ -34,22 +39,24 @@ Exhibit.CloudFacet._settingSpecs = {
 };
 
 /**
- * @param {Object} configuration
+ * @param {Element} configElmt
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
+ * @param {Object} settingsFromDOM
  * @returns {Exhibit.CloudFacet}
  */
-Exhibit.CloudFacet.create = function(configuration, containerElmt, uiContext) {
+Exhibit.CloudFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
     var facet, thisUIContext;
-    thisUIContext = Exhibit.UIContext.create(configuration, uiContext);
-    facet = new Exhibit.CloudFacet(containerElmt, thisUIContext);
-    
-    Exhibit.CloudFacet._configure(facet, configuration);
-    
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-    
+
+    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext); 
+    facet = new Exhibit.CloudFacet(
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt :
+            configElmt, 
+        thisUIContext
+    );
+
+    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
     return facet;
 };
 
@@ -60,45 +67,10 @@ Exhibit.CloudFacet.create = function(configuration, containerElmt, uiContext) {
  * @returns {Exhibit.CloudFacet}
  */
 Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuration, thisUIContext, facet, expressionString, selection, selectMissing, i;
-    configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new Exhibit.CloudFacet(
-        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt :
-            configElmt, 
-        thisUIContext
-    );
-    
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
-    
-    try {
-        expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0) {
-            facet.setExpression(Exhibit.ExpressionParser.parse(expressionString));
-            facet.setExpressionString(expressionString);
-        }
+    var settingsFromDOM, facet;
 
-        selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
-            for (i = 0; i < selection.length; i++) {
-                facet._valueSet.add(selection[i]);
-            }
-        }
-        
-        selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
-            facet._selectMissing = (selectMissing === "true");
-        }
-    } catch (e) {
-        Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "CloudFacet"));
-    }
-    Exhibit.CloudFacet._configure(facet, configuration);
-
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-
+    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
+    facet = Exhibit.CloudFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
     return facet;
 };
 
@@ -142,62 +114,6 @@ Exhibit.CloudFacet.prototype._dispose = function() {
     this._valueSet = null;
     this._valueType = null;
     this._orderMap = null;
-};
-
-/**
- * @returns {Boolean}
- */
-Exhibit.CloudFacet.prototype.hasRestrictions = function() {
-    return this._valueSet.size() > 0 || this._selectMissing;
-};
-
-/**
- *
- */
-Exhibit.CloudFacet.prototype.clearAllRestrictions = function() {
-    Exhibit.jQuery(this.getContainer()).trigger("onBeforeFacetReset.exhibit");
-    this._valueSet = new Exhibit.Set();
-    this._selectMissing = false;
-    this._notifyCollection();
-};
-
-/**
- * @param {Array} restrictions
- * @param {Array} restrictions.selection
- * @param {Boolean} restrictions.selectMissing
- */
-Exhibit.CloudFacet.prototype.applyRestrictions = function(restrictions) {
-    var i;
-    this._valueSet = new Exhibit.Set();
-    for (i = 0; i < restrictions.selection.length; i++) {
-        this._valueSet.add(restrictions.selection[i]);
-    }
-    this._selectMissing = restrictions.selectMissing;
-    
-    this._notifyCollection();
-};
-
-/**
- * @param {String} value
- * @param {Boolean} selected
- */
-Exhibit.CloudFacet.prototype.setSelection = function(value, selected) {
-    if (selected) {
-        this._valueSet.add(value);
-    } else {
-        this._valueSet.remove(value);
-    }
-    this._notifyCollection();
-};
-
-/**
- * @param {Boolean} selected
- */
-Exhibit.CloudFacet.prototype.setSelectMissing = function(selected) {
-    if (selected !== this._selectMissing) {
-        this._selectMissing = selected;
-        this._notifyCollection();
-    }
 };
 
 /**
@@ -279,13 +195,6 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
     }
     
     return entries;
-};
-
-/**
- *
- */
-Exhibit.CloudFacet.prototype._notifyCollection = function() {
-    this.getUIContext().getCollection().onFacetUpdated(this);
 };
 
 /**
@@ -391,207 +300,4 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
     
         Exhibit.jQuery(containerDiv).show();
     }
-};
-
-/**
- * @param {String} value
- * @param {String} label
- * @param {Boolean} selectOnly
- */
-Exhibit.CloudFacet.prototype._filter = function(value, label, selectOnly) {
-    var self, selected, select, deselect, oldValues, oldSelectMissing, newValues, newSelectMissing, actionLabel, wasSelected, wasOnlyThingSelected, newRestrictions, facetLabel;
-    self = this;
-    
-    oldValues = new Exhibit.Set(this._valueSet);
-    oldSelectMissing = this._selectMissing;
-    
-    if (typeof value === "undefined" || value === null) {
-        // the (missing this field) case
-        wasSelected = oldSelectMissing;
-        wasOnlyThingSelected = wasSelected && (oldValues.size() === 0);
-        
-        if (selectOnly) {
-            if (oldValues.size() === 0) {
-                newSelectMissing = !oldSelectMissing;
-            } else {
-                newSelectMissing = true;
-            }
-            newValues = new Exhibit.Set();
-        } else {
-            newSelectMissing = !oldSelectMissing;
-            newValues = new Exhibit.Set(oldValues);
-        }
-    } else {
-        wasSelected = oldValues.contains(value);
-        wasOnlyThingSelected = wasSelected && (oldValues.size() === 1) && !oldSelectMissing;
-        
-        if (selectOnly) {
-            newSelectMissing = false;
-            newValues = new Exhibit.Set();
-            
-            if (!oldValues.contains(value)) {
-                newValues.add(value);
-            } else if (oldValues.size() > 1 || oldSelectMissing) {
-                newValues.add(value);
-            }
-        } else {
-            newSelectMissing = oldSelectMissing;
-            newValues = new Exhibit.Set(oldValues);
-            if (newValues.contains(value)) {
-                newValues.remove(value);
-            } else {
-                newValues.add(value);
-            }
-        }
-    }
-    
-    newRestrictions = { selection: newValues.toArray(), selectMissing: newSelectMissing };
-    
-    facetLabel = this.getLabel();
-    Exhibit.History.pushComponentState(
-        this,
-        Exhibit.Facet.getRegistryKey(),
-        newRestrictions,
-        (selectOnly && !wasOnlyThingSelected) ?
-            Exhibit._("%facets.facetSelectOnlyActionTitle", label, facetLabel) :
-            Exhibit._(wasSelected ? "%facets.facetUnselectActionTitle" : "%facets.facetSelectActionTitle", label, facetLabel),
-        true
-    );
-};
-
-Exhibit.CloudFacet.prototype._clearSelections = function() {
-    Exhibit.History.pushComponentState(
-        this,
-        Exhibit.Facet.getRegistryKey(),
-        this.exportEmptyState(),
-        Exhibit._("%facets.facetClearSelectionsActionTitle", this.getLabel()),
-        true
-    );
-};
-
-/**
- * @param {String} valueType
- * @returns {Function}
- */
-Exhibit.CloudFacet.prototype._createSortFunction = function(valueType) {
-    var sortValueFunction, orderMap, sortFunction, sortDirectionFunction;
-    sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
-    if (this._orderMap !== null) {
-        orderMap = this._orderMap;
-        
-        sortValueFunction = function(a, b) {
-            if (typeof orderMap[a.selectionLabel] !== "undefined") {
-                if (typeof orderMap[b.selectionLabel] !== "undefined") {
-                    return orderMap[a.selectionLabel] - orderMap[b.selectionLabel];
-                } else {
-                    return -1;
-                }
-            } else if (typeof orderMap[b.selectionLabel] !== "undefined") {
-                return 1;
-            } else {
-                return a.selectionLabel.localeCompare(b.selectionLabel);
-            }
-        };
-    } else if (valueType === "number") {
-        sortValueFunction = function(a, b) {
-            a = parseFloat(a.value);
-            b = parseFloat(b.value);
-            return a < b ? -1 : a > b ? 1 : 0;
-        };
-    }
-    
-    sortFunction = sortValueFunction;
-    if (this._settings.sortMode === "count") {
-        sortFunction = function(a, b) {
-            var c = b.count - a.count;
-            return c !== 0 ? c : sortValueFunction(a, b);
-        };
-    }
-
-    sortDirectionFunction = sortFunction;
-    if (this._settings.sortDirection === "reverse"){
-        sortDirectionFunction = function(a, b) {
-            return sortFunction(b, a);
-        };
-    }
-    
-    return sortDirectionFunction;
-};
-
-/**
- * @returns {Object}
- */
-Exhibit.CloudFacet.prototype.exportState = function() {
-    return this._exportState(false);
-};
-
-/**
- * @returns {Object}
- */
-Exhibit.CloudFacet.prototype.exportEmptyState = function() {
-    return this._exportState(true);
-};
-
-/**
- * @private
- * @param {Boolean} empty
- */
-Exhibit.CloudFacet.prototype._exportState = function(empty) {
-    var s = [];
-
-    if (!empty) {
-        s = this._valueSet.toArray();
-    }
-
-    return {
-        "selection": s,
-        "selectMissing": this._selectMissing
-    };
-};
-
-/**
- * @param {Object} state
- * @param {Boolean} state.selectMissing
- * @param {Array} state.selection
- */
-Exhibit.CloudFacet.prototype.importState = function(state) {
-    if (this.stateDiffers(state)) {
-        if (state.selection.length === 0 && !state.selectMissing) {
-            this.clearAllRestrictions();
-        } else {
-            this.applyRestrictions(state);
-        }
-    }
-};
-
-/**
- * Check if the state being requested for import is any different from the
- * current state.  This is only a worthwhile function to call if the check
- * is always faster than just going through with the import.
- * 
- * @param {Object} state
- * @param {Boolean} state.selectMissing
- * @param {Array} state.selection
- */
-Exhibit.CloudFacet.prototype.stateDiffers = function(state) {
-    var stateSet, stateStartCount, valueStartCount;
-
-    if (state.selectMissing !== this._selectMissing) {
-        return true;
-    }
-
-    stateStartCount = state.selection.length;
-    valueStartCount = this._valueSet.size();
-
-    if (stateStartCount !== valueStartCount) {
-        return true;
-    } else {
-        stateSet = new Exhibit.Set(state.selection);
-        stateSet.addSet(this._valueSet);
-        if (stateSet.size() !== stateStartCount) {
-            return true;
-        }
-    }
-
-    return false;
 };
