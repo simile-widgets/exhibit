@@ -16,9 +16,6 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
-    this._itemToValue = null;
-    this._valueToItem = null;
-    this._missingItems = null;
     this._valueType = null;
     this._orderMap = null;
     this._selectMissing = false;
@@ -26,7 +23,6 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
 };
 
 Exhibit.CloudFacet.prototype = new Exhibit.EnumeratedFacet();
-
 /**
  * @constant
  */
@@ -264,28 +260,30 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                          "exhibit-cloudFacet-value");
                 
             if (entry.count > min) {
-                var fontsize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                var minFontSize = null;
-                var maxFontSize = null;
-                if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
-                    minFontSize = parseInt(this._settings.minFontSize);
-                    maxFontSize = parseInt(this._settings.maxFontSize);
-                    fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                    fontsize = Math.min(maxFontSize, fontsize);
-                } else if (typeof this._settings.maxFontSize != "undefined") {
-                    maxFontSize = parseInt(this._settings.maxFontSize);
-                    if (maxFontSize <= 100) {
-                        fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                    }
-                    fontSize = Math.min(maxFontSize, fontSize);
-                } else if (typeof this._settings.minFontSize != "undefined") {
-                    minFontSize = parseInt(this.settings.minFontSize);
-                    if (minFontSize > 100) {
+                if (this._settings){
+                    var fontsize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    var minFontSize = null;
+                    var maxFontSize = null;
+                    if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
+                        minFontSize = parseInt(this._settings.minFontSize);
+                        maxFontSize = parseInt(this._settings.maxFontSize);
                         fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                    }
-                } 
+                        fontsize = Math.min(maxFontSize, fontsize);
+                    } else if (typeof this._settings.maxFontSize != "undefined") {
+                        maxFontSize = parseInt(this._settings.maxFontSize);
+                        if (maxFontSize <= 100) {
+                            fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                        }
+                        fontSize = Math.min(maxFontSize, fontSize);
+                    } else if (typeof this._settings.minFontSize != "undefined") {
+                        minFontSize = parseInt(this.settings.minFontSize);
+                        if (minFontSize > 100) {
+                            fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                        }
+                    } 
 
-                Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");           
+                    Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");
+                }           
             }
             
             Exhibit.jQuery(elmt).bind("click", onSelect);
@@ -300,4 +298,14 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
     
         Exhibit.jQuery(containerDiv).show();
     }
+};
+
+Exhibit.CloudFacet.prototype._clearSelections = function() {
+    Exhibit.History.pushComponentState(
+        this,
+        Exhibit.Facet.getRegistryKey(),
+        this.exportEmptyState(),
+        Exhibit._("%facets.facetClearSelectionsActionTitle", this.getLabel()),
+        true
+    );
 };

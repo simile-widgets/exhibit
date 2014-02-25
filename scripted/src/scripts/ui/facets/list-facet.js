@@ -17,12 +17,13 @@ Exhibit.ListFacet = function(containerElmt, uiContext) {
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
     this._selectMissing = false;
-	this._delayedUpdateItems = null;
+    this._delayedUpdateItems = null;
     this._dom = null;
     this._orderMap = null;
 };
 
 Exhibit.ListFacet.prototype = new Exhibit.EnumeratedFacet();
+
 /**
  * @constant
  */
@@ -159,6 +160,7 @@ Exhibit.ListFacet.prototype._dispose = function() {
     this._orderMap = null;
 };
 
+
 /**
  * @param {Exhibit.Set} items
  * @returns {Exhibit.Set}
@@ -180,20 +182,20 @@ Exhibit.ListFacet.prototype.restrict = function(items) {
  *
  */
 Exhibit.ListFacet.prototype.onUncollapse = function() {
-	if (this._delayedUpdateItems !== null) {
-		this.update(this._delayedUpdateItems);
-		this._delayedUpdateItems = null;
-	}
+    if (this._delayedUpdateItems !== null) {
+        this.update(this._delayedUpdateItems);
+        this._delayedUpdateItems = null;
+    }
 };
 
 /**
  * @param {Exhibit.Set} items
  */
 Exhibit.ListFacet.prototype.update = function(items) {
-	if (Exhibit.FacetUtilities.isCollapsed(this)) {
-		this._delayedUpdateItems = items;
-		return;
-	}
+    if (Exhibit.FacetUtilities.isCollapsed(this)) {
+        this._delayedUpdateItems = items;
+        return;
+    }
     Exhibit.jQuery(this._dom.valuesContainer)
         .hide()
         .empty();
@@ -256,7 +258,7 @@ Exhibit.ListFacet.prototype._initializeUI = function() {
     var self = this;
 
     this._dom = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetFrame" : "constructFlowingFacetFrame"](
-		this,
+        this,
         this.getContainer(),
         this.getLabel(),
         function(elmt, evt, target) { self._clearSelections(); },
