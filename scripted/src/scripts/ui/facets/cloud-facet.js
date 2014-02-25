@@ -358,23 +358,25 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                 var fontsize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
                 var minFontSize = null;
                 var maxFontSize = null;
-                if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
-                    minFontSize = parseInt(this._settings.minFontSize);
-                    maxFontSize = parseInt(this._settings.maxFontSize);
-                    fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                    fontsize = Math.min(maxFontSize, fontsize);
-                } else if (typeof this._settings.maxFontSize != "undefined") {
-                    maxFontSize = parseInt(this._settings.maxFontSize);
-                    if (maxFontSize <= 100) {
-                        fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                    }
-                    fontSize = Math.min(maxFontSize, fontSize);
-                } else if (typeof this._settings.minFontSize != "undefined") {
-                    minFontSize = parseInt(this.settings.minFontSize);
-                    if (minFontSize > 100) {
-                        fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                    }
-                } 
+                if (typeof this._settings != "undefined") {
+                  if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
+                      minFontSize = parseInt(this._settings.minFontSize);
+                      maxFontSize = parseInt(this._settings.maxFontSize);
+                      fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                      fontsize = Math.min(maxFontSize, fontsize);
+                  } else if (typeof this._settings.maxFontSize != "undefined") {
+                      maxFontSize = parseInt(this._settings.maxFontSize);
+                      if (maxFontSize <= 100) {
+                          fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                      }
+                      fontSize = Math.min(maxFontSize, fontSize);
+                  } else if (typeof this._settings.minFontSize != "undefined") {
+                      minFontSize = parseInt(this.settings.minFontSize);
+                      if (minFontSize > 100) {
+                          fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                      }
+                  } 
+                }
 
                 Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");           
             }
