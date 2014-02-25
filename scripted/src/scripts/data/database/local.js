@@ -603,7 +603,7 @@ Exhibit.Database._LocalImpl.prototype.getObject = function(s, p) {
 Exhibit.Database._LocalImpl.prototype.getSubject = function(o, p) {
     var s = null;
 
-    Exhibit.Database._indexVisit(this._spo, o, p, function (v) {
+    Exhibit.Database._indexVisit(this._ops, o, p, function (v) {
         s=v;
         return false; //terminate iteration
     });
