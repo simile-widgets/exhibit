@@ -2,7 +2,7 @@ module("Exhibit.Database", {
     "setup": function() {
         this.indexA = {
             "a": {
-                "b": ["c"]
+                "b": "c"
             }
         };
         this.indexB = {
@@ -27,10 +27,10 @@ test("_indexPut", function() {
     deepEqual(this.indexB, this.indexA, "Put a new value and new secondary key into a mostly empty index");
 
     Exhibit.Database._indexPut(this.indexA, "a", "b", "c");
-    deepEqual(this.indexA["a"]["b"], [ "c" ], "Attempt to put an existent value results in no change");
+    deepEqual(this.indexA["a"]["b"],  "c" , "Attempt to put an existent value results in no change");
 
     Exhibit.Database._indexPut(this.indexA, "a", "b", "d");
-    deepEqual(this.indexA["a"]["b"], [ "c", "d" ], "Put a new value in an existing array");
+    deepEqual(this.indexA["a"]["b"], { "c": true, "d": true }, "Put a new value in an existing array");
 
 });
 
