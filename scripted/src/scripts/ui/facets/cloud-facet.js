@@ -332,7 +332,7 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
         }
         range = max - min;
         
-        constructValue = function(entry) {
+        constructValue = function(entry, settings) {
             var onSelect, onSelectOnly, elmt;
             onSelect = function(evt) {
                 self._filter(entry.value, entry.actionLabel, !(evt.ctrlKey || evt.metaKey));
@@ -353,32 +353,29 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
             Exhibit.jQuery(elmt).attr("class", entry.selected ? 
                          "exhibit-cloudFacet-value exhibit-cloudFacet-value-selected" :
                          "exhibit-cloudFacet-value");
-                
-            if (entry.count > min) {
+                            
+            if (entry.count > min || typeof settings.minFontSize != "undefined") {
                 var fontsize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
                 var minFontSize = null;
                 var maxFontSize = null;
-                if (typeof this._settings != "undefined") {
-                  if (typeof this._settings.maxFontSize != "undefined" && typeof this._settings.minFontSize != "undefined") {
-                      minFontSize = parseInt(this._settings.minFontSize);
-                      maxFontSize = parseInt(this._settings.maxFontSize);
-                      fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                      fontsize = Math.min(maxFontSize, fontsize);
-                  } else if (typeof this._settings.maxFontSize != "undefined") {
-                      maxFontSize = parseInt(this._settings.maxFontSize);
-                      if (maxFontSize <= 100) {
-                          fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                      }
-                      fontSize = Math.min(maxFontSize, fontSize);
-                  } else if (typeof this._settings.minFontSize != "undefined") {
-                      minFontSize = parseInt(this.settings.minFontSize);
-                      if (minFontSize > 100) {
-                          fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
-                      }
-                  } 
+                if (typeof settings.maxFontSize != "undefined" && typeof settings.minFontSize != "undefined") {
+                    minFontSize = parseInt(settings.minFontSize);
+                    maxFontSize = parseInt(settings.maxFontSize);
+                    fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    fontsize = Math.min(maxFontSize, fontsize);
+                } else if (typeof settings.maxFontSize != "undefined") {
+                    maxFontSize = parseInt(settings.maxFontSize);
+                    if (maxFontSize <= 100) {
+                        fontSize = Math.ceil(100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    }
+                    fontSize = Math.min(maxFontSize, fontSize);
+                } else if (typeof settings.minFontSize != "undefined") {
+                    minFontSize = parseInt(settings.minFontSize);
+                    if (minFontSize > 100) {
+                        fontsize = Math.ceil(minFontSize + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
+                    }
                 }
-
-                Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");           
+                Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");
             }
             
             Exhibit.jQuery(elmt).bind("click", onSelect);
@@ -388,7 +385,7 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
         };
     
         for (j = 0; j < entries.length; j++) {
-            constructValue(entries[j]);
+            constructValue(entries[j], this._settings);
         }
     
         Exhibit.jQuery(containerDiv).show();
