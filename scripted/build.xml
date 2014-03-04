@@ -146,6 +146,7 @@
       </fileset>
       <filelist dir="${src}/">
         <file name="scripts/ui/facets/facet.js"/>
+        <file name="scripts/ui/facets/enumerated-facet.js"/>
         <file name="scripts/ui/facets/list-facet.js"/>
         <file name="scripts/ui/facets/cloud-facet.js"/>
         <file name="scripts/ui/facets/numeric-range-facet.js"/>
