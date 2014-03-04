@@ -170,6 +170,7 @@ var Exhibit = {
         "scripts/ui/formatter.js",
         "scripts/ui/format-parser.js",
         "scripts/ui/facets/facet.js",
+        "scripts/ui/facets/enumerated-facet.js",
         "scripts/ui/facets/list-facet.js",
         "scripts/ui/facets/numeric-range-facet.js",
         "scripts/ui/facets/alpha-range-facet.js",
