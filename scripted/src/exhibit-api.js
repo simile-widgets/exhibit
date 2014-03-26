@@ -489,15 +489,22 @@ Exhibit.load = function() {
     }
 
     //allow page url to override exhibit parameters
-    document.location.search.substr(1).split('&').forEach(function (arg) {
-            arg = arg.split('=');
-            if ((arg.length === 2) &&
-                (arg[0]==="exhibit-dev") &&
-                (arg[1]==="true")) {
-                Exhibit.params.bundle = false;
-                Exhibit.params.persist = false;
-            }
-        });
+    //can't use Array.forEach because it breaks IE8.  Want to emulate:
+    //document.location.search.substr(1).split('&').forEach(function (arg) {
+    (function(arr) {
+        var i;
+        for (i=0; i<arr.length; i++) {
+            (function(arg) {
+                arg = arg.split('=');
+                if ((arg.length === 2) &&
+                    (arg[0]==="exhibit-dev") &&
+                    (arg[1]==="true")) {
+                    Exhibit.params.bundle = false;
+                    Exhibit.params.persist = false;
+                }
+            })(arr[i]);
+        }
+    })(document.location.search.substr(1).split('&'));
 
     if (typeof Exhibit.params.babel !== "undefined") {
         Exhibit.babelPrefix = Exhibit.params.babel;
