@@ -180,6 +180,7 @@ var Exhibit = {
         "scripts/ui/views/view.js",
         "scripts/ui/views/view-panel.js",
         "scripts/ui/views/ordered-view-frame.js",
+        "scripts/ui/views/enumerated-view.js",
         "scripts/ui/views/tile-view.js",
         "scripts/ui/views/tabular-view.js",
         "scripts/ui/views/thumbnail-view.js",

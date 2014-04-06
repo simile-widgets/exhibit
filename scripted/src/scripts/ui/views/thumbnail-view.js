@@ -50,6 +50,7 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
     this.register();
 };
 
+Exhibit.ThumbnailView.prototype = new Exhibit.EnumeratedView();
 /**
  * @constant
  */
@@ -61,7 +62,7 @@ Exhibit.ThumbnailView._settingSpecs = {
  * Constant leftover from a now unnecessary IE hack.
  * @constant
  */
-Exhibit.ThumbnailView._itemContainerClass = "exhibit-thumbnailView-itemContainer";
+Exhibit.ThumbnailView.prototype._itemContainerClass = "exhibit-thumbnailView-itemContainer";
 
 /**
  * @param {Object} configuration
@@ -132,152 +133,6 @@ Exhibit.ThumbnailView.createFromDOM = function(configElmt, containerElmt, uiCont
     return view;
 };
 
-/**
- *
- */
-Exhibit.ThumbnailView.prototype.dispose = function() {
-    var view = this;
-    Exhibit.jQuery(this.getUIContext().getCollection().getElement()).unbind(
-        "onItemsChanged.exhibit",
-        view._onItemsChanged
-    );
-
-    this._orderedViewFrame.dispose();
-    this._orderedViewFrame = null;
-
-    this._lensRegistry = null;
-    this._dom = null;
-
-    this._dispose();
-};
-
-/**
- *
- */
-Exhibit.ThumbnailView.prototype._initializeUI = function() {
-    var self, template;
-
-    self = this;
-
-    Exhibit.jQuery(this.getContainer()).empty();
-    self._initializeViewUI(function() {
-        return Exhibit.jQuery(self._dom.bodyDiv).html();
-    });
-
-    template = {
-        elmt: this.getContainer(),
-        children: [
-            {   tag: "div",
-                field: "headerDiv"
-            },
-            {   tag: "div",
-                "class": "exhibit-collectionView-body",
-                field: "bodyDiv"
-            },
-            {   tag: "div",
-                field: "footerDiv"
-            }
-        ]
-    };
-
-    this._dom = Exhibit.jQuery.simileDOM("template", template);
-
-    this._orderedViewFrame._divHeader = this._dom.headerDiv;
-    this._orderedViewFrame._divFooter = this._dom.footerDiv;
-    this._orderedViewFrame._generatedContentElmtRetriever = function() {
-        return self._dom.bodyDiv;
-    };
-
-    this._orderedViewFrame.initializeUI();
-
-    Exhibit.View.addViewState(
-        this.getID(),
-        this.exportState()
-    );
-
-    this._reconstruct();
-};
-
-/**
- *
- */
-Exhibit.ThumbnailView.prototype._reconstruct = function() {
-    if (this._settings.columnCount < 2) {
-        this._reconstructWithFloats();
-    } else {
-        this._reconstructWithTable();
-    }
-};
-
-Exhibit.ThumbnailView.prototype._reconstructWithFloats = function() {
-    var view, state, closeGroups, i;
-    view = this;
-    state = {
-        div:            this._dom.bodyDiv,
-        itemContainer:  null,
-        groupDoms:      [],
-        groupCounts:    []
-    };
-
-    closeGroups = function(groupLevel) {
-        for (i = groupLevel; i < state.groupDoms.length; i++) {
-            Exhibit.jQuery(state.groupDoms[i].countSpan).html(state.groupCounts[i]);
-        }
-        state.groupDoms = state.groupDoms.slice(0, groupLevel);
-        state.groupCounts = state.groupCounts.slice(0, groupLevel);
-
-        if (groupLevel > 0 && groupLevel <= state.groupDoms.length) {
-            state.div = state.groupDoms[groupLevel - 1].contentDiv;
-        } else {
-            state.div = view._dom.bodyDiv;
-        }
-        state.itemContainer = null;
-    };
-
-    this._orderedViewFrame.onNewGroup = function(groupSortKey, keyType, groupLevel) {
-        closeGroups(groupLevel);
-
-        var groupDom = Exhibit.ThumbnailView.constructGroup(
-            groupLevel,
-            groupSortKey
-        );
-
-        Exhibit.jQuery(state.div).append(groupDom.elmt);
-        state.div = groupDom.contentDiv;
-
-        state.groupDoms.push(groupDom);
-        state.groupCounts.push(0);
-    };
-
-    this._orderedViewFrame.onNewItem = function(itemID, index) {
-        //if (index > 10) return;
-
-        var i, itemLensItem, itemLens;
-        if (typeof state.itemContainer === "undefined" || state.itemContainer === null) {
-            state.itemContainer = Exhibit.ThumbnailView.constructItemContainer();
-            Exhibit.jQuery(state.div).append(state.itemContainer);
-        }
-
-        for (i = 0; i < state.groupCounts.length; i++) {
-            state.groupCounts[i]++;
-        }
-
-        itemLensDiv = Exhibit.jQuery("<div>");
-        itemLensDiv.attr("class", Exhibit.ThumbnailView._itemContainerClass);
-
-        itemLens = view._lensRegistry.createLens(itemID, itemLensDiv, view.getUIContext());
-        state.itemContainer.append(itemLensDiv);
-    };
-
-    Exhibit.jQuery(this.getContainer()).hide();
-
-    Exhibit.jQuery(this._dom.bodyDiv).empty();
-    this._orderedViewFrame.reconstruct();
-    closeGroups(0);
-
-    Exhibit.jQuery(this.getContainer()).show();
-};
-
 Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
     var view, state, closeGroups;
     view = this;
@@ -323,9 +178,8 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
     };
 
     this._orderedViewFrame.onNewItem = function(itemID, index) {
-        //if (index > 10) return;
-
         var i, td, itemLensDiv, ItemLens;
+
         if (state.columnIndex >= view._settings.columnCount) {
             state.columnIndex = 0;
         }
@@ -364,103 +218,10 @@ Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
 
 
 /**
- * @returns {Object}
- */
-Exhibit.ThumbnailView.prototype.makeState = function() {
-    return {};
-};
-
-/**
- * @param {String} sub
- * @param {Object} state
- * @returns {Object}
- */
-Exhibit.ThumbnailView.prototype.makeStateWithSub = function(sub, state) {
-    var original;
-    original = this.makeState();
-    original[sub] = state;
-    return original;
-};
-
-/**
- * @param {Object} state
- * @returns {Object}
- */
-Exhibit.ThumbnailView.prototype.exportState = function(state) {
-    if (typeof state === "undefined" || state === null) {
-        return this.makeStateWithSub(this._orderedViewFrame._historyKey,
-                                     this._orderedViewFrame.exportState());
-    } else {
-        return state;
-    }
-};
-
-/**
- * @param {Object} state
- * @param {Object} state.orderedViewFrame
- */
-Exhibit.ThumbnailView.prototype.importState = function(state) {
-    if (this._orderedViewFrame !== null && this.stateDiffers(state)) {
-        this._orderedViewFrame.importState(state.orderedViewFrame);
-    }
-};
-
-/**
- * @param {Object} state
- * @param {Object} state.orderedViewFrame
- * @returns {Boolean}
- */
-Exhibit.ThumbnailView.prototype.stateDiffers = function(state) {
-    if (typeof state.orderedViewFrame !== "undefined") {
-        return this._orderedViewFrame.stateDiffers(state.orderedViewFrame);
-    } else {
-        return false;
-    }
-};
-
-/**
- * @static
- * @param {Number} groupLevel
- * @param {String} label
- * @returns {Element}
- */
-Exhibit.ThumbnailView.constructGroup = function(groupLevel, label) {
-    var template = {
-        "tag": "div",
-        "class": "exhibit-thumbnailView-group",
-        "children": [
-            {   "tag": "h" + (groupLevel + 1),
-                "children": [ 
-                    label,
-                    {   "tag":        "span",
-                        "class":  "exhibit-collectionView-group-count",
-                        "children": [
-                            " (",
-                            {   "tag": "span",
-                                "field": "countSpan"
-                            },
-                            ")"
-                        ]
-                    }
-                ],
-                "field": "header"
-            },
-            {   "tag": "div",
-                "class": "exhibit-collectionView-group-content",
-                "field": "contentDiv"
-            }
-        ]
-    };
-    return Exhibit.jQuery.simileDOM("template", template);
-};
-
-/**
  * @returns {jQuery}
  */
-Exhibit.ThumbnailView.constructItemContainer = function() {
-    var div = Exhibit.jQuery("<div>");
-    div.addClass("exhibit-thumbnailView-body");
-    return div;
+Exhibit.ThumbnailView.prototype.constructItemContainer = function() {
+    return Exhibit.jQuery("<ol>").addClass("exhibit-thumbnailView-body");
 };
     
 /**
