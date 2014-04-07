@@ -133,6 +133,17 @@ Exhibit.ThumbnailView.createFromDOM = function(configElmt, containerElmt, uiCont
     return view;
 };
 
+/**
+ *
+ */
+Exhibit.ThumbnailView.prototype._reconstruct = function() {
+    if (this._settings.columnCount < 2) {
+        this._construct();
+    } else {
+        this._reconstructWithTable();
+    }
+};
+
 Exhibit.ThumbnailView.prototype._reconstructWithTable = function() {
     var view, state, closeGroups;
     view = this;
