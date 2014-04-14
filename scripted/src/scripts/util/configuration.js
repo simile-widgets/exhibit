@@ -127,10 +127,6 @@ Exhibit.ConfigurationSpec.prototype.createValue = function(spec, overrideValue) 
 
   // Get the dimension and type.
   var dimension = this.getDimension(spec);
-  var kind = 'string';
-  if (typeof spec.type != 'undefined') {
-    kind = spec.type;
-  }
 
   // Now parse either as an array or scalar.
   if ((dimension == '*') || (dimension > 1)) {
