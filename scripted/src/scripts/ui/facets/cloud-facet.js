@@ -22,6 +22,42 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     this._dom = null;
 };
 
+// eob
+
+'size': {
+*         default: 10,
+*         description: "The radius of the item, in pixels",
+*         type: "int",
+*         dimension: 1 // optional;
+*      }
+
+
+
+Exhibit.EnumeratedFacet.ConfigurationSpecJson = {
+  'minimumCount': {
+    'type': 'int',
+    'defaultValue': 1,
+    'description': "The minimum count required for an item to appear."
+  },
+  'showMissing': {
+    'type': 'boolean',
+    'defaultValue': true,
+    'description': "Whether to show a item for missing elements."
+  },
+  'missingLabel': {
+  },
+  'maxFontSize': {
+  },
+  'minFontSize': {
+  }
+};
+
+Exhibit.CloudFacet.Spec = new ConfigurationSpec(
+  Exhibit.CloudFacet.ConfigurationSpecJson,
+  Exhibit.EnumeratedFacet.ConfigurationSpec
+);
+
+
 Exhibit.CloudFacet.prototype = new Exhibit.EnumeratedFacet();
 /**
  * @constant
@@ -31,7 +67,7 @@ Exhibit.CloudFacet._settingSpecs = {
     "showMissing":      { "type": "boolean", "defaultValue": true },
     "missingLabel":     { "type": "text" },
     "maxFontSize":      { "type": "text" },
-    "minFontSize":      { "type": "text" } 
+    "minFontSize":      { "type": "text" }
 };
 
 /**
@@ -44,11 +80,11 @@ Exhibit.CloudFacet._settingSpecs = {
 Exhibit.CloudFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
     var facet, thisUIContext;
 
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext); 
+    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
     facet = new Exhibit.CloudFacet(
         (typeof containerElmt !== "undefined" && containerElmt !== null) ?
             containerElmt :
-            configElmt, 
+            configElmt,
         thisUIContext
     );
 
@@ -77,7 +113,7 @@ Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext
 Exhibit.CloudFacet._configure = function(facet, configuration) {
     var selection, i, segment, property, values, orderMap, formatter;
     Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
-    
+
     if (typeof configuration.expression !== "undefined") {
         facet.setExpressionString(configuration.expression);
         facet.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
@@ -125,8 +161,8 @@ Exhibit.CloudFacet.prototype.restrict = function(items) {
     if (this._selectMissing) {
         this._cache.getItemsMissingValue(items, set);
     }
-    
-    
+
+
     return set;
 };
 
@@ -161,27 +197,27 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
         labeler = valueType === "item" ?
             function(v) { var l = database.getObject(v, "label"); return l !== null ? l : v; } :
             function(v) { return v; };
-            
+
         for (i = 0; i < entries.length; i++) {
             entry = entries[i];
             entry.actionLabel = entry.selectionLabel = labeler(entry.value);
             entry.selected = selection.contains(entry.value);
         }
-        
+
         entries.sort(this._createSortFunction(valueType));
     }
-    
+
     if (this._settings.showMissing || this._selectMissing) {
         count = this._cache.countItemsMissingValue(items);
         if (count > 0 || this._selectMissing) {
             span = Exhibit.jQuery("<span>");
-            span.html((typeof this._settings.missingLabel !== "undefined") ? 
+            span.html((typeof this._settings.missingLabel !== "undefined") ?
                          this._settings.missingLabel :
                          Exhibit._("%facets..missingThisField"));
             span.attr("class", "exhibit-facet-value-missingThisField");
-            
+
             entries.unshift({
-                value:          null, 
+                value:          null,
                 count:          count,
                 selected:       this._selectMissing,
                 selectionLabel: Exhibit.jQuery(span).get(0),
@@ -189,7 +225,7 @@ Exhibit.CloudFacet.prototype._computeFacet = function(items) {
             });
         }
     }
-    
+
     return entries;
 };
 
@@ -223,10 +259,10 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
     var self, containerDiv, constructFacetItemFunction, facetHasSelection, constructValue, j, min, max, entry, range;
     self = this;
     containerDiv = this._dom.valuesContainer;
-    
+
     Exhibit.jQuery(containerDiv).hide();
     Exhibit.jQuery(containerDiv).empty();
-    
+
     if (entries.length > 0) {
         min = Number.POSITIVE_INFINITY;
         max = Number.NEGATIVE_INFINITY;
@@ -236,7 +272,7 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
             max = Math.max(max, entry.count);
         }
         range = max - min;
-        
+
         constructValue = function(entry, settings) {
             var onSelect, onSelectOnly, elmt;
             onSelect = function(evt) {
@@ -244,9 +280,9 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                 evt.preventDefault();
                 evt.stopPropagation();
             };
-            
+
             elmt = Exhibit.jQuery("<span>");
-            
+
             Exhibit.jQuery(elmt).append(document.createTextNode("\u00A0"));
             if (typeof entry.selectionLabel === "string") {
                 Exhibit.jQuery(elmt).append(document.createTextNode(entry.selectionLabel));
@@ -254,11 +290,11 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                 Exhibit.jQuery(elmt).append(entry.selectionLabel);
             }
             Exhibit.jQuery(elmt).append(document.createTextNode("\u00A0"));
-            
-            Exhibit.jQuery(elmt).attr("class", entry.selected ? 
+
+            Exhibit.jQuery(elmt).attr("class", entry.selected ?
                          "exhibit-cloudFacet-value exhibit-cloudFacet-value-selected" :
                          "exhibit-cloudFacet-value");
-                            
+
             if (entry.count > min || typeof settings.minFontSize != "undefined") {
                 var fontsize = Math.ceil(100 + 100 * Math.log(1 + 1.5 * (entry.count - min) / range));
                 var minFontSize = null;
@@ -282,17 +318,17 @@ Exhibit.CloudFacet.prototype._constructBody = function(entries) {
                 }
                 Exhibit.jQuery(elmt).css("fontSize",  fontsize + "%");
             }
-            
+
             Exhibit.jQuery(elmt).bind("click", onSelect);
-        
+
             Exhibit.jQuery(containerDiv).append(elmt);
             Exhibit.jQuery(containerDiv).append(document.createTextNode(" "));
         };
-    
+
         for (j = 0; j < entries.length; j++) {
             constructValue(entries[j], this._settings);
         }
-    
+
         Exhibit.jQuery(containerDiv).show();
     }
 };

@@ -5,12 +5,20 @@
 */
 
 /**
-* EnumeratedFacet class consolidates methods that are used in CloudFacet and ListFacet. 
+* EnumeratedFacet class consolidates methods that are used in CloudFacet and ListFacet.
 * @constructor
 * @class
 */
 Exhibit.EnumeratedFacet = function(){
 };
+
+// eob
+Exhibit.EnumeratedFacet.ConfigurationSpecJson = {
+};
+Exhibit.EnumeratedFacet.Spec = new ConfigurationSpec(
+  Exhibit.EnumeratedFacet.ConfigurationSpecJson
+);
+
 
 /**
  * @param {Element} configElmt
@@ -21,9 +29,14 @@ Exhibit.EnumeratedFacet = function(){
  */
 Exhibit.EnumeratedFacet.create = function (configElmt, facet, settingsFromDOM, thisUIContext) {
     var configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    
+
+    // eob
+    // facet.configuration =
+    //    Exhibit.EnumeratedFacet.Spec.createInstance(
+    //       null, configElmt);
+    //
     Exhibit.EnumeratedFacet.includeSettingsFromDOM(configElmt, facet, settingsFromDOM);
-    (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, configuration) : Exhibit.ListFacet._configure(facet, configuration);    
+    (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, configuration) : Exhibit.ListFacet._configure(facet, configuration);
     facet._initializeUI();
     thisUIContext.getCollection().addFacet(facet);
     facet.register();
@@ -32,7 +45,7 @@ Exhibit.EnumeratedFacet.create = function (configElmt, facet, settingsFromDOM, t
 /**
  * @param {Element} configElmt
  * @param {Exhibit.EnumeratedFacet} facet
- * @param {Object} settingsFromDOM 
+ * @param {Object} settingsFromDOM
  */
 Exhibit.EnumeratedFacet.includeSettingsFromDOM = function(configElmt, facet, settingsFromDOM){
     if (settingsFromDOM["expression"] !== "undefined" && settingsFromDOM["expressionString"] !== "undefined") {
@@ -118,7 +131,7 @@ Exhibit.EnumeratedFacet.prototype.applyRestrictions = function(restrictions) {
         this._valueSet.add(restrictions.selection[i]);
     }
     this._selectMissing = restrictions.selectMissing;
-    
+
     this._notifyCollection();
 };
 
@@ -223,7 +236,7 @@ Exhibit.EnumeratedFacet.prototype.importState = function(state) {
  * Check if the state being requested for import is any different from the
  * current state.  This is only a worthwhile function to call if the check
  * is always faster than just going through with the import.
- * 
+ *
  * @param {Object} state
  * @param {Boolean} state.selectMissing
  * @param {Array} state.selection
@@ -259,14 +272,14 @@ Exhibit.EnumeratedFacet.prototype.stateDiffers = function(state) {
 Exhibit.EnumeratedFacet.prototype._filter = function(value, label, selectOnly) {
     var self, selected, select, deselect, oldValues, oldSelectMissing, newValues, newSelectMissing, actionLabel, wasSelected, wasOnlyThingSelected, newRestrictions;
     self = this;
-    
+
     oldValues = new Exhibit.Set(this._valueSet);
     oldSelectMissing = this._selectMissing;
-    
+
     if (typeof value === "undefined" || value === null) { // the (missing this field) case
         wasSelected = oldSelectMissing;
         wasOnlyThingSelected = wasSelected && (oldValues.size() === 0);
-        
+
         if (selectOnly) {
             if (oldValues.size() === 0) {
                 newSelectMissing = !oldSelectMissing;
@@ -281,11 +294,11 @@ Exhibit.EnumeratedFacet.prototype._filter = function(value, label, selectOnly) {
     } else {
         wasSelected = oldValues.contains(value);
         wasOnlyThingSelected = wasSelected && (oldValues.size() === 1) && !oldSelectMissing;
-        
+
         if (selectOnly) {
             newSelectMissing = false;
             newValues = new Exhibit.Set();
-            
+
             if (!oldValues.contains(value)) {
                 newValues.add(value);
             } else if (oldValues.size() > 1 || oldSelectMissing) {
@@ -301,7 +314,7 @@ Exhibit.EnumeratedFacet.prototype._filter = function(value, label, selectOnly) {
             }
         }
     }
-    
+
     newRestrictions = { selection: newValues.toArray(), selectMissing: newSelectMissing };
 
     Exhibit.History.pushComponentState(
@@ -324,7 +337,7 @@ Exhibit.EnumeratedFacet.prototype._createSortFunction = function(valueType) {
     sortValueFunction = function(a, b) { return a.selectionLabel.localeCompare(b.selectionLabel); };
     if (this._orderMap !== null) {
         orderMap = this._orderMap;
-        
+
         sortValueFunction = function(a, b) {
             if (typeof orderMap[a.selectionLabel] !== "undefined") {
                 if (typeof orderMap[b.selectionLabel] !== "undefined") {
@@ -345,7 +358,7 @@ Exhibit.EnumeratedFacet.prototype._createSortFunction = function(valueType) {
             return a < b ? -1 : a > b ? 1 : 0;
         };
     }
-    
+
     sortFunction = sortValueFunction;
     if (this._settings.sortMode === "count") {
         sortFunction = function(a, b) {
@@ -360,6 +373,6 @@ Exhibit.EnumeratedFacet.prototype._createSortFunction = function(valueType) {
             return sortFunction(b, a);
         };
     }
-    
+
     return sortDirectionFunction;
 };

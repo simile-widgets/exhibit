@@ -33,7 +33,7 @@
  *
  *     var BubbleChart = function(json, domNode) {
  *
- *       this.config = BubbleChart.configSpec.createInstance(json, domNode);
+ *       this._settings = BubbleChart.configSpec.createInstance(json, domNode);
  *
  *     };
  *

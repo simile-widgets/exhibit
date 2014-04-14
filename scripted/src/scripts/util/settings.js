@@ -55,7 +55,7 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
                 typeof spec.defaultValue !== "undefined") {
                 settings[name] = spec.defaultValue;
             }
-        
+
             value = f(field);
             if (typeof value !== "undefined" && value !== null) {
                 if (typeof value === "string") {
@@ -68,12 +68,12 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
                 if (typeof spec.type !== "undefined") {
                     type = spec.type;
                 }
-                
+
                 dimensions = 1;
                 if (typeof spec.dimensions !== "undefined") {
                     dimensions = spec.dimensions;
                 }
-                
+
                 try {
                     if (dimensions > 1) {
                         separator = ",";
@@ -202,7 +202,7 @@ Exhibit.SettingsUtilities.createAccessorsFromDOM = function(configElmt, specs, a
  * @param {Function} f
  * @param {Object} specs
  * @param {Object} accessors
- */ 
+ */
 Exhibit.SettingsUtilities._internalCreateAccessors = function(f, specs, accessors) {
     var field, spec, accessorName, accessor, isTuple, createOneAccessor, alternatives, i, noop;
 
@@ -238,7 +238,7 @@ Exhibit.SettingsUtilities._internalCreateAccessors = function(f, specs, accessor
             } else {
                 accessor = createOneAccessor(spec);
             }
-        
+
             if (accessor !== null) {
                 accessors[accessorName] = accessor;
             } else if (typeof accessors[accessorName] === "undefined") {
@@ -260,27 +260,27 @@ Exhibit.SettingsUtilities._createBindingsAccessor = function(f, bindingSpecs) {
         bindingSpec = bindingSpecs[i];
         accessor = null;
         isTuple = false;
-        
+
         if (typeof bindingSpec["bindingNames"] !== "undefined") {
             isTuple = true;
             accessor = Exhibit.SettingsUtilities._createTupleAccessor(f, bindingSpec);
         } else {
             accessor = Exhibit.SettingsUtilities._createElementalAccessor(f, bindingSpec);
         }
-        
+
         if (typeof accessor === "undefined" || accessor === null) {
             if (typeof bindingSpec["optional"] === "undefined" || !bindingSpec.optional) {
                 return null;
             }
         } else {
             bindings.push({
-                bindingName:    bindingSpec.bindingName, 
-                accessor:       accessor, 
+                bindingName:    bindingSpec.bindingName,
+                accessor:       accessor,
                 isTuple:        isTuple
             });
         }
     }
-    
+
     return function(value, database, visitor) {
         Exhibit.SettingsUtilities._evaluateBindings(value, database, visitor, bindings);
     };
@@ -298,30 +298,30 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
     if (typeof value === "undefined" || value === null) {
         return null;
     }
-    
+
     if (typeof value === "string") {
         value = value.trim();
         if (value.length === 0) {
             return null;
         }
     }
-    
+
     try {
         expression = Exhibit.ExpressionParser.parse(value);
-        
+
         parsers = [];
         bindingTypes = spec.types;
         for (i = 0; i < bindingTypes.length; i++) {
             parsers.push(Exhibit.SettingsUtilities._typeToParser(bindingTypes[i]));
         }
-        
+
         bindingNames = spec.bindingNames;
         separator = ",";
 
         if (typeof spec["separator"] !== "undefined") {
             separator = spec.separator;
         }
-        
+
         return function(itemID, database, visitor, tuple) {
             expression.evaluateOnItem(itemID, database).values.visit(
                 function(v) {
@@ -367,14 +367,14 @@ Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
     if (typeof value === "undefined" || value === null) {
         return null;
     }
-    
+
     if (typeof value === "string") {
         value = value.trim();
         if (value.length === 0) {
             return null;
         }
     }
-    
+
     bindingType = "text";
 
     if (typeof spec["type"] !== "undefined") {
@@ -513,20 +513,20 @@ Exhibit.SettingsUtilities._evaluateBindings = function(value, database, visitor,
                 tuple values, which would cause old tuples to be overwritten by new ones.
              */
             binding.accessor(
-                value, 
-                database, 
-                function(tuple2) { visited = true; tuple = tuple2; recurse(); }, 
+                value,
+                database,
+                function(tuple2) { visited = true; tuple = tuple2; recurse(); },
                 tuple
             );
         } else {
             bindingName = binding.bindingName;
             binding.accessor(
-                value, 
-                database, 
+                value,
+                database,
                 function(v) { visited = true; tuple[bindingName] = v; recurse(); }
             );
         }
-        
+
         if (!visited) { recurse(); }
     };
     f({}, 0);
