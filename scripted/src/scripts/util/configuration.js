@@ -20,8 +20,14 @@
  *    }
  * });
  */
-Exhibit.ConfigurationSpec = function(spec) {
+Exhibit.ConfigurationSpec = function(spec, parentSpec) {
   this.spec = spec;
+  if (typeof parentSpec != 'undefined') {
+    // TODO: Make the spec passed in inheirit from the parentSpec.
+    // E.g. the ListFacet ConfigurationSpec might be inialized as follows:
+    //  var spec = ConfigurationSpec(listFacetSpec, EnumeratedFacet.spec);
+    //
+  }
 };
 
 Exhibit.ConfigurationSpec.prototype.createInstance = function(jsonParams, domParams) {
