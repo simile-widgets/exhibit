@@ -5,7 +5,143 @@
  @author Mason Tang
  */
 
-Exhibit.Timegrid = function () {
+Exhibit.TimegridFacet = function (containerElmt, uiContext) {
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("timegrid", containerElmt, uiContext), new Exhibit.TimegridFacet.Layout(containerElmt, uiContext), new Exhibit.TimegridFacet.EventSource());
+    this._containerElmt = containerElmt;
+    this._uiContext = uiContext;
+    
+    this.addSettingSpecs(Exhibit.TimegridFacet._settingSpecs);
+}
+
+/**
+ * @constant
+ */
+Exhibit.TimegridFacet._settingSpecs = {
+    "title":            { "type": "text" },
+    "daystart":         { "type": "int", "defaultValue": 8 },
+    "dayend":           { "type": "int", "defaultValue": 22 },
+    "xCellWidth":       { "type": "int" },
+    "yCellWidth":       { "type": "int" },
+    "startdate":        { "type": "text"},
+    "enddate":          { "type": "text"},
+    "gridheight":       { "type": "int", "defaultValue": 250 },
+    "gridwidth":        { "type": "int", "defaultValue": 250 },
+    "mini":             { "type": "boolean", "defaultValue": false },
+    "defaultFacet":     { "type": "text"}
+};
+
+/**
+ * @param {Exhibit.TimegridFacet} facet
+ * @param {Object} configuration
+ */
+Exhibit.TimegridFacet._configure = function(facet, configuration) {
+    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
+
+    /*
+     Check how to retrieve from cache UI selections of
+     times to look at classes
+     */
+    facet._cache = new Exhibit.FacetUtilities.Cache(
+        facet.getUIContext().getDatabase(),
+        facet.getUIContext().getCollection(),
+        facet.getExpression()
+    );
+};
+
+/**
+ * @param {Object} configuration
+ * @param {Element} containerElmt
+ * @param {Exhibit.UIContext} uiContext
+ * @returns {Exhibit.WeekFacet}
+ */
+Exhibit.TimegridFacet.create = function(configuration, containerElmt, uiContext) {
+    var facet, thisUIContext;
+    thisUIContext = Exhibit.UIContext.create(configuration, uiContext);
+    facet = new Exhibit.TimegridFacet(containerElmt, thisUIContext);
+
+    Exhibit.TimegridFacet._configure(facet, configuration);
+    facet._initializeUI();
+    thisUIContext.getCollection().addFacet(facet);
+    facet.register();
+
+    return facet;
+};
+
+/**
+ *  Makes the timegrid interface
+ */
+Exhibit.WeekFacet.prototype._initializeUI = function() {
+    Exhibit.jQuery(this.getContainer()).empty();
+    Exhibit.jQuery(this.getContainer()).addClass("exhibit-timegridFacet");
+    
+    if (this._settings.defaultFacet == "month") {
+        this._defaultFacet = new Exhibit.MonthFacet(containerElmt, uiContext)
+    } else {
+        this._defaultFacet = new Exhibit.WeekFacet(containerElmt, uiContext)
+    }
+    this._defaultFacet.initializeUI();
+}
+
+/**
+ * @param {Element} configElmt
+ * @param {Element} containerElmt
+ * @param {Exhibit.UIContext} uiContext
+ * @returns {Exhibit.TimegridFacet}
+ */
+Exhibit.TimegridFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
+    var configuration, thisUIContext, facet;
+    configuration = Exhibit.getConfigurationFromDOM(configElmt);
+    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
+    facet = new Exhibit.TimegridFacet(
+        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
+            containerElmt :
+            configElmt,
+        thisUIContext
+    );
+
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
+
+    facet.setExpression(Exhibit.ExpressionParser.parse("selected"));
+    facet.setExpressionString("selected");
+
+    Exhibit.TimegridFacet._configure(facet, configuration);
+
+    facet._initializeUI();
+    thisUIContext.getCollection().addFacet(facet);
+    facet.register();
+
+    return facet;
+};
+
+Exhibit.TimegridFacet.prototype.update = function(items) {
+    this._defaultFacet.update(items);
+};
+
+/**
+ * @returns {Boolean}
+ */
+Exhibit.TimegridFacet.prototype.hasRestrictions = function() {
+    return this._defaultFacet.hasRestriction();
+};
+
+Exhibit.TimegridFacet.prototype.clearAllRestrictions = function() {
+    this._defaultFacet.clearAllRestrictions();
+};
+
+Exhibit.TimegridFacet.prototype.applyRestrictions = function(restrictions) {
+    this._defaultFacet.applyRestrictions(restrictions);
+};
+
+Exhibit.TimegridFacet.prototype.restrict = function(items){
+    return this._defaultFacet.restrict(items);
+}
+
+Exhibit.WeekFacet.prototype.importState = function(state) {
+    this._defaultFacet.importState(state);
+};
+
+Exhibit.WeekFacet.prototype.stateDiffers = function(state) {
+    return this._defaultFacet.stateDiffers(state);
 }
 
 /**
@@ -15,7 +151,7 @@ Exhibit.Timegrid = function () {
  *
  * @constructor
  */
-Exhibit.Timegrid.EventSource = function() {
+Exhibit.TimegridFacet.EventSource = function() {
 
     /*
      * The actual array containing event prototypes is kept private, and only
@@ -68,14 +204,14 @@ Exhibit.Timegrid.EventSource = function() {
 /*
  *Gets a list of all events to place on the timegrid
  */
-Exhibit.Timegrid.EventSource.prototype.getEventIterator = function(startDate, endDate) {
+Exhibit.TimegridFacet.EventSource.prototype.getEventIterator = function(startDate, endDate) {
     return this.generateEvents(startDate, endDate).iterator();
 };
 
 /*
  *Object that contains all the details of a specific event
  */
-Exhibit.Timegrid.EventSource.EventPrototype = function(dayArray, startTime, endTime, startDate, endDate,
+Exhibit.TimegridFacet.EventSource.EventPrototype = function(dayArray, startTime, endTime, startDate, endDate,
         text, description, image, link, icon, color, textColor, dateFormat) {
     var id = "e" + Math.floor(Math.random() * 1000000);
     var days = new DStructs.Array(); days.addAll(dayArray);
@@ -137,7 +273,7 @@ Exhibit.Timegrid.EventSource.EventPrototype = function(dayArray, startTime, endT
                 endTime.setDate(date.getDate());
                 endTime.setMonth(date.getMonth());
                 endTime.setFullYear(date.getFullYear());
-                return new Exhibit.Timegrid.EventSource.Event(startTime, endTime, null,
+                return new Exhibit.TimegridFacet.EventSource.Event(startTime, endTime, null,
                         null, false, text, description, image, link, icon, color,
                         textColor);   
             }
@@ -145,7 +281,7 @@ Exhibit.Timegrid.EventSource.EventPrototype = function(dayArray, startTime, endT
             if (this.getStartDate() <= date && date <= new Date(this.getEndDate())) {
                 var st = new Date(this.getStartDate().toLocaleDateString() + " " + this.getStartTime());
                 var et = new Date(this.getEndDate().toLocaleDateString() + " " + this.getEndTime());
-                return new Exhibit.Timegrid.EventSource.Event(st, et, null,
+                return new Exhibit.TimegridFacet.EventSource.Event(st, et, null,
                     null, false, text, description, image, link, icon, color,
                     textColor);
             }
@@ -158,7 +294,7 @@ Exhibit.Timegrid.EventSource.EventPrototype = function(dayArray, startTime, endT
  * Distinguishes between specific and recurring events
  * and allows for creation of an event
  */
-Exhibit.Timegrid.EventSource.EventPrototype.prototype = {
+Exhibit.TimegridFacet.EventSource.EventPrototype.prototype = {
     generateEvents: function(start, end) {
         var events = new DStructs.Array();
         for (var date = new Date(start); date < end; date.add('d', 1)) {
@@ -173,7 +309,7 @@ Exhibit.Timegrid.EventSource.EventPrototype.prototype = {
  * Determines the layout of a weekly calendar or a monthly
  * calendar.
  */
-Exhibit.Timegrid.Layout = function(containerElmt, uiContext) {
+Exhibit.TimegridFacet.Layout = function(containerElmt, uiContext) {
     this._containerElm = containerElmt;
     this._uiContext = uiContext;
 
@@ -189,7 +325,7 @@ Exhibit.Timegrid.Layout = function(containerElmt, uiContext) {
  *
  * @param {Object} params a parameter hash
  */
-Exhibit.Timegrid.Layout.prototype.configure = function(params) {
+Exhibit.TimegridFacet.Layout.prototype.configure = function(params) {
     for (var attr in params) {
         this[attr] = params[attr.toLowerCase()];
     }
@@ -199,7 +335,7 @@ Exhibit.Timegrid.Layout.prototype.configure = function(params) {
  * @param {Array} events
  * Checks to see if an array of objects only contains unique events
  */
-Exhibit.Timegrid.Layout.prototype.uniqueEventsArray = function(array){
+Exhibit.TimegridFacet.Layout.prototype.uniqueEventsArray = function(array){
     var a = array.concat();
     var compareEvents = function(e1, e2){
         for (var p in e1){
@@ -251,7 +387,7 @@ Exhibit.Timegrid.Layout.prototype.uniqueEventsArray = function(array){
  * layout.  This is relatively complex since any of the above values can be
  * either user-specified or computed.
  */
-Exhibit.Timegrid.Layout.prototype._computeCellSizes = function() {
+Exhibit.TimegridFacet.Layout.prototype._computeCellSizes = function() {
     // Compute the cell sizes for the grid
     this._xCellWidth = Math.round(this._xCellWidth ||
                  (this._gridwidth - 1) / this._xSize);
@@ -268,7 +404,7 @@ Exhibit.Timegrid.Layout.prototype._computeCellSizes = function() {
 /*
  * Renders the grid again when the events change
  */
-Exhibit.Timegrid.Layout.prototype.renderChanged = function() {
+Exhibit.TimegridFacet.Layout.prototype.renderChanged = function() {
     this.initializeGrid();
     this._gridDiv.empty();
     this._gridDiv.append(this.renderEvents(document));
@@ -289,7 +425,7 @@ Exhibit.Timegrid.Layout.prototype.renderChanged = function() {
  *
  * @return {Element} a DOM element containing this layout's gridlines
  */
-Exhibit.Timegrid.Layout.prototype.renderGridlines = function() {
+Exhibit.TimegridFacet.Layout.prototype.renderGridlines = function() {
    var numToDay = {
         0:  "Sn",
         1:  "M",
@@ -372,7 +508,7 @@ Exhibit.Timegrid.Layout.prototype.renderGridlines = function() {
  *
  * @return {Element} a DOM element containing the horizontal labels
  */
-Exhibit.Timegrid.Layout.prototype.renderXLabels = function() {
+Exhibit.TimegridFacet.Layout.prototype.renderXLabels = function() {
     this._xLabelContainer = this._xLabelContainer ||
                             document.createElement("div");
     var xLabelContainer = this._xLabelContainer;
@@ -410,7 +546,7 @@ Exhibit.Timegrid.Layout.prototype.renderXLabels = function() {
  *
  * @return {Element} a DOM element containing the vertical labels
  */
-Exhibit.Timegrid.Layout.prototype.renderYLabels = function() {
+Exhibit.TimegridFacet.Layout.prototype.renderYLabels = function() {
     this._yLabelContainer = this._yLabelContainer ||
                             document.createElement("div");
     var yLabelContainer = this._yLabelContainer;
@@ -442,10 +578,47 @@ Exhibit.Timegrid.Layout.prototype.renderYLabels = function() {
     return yLabelContainer;
 };
 
+Exhibit.Timegrid.Layout.prototype.renderEvents = function(doc) {
+    var eventContainer = doc.createElement("div");
+    $(eventContainer).addClass("timegrid-events");
+    var currentEvents = {};
+    var currentCount = 0;
+    if (this._endpoints) {
+        for (var i = 0; i < this._endpoints.length; i++) {
+            var endpoint = this._endpoints[i];
+            var x = this._xMapper(endpoint);
+            var y = this._yMapper(endpoint);
+            if (endpoint.type == "start") {
+                // Render the event
+                var eventDiv = this._renderEvent(endpoint.event, x, y);
+                eventContainer.appendChild(eventDiv);
+                // Push the event div onto the current events set
+                currentEvents[endpoint.event.getID()] = eventDiv;
+                currentCount++;
+                // Adjust widths and offsets as necessary
+                var hIndex = 0;
+                for (var id in currentEvents) {
+                    var eDiv = currentEvents[id];
+                    var newWidth = this._xCellWidth / currentCount;
+                    var newLeft = this._xCellWidth * x + newWidth * hIndex;
+                    $(eDiv).css("width", newWidth + "px");
+                    $(eDiv).css("left", newLeft + "px");
+                    hIndex++;
+                }
+            } else if (endpoint.type == "end") {
+                // Pop event from current events set
+                delete currentEvents[endpoint.event.getID()];
+                currentCount--;
+            }
+        }
+    }
+    return eventContainer;
+};
+
 /**
  * Renders the grid
  */
-Exhibit.Timegrid.Layout.prototype.render = function(container) {
+Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
     container = $(container);
 
     if (this._mini) {
@@ -514,7 +687,7 @@ Exhibit.Timegrid.Layout.prototype.render = function(container) {
     this.getPrettyBox(container);
 };
 
-Exhibit.Timegrid.Layout.prototype.getPrettyBox = function(container) {
+Exhibit.TimegridFacet.Layout.prototype.getPrettyBox = function(container) {
     var checkOldIE = function() {
         "use strict";
 
@@ -535,7 +708,7 @@ Exhibit.Timegrid.Layout.prototype.getPrettyBox = function(container) {
     }
 };
 
-Exhibit.Timegrid.EventSource.prototype._getBaseURL = function(url) {
+Exhibit.TimegridFacet.EventSource.prototype._getBaseURL = function(url) {
     if (url.indexOf("://") < 0) {
         var url2 = this._getBaseURL(document.location.href);
         if (url.substr(0,1) == "/") {
@@ -553,7 +726,7 @@ Exhibit.Timegrid.EventSource.prototype._getBaseURL = function(url) {
     }
 };
 
-Exhibit.Timegrid.EventSource.prototype._resolveRelativeURL = function(url, base) {
+Exhibit.TimegridFacet.EventSource.prototype._resolveRelativeURL = function(url, base) {
     if (url == null || url == "") {
         return url;
     } else if (url.indexOf("://") > 0) {
@@ -565,7 +738,7 @@ Exhibit.Timegrid.EventSource.prototype._resolveRelativeURL = function(url, base)
     }
 };
 
-Exhibit.Timegrid.EventSource.Event = function(
+Exhibit.TimegridFacet.EventSource.Event = function(
         start, end, latestStart, earliestEnd, instant,
         text, description, image, link,
         icon, color, textColor) {
@@ -593,7 +766,7 @@ Exhibit.Timegrid.EventSource.Event = function(
     this._wikiSection = null;
 };
 
-Exhibit.Timegrid.EventSource.Event.prototype = {
+Exhibit.TimegridFacet.EventSource.Event.prototype = {
     getID:          function() { return this._id; },
 
     isInstant:      function() { return this._instant; },
@@ -614,7 +787,7 @@ Exhibit.Timegrid.EventSource.Event.prototype = {
     getTextColor:   function() { return this._textColor; },
 
     getInterval: function() {
-        return new Exhibit.Timegrid.Interval(this.getEnd() -
+        return new Exhibit.TimegridFacet.Interval(this.getEnd() -
                 this.getStart());
     },
 
@@ -719,7 +892,7 @@ Exhibit.Timegrid.EventSource.Event.prototype = {
     }
 };
 
-Exhibit.Timegrid.Layout.prototype.interval = function(ms) {
+Exhibit.TimegridFacet.Layout.prototype.interval = function(ms) {
     // Conversion factors as varants to eliminate all the multiplication
     var SECONDS_CF     = 1000;
     var MINUTES_CF     = 60000;
@@ -754,11 +927,11 @@ Exhibit.Timegrid.Layout.prototype.interval = function(ms) {
     return this;
 };
 
-Exhibit.Timegrid.Layout.prototype.intervaltoString = function() {
+Exhibit.TimegridFacet.Layout.prototype.intervaltoString = function() {
     return this.milliseconds.toString();
 };
 
-Exhibit.Timegrid.Layout.prototype.setLayouts = function(layouts) {
+Exhibit.TimegridFacet.Layout.prototype.setLayouts = function(layouts) {
     this._layouts = layouts;
     this._titles = $.map(this._layouts, function(l) { return l.title; });
     //this._tabSet.setLayouts(this._titles, this._layouts);
@@ -769,9 +942,9 @@ Exhibit.Timegrid.Layout.prototype.setLayouts = function(layouts) {
  * @param {String} label
  * @param {Boolean} selectOnly
  */
-Exhibit.Timegrid.Layout.prototype._filter = function(entry) {
+Exhibit.TimegridFacet.Layout.prototype._filter = function(entry) {
     var values, wasSelected, newRestrictions, facetLabel;
-    Exhibit.jQuery.extend(this, new Exhibit.Facet("week", this._containerElmt, this._uiContext), new Exhibit.Timegrid.EventSource());
+    Exhibit.jQuery.extend(this, new Exhibit.Facet("week", this._containerElmt, this._uiContext), new Exhibit.TimegridFacet.EventSource());
 
     values = new Exhibit.Set(this._valueSet);
 

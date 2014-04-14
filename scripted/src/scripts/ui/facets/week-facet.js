@@ -3,7 +3,10 @@
  @author Quanquan Liu <quanquan@mit.edu>
  @author Mason Tang
  */
-
+/*
+ *TODO: Make sure that all methods here goes through TimegridFacet
+ *All TimegridFacet methods that change UI goes through here
+ */
 /*
  @class
  @constructor
@@ -11,9 +14,6 @@
  @param {Exhibit.UIContext} uiContext
  */
 Exhibit.WeekFacet = function(containerElmt, uiContext) {
-    Exhibit.jQuery.extend(this, new Exhibit.Facet("week", containerElmt, uiContext), new Exhibit.Timegrid.Layout(containerElmt, uiContext), new Exhibit.Timegrid.EventSource());
-    this.addSettingSpecs(Exhibit.WeekFacet._settingSpecs);
-
     this._dom = null;
     this._containerElmt = containerElmt;
     this._uiContext = uiContext;
@@ -35,7 +35,7 @@ Exhibit.WeekFacet = function(containerElmt, uiContext) {
      * A function to map date objects to a custom timezone
      * @type Function
      */
-    this._timezoneMapper = function(date) {
+    this.timezoneMapper = function(date) {
         if (typeof self.timezoneoffset != "undefined") {
             return date.toTimezone(self.timezoneoffset);
         }
@@ -47,81 +47,15 @@ Exhibit.WeekFacet = function(containerElmt, uiContext) {
     this._yLabelWidth = 48;
 
     this._xMapper = function(obj) {
-        var time = self._timezoneMapper(obj.time);
-        var start = self._timezoneMapper(self._startTime);
+        var time = self.timezoneMapper(obj.time);
+        var start = self.timezoneMapper(self._startTime);
         var ivl = self.interval(time - start);
         return ivl.days;
     };
     this._yMapper = function(obj) {
-        var time = self._timezoneMapper(obj.time);
+        var time = self.timezoneMapper(obj.time);
         return (time.getHours() + time.getMinutes() / 60.0) - self._dayStart;
     };
-};
-
-/**
- * @constant
- */
-Exhibit.WeekFacet._settingSpecs = {
-    "title":            { "type": "text" },
-    "daystart":         { "type": "int", "defaultValue": 8 },
-    "dayend":           { "type": "int", "defaultValue": 22 },
-    "xCellWidth":       { "type": "int" },
-    "yCellWidth":       { "type": "int" },
-    "startdate":        { "type": "text"},
-    "enddate":          { "type": "text"},
-    "gridheight":       { "type": "int", "defaultValue": 250 },
-    "gridwidth":        { "type": "int", "defaultValue": 250 },
-    "mini":             { "type": "boolean", "defaultValue": false }
-};
-
-/**
- * @param {Object} configuration
- * @param {Element} containerElmt
- * @param {Exhibit.UIContext} uiContext
- * @returns {Exhibit.WeekFacet}
- */
-Exhibit.WeekFacet.create = function(configuration, containerElmt, uiContext) {
-    var facet, thisUIContext;
-    thisUIContext = Exhibit.UIContext.create(configuration, uiContext);
-    facet = new Exhibit.WeekFacet(containerElmt, thisUIContext);
-
-    Exhibit.WeekFacet._configure(facet, configuration);
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-
-    return facet;
-};
-
-/**
- * @param {Element} configElmt
- * @param {Element} containerElmt
- * @param {Exhibit.UIContext} uiContext
- * @returns {Exhibit.WeekFacet}
- */
-Exhibit.WeekFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuration, thisUIContext, facet;
-    configuration = Exhibit.getConfigurationFromDOM(configElmt);
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new Exhibit.WeekFacet(
-        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt :
-            configElmt,
-        thisUIContext
-    );
-
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
-
-    facet.setExpression(Exhibit.ExpressionParser.parse("selected"));
-    facet.setExpressionString("selected");
-
-    Exhibit.WeekFacet._configure(facet, configuration);
-
-    facet._initializeUI();
-    thisUIContext.getCollection().addFacet(facet);
-    facet.register();
-
-    return facet;
 };
 
 /*
@@ -210,30 +144,9 @@ Exhibit.WeekFacet.prototype._updateGrid = function() {
 };
 
 /**
- * @param {Exhibit.WeekFacet} facet
- * @param {Object} configuration
- */
-Exhibit.WeekFacet._configure = function(facet, configuration) {
-    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
-
-    /*
-     Check how to retrieve from cache UI selections of
-     times to look at classes
-     */
-    facet._cache = new Exhibit.FacetUtilities.Cache(
-        facet.getUIContext().getDatabase(),
-        facet.getUIContext().getCollection(),
-        facet.getExpression()
-    );
-};
-
-/**
  *  Makes the week interface
  */
-Exhibit.WeekFacet.prototype._initializeUI = function() {
-    Exhibit.jQuery(this.getContainer()).empty();
-    Exhibit.jQuery(this.getContainer()).addClass("exhibit-weekFacet");
-
+Exhibit.WeekFacet.prototype.initializeUI = function() {
     var dom = Exhibit.jQuery.simileDOM(
         "string",
         this.getContainer(),
@@ -519,43 +432,6 @@ Exhibit.WeekFacet.prototype.applyRestrictions = function(restrictions) {
     this._notifyCollection();
 };
 
-Exhibit.Timegrid.Layout.prototype.renderEvents = function(doc) {
-    var eventContainer = doc.createElement("div");
-    $(eventContainer).addClass("timegrid-events");
-    var currentEvents = {};
-    var currentCount = 0;
-    if (this._endpoints) {
-        for (var i = 0; i < this._endpoints.length; i++) {
-            var endpoint = this._endpoints[i];
-            var x = this._xMapper(endpoint);
-            var y = this._yMapper(endpoint);
-            if (endpoint.type == "start") {
-                // Render the event
-                var eventDiv = this._renderEvent(endpoint.event, x, y);
-                eventContainer.appendChild(eventDiv);
-                // Push the event div onto the current events set
-                currentEvents[endpoint.event.getID()] = eventDiv;
-                currentCount++;
-                // Adjust widths and offsets as necessary
-                var hIndex = 0;
-                for (var id in currentEvents) {
-                    var eDiv = currentEvents[id];
-                    var newWidth = this._xCellWidth / currentCount;
-                    var newLeft = this._xCellWidth * x + newWidth * hIndex;
-                    $(eDiv).css("width", newWidth + "px");
-                    $(eDiv).css("left", newLeft + "px");
-                    hIndex++;
-                }
-            } else if (endpoint.type == "end") {
-                // Pop event from current events set
-                delete currentEvents[endpoint.event.getID()];
-                currentCount--;
-            }
-        }
-    }
-    return eventContainer;
-};
-
 Exhibit.WeekFacet.prototype._renderEvent = function(evt, x, y) {
     var ediv = document.createElement('div');
     var tediv = document.createElement('div');
@@ -721,6 +597,8 @@ Exhibit.WeekFacet.prototype._reconstruct = function(items) {
 
 /**
  * @private
+ * TODO: make sure that onFacetUpdated is updating the Timegrid Facet and not the previous
+ * week facet.
  */
 Exhibit.WeekFacet.prototype._notifyCollection = function() {
     this.getUIContext().getCollection().onFacetUpdated(this);
@@ -823,7 +701,7 @@ Exhibit.WeekFacet.prototype.renderIterator = function() {
 /**
  * @returns {Object}
  */
-Exhibit.CloudFacet.prototype.exportState = function() {
+Exhibit.WeekFacet.prototype.exportState = function() {
     return this._exportState(false);
 };
 
