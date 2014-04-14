@@ -26,7 +26,7 @@
  *    });
  *
  *
- * If the dimension is set, 
+ * If the dimension is set,
  *
  * Then, in the constructor of that class, create a new configuration object
  * like this:
@@ -38,7 +38,7 @@
  *     };
  *
  * In this case, the variables `json` and `domNode` are optional configuration
- * objects passed in by the user. 
+ * objects passed in by the user.
  *
  * SPEC OPTIONS THAT AREN'T SELF EXPLANITORY...
  * ============================================================================
@@ -53,7 +53,7 @@
  *
  * Dimension
  * ---------
- * 
+ *
  * Dimension is optional and defaults to one. Valid settings for dimension are
  * integers greater than one or the * character.
  *
@@ -63,7 +63,15 @@
  *   * If *, the value is parsed as an arbitrary comma-separated list.
  *
  */
-Exhibit.ConfigurationSpec = function(spec) { this.spec = spec; };
+Exhibit.ConfigurationSpec = function(spec, parentSpec) {
+  this.spec = spec;
+  if (typeof parentSpec != 'undefined') {
+    // TODO: Make the spec passed in inheirit from the parentSpec.
+    // E.g. the ListFacet ConfigurationSpec might be inialized as follows:
+    //  var spec = ConfigurationSpec(listFacetSpec, EnumeratedFacet.spec);
+    //
+  }
+};
 
 Exhibit.ConfigurationSpec.prototype.createInstance = function(jsonParams, domParams) {
   var config = this.createInstanceDefaults();
@@ -199,6 +207,3 @@ Exhibit.ConfigurationSpec.prototype.addDomConfigToInstance = function(config, el
 Exhibit.ConfigurationSpec.prototype.parseExpression = function(expressionStr) {
   // TODO
 };
-
-
-
