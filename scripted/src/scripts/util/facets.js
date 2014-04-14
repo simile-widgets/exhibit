@@ -670,6 +670,7 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
                                 insert(item, value, itemToValue);
                                 insert(value, item, valueToItem);
                                 missing = false;
+                                return true;
                             }, 
                            items);
                 if (missing) {
