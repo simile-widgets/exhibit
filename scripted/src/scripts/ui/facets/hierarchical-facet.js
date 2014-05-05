@@ -711,6 +711,21 @@ Exhibit.HierarchicalFacet.prototype._buildCache = function() {
                 map[x] = [ y ];
             }
         };
+
+        inMap = function (x, y, map) {
+            var yValues
+            if (typeof map[x] == "undefined") {
+                return false;
+            } else {
+                yValues = map[x];
+                for (i = 0; i < yValues.length; i++) {
+                    if (yValues[i] == y) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         
         database = this.getUIContext().getDatabase();
         tree = {
@@ -745,8 +760,10 @@ Exhibit.HierarchicalFacet.prototype._buildCache = function() {
                 results = groupingExpression.evaluateOnItem(value, database);
                 if (results.values.size() > 0) {
                     results.values.visit(function(parentValue) {
-                        insert(value, parentValue, valueToParent);
-                        insert(parentValue, value, valueToChildren);
+                        if (!inMap(value,parentValue,valueToParent)) {
+                            insert(value, parentValue, valueToParent);}
+                        if (!inMap(parentValue,value,valueToChildren)) {
+                            insert(parentValue, value, valueToChildren);}
                         if (!valueSet.contains(parentValue)) {
                             newValueSet.add(parentValue);
                         }
