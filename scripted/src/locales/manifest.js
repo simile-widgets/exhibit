@@ -9,5 +9,6 @@ Exhibit.jQuery(document).bind("registerLocales.exhibit", function() {
     new Exhibit.Locale("no", Exhibit.urlPrefix + "locales/no/locale.js");
     new Exhibit.Locale("sv", Exhibit.urlPrefix + "locales/sv/locale.js");
     new Exhibit.Locale("pt-BR", Exhibit.urlPrefix + "locales/pt-BR/locale.js");
+    new Exhibit.Locale("fi", Exhibit.urlPrefix + "locales/fi/locale.js");
     Exhibit.jQuery(document).trigger("localesRegistered.exhibit");
 });
