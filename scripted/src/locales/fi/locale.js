@@ -140,8 +140,8 @@ Exhibit.Localization.importLocale("fi", {
     "%facets.hierarchical.rootLabel": "(juuri)",
 
     "%views.unplottableTemplate": "<a class=\"exhibit-action exhibit-views-unplottableCount\" href=\"#\" id=\"unplottableCountLink\">%1$d %2$s</a> out of <span class=\"exhibit-views-totalCount\">%3$d</span> cannot be plotted.",
-    "%views.resultLabel": "result",
-    "%views.resultsLabel": "results",
+    "%views.resultLabel": "hakutulos",
+    "%views.resultsLabel": "hakutulosta",
 
     "%viewPanel.selectViewActionTitle": "valitse %1$s näkymä",
     "%viewPanel.missingViewClassMessage": "The specification for one of the views is missing the viewClass field.",
@@ -155,8 +155,8 @@ Exhibit.Localization.importLocale("fi", {
     "%TileView.label": "Tiles",
     "%TileView.tooltip": "View items as tiles in a list",
 
-    "%ThumbnailView.label": "Thumbnails",
-    "%ThumbnailView.tooltip": "View items as thumbnails",
+    "%ThumbnailView.label": "Pikkukuvat",
+    "%ThumbnailView.tooltip": "Näytä pikkukuvina",
 
     "%TabularView.label": "Taulukko",
     "%TabularView.tooltip": "Näytä taulukkona",
