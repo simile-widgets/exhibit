@@ -224,7 +224,7 @@ Exhibit.Localization.importLocale("fi", {
     "%formatter.dateTimeFullFormat": "EEEE, MMMM d, yyyy G, HH:mm:ss.S z",
     "%formatter.shortDaysOfWeek": [ "su", "ma", "ti", "ke", "to", "pe", "la" ],
     "%formatter.daysOfWeek": [ "sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai" ],
-    "%formatter.shortMonths": [ "tammi", "helmi", "maalis", "huhti", "touko", "kesä", "heinä", "elo", "yys", "loka", "marras", "joulu" ],
+    "%formatter.shortMonths": [ "tammi", "helmi", "maalis", "huhti", "touko", "kesä", "heinä", "elo", "syys", "loka", "marras", "joulu" ],
     "%formatter.months": [ "tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu" ],
     "%formatter.commonEra": "CE",
     "%formatter.beforeCommonEra": "BCE",
