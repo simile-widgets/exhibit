@@ -23,6 +23,9 @@
         .flag-container img {
             border:     1px solid #ccc;
         }
+        #main td {
+        padding: 20px
+        }
     </style>
   </head>
 
@@ -33,8 +36,9 @@
       <li><a href="..">Demos</a></li>
       <li><span>Examples: Flags of the World</span></li>
     </ul>
-    <table width="100%" cellpadding="20" cellspacing="0"><tr valign="top">
-        <td width="20%" style="background: #DE8D57">
+    <table id="main" style="width:100%;border-spacing:0px">
+    <tr style="vertical-align:top">
+        <td style="width:20%; background: #DE8D57">
             <h1>Flags of the World</h1>
             <p>Adapted from <a href="http://ecmanaut.blogspot.com/">Johan Sundström</a>'s
                 <a href="http://ecmanaut.googlecode.com/svn/trunk/exhibits/flags.html">flags of the world exhibit</a>,
@@ -45,7 +49,7 @@
                 with just the few simple files you see in <a href="./">this directory</a>.
                 Could you have built the same map with as little effort using anything else?
             </p>
-            <center data-ex-role="logo" data-ex-color="BlanchedAlmond"></center>
+            <div style="text-align:center" data-ex-role="logo" data-ex-color="BlanchedAlmond"></div>
         </td>
         <td>
             <div data-ex-role="view"
@@ -60,7 +64,8 @@
                 >
                 <div data-ex-role="lens" style="display: none;" class="map-lens">
                     <div class="flag-container">
-                        <img data-ex-src-subcontent="http://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_{{.label}}.svg/200px-Flag_of_{{.label}}.svg.png" />
+                        <img data-ex-src-subcontent="http://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_{{.label}}.svg/200px-Flag_of_{{.label}}.svg.png"
+                        alt="wikipedia flag image"/>
                     </div>
                     <div><b data-ex-content=".label"></b> [<span data-ex-content=".code"></span>]</div>
                     <div>(Image from Wikipedia)</div>

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>SIMILE Widgets | Exhibit | Examples | U.S. Presidents</title>
@@ -14,9 +15,20 @@
     <link rel="exhibit-extension" type="text/javascript" href="../api/extensions/time/time-extension.js" />
     
     <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/extensions/map/map-extension.js -->
-    <script src="../api/extensions/map/map-extension.js"/></script>
+    <script src="../api/extensions/map/map-extension.js"></script>
     
     <link rel='stylesheet' href='styles.css' type='text/css' />
+<style>
+.logo {
+   text-align: center
+}
+.lens-table {
+width: 100%
+}
+.lens-table td {
+   padding: 10px
+}
+</style>
   </head>
 
   <body>
@@ -41,7 +53,7 @@
                     <div data-ex-role="facet" data-ex-expression=".religion" data-ex-facet-label="Religions" data-ex-height="20em"></div>
                     <div data-ex-role="facet" data-ex-expression=".party" data-ex-facet-label="Political Parties" data-ex-height="10em" data-ex-color-coder="party-colors"></div>
                     <div data-ex-role="facet" data-ex-expression=".dieInOffice" data-ex-facet-label="Died In Office" data-ex-height="4em"></div>
-                    <center data-ex-role="logo" data-ex-color="DeepSkyBlue"></center>
+                    <div class="logo" data-ex-role="logo" data-ex-color="DeepSkyBlue"></div>
                 </div>
             </td>
             <td id="content">
@@ -55,11 +67,12 @@
                 </div>
                 
                 <div class="item" data-ex-role="lens" style="display: none;">
-                    <table cellpadding="10" width="100%">
+                    <table class="lens-table">
                         <tr>
-                            <td width="1"><img data-ex-src-content=".imageURL" /></td>
+                            <td><img data-ex-src-content=".imageURL" 
+                            alt="portrait"/></td>
                             <td>
-                                <a data-ex-href-content=".url"><span data-ex-content=".label" /></a>
+                                <a data-ex-href-content=".url"><span data-ex-content=".label"></span></a>
                                 <div>Terms: <span data-ex-content=".term"></span>, <span data-ex-content=".party"></span></div>
                                 <div>Religions: <span data-ex-content=".religion"></span></div>
                                 <div>Birth: <span data-ex-content=".birth"></span>, <span data-ex-content=".birthPlace"></span></div>
@@ -92,7 +105,8 @@
                 <div data-ex-role="viewPanel" data-ex-initial-view="0"                         data-ex-formats="date { mode: medium; show: date }"
 >
                     <div class="map-lens" data-ex-role="lens" style="display: none;">
-                        <div><img data-ex-src-content=".imageURL" /></div>
+                        <div><img data-ex-src-content=".imageURL"
+                        alt="portrait" /></div>
                         <div data-ex-content=".label"></div>
                         <div data-ex-content=".birthPlace"></div>
 			<div data-ex-content=".birth"></div>
@@ -137,7 +151,7 @@
                         <table style="display: none;">
                             <tr data-ex-background-style-content="if(exists(.death), '#ccc', 'white')">
                                 <td><span data-ex-content=".term"></span></td>
-                                <td><b data-ex-content=".label"></b><br/><img data-ex-src-content=".imageURL" /></td>
+                                <td><b data-ex-content=".label"></b><br/><img data-ex-src-content=".imageURL" alt="portrait"/></td>
                                 <td><span data-ex-content=".party"></span></td>
                                 <td><span data-ex-content=".presidency.inDate"></span></td>
                                 <td><span data-ex-content=".presidency.outDate"></span></td>
