@@ -23,8 +23,8 @@
       <li><span>Examples: Topher's Breakfast Cereal Character Guide</span></li>
     </ul>
     <table id="header">
-        <tr valign="middle">
-            <td><img src="banner.png" style="float: left; margin-right: 2em;"/></td>
+        <tr style="vertical-align:middle">
+            <td><img alt="Breakfast cereal banner" src="banner.png" style="float: left; margin-right: 2em;"/></td>
             <td>
                 <p>Please refer to 
                     <a href="http://www.lavasurfer.com/cereal-guide.html" target="_blank">Topher's original site</a>
@@ -37,9 +37,11 @@
     </table>
     <div id="body">
         <div style="width: 100%">
-            <table cellpadding="0" cellspacing="10" border="0" id="exhibit" width="100%">
+            <table
+            style="width:100%;border-spacing:10;border:0"
+                   id="exhibit">
                 <tr>
-                    <td width="15%">
+                    <td style="width:15%">
                         <b>Search</b>
                         <div data-ex-role="facet" data-ex-facet-class="TextSearch"></div>
                         <hr/>
@@ -60,19 +62,19 @@
                   
                         <div data-ex-role="viewPanel">
                             <div data-ex-role="lens" class="item" style="display: none;">
-                                <table cellspacing="5">
+                                <table style="border-spacing:5">
                                     <tr>
                                         <td style="position: relative"><div class="itemThumbnail-blocker"></div><img data-ex-src-content=".image" /></td>
                                         <td>
-                                            <h1><span data-ex-content=".label" /></h1>
+                                            <h1><span data-ex-content=".label" ></span></h1>
                                             <h2><span data-ex-content=".brand"></span> <span data-ex-content=".cereal"></span></h2>
                                             <p data-ex-content=".text"></p>
-                                            <center><a data-ex-href-content=".url" target="new">More...</a></center>
+                                            <div style="text-align:center"><a data-ex-href-content=".url" target="new">More...</a></div>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
-                            <div role="view" 
+                            <div data-ex-role="view" 
                                 data-ex-view-class="Thumbnail"
                                 data-ex-show-all="true"
                                 data-ex-paginate="true"
@@ -80,12 +82,12 @@
                           
                                 <table data-ex-role="lens" class="itemThumbnail" style="display: none;">
                                     <tr>
-                                        <td valign="bottom" class="itemThumbnail-thumbnailContainer">
+                                        <td style="vertial-align:bottom" class="itemThumbnail-thumbnailContainer">
                                             <div style="position: relative"><div class="itemThumbnail-blocker"></div><img data-ex-src-content=".thumbnail" /></div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="itemThumbnail-caption"><span data-ex-content="value" /></td>
+                                        <td class="itemThumbnail-caption"><span data-ex-content="value"></span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -104,10 +106,10 @@
                             </div>
                         </div>
                     </td>
-                    <td width="15%">
+                    <td style="width:15%">
                         <div data-ex-role="facet" data-ex-expression=".country" data-ex-facet-label="Countries" data-ex-height="15em"></div>
                         <div data-ex-role="facet" data-ex-expression=".form" data-ex-facet-label="Forms" data-ex-height="20em"></div>
-                        <center data-ex-role="logo"></center>
+                        <div style="text-align:center" data-ex-role="logo"></div>
                     </td>
                 </tr>
             </table>
