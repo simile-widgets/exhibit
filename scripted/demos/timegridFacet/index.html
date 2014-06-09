@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Calendar Facet</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom CSS -->
+    <link href="css/scrolling-nav.css" rel="stylesheet" type="text/css">
+    <script src="//api.simile-widgets.org/exhibit/HEAD/lib/jquery-1.7.2.min.js"></script>
+    <script src="//api.simile-widgets.org/exhibit/HEAD/exhibit-api.js?log=true" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="//api.simile-widgets.org/exhibit/HEAD/styles/exhibit-scripted-bundle.css">
+	
+    <link rel="exhibit/data" type="application/json" href="schema.js" />
+    <link rel="exhibit/data" type="application/json" href="academic.js" />
+</head>
+
+<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#page-top">Timegrid Facet</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#about">About and Sources</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <section id="intro" class="intro-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 style="color:#800000;">Weekly Calendar Facet</h1>
+                    <h2 style>Search for a Event:</h2>
+                    <div class="text_search" data-ex-role="facet" data-ex-facet-class="TextSearch" data-ex-expressions="value, .label, .description, .startDate, .endDate .startTime, .endTime" style="width:50%; margin-left:25%"></div></br></br>
+                    <br>
+                    <div data-ex-role="exhibit-view"
+			    data-ex-orders=".label"
+			    data-ex-possible-orders=".courseNumber, .label,  .semester, .offering, .level, .category, .units, .total-units"
+			    data-ex-show-all="false"
+			    data-ex-grouped="false"
+                            style="float: right; display:inline-block"></div>
+                    <div data-ex-role="exhibit-lens" class="event-lens" data-ex-item-types="Event">
+                        <div class="event-title" data-ex-classid-content = ".color" style="background-color: #B0E2FF">
+                            <span data-ex-content=".label" class="event-name"></span>
+                        </div>
+                        <div id="show-info" class="info-body" style="display:block;">
+                            <div data-ex-if-exists=".recurring"><b>Weekly:</b> <span data-ex-content=".recurring"></span></div>
+                            <div data-ex-if-exists=".startDate"><b>Begins:</b> <span data-ex-content=".startDate"></span> at <span data-ex-content=".startTime"></span></div>
+                            <div data-ex-if-exists=".endDate"><b>Ends:</b> <span data-ex-content=".endDate"></span> at <span data-ex-content=".endTime"></span></div>
+                            <div data-ex-if-exists=".description"><b>Description:</b> <span data-ex-content=".description"></span></div>
+                            <div><b>Displayed:</b> <span data-ex-content=".display"></span></div>
+                        </div>
+                    </div>
+		    <div data-ex-role="exhibit-facet" data-ex-facet-class="Timegrid" id='timegrid-facet' data-ex-mini="false" data-ex-daystart="8" data-ex-dayend="22" data-ex-startdate = "08/1/2014" data-ex-gridwidth="600" data-ex-gridheight="600" data-ex-default-facet="week"></div>
+                    <div data-ex-role="exhibit-collection" data-ex-item-types="Event"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>About and Sources</h1>
+                    <h2>About</h2>
+                    <p>The week facet was developed as part of MIT's <a href = "http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a> framework. It allows you to display weekly events on a calendar as
+                    well as show details about these events with the rest of Exhibit's functionality.</p>
+                    <h2>How to Use</h2>
+                    <h4>To use the week facet, include this facet using <br /> <br /> <pre>data-ex-facet-class="Timegrid"</pre> <br /> <br /> You JSON file should include the following fields (in addition to the fields required by Exhibit): </h4><br />
+                    <p><ol style="text-align: left">
+                        <li><b>startDate</b>: Date in which your activity starts. If it is a recurring event, then all dates within the startDate/endDate range may display the event. If your event is not recurring, make the startDate and endDate the same.</li>
+                        <li><b>endDate</b>: The ending date for your event.</li>
+                        <li><b>startTime</b>: The time your event starts.</li>
+                        <li><b>endTime</b>: The time your event ends.</li>
+                        <li><b>display</b>: Whether the calendar will display your event. Enter either "true" or "false".</li>
+                        <li><b>label</b>: The label for your event. This will be displayed on the calendar within each box for each event.</li>
+                        <li><b>description</b>: Your event description.</li>
+                        <li><b>recurring</b>: If your event is recurring, list the days of the week it occurs on. Use "M", "T", "W", "R", "F", "S", and "Sn" for "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", and "Sunday", respectively.</li>
+			<li><b>color</b>: The background color of your event. Please enter a hex, rgb, or color name.</li>
+		    </ol></p><br />
+                    <h4>You can set the following settings for your Timegrid Facet calendar:</h4><br />
+                    <p><ol style="text-align: left">
+			<li><b>default-facet</b>: "week" or "month" -- the default view for the facet (what you see first).</li>
+                        <li><b>mini</b>: "true" or "false": whether you want the mini version of the calendar.</li>
+                        <li><b>daystart</b>: The first hour of the day that you want to display. For example, if you want your calendar to start at 1:00PM, write "1".</li>
+                        <li><b>dayend</b>: The last hour of the day you want to display.</li>
+                        <li><b>startdate</b>: The first day you want your calendar to display. For example, if you want your calendar to display a week starting with "07/20/2014" enter this into the field.</li>
+                        <li><b>enddate</b>: The last day you want your calendar to display. If you specify both "startDate" and "endDate", "startDate" takes precendence.</li>
+                        <li><b>gridwidth</b>: The width of your calendar.</li>
+                        <li><b>gridheight</b>: The height of your calendar.</li>
+                    </ol>
+                    </p>
+                    <h2>Resources</h2>
+                    <p>Please visit our <a href="">Github demos</a> to see the resources used in this demo. For other <a href = "http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a> related resources, visit the <a href="https://github.com/simile-widgets/exhibit">Exhibit 3.0 Github page</a>.</p>
+                    <h2>Credits</h2>
+                    <p>This facet was created by <a href="http://web.mit.edu/quanquan/www/">Quanquan Liu</a> (quanquan at mit.edu). It was adapted in part from the SIMILE project Timegrid widget which was created by <a href="http://www.geekbyday.com/">Mason Tang</a>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core JavaScript Files -->
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/scrolling-nav.js"></script>
+</body>
+
+</html>
