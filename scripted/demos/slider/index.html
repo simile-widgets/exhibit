@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | Slider</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="http://www.simile-widgets.org/styles/common.css" type="text/css" />
+    <link href="number-data.js" type="application/json" rel="exhibit-data" />
+
+    <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/exhibit-api.js -->
+    <script src="../api/exhibit-api.js"></script>
+  </head>
+
+  <body>
+    <ul id="path">
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit/">Exhibit 3.0</a></li>
+      <li><a href="..">Demos</a></li>
+      <li><span>Examples: Slider facet</span></li>
+    </ul>
+
+    <div data-ex-role="exhibit-collection" data-ex-item-types="Number"></div>
+    <table id="frame">
+        <tr>
+            <td id="content">
+                <h1>Exhibit 3.0 Scripted Demo: Slider facet</h1>
+                <div data-ex-role="view">
+                  <div class="number" data-ex-role="exhibit-lens" style="display: none;">
+                  <span data-ex-content=".label"></span>:
+		    <span class="party" data-ex-content=".number"></span>, 
+		    <span class="party" data-ex-content="add (.number, .two )"></span>
+               </div>
+                </div>
+            </td>
+            <td id="sidebar" width="25%">
+               <div data-ex-role="exhibit-facet"
+                 data-ex-expression=".number"
+                 data-ex-facet-class="Slider"
+                 data-ex-facet-label="Number"
+                 id="number"></div>
+               <div data-ex-role="exhibit-facet"
+                 data-ex-expression="add ( .number, .two )"
+                 data-ex-facet-class="Slider"
+		 data-ex-horizontal="false"
+                 data-ex-facet-label="Sum"
+                 id="sum"></div>
+               <div data-ex-role="exhibit-facet"
+                 data-ex-expression=".number"
+                 data-ex-facet-label="Listing"></div>
+            </td>
+        </tr>
+    </table>
+  </body>
+</html>
