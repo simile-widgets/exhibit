@@ -75,7 +75,7 @@ Exhibit.EnumeratedFacet.buildSettingsFromDOM = function(configElmt) {
         if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
             settingsFromDOM["valueSet"] = [];
             for (i = 0; i < selection.length; i++) {
-                settingsFromDOM.push(selection[i]);
+                settingsFromDOM["valueSet"].push(selection[i]);
             }
         }
 
