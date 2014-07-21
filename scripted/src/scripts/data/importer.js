@@ -198,7 +198,7 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
         callback = function(data, status, jqxhr) {
             var msg,
                 fragment = Exhibit.jQuery(data).find(fragmentId)
-	                          .andSelf()
+	                          .addBack()
 	                          .filter(fragmentId);
             if (fragment.length < 1) {
                 msg = Exhibit._("%import.missingFragment", url);
