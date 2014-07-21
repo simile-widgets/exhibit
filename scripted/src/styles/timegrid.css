@@ -1,0 +1,184 @@
+div.week-default {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    overflow: hidden;
+}
+
+div.week-default * {
+    margin: 0;
+    padding: 0;
+}
+
+div.week-default ul, div.week-default li {
+    font-size: 9pt;
+}
+
+div.timegrid-iterator {
+    float: left;
+    font-weight: bold;
+    height: 1.5em;
+}
+
+.timegrid-iterator-prev, .timegrid-iterator-next {
+    margin: .5em;
+}
+
+.timegrid-iterator img {
+    border: none;
+}
+
+div.timegrid-tab {
+    padding-left: 1em;
+    padding-right: 1em;
+    margin: 0px;
+    float: right;
+    background-color: #bbb;
+}
+
+div.timegrid-tab-active {
+    font-weight: bold;
+}
+
+div.timegrid-view {
+    position: absolute;
+    top: 1.5em;
+    bottom: 0px;
+    width: 100%;
+    left: 0px;
+    border: 1px white solid;
+}
+
+div.timegrid-grid-window {
+    position: absolute;
+    overflow: scroll;
+    border: 1px inset black;
+}
+
+table.timegrid-gridlines, .timegrid-hline, .timegrid-vline {
+    border: 1px solid #e6e2af;
+}
+
+div.timegrid-events {
+    position: relative;
+    z-index: 2;
+}
+
+div.timegrid-gridlines {
+    position: relative;
+    z-index: 1;
+}
+
+div.timegrid-xlabels {
+    position:   absolute;
+    left: 0px;
+}
+
+.timegrid-xlabels div.timegrid-label {
+    top:            0px;
+    bottom:         0px;
+    text-align:     center;
+    padding:        3px;
+}
+
+div.timegrid-ylabels {
+    position: absolute;
+}
+
+.timegrid-ylabels div.timegrid-label {
+    left:       0px;
+    right:      0px;
+    text-align: right;
+    padding:    3px;
+}
+
+div.timegrid-xlabels-window {
+    position: absolute;
+    overflow: hidden;
+    text-align: center;
+}
+
+div.timegrid-ylabels-window {
+    position: absolute;
+    overflow: hidden;
+}
+
+div.timegrid-label {
+    position: absolute;
+    padding: 2px;
+    color: #aaa;
+}
+
+/* Weekly View */
+div.timegrid-event {
+    position: absolute;
+    width: 100px;
+    background-color: #aaf;
+    padding: 0;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.timegrid-week-highlight {
+    position: absolute;
+    background-color: #eee;
+}
+
+.timegrid-event div {
+    padding: 2px;
+}
+
+/* Monthly View */
+div.timegrid-month-cell {
+    position: absolute;
+    padding: 0;
+    overflow: hidden;
+}
+
+div.timegrid-month-cell-not-current {
+    background-color: #F8F8F8;
+}
+
+div.timegrid-month-cell-now {
+    background-color: #ccc;
+}
+
+ul.timegrid-event-list {
+    list-style-position: inside;
+    padding-left: .5em;
+}
+
+div.timegrid-month-label {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+div.timegrid-month-label span {
+    display: block;
+    font-size: 12em;
+    font-weight: bold;
+    color: #F0F0F0;
+}
+
+span.timegrid-month-date-label {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: #000;
+}
+
+/* Message */
+.timegrid-message-container {
+    position:   absolute;
+    top:        30%;
+    left:       35%;
+    right:      35%;
+    z-index:    1000;
+    display:    none;
+}
+.timegrid-message {
+    font-size:      120%;
+    font-weight:    bold;
+    text-align:     center;
+}
