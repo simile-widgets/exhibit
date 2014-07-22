@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | Senate</title>
@@ -46,10 +47,14 @@
                     <div class="item" data-ex-role="exhibit-lens" data-ex-item-types="Senator" style="display: none">
                         <h3><a data-ex-href-content=".homepage"><span data-ex-content=".label"></span> (<span data-ex-content=".party"></span>-<span data-ex-content=".state"></span>)</a></h3>
                         <div><strong>Committees:</strong> <span data-ex-content=".committeeMember.label"></span></div>
-                        <span data-ex-if-exists="!sponsor.description"><div><strong>Bills (yesterday):</strong> <span data-ex-content="!sponsor.description"></span></div></span>
+                        <div data-ex-if-exists="!sponsor.description">
+                            <div><strong>Bills (yesterday):</strong> 
+                            <span data-ex-content="!sponsor.description"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="item" data-ex-role="exhibit-lens" data-ex-item-types="Bill" style="display: none">
-                        <p><span data-ex-content=".description"></span></p>
+                      <p><span data-ex-content=".description"></span></p>
                         <p>Referred to: <span data-ex-content=".inCommittee"></span></p>
                         <p>Sponsored by <span data-ex-content=".sponsor"></span>; <span data-ex-content=".cosponsor"></span></p>
                         <p><a data-ex-href-content=".billHomepage">Read the bill</a></p>
@@ -84,7 +89,6 @@
                             data-ex-label="Tiles"
                             data-ex-paginate="true"
                           ></div>
-                        </div>
                     </div>
                 </div>
             </td>

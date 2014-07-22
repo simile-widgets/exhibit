@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>SIMILE Widgets | Exhibit 3.0 | Scripted Demos | MIT Nobel Prize Winners (local data)</title>
@@ -799,7 +800,7 @@
         </div>
     
         <div id="top-panels">
-            <table width="100%"><tr>
+            <table style="width:100%"><tr>
                 <td><div data-ex-role="facet" data-ex-expression=".discipline" data-ex-facet-label="Discipline"></div></td>
                 <td><div data-ex-role="facet" data-ex-expression=".relationship" data-ex-facet-label="Relationship"></div></td>
                 <td><div data-ex-role="facet" data-ex-expression=".shared" data-ex-facet-label="Shared?"></div></td>
@@ -808,7 +809,7 @@
         </div>
         <div data-ex-role="viewPanel" style="padding: 1em 0.5in;">
             <table data-ex-role="lens" class="nobelist" style="display: none;"><tr>
-                <td><img data-ex-src-content=".imageURL" /></td>
+                <td><img alt="portrait" data-ex-src-content=".imageURL" /></td>
                 <td>
                     <div data-ex-content=".label" class="name"></div>
                     <div>
@@ -828,7 +829,7 @@
                 data-ex-orders=".discipline"
                 data-ex-possible-orders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
                 <div data-ex-role="exhibit-lens" class="nobelist-thumbnail" style="display: none;">
-                    <img data-ex-src-content=".imageURL" />
+                    <img alt="portrait" data-ex-src-content=".imageURL" />
                     <div><span data-ex-content=".label"></span></div>
                     <div>
                         <span data-ex-content=".discipline" class="discipline"></span>, 
@@ -851,7 +852,7 @@
                 data-ex-bubbleWidth="150"
                 data-ex-bubbleHeight="150">
                 <div data-ex-role="lens" class="nobelist-timeline-lens" style="display: none;">
-                    <img data-ex-src-content=".imageURL" />
+                    <img alt="portrait" data-ex-src-content=".imageURL" />
                     <div><span data-ex-content=".label"></span></div>
                     <div>
                         <span data-ex-content=".discipline" class="discipline"></span>, 
