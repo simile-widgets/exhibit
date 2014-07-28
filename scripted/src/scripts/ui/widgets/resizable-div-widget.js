@@ -65,29 +65,29 @@ Exhibit.ResizableDivWidget.prototype._initializeUI = function() {
     this._contentDiv = Exhibit.jQuery(this._div).children().get(0);
     this._resizerDiv = Exhibit.jQuery(this._div).children().get(1);
 
-    Exhibit.jQuery(this._resizerDiv).bind("mousedown", function(evt) {
+    Exhibit.jQuery(this._resizerDiv).on("mousedown", function(evt) {
         self._dragging = true;
         self._height = Exhibit.jQuery(self._contentDiv).height();
         self._origin = { "x": evt.pageX, "y": evt.pageY };
 
         self._ondrag = function(evt2) {
             var height = self._height + evt2.pageY - self._origin.y;
-            evt.preventDefault();
-            evt.stopPropagation();
             Exhibit.jQuery(self._contentDiv).height(Math.max(
                 height,
                 self._configuration.minHeight
             ));
+            return false; //stop propagation
         };
-        Exhibit.jQuery(document).bind("mousemove", self._ondrag);
+        Exhibit.jQuery(document).on("mousemove", self._ondrag);
 
         self._dragdone = function(evt) {
             self._dragging = false;
-            Exhibit.jQuery(document).unbind("mousemove", self._ondrag);
+            Exhibit.jQuery(document).off("mousemove", self._ondrag);
             if (typeof self._configuration.onResize === "function") {
                 self._configuration.onResize();
             }
         };
-        Exhibit.jQuery(self._resizerDiv).one("mouseup", self._dragdone);
+        Exhibit.jQuery("body").one("mouseup", self._dragdone);
+        return false;
     });
 };
