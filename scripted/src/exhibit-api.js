@@ -12,7 +12,7 @@ var Exhibit = {
      * The version number for Exhibit.
      * @constant
      */
-    version: "3.0.0",
+    version: "3.1.0",
 
     /**
      * The XML namespace for Exhibit.
@@ -81,7 +81,7 @@ var Exhibit = {
     Extension: {},
 
     _dependencies: {
-        "lib/jquery-1.7.2.min.js": "jQuery",
+        "lib/jquery-1.8.3.min.js": "jQuery",
         "lib/json2.js": "JSON",
         "lib/base64.js": "Base64",
         "lib/sprintf.js": "sprintf",
