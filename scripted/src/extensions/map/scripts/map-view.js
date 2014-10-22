@@ -478,12 +478,6 @@ Exhibit.MapView.prototype._constructGMap = function(mapDiv) {
         }
 
         map = new google.maps.Map(mapDiv, mapOptions);
-
-        /** @@@
-        google.maps.event.addListener(map, "click", function() {
-            SimileAjax.WindowManager.cancelPopups();
-        });
-        */
         
         return map;
     }
