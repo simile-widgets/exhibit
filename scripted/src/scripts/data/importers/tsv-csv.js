@@ -40,7 +40,12 @@ Exhibit.Importer.TsvCsv = {
     _importer: null
 };
 
-
+Exhibit.Importer.TsvCsv._settingSpecs = {
+    "properties": {"type": "text"},
+    "valueSeparator": {"type": "text"},
+    "hasColumnTitles": {"type": "boolean", 
+                        "defaultValue": true}
+}
 
 Exhibit.Importer.Tsv.parse = function(url, content, callback, link) {
     callback(Exhibit.Importer.TsvCsv.parse(content, link, url, "\t"));
@@ -50,47 +55,48 @@ Exhibit.Importer.Csv.parse = function(url, content, callback, link) {
 };
 
 Exhibit.Importer.TsvCsv.parse = function(content, link, url, separator) {
-    var url=link;
-    var hasColumnTitles=true;
-    var expressionString=null;
-
-    if (typeof link != "string") {//link tag; get attributes
-	url = link.href;
-	expressionString = Exhibit.getAttribute(link, "properties"); 
-	if (expressionString) {
-	    //if properties specified in link, assume no column titles
-	    //unless overridden by specifying hasColumnTitle=true
-	    hasColumnTitles = Exhibit.getAttribute(link, "hasColumnTitles");
-	    if (hasColumnTitles)
-		hasColumnTitles = (hasColumnTitles.toLowerCase() == "true");
-	}
-    }
-    var valueSeparator=Exhibit.getAttribute(link,"valueSeparator");
-
+    var hasColumns;
+    var settings = {};
     var o = null;
+
+    if (typeof(link) == "string") {
+        link = Exhibit.jQuery("<link>");
+        link.attr("href",url);
+    }
+
+    Exhibit.SettingsUtilities
+        .collectSettingsFromDOM(link, this._settingSpecs, settings);
+    hasColumns = settings.hasOwnProperty("hasColumns") ?
+        settings.hasColumns :
+        !settings.hasOwnProperty("properties");
+    
     try {
-        o = Exhibit.Importer.TsvCsv._parseInternal(content, separator, expressionString, hasColumnTitles, valueSeparator); //text is converted to Exhibit JSON
+        o = Exhibit.Importer.TsvCsv
+            ._parseInternal(content, separator, settings.properties, 
+                            settings.hasColumnTitles, settings.valueSeparator);
     } catch (e) {
-	SimileAjax.Debug.exception(e, "Error parsing tsv/csv from " + url);
+	Exhibit.Debug.exception(e, "Error parsing tsv/csv from " + url);
     }
     return o;
 }
 
 Exhibit.Importer.TsvCsv._parseInternal = function(text, separator, expressionString, hasColumnTitles, valueSeparator) {
+    // separator separates fields; 
+    // valueSeparator separates multiple values in field
     var data = Exhibit.Importer.TsvCsv.CsvToArray(text, separator);
     var exprs= null;
     var propNames = [];
     var properties = [];
 
     if (hasColumnTitles) {
-	exprs = data.shift();
+        exprs = data.shift();
     }
     if (expressionString) {
-	exprs = expressionString.split(",");
-	//can override header row from column titles 
+        exprs = expressionString.split(",");
+        //can override header row's column titles 
     }
     if (!exprs) {
-	SimileAjax.Debug.exception(new Error("No property names defined for tsv/csv file"));
+        Exhibit.Debug.exception(new Error("No property names defined for tsv/csv file"));
     }
     for (i=0; i<exprs.length; i++) {
 	var expr = exprs[i].split(":");
