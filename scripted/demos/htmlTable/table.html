@@ -6,23 +6,29 @@
     <link rel='stylesheet' href='http://www.simile-widgets.org/styles/common.css' type='text/css' />
     
     <link href="#mydata1" type="text/html" rel="exhibit/data"
-    ex:itemType="Person" ex:pluralLabel="People"/>
+    data-ex-item-type="Person" data-ex-plural-label="People"/>
     <link href="#mydata2" type="text/html" rel="exhibit/data"
-    ex:columns="Name,Age" ex:itemType="Person" ex:pluralLabel="People"/>
+    data-ex-columns="Name,Age" data-ex-item-type="Person" data-ex-plural-label="People"/>
 
-    <link href="#mydata3" type="text/html" rel="exhibit/data" ex:itemType="Person" ex:pluralLabel="People"/>
+    <link href="#mydata3" type="text/html" rel="exhibit/data" data-ex-item-type="Person" data-ex-plural-label="People"/>
     
     <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/2.2.0/exhibit-api.js -->
     <script src="../api/exhibit-api.js?bundle=false"></script>
   </head>
   <body>
+    <ul id="path">
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit/">Exhibit</a></li>
+      <li><a href="..">Demos</a></li>
+      <li><span>HTML Table Importer</span></li>
+    </ul>
   <h1>Html Table Example</h1>
   This is a demonstration of Exhibit's html table importer.
 
 <h3>Results</h3>
-<div ex:role="view">
-<div ex:role="lens">
-<span ex:content=".Name"></span>, <span ex:content=".Age"></span>
+<div data-ex-role="view">
+<div data-ex-role="lens">
+<span data-ex-content=".Name"></span>, <span data-ex-content=".Age"></span>
 </div>
 </div>
 
@@ -163,14 +169,14 @@ parameters in the &lt;td&gt; elements that make up the header row.
 
   <div id="mydata3">
   <table>
-  <col ex:property="Age"><col ex:property="Name">
-  <tr><td>37<td>Carol<td>28
-  <tr><td>85 <td>Eve
+  <col data-ex-property="Age"><col data-ex-property="Name">
+  <tr><td>37<td>Carol</tr>
+  <tr><td>85 <td>Eve</tr>
   </table>
   </div>
 
 <h3>Raw data</h3>
-  <div ex:role="view">
+  <div data-ex-role="view">
   </div>
   </body>
 </html>
