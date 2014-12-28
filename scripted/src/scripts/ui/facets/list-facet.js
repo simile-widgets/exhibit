@@ -11,7 +11,6 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.ListFacet = function(containerElmt, uiContext) {
-//    Exhibit.jQuery.extend(this, new Exhibit.EnumeratedFacet("list", containerElmt, uiContext));
     Exhibit.EnumeratedFacet.call(this,"list",containerElmt,uiContext);
     this.addSettingSpecs(Exhibit.ListFacet._settingSpecs);
 
@@ -32,8 +31,6 @@ Exhibit.ListFacet._settingSpecs = {
     "fixedOrder":       { "type": "text" },
     "sortMode":         { "type": "text", "defaultValue": "value" },
     "sortDirection":    { "type": "text", "defaultValue": "forward" },
-    "showMissing":      { "type": "boolean", "defaultValue": true },
-    "missingLabel":     { "type": "text" },
     "scroll":           { "type": "boolean", "defaultValue": true },
     "height":           { "type": "text" },
     "colorCoder":       { "type": "text", "defaultValue": null },
@@ -50,18 +47,9 @@ Exhibit.ListFacet._settingSpecs = {
  * @param {Object} settingsFromDOM
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
- var thisUIContext, facet;
-
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new this(
-        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt : configElmt, 
-        thisUIContext
-    );
-
-    Exhibit.EnumeratedFacet.createFromDOM(configElmt, facet, thisUIContext);
-    return facet;
+Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, 
+                                           uiContext) {
+    return Exhibit.EnumeratedFacet.createFromDOM(Exhibit.ListFacet, configElmt, containerElmt, uiContext);
 };
 
 /**
@@ -74,13 +62,7 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
 Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
     var settingsFromDOM, facet;
 
-    thisUIContext = Exhibit.UIContext.create(configElmt, uiContext);
-
-    facet = new this(containerElmt, thisUIContext);
-
-    facet = Exhibit.EnumeratedFacet.create(configElmt, containerElmt, uiContext);
-
-    return facet;
+    return Exhibit.EnumeratedFacet.createFromObj(Exhibit.ListFacet, configElmt, containerElmt, uiContext);
 };
 
 /**
@@ -92,20 +74,7 @@ Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
 Exhibit.ListFacet.prototype._configure = function(settings) {
     var selection, i, segment, property, values, orderMap, formatter;
 
-    this._settings = settings;
-    if (typeof settings.expression !== "undefined") {
-        this.setExpressionString(settings.expression);
-        this.setExpression(Exhibit.ExpressionParser.parse(settings.expression));
-    }
-    if (typeof settings.selection !== "undefined") {
-        selection = settings.selection;
-        for (i = 0; i < selection.length; i++) {
-            this._valueSet.add(selection[i]);
-        }
-    }
-    if (typeof settings.selectMissing !== "undefined") {
-        this._selectMissing = settings.selectMissing;
-    }
+    Exhibit.EnumeratedFacet.prototype._configure.call(this, settings);
     
     if (typeof settings.facetLabel === "undefined") {
         if (this.getExpression() !== null && this.getExpression().isPath()) {
@@ -144,12 +113,6 @@ Exhibit.ListFacet.prototype._configure = function(settings) {
             }
         }
     }
-    
-    this._cache = new Exhibit.FacetUtilities.Cache(
-        this.getUIContext().getDatabase(),
-        this.getUIContext().getCollection(),
-        this.getExpression()
-    );
 };
 
 /**
@@ -164,23 +127,6 @@ Exhibit.ListFacet.prototype._dispose = function() {
     this._orderMap = null;
 };
 
-
-/**
- * @param {Exhibit.Set} items
- * @returns {Exhibit.Set}
- */
-Exhibit.ListFacet.prototype.restrict = function(items) {
-    if (this._valueSet.size() === 0 && !this._selectMissing) {
-        return items;
-    }
-    
-    var set = this._cache.getItemsFromValues(this._valueSet, items);
-    if (this._selectMissing) {
-        this._cache.getItemsMissingValue(items, set);
-    }
-    
-    return set;
-};
 
 /**
  *
@@ -205,54 +151,6 @@ Exhibit.ListFacet.prototype.update = function(items) {
         .empty();
     this._constructBody(this._computeFacet(items));
     Exhibit.jQuery(this._dom.valuesContainer).show();
-};
-
-/**
- * @param {Exhibit.Set} items
- * @returns {Array}
- */
-Exhibit.ListFacet.prototype._computeFacet = function(items) {
-    var database, r, entries, valueType, selection, labeler, i, entry, count, span;
-    database = this.getUIContext().getDatabase();
-    r = this._cache.getValueCountsFromItems(items);
-    entries = r.entries;
-    valueType = r.valueType;
-    
-    if (entries.length > 0) {
-        selection = this._valueSet;
-        labeler = valueType === "item" ?
-            function(v) { var l = database.getObject(v, "label"); return l !== null ? l : v; } :
-            function(v) { return v; };
-            
-        for (i = 0; i < entries.length; i++) {
-            entry = entries[i];
-            entry.actionLabel = entry.selectionLabel = labeler(entry.value);
-            entry.selected = selection.contains(entry.value);
-        }
-        
-        entries.sort(this._createSortFunction(valueType));
-    }
-    
-    if (this._settings.showMissing || this._selectMissing) {
-        count = this._cache.countItemsMissingValue(items);
-        if (count > 0 || this._selectMissing) {
-            span = Exhibit.jQuery("<span>")
-                .attr("class", "exhibit-facet-value-missingThisField")
-                .html((typeof this._settings.missingLabel !== "undefined") ? 
-                      this.missingLabel :
-                      Exhibit._("%facets.missingThisField"));
-            
-            entries.unshift({
-                value:          null, 
-                count:          count,
-                selected:       this._selectMissing,
-                selectionLabel: Exhibit.jQuery(span).get(0),
-                actionLabel:    Exhibit._("%facets.missingThisField")
-            });
-        }
-    }
-    
-    return entries;
 };
 
 /**
