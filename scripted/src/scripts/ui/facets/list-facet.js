@@ -50,32 +50,35 @@ Exhibit.ListFacet._settingSpecs = {
  * @param {Object} settingsFromDOM
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
+Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
  var thisUIContext, facet;
 
     thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new Exhibit.ListFacet(
+    facet = new this(
         (typeof containerElmt !== "undefined" && containerElmt !== null) ?
             containerElmt : configElmt, 
         thisUIContext
     );
 
-    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
+    Exhibit.EnumeratedFacet.createFromDOM(configElmt, facet, thisUIContext);
     return facet;
 };
 
 /**
  * @static
- * @param {Element} configElmt
+ * @param {Object} configObj
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
+Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
     var settingsFromDOM, facet;
 
-    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
-    facet = Exhibit.ListFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
+    thisUIContext = Exhibit.UIContext.create(configElmt, uiContext);
+
+    facet = new this(containerElmt, thisUIContext);
+
+    facet = Exhibit.EnumeratedFacet.create(configElmt, containerElmt, uiContext);
 
     return facet;
 };
@@ -88,8 +91,8 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
  */
 Exhibit.ListFacet._configure = function(facet, configuration) {
     var selection, i, segment, property, values, orderMap, formatter;
-    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
-    
+
+    configuration = facet._settings;
     if (typeof configuration.expression !== "undefined") {
         facet.setExpressionString(configuration.expression);
         facet.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));

@@ -36,38 +36,43 @@ Exhibit.CloudFacet._settingSpecs = {
 };
 
 /**
+ * @static
  * @param {Element} configElmt
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
  * @param {Object} settingsFromDOM
  * @returns {Exhibit.CloudFacet}
  */
-Exhibit.CloudFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
-    var facet, thisUIContext;
+Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
+ var thisUIContext, facet;
 
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext); 
-    facet = new Exhibit.CloudFacet(
+    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
+    facet = new this(
         (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt :
-            configElmt, 
+            containerElmt : configElmt, 
         thisUIContext
     );
 
-    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
+    Exhibit.EnumeratedFacet.createFromDOM(configElmt, facet, thisUIContext);
     return facet;
 };
 
 /**
+ * @static
  * @param {Element} configElmt
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
  * @returns {Exhibit.CloudFacet}
  */
-Exhibit.CloudFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
+Exhibit.CloudFacet.create = function(configObj, containerElmt, uiContext) {
     var settingsFromDOM, facet;
 
-    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
-    facet = Exhibit.CloudFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
+    thisUIContext = Exhibit.UIContext.create(configObj, uiContext);
+
+    facet = new this(containerElmt, thisUIContext);
+
+    facet = Exhibit.EnumeratedFacet.create(configObj, containerElmt, uiContext);
+
     return facet;
 };
 

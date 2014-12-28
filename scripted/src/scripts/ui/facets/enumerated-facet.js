@@ -11,12 +11,16 @@
 */
 Exhibit.EnumeratedFacet = function(key, div, uiContext){
     Exhibit.Facet.call(this, key, div, uiContext);
+    this.addSettingSpecs(Exhibit.EnumeratedFacet._settingSpecs);
 };
 
 Exhibit.EnumeratedFacet.prototype = new Exhibit.Facet();
 
-Exhibit.EnumerateFacet._settingSpecs = {
-    "selectMissing":     { "type": "boolean", "defaultValue": false}
+Exhibit.EnumeratedFacet._settingSpecs = {
+    "selectMissing":     { "type": "boolean", "defaultValue": false},
+    "selection":         { "type": "text", "dimensions": "*",
+                           "separator": ";"},
+    "expression":        { "type": "text" }
 }
 
 /**
@@ -26,70 +30,30 @@ Exhibit.EnumerateFacet._settingSpecs = {
  * @param {Exhibit.UIContext} thisUIContext
  * @returns {Exhibit.CloudFacet}
  */
-Exhibit.EnumeratedFacet.create = function (configElmt, facet, settingsFromDOM, thisUIContext) {
-    var configuration = Exhibit.getConfigurationFromDOM(configElmt);
+Exhibit.EnumeratedFacet.createFromDOM = function (configElmt, facet, thisUIContext) {
+    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt,
+        facet.getSettingSpecs(), facet._settings);
     
-    Exhibit.EnumeratedFacet.includeSettingsFromDOM(configElmt, facet, settingsFromDOM);
-    (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, configuration) : Exhibit.ListFacet._configure(facet, configuration);    
+    (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, facet._settings) : Exhibit.ListFacet._configure(facet, facet._settings);    
     facet._initializeUI();
     thisUIContext.getCollection().addFacet(facet);
     facet.register();
 }
 
 /**
- * @param {Element} configElmt
- * @param {Exhibit.EnumeratedFacet} facet
- * @param {Object} settingsFromDOM 
+ * @param {Object} configSpec
+ * @param {Element} containerElmt
+ * @param {Exhibit.UIContext} thisUIContext
+ * @returns {Exhibit.CloudFacet}
  */
-Exhibit.EnumeratedFacet.includeSettingsFromDOM = function(configElmt, facet, settingsFromDOM){
-    if (settingsFromDOM["expression"] !== "undefined" && settingsFromDOM["expressionString"] !== "undefined") {
-        facet.setExpression(Exhibit.ExpressionParser.parse(settingsFromDOM["expressionString"]));
-        facet.setExpressionString(settingsFromDOM["expressionString"]);
-    }
-
-    if (settingsFromDOM["valueSet"] !== "undefined") {
-        for (i = 0; i < settingsFromDOM["valueSet"].length; i++){
-            facet._valueSet.add(settingsFromDOM["valueSet"][i]);
-        }
-    }
-
-    if (settingsFromDOM["selectMissing"] !== "undefined") {
-        facet._selectMissing = (settingsFromDOM["selectMissing"] === "true");
-    }
-    Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
-}
-
-/**
- * @param {Element} configElmt
- * @returns {Object} settingsFromDOM
- */
-Exhibit.EnumeratedFacet.buildSettingsFromDOM = function(configElmt) {
-    var settingsFromDOM = {
-        "expression": "undefined",
-        "expressionString" : "undefined",
-        "valueSet" : "undefined",
-        "selectMissing" : "undefined"
-    };
-
-    try {
-        expressionString = Exhibit.getAttribute(configElmt, "expression");
-        if (typeof expressionString !== "undefined" && expressionString !== null && expressionString.length > 0){
-            settingsFromDOM["expression"] = Exhibit.ExpressionParser.parse(expressionString);
-            settingsFromDOM["expressionString"] = expressionString
-        }
-
-        selection = Exhibit.getAttribute(configElmt, "selection", ";");
-        if (typeof selection !== "undefined" && selection !== null && selection.length > 0) {
-            settingsFromDOM["valueSet"] = [];
-            for (i = 0; i < selection.length; i++) {
-                settingsFromDOM["valueSet"].push(selection[i]);
-            }
-        }
-    } catch (e) {
-         Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "EnumeratedFacet"));
-    }
-
-    return settingsFromDOM;
+Exhibit.EnumeratedFacet.create = function (configObj, facet, thisUIContext) {
+    Exhibit.SettingsUtilities.collectSettings(configObj,
+        facet.getSettingSpecs(), facet._settings);
+    
+    (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, facet._settings) : Exhibit.ListFacet._configure(facet, facet._settings);    
+    facet._initializeUI();
+    thisUIContext.getCollection().addFacet(facet);
+    facet.register();
 }
 
 /**
