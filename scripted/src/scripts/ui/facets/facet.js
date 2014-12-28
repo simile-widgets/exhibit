@@ -77,6 +77,15 @@ Exhibit.Facet = function(key, div, uiContext) {
 
     /**
      * @public
+     * @returns {Boolean}
+     */
+    this.hasUIContext = function() {
+        return (typeof _uiContext !== "undefined") &&
+            (_uiContext !== null);
+    };
+
+    /**
+     * @public
      * @param {Exhibit.Expression}
      */
     this.setExpression = function(e) {
@@ -157,23 +166,27 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @example MyFacet.create = function() { ...; this.register(); };
      */
     this.register = function() {
-        this.getUIContext().getMain().getRegistry().register(
-            Exhibit.Facet.getRegistryKey(),
-            this.getID(),
-            this
-        );
-        _registered = true;
+        if (this.hasUIContext()) {
+            this.getUIContext().getMain().getRegistry().register(
+                Exhibit.Facet.getRegistryKey(),
+                this.getID(),
+                this
+            );
+            _registered = true;
+        }
     };
 
     /**
      * Remove this facet from the registry.
      */
     this.unregister = function() {
-        self.getUIContext().getMain().getRegistry().unregister(
-            Exhibit.Facet.getRegistryKey(),
-            self.getID()
-        );
-        _registered = false;
+        if (this.hasUIContext()) {
+            self.getUIContext().getMain().getRegistry().unregister(
+                Exhibit.Facet.getRegistryKey(),
+                self.getID()
+            );
+            _registered = false;
+        }
     };
 
     /**
@@ -181,13 +194,14 @@ Exhibit.Facet = function(key, div, uiContext) {
      */
     this.dispose = function() {
         Exhibit.jQuery(_div).empty();
-        this.getUIContext().getCollection().removeFacet(this);
-        // if instance defines _dispose for localized material, call it
+        if (this.hasUIContext) {
+            this.getUIContext().getCollection().removeFacet(this);
+            // if instance defines _dispose for localized material, call it
+        }
         if (typeof this._dispose !== "undefined") {
             this._dispose();
         }
         this.unregister();
-
         _id = null;
         _div = null;
         _uiContext = null;
@@ -209,10 +223,12 @@ Exhibit.Facet = function(key, div, uiContext) {
                 + _instanceKey
                 + "-"
                 + self.getExpressionString()
-                + "-"
-                + self.getUIContext().getCollection().getID()
-                + "-"
-                + self.getUIContext().getMain().getRegistry().generateIdentifier(Exhibit.Facet.getRegistryKey());
+                + (!self.hasUIContext()? "":
+                   "-"
+                   + self.getUIContext().getCollection().getID()
+                   + "-"
+                   + self.getUIContext().getMain().getRegistry()
+                   .generateIdentifier(Exhibit.Facet.getRegistryKey()));
         }
     };
 

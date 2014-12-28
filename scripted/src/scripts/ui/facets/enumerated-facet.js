@@ -9,8 +9,15 @@
 * @constructor
 * @class
 */
-Exhibit.EnumeratedFacet = function(){
+Exhibit.EnumeratedFacet = function(key, div, uiContext){
+    Exhibit.Facet.call(this, key, div, uiContext);
 };
+
+Exhibit.EnumeratedFacet.prototype = new Exhibit.Facet();
+
+Exhibit.EnumerateFacet._settingSpecs = {
+    "selectMissing":     { "type": "boolean", "defaultValue": false}
+}
 
 /**
  * @param {Element} configElmt
@@ -78,12 +85,6 @@ Exhibit.EnumeratedFacet.buildSettingsFromDOM = function(configElmt) {
                 settingsFromDOM["valueSet"].push(selection[i]);
             }
         }
-
-        selectMissing = Exhibit.getAttribute(configElmt, "selectMissing");
-        if (typeof selectMissing !== "undefined" && selectMissing !== null && selectMissing.length > 0) {
-            settingsFromDOM["selectMissing"] = (selectMissing === "true");
-        }
-
     } catch (e) {
          Exhibit.Debug.exception(e, Exhibit._("%facets.error.configuration", "EnumeratedFacet"));
     }

@@ -11,7 +11,8 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.ListFacet = function(containerElmt, uiContext) {
-    Exhibit.jQuery.extend(this, new Exhibit.Facet("list", containerElmt, uiContext));
+//    Exhibit.jQuery.extend(this, new Exhibit.EnumeratedFacet("list", containerElmt, uiContext));
+    Exhibit.EnumeratedFacet.call(this,"list",containerElmt,uiContext);
     this.addSettingSpecs(Exhibit.ListFacet._settingSpecs);
 
     this._colorCoder = null;

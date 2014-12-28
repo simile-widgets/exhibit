@@ -12,7 +12,8 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.CloudFacet = function(containerElmt, uiContext) {
-    Exhibit.jQuery.extend(this, new Exhibit.Facet("cloud", containerElmt, uiContext));
+//    Exhibit.jQuery.extend(this, new Exhibit.Facet("cloud", containerElmt, uiContext));
+    Exhibit.EnumeratedFacet.call(this,"cloud",containerElmt,uiContext);
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
     this._valueSet = new Exhibit.Set();
