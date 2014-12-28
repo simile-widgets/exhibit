@@ -80,28 +80,28 @@ Exhibit.CloudFacet.create = function(configObj, containerElmt, uiContext) {
  * @param {Exhibit.CloudFacet} facet
  * @param {Object} configuration
  */
-Exhibit.CloudFacet._configure = function(facet, configuration) {
+Exhibit.CloudFacet.prototype._configure = function(configuration) {
     var selection, i, segment, property, values, orderMap, formatter;
-    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
-    
+
+    this._settings = configuration;
     if (typeof configuration.expression !== "undefined") {
-        facet.setExpressionString(configuration.expression);
-        facet.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
+        this.setExpressionString(configuration.expression);
+        this.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
     }
     if (typeof configuration.selection !== "undefined") {
         selection = configuration.selection;
         for (i = 0; i < selection.length; i++) {
-            facet._valueSet.add(selection[i]);
+            this._valueSet.add(selection[i]);
         }
     }
     if (typeof configuration.selectMissing !== "undefined") {
-        facet._selectMissing = configuration.selectMissing;
+        this._selectMissing = configuration.selectMissing;
     }
 
-    facet._cache = new Exhibit.FacetUtilities.Cache(
-        facet.getUIContext().getDatabase(),
-        facet.getUIContext().getCollection(),
-        facet.getExpression()
+    this._cache = new Exhibit.FacetUtilities.Cache(
+        this.getUIContext().getDatabase(),
+        this.getUIContext().getCollection(),
+        this.getExpression()
     );
 
 };

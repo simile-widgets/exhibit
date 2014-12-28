@@ -89,66 +89,66 @@ Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
  * @param {Exhibit.ListFacet} facet
  * @param {Object} configuration
  */
-Exhibit.ListFacet._configure = function(facet, configuration) {
+Exhibit.ListFacet.prototype._configure = function(settings) {
     var selection, i, segment, property, values, orderMap, formatter;
 
-    configuration = facet._settings;
-    if (typeof configuration.expression !== "undefined") {
-        facet.setExpressionString(configuration.expression);
-        facet.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
+    this._settings = settings;
+    if (typeof settings.expression !== "undefined") {
+        this.setExpressionString(settings.expression);
+        this.setExpression(Exhibit.ExpressionParser.parse(settings.expression));
     }
-    if (typeof configuration.selection !== "undefined") {
-        selection = configuration.selection;
+    if (typeof settings.selection !== "undefined") {
+        selection = settings.selection;
         for (i = 0; i < selection.length; i++) {
-            facet._valueSet.add(selection[i]);
+            this._valueSet.add(selection[i]);
         }
     }
-    if (typeof configuration.selectMissing !== "undefined") {
-        facet._selectMissing = configuration.selectMissing;
+    if (typeof settings.selectMissing !== "undefined") {
+        this._selectMissing = settings.selectMissing;
     }
     
-    if (typeof facet._settings.facetLabel === "undefined") {
-        if (facet.getExpression() !== null && facet.getExpression().isPath()) {
-            segment = facet.getExpression().getPath().getLastSegment();
-            property = facet.getUIContext().getDatabase().getProperty(segment.property);
+    if (typeof settings.facetLabel === "undefined") {
+        if (this.getExpression() !== null && this.getExpression().isPath()) {
+            segment = this.getExpression().getPath().getLastSegment();
+            property = this.getUIContext().getDatabase().getProperty(segment.property);
             if (typeof property !== "undefined" && property !== null) {
-                facet._settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
+                settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
             }
         }
     }
-    if (typeof facet._settings.fixedOrder !== "undefined") {
-        values = facet._settings.fixedOrder.split(";");
+    if (typeof settings.fixedOrder !== "undefined") {
+        values = settings.fixedOrder.split(";");
         orderMap = {};
         for (i = 0; i < values.length; i++) {
             orderMap[values[i].trim()] = i;
         }
         
-        facet._orderMap = orderMap;
+        this._orderMap = orderMap;
     }
     
-    if (facet._settings.colorCoder !== "undefined") {
-        facet._colorCoder = facet.getUIContext().getMain().getComponent(facet._settings.colorCoder);
+    if (settings.colorCoder !== "undefined") {
+        this._colorCoder = this.getUIContext().getMain().getComponent(settings.colorCoder);
     }
     
-    if (facet._settings.collapsed) {
-        facet._settings.collapsible = true;
+    if (settings.collapsed) {
+        settings.collapsible = true;
     }
     
-    if (typeof facet._settings.formatter !== "undefined") {
-        formatter = facet._settings.formatter;
+    if (typeof settings.formatter !== "undefined") {
+        formatter = settings.formatter;
         if (formatter !== null && formatter.length > 0) {
             try {
-                facet._formatter = eval(formatter);
+                this._formatter = eval(formatter);
             } catch (e) {
                 Exhibit.Debug.log(e);
             }
         }
     }
     
-    facet._cache = new Exhibit.FacetUtilities.Cache(
-        facet.getUIContext().getDatabase(),
-        facet.getUIContext().getCollection(),
-        facet.getExpression()
+    this._cache = new Exhibit.FacetUtilities.Cache(
+        this.getUIContext().getDatabase(),
+        this.getUIContext().getCollection(),
+        this.getExpression()
     );
 };
 
@@ -239,7 +239,7 @@ Exhibit.ListFacet.prototype._computeFacet = function(items) {
             span = Exhibit.jQuery("<span>")
                 .attr("class", "exhibit-facet-value-missingThisField")
                 .html((typeof this._settings.missingLabel !== "undefined") ? 
-                      this._settings.missingLabel :
+                      this.missingLabel :
                       Exhibit._("%facets.missingThisField"));
             
             entries.unshift({

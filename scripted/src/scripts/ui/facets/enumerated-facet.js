@@ -30,11 +30,13 @@ Exhibit.EnumeratedFacet._settingSpecs = {
  * @param {Exhibit.UIContext} thisUIContext
  * @returns {Exhibit.CloudFacet}
  */
-Exhibit.EnumeratedFacet.createFromDOM = function (configElmt, facet, thisUIContext) {
+Exhibit.EnumeratedFacet.createFromDOM = function (configElmt, facet,
+                                                  thisUIContext) {
+    var configuration = {};
     Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt,
-        facet.getSettingSpecs(), facet._settings);
+        facet.getSettingSpecs(), configuration);
     
-    (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, facet._settings) : Exhibit.ListFacet._configure(facet, facet._settings);    
+    facet._configure(configuration);    
     facet._initializeUI();
     thisUIContext.getCollection().addFacet(facet);
     facet.register();
@@ -49,7 +51,6 @@ Exhibit.EnumeratedFacet.createFromDOM = function (configElmt, facet, thisUIConte
 Exhibit.EnumeratedFacet.create = function (configObj, facet, thisUIContext) {
     Exhibit.SettingsUtilities.collectSettings(configObj,
         facet.getSettingSpecs(), facet._settings);
-    
     (facet instanceof Exhibit.CloudFacet) ? Exhibit.CloudFacet._configure(facet, facet._settings) : Exhibit.ListFacet._configure(facet, facet._settings);    
     facet._initializeUI();
     thisUIContext.getCollection().addFacet(facet);
