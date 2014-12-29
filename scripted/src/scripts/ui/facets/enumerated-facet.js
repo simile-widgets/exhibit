@@ -11,7 +11,10 @@
 */
 Exhibit.EnumeratedFacet = function (key, div, uiContext){
     Exhibit.Facet.call(this, key, div, uiContext);
+    this._valueSet = new Exhibit.Set();
+    this._selectMissing = false;
     this.addSettingSpecs(Exhibit.EnumeratedFacet._settingSpecs);
+    this._orderMap = null;
 };
 
 Exhibit.EnumeratedFacet.prototype = new Exhibit.Facet();
@@ -23,7 +26,10 @@ Exhibit.EnumeratedFacet._settingSpecs = {
     "selectMissing":     { "type": "boolean", "defaultValue": false},
     "showMissing":       { "type": "boolean", "defaultValue": true },
     "missingLabel":      { "type": "text" },
-    "minimumCount":      { "type": "int", "defaultValue": 1 }
+    "minimumCount":      { "type": "int", "defaultValue": 1 },
+    "fixedOrder":        { "type": "text" },
+    "sortMode":          { "type": "text", "defaultValue": "value" },
+    "sortDirection":     { "type": "text", "defaultValue": "forward" }
 };
 
 Exhibit.EnumeratedFacet.create = function (FacetType,
@@ -86,10 +92,21 @@ Exhibit.EnumeratedFacet.createFromObj = function (FacetType,
         });
 };
 
+Exhibit.EnumeratedFacet.prototype.dispose = function () {
+    this._cache.dispose();
+    this._cache = null;
+    this._dom = null;
+    this._valueSet = null;
+    this._orderMap = null;
+    Exhibit.Facet.prototype.dispose.call(this);
+};
+
 /**
  * @param {Object} configuration
  */
 Exhibit.EnumeratedFacet.prototype._configure = function(configuration) {
+    var selection, i;
+
     this._settings = configuration;
     if (typeof configuration.expression !== "undefined") {
         this.setExpressionString(configuration.expression);
@@ -110,7 +127,7 @@ Exhibit.EnumeratedFacet.prototype._configure = function(configuration) {
         this.getUIContext().getCollection(),
         this.getExpression()
     );
-}
+};
 
 
 /**
@@ -206,6 +223,7 @@ Exhibit.EnumeratedFacet.prototype._clearSelections = function() {
     );
 };
 
+
 /**
  * @param {Exhibit.Set} items
  * @returns {Array}
@@ -228,7 +246,8 @@ Exhibit.EnumeratedFacet.prototype._computeFacet = function(items) {
     if (entries.length > 0) {
         selection = this._valueSet;
         labeler = valueType === "item" ?
-            function(v) { var l = database.getObject(v, "label"); return l !== null ? l : v; } :
+            function(v) { var l = database.getObject(v, "label"); 
+                          return l !== null ? l : v; } :
             function(v) { return v; };
             
         for (i = 0; i < entries.length; i++) {
@@ -276,13 +295,6 @@ Exhibit.EnumeratedFacet.prototype.exportState = function() {
 Exhibit.EnumeratedFacet.prototype.exportEmptyState = function() {
     return this._exportState(true);
 };
-
-/**
- * @returns {Object}
- */
- Exhibit.EnumeratedFacet.prototype.exportState = function() {
-    return this._exportState(false);
- };
 
 /**
  * @private
@@ -461,3 +473,4 @@ Exhibit.EnumeratedFacet.prototype._createSortFunction = function(valueType) {
     
     return sortDirectionFunction;
 };
+

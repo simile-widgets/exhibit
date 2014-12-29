@@ -10,7 +10,7 @@
  * @param {Element|jQuery} div
  * @param {Exhibit.UIContext} uiContext
  */
-Exhibit.Facet = function(key, div, uiContext) {
+Exhibit.Facet = function (key, div, uiContext) {
     var self, _id, _instanceKey, _div, _uiContext, _registered, _expression, _expressionString, _setIdentifier;
 
     /**
@@ -67,7 +67,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {String}
      */
-    this.getLabel = function() {
+    this.getLabel = function () {
         if (typeof this._settings.facetLabel !== "undefined") {
             return this._settings.facetLabel;
         } else {
@@ -79,7 +79,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {Boolean}
      */
-    this.hasUIContext = function() {
+    this.hasUIContext = function () {
         return (typeof _uiContext !== "undefined") &&
             (_uiContext !== null);
     };
@@ -88,7 +88,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @param {Exhibit.Expression}
      */
-    this.setExpression = function(e) {
+    this.setExpression = function (e) {
         _expression = e;
     };
 
@@ -96,7 +96,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {Exhibit.Expression}
      */
-    this.getExpression = function() {
+    this.getExpression = function () {
         return _expression;
     };
 
@@ -104,7 +104,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @param {String} s
      */
-    this.setExpressionString = function(s) {
+    this.setExpressionString = function (s) {
         _expressionString = s;
         _setIdentifier();
     };
@@ -113,7 +113,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {String}
      */
-    this.getExpressionString = function() {
+    this.getExpressionString = function () {
         return _expressionString;
     };
 
@@ -121,7 +121,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @param {Object} specs
      */
-    this.addSettingSpecs = function(specs) {
+    this.addSettingSpecs = function (specs) {
         Exhibit.jQuery.extend(true, this._settingSpecs, specs);
     };
 
@@ -129,7 +129,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {Object}
      */
-    this.getSettingSpecs = function() {
+    this.getSettingSpecs = function () {
         return this._settingSpecs;
     };
 
@@ -138,7 +138,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {String}
      */
-    this.getID = function() {
+    this.getID = function () {
         return _id;
     };
 
@@ -147,7 +147,7 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {Exhibit.UIContext}
      */
-    this.getUIContext = function() {
+    this.getUIContext = function () {
         return _uiContext;
     };
 
@@ -156,16 +156,16 @@ Exhibit.Facet = function(key, div, uiContext) {
      * @public
      * @returns {jQuery}
      */
-    this.getContainer = function() {
+    this.getContainer = function () {
         return _div;
     };
 
     /**
      * Enter this facet into the registry, making it easier to locate.
      * By convention, this should be called at the end of the factory.
-     * @example MyFacet.create = function() { ...; this.register(); };
+     * @example MyFacet.create = function () { ...; this.register(); };
      */
-    this.register = function() {
+    this.register = function () {
         if (this.hasUIContext()) {
             this.getUIContext().getMain().getRegistry().register(
                 Exhibit.Facet.getRegistryKey(),
@@ -179,7 +179,7 @@ Exhibit.Facet = function(key, div, uiContext) {
     /**
      * Remove this facet from the registry.
      */
-    this.unregister = function() {
+    this.unregister = function () {
         if (this.hasUIContext()) {
             self.getUIContext().getMain().getRegistry().unregister(
                 Exhibit.Facet.getRegistryKey(),
@@ -192,22 +192,22 @@ Exhibit.Facet = function(key, div, uiContext) {
     /**
      * Free up all references to objects, empty related elements, unregister.
      */
-    this.dispose = function() {
+    this.dispose = function () {
         Exhibit.jQuery(_div).empty();
         if (this.hasUIContext) {
             this.getUIContext().getCollection().removeFacet(this);
             // if instance defines _dispose for localized material, call it
         }
+        this.unregister();
         if (typeof this._dispose !== "undefined") {
             this._dispose();
         }
-        this.unregister();
         _id = null;
         _div = null;
         _uiContext = null;
         _expression = null;
         _expressionString = null;
-        _settings = null;
+        this._settings = null;
         this._settingSpecs = null;
         self = null;
     };
@@ -215,7 +215,7 @@ Exhibit.Facet = function(key, div, uiContext) {
     /**
      * @private
      */
-    _setIdentifier = function() {
+    _setIdentifier = function () {
         _id = Exhibit.jQuery(_div).attr("id");
         if (typeof _id === "undefined" || _id === null) {
             _id = Exhibit.Facet.getRegistryKey()
@@ -223,7 +223,7 @@ Exhibit.Facet = function(key, div, uiContext) {
                 + _instanceKey
                 + "-"
                 + self.getExpressionString()
-                + (!self.hasUIContext()? "":
+                + (!self.hasUIContext() ? "" :
                    "-"
                    + self.getUIContext().getCollection().getID()
                    + "-"
@@ -251,7 +251,7 @@ Exhibit.Facet._settingSpecs = {
  * @static
  * @returns {String}
  */
-Exhibit.Facet.getRegistryKey = function() {
+Exhibit.Facet.getRegistryKey = function () {
     return Exhibit.Facet._registryKey;
 };
 
@@ -260,7 +260,7 @@ Exhibit.Facet.getRegistryKey = function() {
  * @param {jQuery.Event} evt
  * @param {Exhibit.Registry} reg
  */
-Exhibit.Facet.registerComponent = function(evt, reg) {
+Exhibit.Facet.registerComponent = function (evt, reg) {
     if (!reg.hasRegistry(Exhibit.Facet.getRegistryKey())) {
         reg.createRegistry(Exhibit.Facet.getRegistryKey());
         Exhibit.jQuery(document).trigger("registerFacets.exhibit");

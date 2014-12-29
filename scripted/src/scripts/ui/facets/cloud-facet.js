@@ -15,10 +15,6 @@ Exhibit.CloudFacet = function(containerElmt, uiContext) {
     Exhibit.EnumeratedFacet.call(this,"cloud",containerElmt,uiContext);
     this.addSettingSpecs(Exhibit.CloudFacet._settingSpecs);
     this._colorCoder = null;
-    this._valueSet = new Exhibit.Set();
-    this._valueType = null;
-    this._orderMap = null;
-    this._selectMissing = false;
     this._dom = null;
 };
 
@@ -57,18 +53,6 @@ Exhibit.CloudFacet.create = function(configObj, containerElmt, uiContext) {
     return Exhibit.EnumeratedFacet
         .createFromObj(Exhibit.CloudFacet, configObj, 
                        containerElmt, uiContext);
-};
-
-/**
- *
- */
-Exhibit.CloudFacet.prototype._dispose = function() {
-    this._cache.dispose();
-    this._cache = null;
-    this._dom = null;
-    this._valueSet = null;
-    this._valueType = null;
-    this._orderMap = null;
 };
 
 /**

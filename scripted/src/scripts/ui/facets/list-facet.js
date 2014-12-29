@@ -15,11 +15,8 @@ Exhibit.ListFacet = function(containerElmt, uiContext) {
     this.addSettingSpecs(Exhibit.ListFacet._settingSpecs);
 
     this._colorCoder = null;
-    this._valueSet = new Exhibit.Set();
-    this._selectMissing = false;
     this._delayedUpdateItems = null;
     this._dom = null;
-    this._orderMap = null;
 };
 
 Exhibit.ListFacet.prototype = new Exhibit.EnumeratedFacet();
@@ -28,9 +25,6 @@ Exhibit.ListFacet.prototype = new Exhibit.EnumeratedFacet();
  * @constant
  */
 Exhibit.ListFacet._settingSpecs = {
-    "fixedOrder":       { "type": "text" },
-    "sortMode":         { "type": "text", "defaultValue": "value" },
-    "sortDirection":    { "type": "text", "defaultValue": "forward" },
     "scroll":           { "type": "boolean", "defaultValue": true },
     "height":           { "type": "text" },
     "colorCoder":       { "type": "text", "defaultValue": null },
@@ -62,7 +56,7 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt,
 Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
     var settingsFromDOM, facet;
 
-    return Exhibit.EnumeratedFacet.createFromObj(Exhibit.ListFacet, configElmt, containerElmt, uiContext);
+    return Exhibit.EnumeratedFacet.createFromObj(Exhibit.ListFacet, configObj, containerElmt, uiContext);
 };
 
 /**
@@ -118,13 +112,9 @@ Exhibit.ListFacet.prototype._configure = function(settings) {
 /**
  *
  */
-Exhibit.ListFacet.prototype._dispose = function() {
-    this._cache.dispose();
-    this._cache = null;
+Exhibit.ListFacet.prototype.dispose = function() {
     this._colorCoder = null;
-    this._dom = null;
-    this._valueSet = null;
-    this._orderMap = null;
+    Exhibit.EnumeratedFacet.prototype.dispose.call(this);
 };
 
 
