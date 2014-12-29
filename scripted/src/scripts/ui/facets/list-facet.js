@@ -11,15 +11,12 @@
  * @param {Exhibit.UIContext} uiContext
  */
 Exhibit.ListFacet = function(containerElmt, uiContext) {
-    Exhibit.jQuery.extend(this, new Exhibit.Facet("list", containerElmt, uiContext));
+    Exhibit.EnumeratedFacet.call(this,"list",containerElmt,uiContext);
     this.addSettingSpecs(Exhibit.ListFacet._settingSpecs);
 
     this._colorCoder = null;
-    this._valueSet = new Exhibit.Set();
-    this._selectMissing = false;
     this._delayedUpdateItems = null;
     this._dom = null;
-    this._orderMap = null;
 };
 
 Exhibit.ListFacet.prototype = new Exhibit.EnumeratedFacet();
@@ -28,11 +25,6 @@ Exhibit.ListFacet.prototype = new Exhibit.EnumeratedFacet();
  * @constant
  */
 Exhibit.ListFacet._settingSpecs = {
-    "fixedOrder":       { "type": "text" },
-    "sortMode":         { "type": "text", "defaultValue": "value" },
-    "sortDirection":    { "type": "text", "defaultValue": "forward" },
-    "showMissing":      { "type": "boolean", "defaultValue": true },
-    "missingLabel":     { "type": "text" },
     "scroll":           { "type": "boolean", "defaultValue": true },
     "height":           { "type": "text" },
     "colorCoder":       { "type": "text", "defaultValue": null },
@@ -49,34 +41,22 @@ Exhibit.ListFacet._settingSpecs = {
  * @param {Object} settingsFromDOM
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.create = function(configElmt, containerElmt, uiContext, settingsFromDOM) {
- var thisUIContext, facet;
-
-    thisUIContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
-    facet = new Exhibit.ListFacet(
-        (typeof containerElmt !== "undefined" && containerElmt !== null) ?
-            containerElmt : configElmt, 
-        thisUIContext
-    );
-
-    Exhibit.EnumeratedFacet.create(configElmt, facet, settingsFromDOM, thisUIContext);
-    return facet;
+Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, 
+                                           uiContext) {
+    return Exhibit.EnumeratedFacet.createFromDOM(Exhibit.ListFacet, configElmt, containerElmt, uiContext);
 };
 
 /**
  * @static
- * @param {Element} configElmt
+ * @param {Object} configObj
  * @param {Element} containerElmt
  * @param {Exhibit.UIContext} uiContext
  * @returns {Exhibit.ListFacet}
  */
-Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext) {
+Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
     var settingsFromDOM, facet;
 
-    settingsFromDOM = Exhibit.EnumeratedFacet.buildSettingsFromDOM(configElmt);
-    facet = Exhibit.ListFacet.create(configElmt, containerElmt, uiContext, settingsFromDOM);
-
-    return facet;
+    return Exhibit.EnumeratedFacet.createFromObj(Exhibit.ListFacet, configObj, containerElmt, uiContext);
 };
 
 /**
@@ -85,98 +65,58 @@ Exhibit.ListFacet.createFromDOM = function(configElmt, containerElmt, uiContext)
  * @param {Exhibit.ListFacet} facet
  * @param {Object} configuration
  */
-Exhibit.ListFacet._configure = function(facet, configuration) {
+Exhibit.ListFacet.prototype._configure = function(settings) {
     var selection, i, segment, property, values, orderMap, formatter;
-    Exhibit.SettingsUtilities.collectSettings(configuration, facet.getSettingSpecs(), facet._settings);
+
+    Exhibit.EnumeratedFacet.prototype._configure.call(this, settings);
     
-    if (typeof configuration.expression !== "undefined") {
-        facet.setExpressionString(configuration.expression);
-        facet.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
-    }
-    if (typeof configuration.selection !== "undefined") {
-        selection = configuration.selection;
-        for (i = 0; i < selection.length; i++) {
-            facet._valueSet.add(selection[i]);
-        }
-    }
-    if (typeof configuration.selectMissing !== "undefined") {
-        facet._selectMissing = configuration.selectMissing;
-    }
-    
-    if (typeof facet._settings.facetLabel === "undefined") {
-        if (facet.getExpression() !== null && facet.getExpression().isPath()) {
-            segment = facet.getExpression().getPath().getLastSegment();
-            property = facet.getUIContext().getDatabase().getProperty(segment.property);
+    if (typeof settings.facetLabel === "undefined") {
+        if (this.getExpression() !== null && this.getExpression().isPath()) {
+            segment = this.getExpression().getPath().getLastSegment();
+            property = this.getUIContext().getDatabase().getProperty(segment.property);
             if (typeof property !== "undefined" && property !== null) {
-                facet._settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
+                settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
             }
         }
     }
-    if (typeof facet._settings.fixedOrder !== "undefined") {
-        values = facet._settings.fixedOrder.split(";");
+    if (typeof settings.fixedOrder !== "undefined") {
+        values = settings.fixedOrder.split(";");
         orderMap = {};
         for (i = 0; i < values.length; i++) {
             orderMap[values[i].trim()] = i;
         }
         
-        facet._orderMap = orderMap;
+        this._orderMap = orderMap;
     }
     
-    if (facet._settings.colorCoder !== "undefined") {
-        facet._colorCoder = facet.getUIContext().getMain().getComponent(facet._settings.colorCoder);
+    if (settings.colorCoder !== "undefined") {
+        this._colorCoder = this.getUIContext().getMain().getComponent(settings.colorCoder);
     }
     
-    if (facet._settings.collapsed) {
-        facet._settings.collapsible = true;
+    if (settings.collapsed) {
+        settings.collapsible = true;
     }
     
-    if (typeof facet._settings.formatter !== "undefined") {
-        formatter = facet._settings.formatter;
+    if (typeof settings.formatter !== "undefined") {
+        formatter = settings.formatter;
         if (formatter !== null && formatter.length > 0) {
             try {
-                facet._formatter = eval(formatter);
+                this._formatter = eval(formatter);
             } catch (e) {
                 Exhibit.Debug.log(e);
             }
         }
     }
-    
-    facet._cache = new Exhibit.FacetUtilities.Cache(
-        facet.getUIContext().getDatabase(),
-        facet.getUIContext().getCollection(),
-        facet.getExpression()
-    );
 };
 
 /**
  *
  */
-Exhibit.ListFacet.prototype._dispose = function() {
-    this._cache.dispose();
-    this._cache = null;
+Exhibit.ListFacet.prototype.dispose = function() {
     this._colorCoder = null;
-    this._dom = null;
-    this._valueSet = null;
-    this._orderMap = null;
+    Exhibit.EnumeratedFacet.prototype.dispose.call(this);
 };
 
-
-/**
- * @param {Exhibit.Set} items
- * @returns {Exhibit.Set}
- */
-Exhibit.ListFacet.prototype.restrict = function(items) {
-    if (this._valueSet.size() === 0 && !this._selectMissing) {
-        return items;
-    }
-    
-    var set = this._cache.getItemsFromValues(this._valueSet, items);
-    if (this._selectMissing) {
-        this._cache.getItemsMissingValue(items, set);
-    }
-    
-    return set;
-};
 
 /**
  *
@@ -201,54 +141,6 @@ Exhibit.ListFacet.prototype.update = function(items) {
         .empty();
     this._constructBody(this._computeFacet(items));
     Exhibit.jQuery(this._dom.valuesContainer).show();
-};
-
-/**
- * @param {Exhibit.Set} items
- * @returns {Array}
- */
-Exhibit.ListFacet.prototype._computeFacet = function(items) {
-    var database, r, entries, valueType, selection, labeler, i, entry, count, span;
-    database = this.getUIContext().getDatabase();
-    r = this._cache.getValueCountsFromItems(items);
-    entries = r.entries;
-    valueType = r.valueType;
-    
-    if (entries.length > 0) {
-        selection = this._valueSet;
-        labeler = valueType === "item" ?
-            function(v) { var l = database.getObject(v, "label"); return l !== null ? l : v; } :
-            function(v) { return v; };
-            
-        for (i = 0; i < entries.length; i++) {
-            entry = entries[i];
-            entry.actionLabel = entry.selectionLabel = labeler(entry.value);
-            entry.selected = selection.contains(entry.value);
-        }
-        
-        entries.sort(this._createSortFunction(valueType));
-    }
-    
-    if (this._settings.showMissing || this._selectMissing) {
-        count = this._cache.countItemsMissingValue(items);
-        if (count > 0 || this._selectMissing) {
-            span = Exhibit.jQuery("<span>")
-                .attr("class", "exhibit-facet-value-missingThisField")
-                .html((typeof this._settings.missingLabel !== "undefined") ? 
-                      this._settings.missingLabel :
-                      Exhibit._("%facets.missingThisField"));
-            
-            entries.unshift({
-                value:          null, 
-                count:          count,
-                selected:       this._selectMissing,
-                selectionLabel: Exhibit.jQuery(span).get(0),
-                actionLabel:    Exhibit._("%facets.missingThisField")
-            });
-        }
-    }
-    
-    return entries;
 };
 
 /**

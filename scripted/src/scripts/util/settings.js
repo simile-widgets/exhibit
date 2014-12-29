@@ -75,14 +75,15 @@ Exhibit.SettingsUtilities._internalCollectSettings = function(f, specs, settings
                 }
                 
                 try {
-                    if (dimensions > 1) {
+                    if ((dimensions > 1) || (dimensions == "*")) {
                         separator = ",";
                         if (typeof spec.separator !== "undefined") {
                             separator = spec.separator;
                         }
 
                         a = value.split(separator);
-                        if (a.length !== dimensions) {
+                        if ((a.length !== dimensions) && 
+                            (dimensions != "*")) {
                             throw new Error(Exhibit._("%settings.error.inconsistentDimensions", dimensions, separator, value));
                         } else {
                             for (i = 0; i < a.length; i++) {
