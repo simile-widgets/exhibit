@@ -114,7 +114,12 @@ Exhibit.getAttribute = function(elmt, name, splitOn) {
     };
     
     try {
-        value = Exhibit.jQuery(elmt).attr(name);
+        if (name !== "role") {
+            //role is now an official html5 attribute
+            //so if exhibit accepts it, then
+            //exhibit will incorrectly hit non-exhibit items
+            value = Exhibit.jQuery(elmt).attr(name);
+            }
         if (typeof value === "undefined" || value.length === 0) {
             value = Exhibit.jQuery(elmt).attr("data-ex-"+hyphenate(name));
             if (typeof value === "undefined" || value.length === 0) {
