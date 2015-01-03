@@ -149,6 +149,7 @@
         <file name="scripts/ui/facets/enumerated-facet.js"/>
         <file name="scripts/ui/facets/list-facet.js"/>
         <file name="scripts/ui/facets/cloud-facet.js"/>
+        <file name="scripts/ui/facets/image-facet.js"/>
         <file name="scripts/ui/facets/numeric-range-facet.js"/>
         <file name="scripts/ui/facets/alpha-range-facet.js"/>
         <file name="scripts/ui/facets/text-search-facet.js"/>
