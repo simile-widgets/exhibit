@@ -12,7 +12,7 @@ var Exhibit = {
      * The version number for Exhibit.
      * @constant
      */
-    version: "3.1.0",
+    version: "3.1.2-rc1",
 
     /**
      * The XML namespace for Exhibit.
