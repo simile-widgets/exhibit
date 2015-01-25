@@ -72,7 +72,8 @@ var Exhibit = {
         "babel": undefined,
         "backstage": undefined,
         "locale": undefined,
-        "persist": true
+        "persist": true,
+        "dev": false
     },
 
     /**
@@ -481,7 +482,8 @@ Exhibit.load = function() {
         "babel": String,
         "backstage": String,
         "locale": String,
-        "persist": Boolean
+        "persist": Boolean,
+        "dev": Boolean
     };
 
     if (typeof Exhibit_urlPrefix === "string") {
@@ -511,6 +513,7 @@ Exhibit.load = function() {
                 if ((arg.length === 2) &&
                     (arg[0]==="exhibit-dev") &&
                     (arg[1]==="true")) {
+                    Exhibit.params.dev = true;
                     Exhibit.params.bundle = false;
                     Exhibit.params.persist = false;
                 }
