@@ -69,6 +69,10 @@ Exhibit.onjQueryLoaded(function() {
             "mapPrefix": String
         };
         
+        if (Exhibit.params.dev) {
+            Exhibit.MapExtension.params.bundle = false;
+        }
+
         if (typeof Exhibit_MapExtension_urlPrefix === "string") {
             Exhibit.MapExtension.urlPrefix = Exhibit_MapExtension_urlPrefix;
             if (typeof Exhibit_MapExtension_parameters !== "undefined") {

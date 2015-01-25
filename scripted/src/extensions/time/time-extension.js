@@ -69,6 +69,10 @@ Exhibit.onjQueryLoaded(function() {
             "timelinePrefix": String,
             "timelineVersion": String
         };
+
+        if (Exhibit.params.dev) {
+            Exhibit.TimeExtension.params.bundle = false;
+        }
         
         if (typeof Exhibit_TimeExtension_urlPrefix === "string") {
             Exhibit.TimeExtension.urlPrefix = Exhibit_TimeExtension_urlPrefix;
