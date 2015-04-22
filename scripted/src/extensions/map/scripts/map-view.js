@@ -1038,7 +1038,12 @@ Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
 
     content = this._createInfoWindow(items);
 
-    markerSize = marker.getIcon().size;
+    if (marker !== undefined) {
+        markerSize = marker.getIcon().size;
+    } else {
+        markerSize = 0;
+    }
+
     // The origin (0, 0) is the top middle
     winAnchor = new google.maps.Size(
         0,
