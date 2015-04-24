@@ -152,8 +152,21 @@ Exhibit.SliderFacet.slider.prototype._setDisplays = function(slider) {
         this._dom.minDisplay.val(min);
         this._dom.maxDisplay.val(max);
     } else {
-        this._dom.minDisplay.html(min);
-        this._dom.maxDisplay.html(max);
+	if (this._facet._settings.displayFormat !== "none" && this._facet.hasUIContext()) {
+	    var minDisplay = this._dom.minDisplay;
+	    var maxDisplay = this._dom.maxDisplay;
+	    this._facet
+		.getUIContext()
+		.format(min, this._facet._settings.displayFormat,
+			function(value) { minDisplay.html(value); });
+	    this._facet
+		.getUIContext()
+		.format(max, this._facet._settings.displayFormat,
+			function(value) { maxDisplay.html(value); });
+	} else {
+	    this._dom.minDisplay.html(min);
+            this._dom.maxDisplay.html(max);
+	}
     }
 };
 
