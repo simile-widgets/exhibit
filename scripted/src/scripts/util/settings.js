@@ -363,7 +363,11 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
 Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
     var value, bindingType, expression, parser;
 
-    value = f(spec.attributeName);
+    if (typeof spec.attributeName == 'function'){
+            value = spec.attributeName();
+    } else{
+        value = f(spec.attributeName);
+    }
 
     if (typeof value === "undefined" || value === null) {
         return null;
