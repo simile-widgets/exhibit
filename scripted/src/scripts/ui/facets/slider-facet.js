@@ -373,8 +373,9 @@ Exhibit.SliderFacet.prototype.importState = function(state) {
             this._range.max = state.max;
         }
         this._slider._setMax(this._range.max);
+
+        this._notifyCollection();
     }
-    this._notifyCollection();
 };
 
 /**
