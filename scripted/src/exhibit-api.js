@@ -82,7 +82,7 @@ var Exhibit = {
     Extension: {},
 
     _dependencies: {
-        "lib/jquery-1.11.1.min.js": "jQuery",
+        "lib/jquery-1.11.3.min.js": "jQuery",
         "lib/json2.js": "JSON",
         "lib/base64.js": "Base64",
         "lib/sprintf.js": "sprintf",
