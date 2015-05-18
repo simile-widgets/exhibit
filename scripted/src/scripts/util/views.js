@@ -157,6 +157,7 @@ Exhibit.ViewUtilities._setUnplottableMessage = function(dom, totalCount, unplott
             {}
         );
         Exhibit.jQuery(dom.unplottableCountLink).bind("click", function(evt) {
+            evt.preventDefault();
             Exhibit.ViewUtilities.openBubbleForItems(evt.target, unplottableItems, uiContext);
         });
         Exhibit.jQuery(div).show();
