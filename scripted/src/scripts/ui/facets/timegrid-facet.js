@@ -579,19 +579,19 @@ Exhibit.TimegridFacet.Layout.prototype.renderGridlines = function() {
         }
     };
  
-    var gridlineContainer = $("<table></table>", {class: 'timegrid-gridlines',
+    var gridlineContainer = $("<table></table>", {'class': 'timegrid-gridlines',
                                                   width: this._xCellWidth * this._xSize,
                                                   height: this._yCellWidth * this._ySize});
 
     for (var y = 0; y <= this._ySize - 1; y++) { // Horizontal lines
-        var hlineDiv = $('<tr></tr>', { class:'timegrid-hline',
+        var hlineDiv = $('<tr></tr>', { 'class':'timegrid-hline',
                                         height: "auto" });
         gridlineContainer.append(hlineDiv);
 
         for (var x = 0; x < this._xSize; x++) { // Vertical lines
             var cid = numToDay[(new Date(this._startTime).getDay() + x) % 7] + (this._dayStart + y);
             var vlineDiv = $('<th></th>', { classid: cid,
-                                            class: 'timegrid-vline',
+                                            'class': 'timegrid-vline',
                                             width: "auto"});
             if (this._valueSet.contains(cid)){
                 vlineDiv.css("background-color", self._color);
