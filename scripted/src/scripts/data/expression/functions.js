@@ -324,7 +324,7 @@ Exhibit.Functions["max"] = {
             currentValueType = arg.valueType ? arg.valueType : 'text';
             parser = Exhibit.SettingsUtilities._typeToParser(currentValueType);
             
-            arg.forEachValue(fn(parser, c));
+            arg.forEachValue(fn(parser, currentValueType));
         }
         return new Exhibit.Expression._Collection([ max ], (typeof valueType !== "undefined" && valueType !== null) ? valueType : "text");
     }
