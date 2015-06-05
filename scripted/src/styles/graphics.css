@@ -34,16 +34,17 @@ div.simileAjax-bubble:after {
   border: 1px solid gray;
   font-family: Arial;
   color: #444444;
-  font-size: 14px;
-  line-height: 10px;
-  width: 10px;
-  height: 10px;
+  font-size: 16px;
+  line-height: 12px;
+  width: 12px;
+  height: 12px;
   padding: 0px;
   text-align: center;
   text-decoration: none;
   position: absolute;
   right: 4px;
   top: 4px;
+  cursor: pointer;
 }
 
 .simileAjax-bubble-close-btn:hover {
@@ -208,174 +209,6 @@ div.simileAjax-bubble-above-left:after {
 }
 
 
-div.simileAjax-bubble-innerContainer {
-    margin:     0px;
-    padding:    0px;
-    border:     none;
-    position:   relative;
-    width:      100%;
-    height:     100%;
-    overflow:   visible;
-}
-
-div.simileAjax-bubble-contentContainer {
-    margin:     0px;
-    padding:    0px;
-    position:   absolute;
-    left:       0px;
-    top:        0px;
-    width:      100%;
-    height:     100%;
-    overflow:   auto;
-    border:     1px solid black;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background: white;
-}
-
-div.simileAjax-bubble-border-left {
-    position:   absolute;
-    left:       -50px;
-    top:        0px;
-    width:      50px;
-    height:     100%;
-}
-
-div.simileAjax-bubble-border-left-pngTranslucent {
-    background: url(../images/bubble-left.png) top right repeat-y;
-}
-
-div.simileAjax-bubble-border-right {
-    position:   absolute;
-    right:      -50px;
-    top:        0px;
-    width:      50px;
-    height:     100%;
-}
-
-.simileAjax-bubble-border-right-pngTranslucent {
-    background: url(../images/bubble-right.png) top left repeat-y;
-}
-
-div.simileAjax-bubble-border-top {
-    position:   absolute;
-    top:        -50px;
-    left:       0px;
-    width:      100%;
-    height:     50px;
-}
-
-.simileAjax-bubble-border-top-pngTranslucent {
-    background: url(../images/bubble-top.png) bottom left repeat-x;
-}
-
-div.simileAjax-bubble-border-bottom {
-    position:   absolute;
-    bottom:     -50px;
-    left:       0px;
-    width:      100%;
-    height:     50px;
-}
-
-.simileAjax-bubble-border-bottom-pngTranslucent {
-    background: url(../images/bubble-bottom.png) top left repeat-x;
-}
-
-div.simileAjax-bubble-border-top-left {
-    position:   absolute;
-    top:        -50px;
-    left:       -50px;
-    width:      50px;
-    height:     50px;
-}
-
-.simileAjax-bubble-border-top-left-pngTranslucent {
-    background: url(../images/bubble-top-left.png) bottom right no-repeat;
-}
-
-div.simileAjax-bubble-border-top-right {
-    position:   absolute;
-    top:        -50px;
-    right:      -50px;
-    width:      50px;
-    height:     50px;
-}
-
-.simileAjax-bubble-border-top-right-pngTranslucent {
-    background: url(../images/bubble-top-right.png) bottom left no-repeat;
-}
-
-div.simileAjax-bubble-border-bottom-left {
-    position:   absolute;
-    bottom:     -50px;
-    left:       -50px;
-    width:      50px;
-    height:     50px;
-}
-
-.simileAjax-bubble-border-bottom-left-pngTranslucent {
-    background: url(../images/bubble-bottom-left.png) top right no-repeat;
-}
-
-div.simileAjax-bubble-border-bottom-right {
-    position:   absolute;
-    bottom:     -50px;
-    right:      -50px;
-    width:      50px;
-    height:     50px;
-}
-
-.simileAjax-bubble-border-bottom-right-pngTranslucent {
-    background: url(../images/bubble-bottom-right.png) top left no-repeat;
-}
-
-div.simileAjax-bubble-arrow-point-left {
-    position:   absolute;
-    left:       86px;
-    top:        -25px;
-    width:      100px;
-    height:     49px;
-}
-
-.simileAjax-bubble-arrow-point-left-pngTranslucent {
-    background: url(../images/bubble-arrow-point-left.png) center right no-repeat;
-}
-
-div.simileAjax-bubble-arrow-point-right {
-    position:   absolute;
-    right:      -86px;
-    top:        -25px;
-    width:      100px;
-    height:     49px;
-}
-
-.simileAjax-bubble-arrow-point-right-pngTranslucent {
-    background: url(../images/bubble-arrow-point-right.png) center left no-repeat;
-}
-
-div.simileAjax-bubble-arrow-point-up {
-    position:   absolute;
-    top:        -84px;
-    left:       -25px;
-    width:      49px;
-    height:     100px;
-}
-
-.simileAjax-bubble-arrow-point-up-pngTranslucent {
-    background: url(../images/bubble-arrow-point-up.png) bottom center no-repeat;
-}
-
-div.simileAjax-bubble-arrow-point-down {
-    position:   absolute;
-    bottom:     -84px;
-    right:      -25px;
-    width:      49px;
-    height:     100px;
-}
-
-.simileAjax-bubble-arrow-point-down-pngTranslucent {
-    background: url(../images/bubble-arrow-point-down.png) bottom center no-repeat;
-}
 
 div.simileAjax-bubble-close {
     position:   absolute;
@@ -386,7 +219,15 @@ div.simileAjax-bubble-close {
     cursor:     pointer;
 }
 
-.simileAjax-bubble-close-pngTranslucent {
-    background: url(../images/close-button.png) no-repeat;
+div.simileAjax-message-bubble {
+    position:   fixed;
+    left:       35%;
+    top:        35%;
+    min-width:  25%;
+    z-index:    1000;
+    padding:    3ex;
+    border:     2px solid gray;
+    border-radius: 3ex;
+    background: white;
+    background: rgba(255,255,255,.85);
 }
-
