@@ -230,4 +230,9 @@ div.simileAjax-message-bubble {
     border-radius: 3ex;
     background: white;
     background: rgba(255,255,255,.85);
+    text-align: center;
+}
+
+div.simileAjax-message-bubble-content {
+    display: inline-block;
 }

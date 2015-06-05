@@ -171,49 +171,12 @@
         "createMessageBubble": function() {
             var containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv;
 
-            containerDiv = $("<div>");
+            containerDiv = Exhibit.jQuery("<div>");
+            contentDiv = Exhibit.jQuery("<div>");
+            containerDiv.append(contentDiv);
+            containerDiv.addClass('simileAjax-message-bubble');
+            contentDiv.addClass('simileAjax-message-bubble-content');
 
-                topDiv = $("<div>").css({
-                    "height": 33,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-top-left.png) top left no-repeat",
-                    "padding-left": 44
-                });
-                containerDiv.append(topDiv);
-        
-                topRightDiv = $("<div>").css({
-                    "height": 33,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-top-right.png) top right no-repeat"
-                });
-                topDiv.append(topRightDiv);
-        
-                middleDiv = $("<div>").css({
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-left.png) top left repeat-y",
-                    "padding-left": 44
-                });
-                containerDiv.append(middleDiv);
-        
-                middleRightDiv = $("<div>").css({
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-right.png) top right repeat-y",
-                    "padding-right": 44
-                });
-                middleDiv.append(middleRightDiv);
-        
-                contentDiv = $("<div>");
-                middleRightDiv.append(contentDiv);
-        
-                bottomDiv = $("<div>").css({
-                    "height": 55,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-left.png) bottom left no-repeat",
-                    "padding-left": 44
-                });
-                containerDiv.append(bottomDiv);
-        
-                bottomRightDiv = $("<div>").css({
-                    "height": 55,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-right.png) bottom right no-repeat"
-                });
-                bottomDiv.append(bottomRightDiv);
-            
             return {
                 containerDiv:   containerDiv,
                 contentDiv:     contentDiv
