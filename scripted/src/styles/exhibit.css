@@ -155,10 +155,16 @@ div.exhibit-focusDialog-controls {
  *  Busy indicator
  */
 .exhibit-busyIndicator {
-    position:   absolute;
+    position:   fixed;
     left:       35%;
-    width:      30%;
+    top:        35%;
+    min-width:  25%;
     z-index:    1000;
+    padding:    3ex;
+    border:     2px solid gray;
+    border-radius: 3ex;
+    background: white;
+    background: rgba(255,255,255,.85);
 }
 .exhibit-busyIndicator-content {
     font-size:      120%;

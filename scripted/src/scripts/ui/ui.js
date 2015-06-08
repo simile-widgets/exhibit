@@ -405,19 +405,6 @@ Exhibit.UI.showBusyIndicator = function(msg) {
         Exhibit.UI._busyIndicator = Exhibit.UI.createBusyIndicator();
     }
     
-    // @@@ jQuery simplification?
-    scrollTop = typeof document.body["scrollTop"] !== "undefined" ?
-        document.body.scrollTop :
-        document.body.parentNode.scrollTop;
-    height = typeof window["innerHeight"] !== "undefined" ?
-        window.innerHeight :
-        (typeof document.body["clientHeight"] !== "undefined" ?
-            document.body.clientHeight :
-            document.body.parentNode.clientHeight);
-        
-    top = Math.floor(scrollTop + height / 3);
-    
-    Exhibit.jQuery(Exhibit.UI._busyIndicator).css("top", top + "px");
     Exhibit.jQuery(document.body).append(Exhibit.UI._busyIndicator);
     if (msg) {
         Exhibit.UI._busyIndicator.find('.message').text(msg);
@@ -714,58 +701,9 @@ Exhibit.UI.createBusyIndicator = function() {
     var urlPrefix, containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv, img;
     urlPrefix = Exhibit.urlPrefix + "images/";
     containerDiv = Exhibit.jQuery("<div>");
-    if (Exhibit.jQuery.simileBubble("pngIsTranslucent")) {
-        topDiv = Exhibit.jQuery("<div>").css({
-            "height": "33px",
-            "padding-left": "44px",
-            "background": "url(" + urlPrefix + "message-bubble/message-top-left.png) top left no-repeat"
-        });
-        containerDiv.append(topDiv);
         
-        topRightDiv = Exhibit.jQuery("<div>").css({
-            "height": "33px",
-            "background": "url(" + urlPrefix + "message-bubble/message-top-right.png) top right no-repeat"
-        });
-        topDiv.append(topRightDiv);
-        
-        middleDiv = Exhibit.jQuery("<div>").css({
-            "padding-left": "44px",
-            "background": "url(" + urlPrefix + "message-bubble/message-left.png) top left repeat-y"
-        });
-        containerDiv.append(middleDiv);
-        
-        middleRightDiv = Exhibit.jQuery("<div>").css({
-            "padding-right": "44px",
-            "background": "url(" + urlPrefix + "message-bubble/message-right.png) top right repeat-y"
-        });
-        middleDiv.append(middleRightDiv);
-        
-        contentDiv = Exhibit.jQuery("<div>");
-        middleRightDiv.append(contentDiv);
-        
-        bottomDiv = Exhibit.jQuery("<div>").css({
-            "height": "55px",
-            "padding-left": "44px",
-            "background": "url(" + urlPrefix + "message-bubble/message-bottom-left.png) bottom left no-repeat"
-        });
-        containerDiv.append(bottomDiv);
-        
-        bottomRightDiv = Exhibit.jQuery("<div>").css({
-            "height": "55px",
-            "background": "url(" + urlPrefix + "message-bubble/message-bottom-right.png) bottom right no-repeat"
-        });
-        bottomDiv.append(bottomRightDiv);
-    } else {
-        containerDiv.css({
-            "border": "2px solid #7777AA",
-            "padding": "20px",
-            "background": "white",
-            "opacity": 0.9
-        });
-        
-        contentDiv = Exhibit.jQuery("<div>");
-        containerDiv.append(contentDiv);
-    }
+    contentDiv = Exhibit.jQuery("<div>");
+    containerDiv.append(contentDiv);
 
     containerDiv.addClass("exhibit-busyIndicator");
     contentDiv.addClass("exhibit-busyIndicator-content");

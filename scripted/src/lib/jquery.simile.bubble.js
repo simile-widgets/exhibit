@@ -10,21 +10,8 @@
     _init = false;
 
     defaultBubbleConfig = {
-        containerCSSClass:              "simileAjax-bubble-container",
-        innerContainerCSSClass:         "simileAjax-bubble-innerContainer",
-        contentContainerCSSClass:       "simileAjax-bubble-contentContainer",
-    
-        borderGraphicSize:              50,
-        borderGraphicCSSClassPrefix:    "simileAjax-bubble-border-",
-    
-        arrowGraphicTargetOffset:       33,  // from tip of arrow to the side of the graphic that touches the content of the bubble
-        arrowGraphicLength:             100, // dimension of arrow graphic along the direction that the arrow points
-        arrowGraphicWidth:              49,  // dimension of arrow graphic perpendicular to the direction that the arrow points
-        arrowGraphicCSSClassPrefix:     "simileAjax-bubble-arrow-",
-        
-        closeGraphicCSSClass:           "simileAjax-bubble-close",
-    
-        extraPadding:                   20
+        closeGraphicCSSClass:           "exhibit-bubble-close",
+        extraPadding:                   50
     };
 
     methods = {
@@ -82,33 +69,20 @@
             }, 200);
         },
         "createBubbleForPoint": function(pageX, pageY, contentWidth, contentHeight, orientation) {
-            var bubbleConfig, pnTransparencyClassSuffix, bubbleWidth, bubbleHeight, generatePngSensitiveClass, div, divInnerContainer, bubble, close, layer, createBorder, divContentContainer, divClose;
+            var bubbleConfig, div, bubble, close, divContentContainer, divClose;
 
             contentWidth = parseInt(contentWidth, 10);
             contentHeight = parseInt(contentHeight, 10);
 
             bubbleConfig = defaultBubbleConfig;
-            pngTransparencyClassSuffix = "pngTranslucent";
-    
-            bubbleWidth = contentWidth + 2 * bubbleConfig.borderGraphicSize;
-            bubbleHeight = contentHeight + 2 * bubbleConfig.borderGraphicSize;
-    
-            generatePngSensitiveClass = function(className) {
-                return className + " " + className + "-" + pngTransparencyClassSuffix;
-            };
     
             /*
              *  Render container divs
              */
             div = $("<div>").
-                attr("class", generatePngSensitiveClass(bubbleConfig.containerCSSClass)).
-                css("width", contentWidth + "px").
-                css("height", contentHeight + "px");
+                addClass("exhibit-bubble")
+                .css({left: pageX, top: pageY});
 
-            divInnerContainer = $("<div>").
-                attr("class", generatePngSensitiveClass(bubbleConfig.innerContainerCSSClass));
-            div.append(divInnerContainer);
-    
             /*
              *  Create layer for bubble
              */
@@ -121,198 +95,88 @@
                     bubble._closed = true;
                 }
             };
-            bubble = { _closed: false };
-            bubble._div = div.get(0);
-            // @@@ not entirely correct, former layers material
-            bubble.close = function() { close(); };
-            
-            /*
-             *  Render border graphics
-             */
-            createBorder = function(classNameSuffix) {
-                var divBorderGraphic = $("<div>").
-                    attr("class",generatePngSensitiveClass(bubbleConfig.borderGraphicCSSClassPrefix + classNameSuffix));
-                divInnerContainer.append(divBorderGraphic);
-            };
 
-            createBorder("top-left");
-            createBorder("top-right");
-            createBorder("bottom-left");
-            createBorder("bottom-right");
-            createBorder("left");
-            createBorder("right");
-            createBorder("top");
-            createBorder("bottom");
-            
             /*
              *  Render content
+            extra div layer with padding to prevent margin of inner
+            items from expanding the bubble from its original fixed size
              */
-            divContentContainer = $("<div>").
-                attr("class", generatePngSensitiveClass(bubbleConfig.contentContainerCSSClass));
-            divInnerContainer.append(divContentContainer);
-            bubble.content = divContentContainer.get(0);
+            divContentContainer = $("<div><div></div></div>")
+                .appendTo(div)
+                .css({width: contentWidth, height: contentHeight,
+                      padding: "1px"})
+                .children(0);
             
+            bubble = { _closed: false,
+                       _div: div.get(0),
+                       close: close,
+                       content: divContentContainer.get(0)};
             /*
              *  Render close button
              */
             divClose = $("<div>").
-                attr("class", generatePngSensitiveClass(bubbleConfig.closeGraphicCSSClass));
-            divInnerContainer.append(divClose);
-            divClose.bind("click", bubble.close);
+                addClass("exhibit-bubble-close-btn").
+                appendTo(div).
+                bind("click", bubble.close);
+
             
+            //hide bubble so doesn't flicker while trying placements
+            //div.hide ruins getBoundingClientRect
+            div.css({opacity: "0"}); 
+            $(document.body).append(div); 
+
             (function() {
-                var docWidth, docHeight, halfArrowGraphicWidth, createArrow, left, divArrow, top;
-                docWidth = $(window).width();
-                docHeight = $(window).height();
-                
-                halfArrowGraphicWidth = Math.ceil(bubbleConfig.arrowGraphicWidth / 2);
-        
-                createArrow = function(classNameSuffix) {
-                    var divArrowGraphic = $("<div>").
-                        attr("class", generatePngSensitiveClass(bubbleConfig.arrowGraphicCSSClassPrefix + "point-" + classNameSuffix));
-                    divInnerContainer.append(divArrowGraphic);
-                    return divArrowGraphic;
-                };
-        
-                if (pageX - halfArrowGraphicWidth - bubbleConfig.borderGraphicSize - bubbleConfig.extraPadding > 0 &&
-                    pageX + halfArrowGraphicWidth + bubbleConfig.borderGraphicSize + bubbleConfig.extraPadding < docWidth) {
-                    
-                    /*
-                     *  Bubble can be positioned above or below the target point.
-                     */
-                    
-                    left = pageX - Math.round(contentWidth / 2);
-                    left = pageX < (docWidth / 2) ?
-                        Math.max(left, bubbleConfig.extraPadding + bubbleConfig.borderGraphicSize) : 
-                        Math.min(left, docWidth - bubbleConfig.extraPadding - bubbleConfig.borderGraphicSize - contentWidth);
-                    
-                    if ((orientation && orientation === "top") || 
-                        (!orientation && 
-                         (pageY 
-                          - bubbleConfig.arrowGraphicTargetOffset 
-                          - contentHeight 
-                          - bubbleConfig.borderGraphicSize 
-                          - bubbleConfig.extraPadding > 0))) {
-                        
-                        /*
-                         *  Position bubble above the target point.
-                         */
-                        
-                        divArrow = createArrow("down");
-                        divArrow.css("left", (pageX - halfArrowGraphicWidth - left) + "px");
-                        
-                        div.css("left", left + "px");
-                        div.css("top", (pageY - bubbleConfig.arrowGraphicTargetOffset - contentHeight) + "px");
-                        
-                        return;
-                    } else if ((orientation && orientation === "bottom") || 
-                               (!orientation && 
-                                (pageY 
-                                 + bubbleConfig.arrowGraphicTargetOffset 
-                                 + contentHeight 
-                                 + bubbleConfig.borderGraphicSize 
-                                 + bubbleConfig.extraPadding < docHeight))) {
-                        
-                        /*
-                         *  Position bubble below the target point.
-                         */
-                        
-                        divArrow = createArrow("up");
-                        divArrow.css("left", (pageX - halfArrowGraphicWidth - left) + "px");
-                
-                        div.css("left", left + "px");
-                        div.css("top", (pageY + bubbleConfig.arrowGraphicTargetOffset) + "px");
-                
-                        return;
+                var
+                vw=$(window).width(), 
+                vh=$(window).height(), 
+                rect,
+                vizPixels=0,
+                bestViz=0,
+                bestPosition = 'below-right',
+                elt = div.get(0),
+                positionClass, i, 
+                positionClasses = [
+                    'above','below','right','above-right',
+                    'below-right','left','above-left','below-left'
+                ];
+
+                for (i=0; i<positionClasses.length;i++) {
+                    positionClass='exhibit-bubble-' +
+                        positionClasses[i];
+                    div.addClass(positionClass);
+                    rect=elt.getBoundingClientRect();
+                    if (rect.left >= 0 && rect.top >= 0) {
+                        if (rect.right < vw && rect.bottom < vh) {
+                            //found a placement that's fully visible
+                            return; 
+                        }
+                        //determine visible area
+                        vizPixels = 
+                            (Math.min(rect.right,vw) - Math.max(rect.left,0)) *
+                            (Math.min(rect.bottom, vh) - Math.max(rect.top,0));
+                        if (vizPixels > bestViz) {
+                            bestViz = vizPixels;
+                            bestPosition = positionClass;
+                        }
                     }
+                    div.removeClass(positionClass);
                 }
-                
-                top = pageY - Math.round(contentHeight / 2);
-                top = pageY < (docHeight / 2) ?
-                    Math.max(top, bubbleConfig.extraPadding + bubbleConfig.borderGraphicSize) : 
-                    Math.min(top, docHeight - bubbleConfig.extraPadding - bubbleConfig.borderGraphicSize - contentHeight);
-                
-                if ((orientation && orientation === "left") || 
-                    (!orientation && 
-                     (pageX 
-                      - bubbleConfig.arrowGraphicTargetOffset 
-                      - contentWidth
-                      - bubbleConfig.borderGraphicSize 
-                      - bubbleConfig.extraPadding > 0))) {
-                    
-                    /*
-                     *  Position bubble left of the target point.
-                     */
-                    
-                    divArrow = createArrow("right");
-                    divArrow.css("top", (pageY - halfArrowGraphicWidth - top) + "px");
-                    
-                    div.css("top", top + "px");
-                    div.css("left", (pageX - bubbleConfig.arrowGraphicTargetOffset - contentWidth) + "px");
-                } else {
-            
-                    /*
-                     *  Position bubble right of the target point, as the last resort.
-                     */
-                    
-                    divArrow = createArrow("left");
-                    divArrow.css("top", (pageY - halfArrowGraphicWidth - top) + "px");
-                    
-                    div.css("top", top + "px");
-                    div.css("left", (pageX + bubbleConfig.arrowGraphicTargetOffset) + "px");
-                }
+                //nothing fully visible, so use what's most visible.
+                div.addClass(bestPosition);
             }());
-            
-            $(document.body).append(div);
-            
+            div.css({opacity: "1"});
+
             return bubble;            
         },
         "createMessageBubble": function() {
             var containerDiv, topDiv, topRightDiv, middleDiv, middleRightDiv, contentDiv, bottomDiv, bottomRightDiv;
 
-            containerDiv = $("<div>");
+            containerDiv = Exhibit.jQuery("<div>");
+            contentDiv = Exhibit.jQuery("<div>");
+            containerDiv.append(contentDiv);
+            containerDiv.addClass('exhibit-message-bubble');
+            contentDiv.addClass('exhibit-message-bubble-content');
 
-                topDiv = $("<div>").css({
-                    "height": 33,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-top-left.png) top left no-repeat",
-                    "padding-left": 44
-                });
-                containerDiv.append(topDiv);
-        
-                topRightDiv = $("<div>").css({
-                    "height": 33,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-top-right.png) top right no-repeat"
-                });
-                topDiv.append(topRightDiv);
-        
-                middleDiv = $("<div>").css({
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-left.png) top left repeat-y",
-                    "padding-left": 44
-                });
-                containerDiv.append(middleDiv);
-        
-                middleRightDiv = $("<div>").css({
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-right.png) top right repeat-y",
-                    "padding-right": 44
-                });
-                middleDiv.append(middleRightDiv);
-        
-                contentDiv = $("<div>");
-                middleRightDiv.append(contentDiv);
-        
-                bottomDiv = $("<div>").css({
-                    "height": 55,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-left.png) bottom left no-repeat",
-                    "padding-left": 44
-                });
-                containerDiv.append(bottomDiv);
-        
-                bottomRightDiv = $("<div>").css({
-                    "height": 55,
-                    "background": "url(" + Exhibit.urlPrefix + "images/message-bottom-right.png) bottom right no-repeat"
-                });
-                bottomDiv.append(bottomRightDiv);
-            
             return {
                 containerDiv:   containerDiv,
                 contentDiv:     contentDiv
