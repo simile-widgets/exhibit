@@ -10,7 +10,7 @@
     _init = false;
 
     defaultBubbleConfig = {
-        closeGraphicCSSClass:           "simileAjax-bubble-close",
+        closeGraphicCSSClass:           "exhibit-bubble-close",
         extraPadding:                   50
     };
 
@@ -80,7 +80,7 @@
              *  Render container divs
              */
             div = $("<div>").
-                addClass("simileAjax-bubble")
+                addClass("exhibit-bubble")
                 .css({left: pageX, top: pageY});
 
             /*
@@ -115,7 +115,7 @@
              *  Render close button
              */
             divClose = $("<div>").
-                addClass("simileAjax-bubble-close-btn").
+                addClass("exhibit-bubble-close-btn").
                 appendTo(div).
                 bind("click", bubble.close);
 
@@ -141,7 +141,7 @@
                 ];
 
                 for (i=0; i<positionClasses.length;i++) {
-                    positionClass='simileAjax-bubble-' +
+                    positionClass='exhibit-bubble-' +
                         positionClasses[i];
                     div.addClass(positionClass);
                     rect=elt.getBoundingClientRect();
@@ -174,8 +174,8 @@
             containerDiv = Exhibit.jQuery("<div>");
             contentDiv = Exhibit.jQuery("<div>");
             containerDiv.append(contentDiv);
-            containerDiv.addClass('simileAjax-message-bubble');
-            contentDiv.addClass('simileAjax-message-bubble-content');
+            containerDiv.addClass('exhibit-message-bubble');
+            contentDiv.addClass('exhibit-message-bubble-content');
 
             return {
                 containerDiv:   containerDiv,

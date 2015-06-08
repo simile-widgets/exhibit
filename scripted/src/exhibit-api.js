@@ -218,6 +218,7 @@ var Exhibit = {
 
     "styles": [
         "styles/graphics.css",
+        "styles/bubbles.css",
         "styles/exhibit.css",
         "styles/browse-panel.css",
         "styles/lens.css",

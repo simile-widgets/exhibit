@@ -1,214 +1,173 @@
-div.simileAjax-bubble
-{
-    position: absolute;
-    background-color: white;
-    border: 1px solid gray;
-    padding: 2ex;
-    border-radius: 1ex;
-    z-index: 1000;
+div.simileAjax-bubble-container {
+    margin:     0px;
+    padding:    0px;
+    border:     none;
+    position:   absolute;
+    z-index:    1000;
 }
 
-div.simileAjax-bubble:before {
-    content: ' ';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border: 1px solid transparent;
+div.simileAjax-bubble-innerContainer {
+    margin:     0px;
+    padding:    0px;
+    border:     none;
+    position:   relative;
+    width:      100%;
+    height:     100%;
+    overflow:   visible;
 }
 
-div.simileAjax-bubble:after {
-    content: ' ';
-    position: absolute;
-    width: 0px;
-    height: 0px;
-    border: 1px solid transparent;
+div.simileAjax-bubble-contentContainer {
+    margin:     0px;
+    padding:    0px;
+    border:     none;
+    position:   absolute;
+    left:       0px;
+    top:        0px;
+    width:      100%;
+    height:     100%;
+    overflow:   auto;
+    background: white;
 }
 
-.simileAjax-bubble-close-btn:before {
-  content: "\00d7"
-}
-.simileAjax-bubble-close-btn {
-  background: #dddddd;
-  background-image: linear-gradient(135deg, white, #bbbbbb);
-  border-radius: 20px;
-  border: 1px solid gray;
-  font-family: Arial;
-  color: #444444;
-  font-size: 16px;
-  line-height: 12px;
-  width: 12px;
-  height: 12px;
-  padding: 0px;
-  text-align: center;
-  text-decoration: none;
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  cursor: pointer;
+div.simileAjax-bubble-border-left {
+    position:   absolute;
+    left:       -50px;
+    top:        0px;
+    width:      50px;
+    height:     100%;
 }
 
-.simileAjax-bubble-close-btn:hover {
-  background: #aaaaaa;
-  background-image: linear-gradient(45deg, #cccccc, #999999);
-  text-decoration: none;
+div.simileAjax-bubble-border-left-pngTranslucent {
+    background: url(../images/bubble-left.png) top right repeat-y;
 }
 
-div.simileAjax-bubble-above {
-    transform: translate(-50%,-100%) translateY(-22px);
+div.simileAjax-bubble-border-right {
+    position:   absolute;
+    right:      -50px;
+    top:        0px;
+    width:      50px;
+    height:     100%;
 }
 
-div.simileAjax-bubble-above:before {
-    left: 50%;
-    bottom: -44px;
-    border-width: 22px 8px 22px 8px;
-    margin-left: -8px;
-    border-top-color: gray;
+.simileAjax-bubble-border-right-pngTranslucent {
+    background: url(../images/bubble-right.png) top left repeat-y;
 }
 
-div.simileAjax-bubble-above:after {
-    left: 50%;
-    bottom: -42px;
-    border-top-color: white;
-    border-width: 22px 8px 22px 8px;
-    margin-left: -8px;
+div.simileAjax-bubble-border-top {
+    position:   absolute;
+    top:        -50px;
+    left:       0px;
+    width:      100%;
+    height:     50px;
 }
 
-div.simileAjax-bubble-below {
-    transform: translate(-50%, 22px);
+.simileAjax-bubble-border-top-pngTranslucent {
+    background: url(../images/bubble-top.png) bottom left repeat-x;
 }
 
-div.simileAjax-bubble-below:before {
-    left: 50%;
-    top: -44px;
-    border-width: 22px 8px 22px 8px;
-    margin-left: -8px;
-    border-bottom-color: gray;
+div.simileAjax-bubble-border-bottom {
+    position:   absolute;
+    bottom:     -50px;
+    left:       0px;
+    width:      100%;
+    height:     50px;
 }
 
-div.simileAjax-bubble-below:after {
-    left: 50%;
-    top: -42px;
-    border-bottom-color:  white;
-    border-width: 22px 8px 22px 8px;
-    margin-left: -8px;
+.simileAjax-bubble-border-bottom-pngTranslucent {
+    background: url(../images/bubble-bottom.png) top left repeat-x;
 }
 
-div.simileAjax-bubble-right {
-    transform: translate(22px, -50%);
+div.simileAjax-bubble-border-top-left {
+    position:   absolute;
+    top:        -50px;
+    left:       -50px;
+    width:      50px;
+    height:     50px;
 }
 
-div.simileAjax-bubble-right:before {
-    top: 50%;
-    left: -44px;
-    border-width: 8px 22px 8px 22px;
-    margin-top: -8px;
-    border-right-color:  gray;
+.simileAjax-bubble-border-top-left-pngTranslucent {
+    background: url(../images/bubble-top-left.png) bottom right no-repeat;
 }
 
-div.simileAjax-bubble-right:after {
-    top: 50%;
-    left: -42px;
-    border-right-color: white;
-    border-width: 8px 22px 8px 22px;
-    margin-top: -8px;
+div.simileAjax-bubble-border-top-right {
+    position:   absolute;
+    top:        -50px;
+    right:      -50px;
+    width:      50px;
+    height:     50px;
 }
 
-div.simileAjax-bubble-left {
-    transform: translate(-100%,-50%) translateX(-22px);
+.simileAjax-bubble-border-top-right-pngTranslucent {
+    background: url(../images/bubble-top-right.png) bottom left no-repeat;
 }
 
-div.simileAjax-bubble-left:before {
-    top: 50%;
-    right: -44px;
-    border-width: 8px 22px 8px 22px;
-    margin-top: -8px;
-    border-left-color: gray;
+div.simileAjax-bubble-border-bottom-left {
+    position:   absolute;
+    bottom:     -50px;
+    left:       -50px;
+    width:      50px;
+    height:     50px;
 }
 
-div.simileAjax-bubble-left:after {
-    top: 50%;
-    right: -42px;
-    margin-top: -8px;
-    border-left-color: white;
-    border-width: 8px 22px 8px 22px;
+.simileAjax-bubble-border-bottom-left-pngTranslucent {
+    background: url(../images/bubble-bottom-left.png) top right no-repeat;
 }
 
-div.simileAjax-bubble-below-right {
-    margin-left: 22px;
+div.simileAjax-bubble-border-bottom-right {
+    position:   absolute;
+    bottom:     -50px;
+    right:      -50px;
+    width:      50px;
+    height:     50px;
 }
 
-div.simileAjax-bubble-below-right:before {
-    border-top-color: gray;
-    top: -1px;
-    left: -23px;
-    border-width: 10px 22px 10px 22px;
+.simileAjax-bubble-border-bottom-right-pngTranslucent {
+    background: url(../images/bubble-bottom-right.png) top left no-repeat;
 }
 
-div.simileAjax-bubble-below-right:after {
-    border-top-color: white;
-    top: 0;
-    left: -18px;
-    border-width: 10px 22px 10px 22px;
+div.simileAjax-bubble-arrow-point-left {
+    position:   absolute;
+    left:       -100px;
+    width:      100px;
+    height:     49px;
 }
 
-div.simileAjax-bubble-above-right {
-    margin-left: 22px;
-    transform: translateY(-100%);
+.simileAjax-bubble-arrow-point-left-pngTranslucent {
+    background: url(../images/bubble-arrow-point-left.png) center right no-repeat;
 }
 
-div.simileAjax-bubble-above-right:before {
-    border-bottom-color: gray;
-    bottom: -1px;
-    left: -23px;
-    border-width: 10px 22px 10px 22px;
+div.simileAjax-bubble-arrow-point-right {
+    position:   absolute;
+    right:      -100px;
+    width:      100px;
+    height:     49px;
 }
 
-div.simileAjax-bubble-above-right:after {
-    border-bottom-color: white;
-    bottom: 0;
-    left: -18px;
-    border-width: 10px 22px 10px 22px;
+.simileAjax-bubble-arrow-point-right-pngTranslucent {
+    background: url(../images/bubble-arrow-point-right.png) center left no-repeat;
 }
 
-div.simileAjax-bubble-below-left {
-    margin-left: -22px;
-    transform: translateX(-100%);
+div.simileAjax-bubble-arrow-point-up {
+    position:   absolute;
+    top:        -100px;
+    width:      49px;
+    height:     100px;
 }
 
-div.simileAjax-bubble-below-left:before {
-    border-top-color: gray;
-    top: -1px;
-    right: -24px;
-    border-width: 10px 23px 10px 23px;
+.simileAjax-bubble-arrow-point-up-pngTranslucent {
+    background: url(../images/bubble-arrow-point-up.png) bottom center no-repeat;
 }
 
-div.simileAjax-bubble-below-left:after {
-    border-top-color: white;
-    top: 0;
-    right: -19px;
-    border-width: 10px 23px 10px 23px;
+div.simileAjax-bubble-arrow-point-down {
+    position:   absolute;
+    bottom:     -100px;
+    width:      49px;
+    height:     100px;
 }
 
-div.simileAjax-bubble-above-left {
-    margin-left: -22px;
-    transform: translate(-100%,-100%);
+.simileAjax-bubble-arrow-point-down-pngTranslucent {
+    background: url(../images/bubble-arrow-point-down.png) bottom center no-repeat;
 }
-
-div.simileAjax-bubble-above-left:before {
-    border-bottom-color: gray;
-    bottom: -1px;
-    right: -24px;
-    border-width: 10px 23px 10px 23px;
-}
-
-div.simileAjax-bubble-above-left:after {
-    border-bottom-color: white;
-    bottom: 0;
-    right: -19px;
-    border-width: 10px 23px 10px 23px;
-}
-
-
 
 div.simileAjax-bubble-close {
     position:   absolute;
@@ -219,20 +178,7 @@ div.simileAjax-bubble-close {
     cursor:     pointer;
 }
 
-div.simileAjax-message-bubble {
-    position:   fixed;
-    left:       35%;
-    top:        35%;
-    min-width:  25%;
-    z-index:    1000;
-    padding:    3ex;
-    border:     2px solid gray;
-    border-radius: 3ex;
-    background: white;
-    background: rgba(255,255,255,.85);
-    text-align: center;
+.simileAjax-bubble-close-pngTranslucent {
+    background: url(../images/close-button.png) no-repeat;
 }
 
-div.simileAjax-message-bubble-content {
-    display: inline-block;
-}
