@@ -339,7 +339,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
         /*
          *  Style the table
          */
-        table = Exhibit.jQuery("<table>");
+        table = Exhibit.jQuery("<table><thead></thead><tbody></tbody></table>");
         table.attr("class", "exhibit-tabularView-body");
         if (this._settings.tableStyler !== null) {
             this._settings.tableStyler(table.get(0), database);
@@ -353,7 +353,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
          *  Create the column headers
          */
         tr = Exhibit.jQuery("<tr>");
-        table.prepend(tr);
+        table.children('thead').prepend(tr);
         createColumnHeader = function(i) {
             var column, td;
             column = self._columns[i];
