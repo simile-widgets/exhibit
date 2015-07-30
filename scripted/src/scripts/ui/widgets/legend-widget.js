@@ -19,10 +19,10 @@ Exhibit.LegendWidget = function(configuration, containerElmt, uiContext) {
     this._configuration = configuration;
     this._div = containerElmt;
     this._uiContext = uiContext;
-    
+
     this._colorMarkerGenerator = typeof configuration.colorMarkerGenerator !== "undefined" ?
         configuration.colorMarkerGenerator :
-        Exhibit.LegendWidget._defaultColorMarkerGenerator;	 
+        Exhibit.LegendWidget._defaultColorMarkerGenerator;
 	this._sizeMarkerGenerator = typeof configuration.sizeMarkerGenerator !== "undefined" ?
 		configuration.sizeMarkerGenerator :
 		Exhibit.LegendWidget._defaultSizeMarkerGenerator;
@@ -33,7 +33,7 @@ Exhibit.LegendWidget = function(configuration, containerElmt, uiContext) {
     this._labelStyler = typeof configuration.labelStyler !== "undefined" ?
         configuration.labelStyler :
         Exhibit.LegendWidget._defaultColorLabelStyler;
-    
+
     this._initializeUI();
 };
 
@@ -53,7 +53,7 @@ Exhibit.LegendWidget.create = function(configuration, containerElmt, uiContext) 
  */
 Exhibit.LegendWidget.prototype.dispose = function() {
     Exhibit.jQuery(this._div).empty();
-    
+
     this._div = null;
     this._uiContext = null;
 };
@@ -82,8 +82,8 @@ Exhibit.LegendWidget.prototype.addLegendLabel = function(label, type) {
 	dom = Exhibit.jQuery.simileDOM("string",
 			"div",
 			'<div class="legend-label">' +
-				'<span class="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "&nbsp;") + 
+				'<span class="label" class="exhibit-legendWidget-entry-title">' +
+					label.replace(/\s+/g, "&nbsp;") +
 				"</span>" +
 			"&nbsp;&nbsp; </div>",
 			{ }
@@ -108,10 +108,10 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 		dom = Exhibit.jQuery.simileDOM("string",
 			"span",
 			'<span id="marker"></span>&nbsp;' +
-				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "&nbsp;") + 
+				'<span id="label" class="exhibit-legendWidget-entry-title">' +
+					label.replace(/\s+/g, "&nbsp;") +
 				"</span>" +
-				"&nbsp;&nbsp; ",
+				"&nbsp; ",
 			{ marker: this._colorMarkerGenerator(value) }
 		);
 	}
@@ -120,10 +120,10 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 		dom = Exhibit.jQuery.simileDOM("string",
 			"span",
 			'<span id="marker"></span>&nbsp;' +
-				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "&nbsp;") + 
+				'<span id="label" class="exhibit-legendWidget-entry-title">' +
+					label.replace(/\s+/g, "&nbsp;") +
 				"</span>" +
-				"&nbsp;&nbsp; ",
+				"&nbsp; ",
 			{ marker: this._sizeMarkerGenerator(value) }
 		);
 	}
@@ -132,16 +132,15 @@ Exhibit.LegendWidget.prototype.addEntry = function(value, label, type) {
 		dom = Exhibit.jQuery.simileDOM("string",
 			"span",
 			'<span id="marker"></span>&nbsp;' +
-				'<span id="label" class="exhibit-legendWidget-entry-title">' + 
-					label.replace(/\s+/g, "&nbsp;") + 
-				"</span>" +
-				"&nbsp; ",
+				'<span id="label" class="exhibit-legendWidget-entry-title">' +
+					label.replace(/\s+/g, "&nbsp;") +
+				"</span>",
 			{ marker: this._iconMarkerGenerator(value) }
 		);
 	}
     Exhibit.jQuery(dom.elmt).addClass("exhibit-legendWidget-entry");
     this._labelStyler(dom.label, value);
-    Exhibit.jQuery(legendDiv).append(dom.elmt);
+    Exhibit.jQuery(legendDiv).append(dom.elmt).append("&nbsp; ");
 };
 
 /**
@@ -170,7 +169,7 @@ Exhibit.LegendWidget._defaultColorMarkerGenerator = function(value) {
     return span.get(0);
 };
 
-/** 
+/**
  * @static
  * @private
  * @param {Number} value
