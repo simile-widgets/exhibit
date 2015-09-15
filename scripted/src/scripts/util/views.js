@@ -19,8 +19,8 @@ Exhibit.ViewUtilities.openBubbleForItems = function(anchorElmt, arrayOfItemIDs, 
     var coords, bubble;
     coords = Exhibit.jQuery(anchorElmt).offset();
     bubble = Exhibit.jQuery.simileBubble("createBubbleForPoint",
-        coords.left + Math.round(anchorElmt.offsetWidth / 2), 
-        coords.top + Math.round(anchorElmt.offsetHeight / 2), 
+        coords.left + Math.round(anchorElmt.offsetWidth / 2),
+        coords.top + Math.round(anchorElmt.offsetHeight / 2),
         uiContext.getSetting("bubbleWidth"), // px
         uiContext.getSetting("bubbleHeight") // px
     );
@@ -36,15 +36,28 @@ Exhibit.ViewUtilities.openBubbleForItems = function(anchorElmt, arrayOfItemIDs, 
  * @param {Exhibit.UIContext} uiContext
  * @returns {Element}
  */
-Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs, labelExpression, uiContext) {
+Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs, labelExpression, uiContext, labelPointExpr) {
     var ul, i, makeItem, itemLensDiv, itemLens;
+
     if (typeof bubbleElmt === "undefined" || bubbleElmt === null) {
         bubbleElmt = Exhibit.jQuery("<div>");
     }
-    
+
     if (arrayOfItemIDs.length > 1) {
         Exhibit.jQuery(bubbleElmt).addClass("exhibit-views-bubbleWithItems");
-        
+
+        makeLabelMultiple = function(elmt) {
+            Exhibit.jQuery("<strong>")
+                .append(elmt)
+                .appendTo(bubbleElmt);
+        };
+
+        if (typeof labelPointExpr !== "undefined" && labelPointExpr !== null) {
+            header = labelPointExpr.evaluateSingleOnItem(arrayOfItemIDs[0], uiContext.getDatabase()).value;
+
+            uiContext.format(header, "text", makeLabelMultiple);
+        }
+
         ul = Exhibit.jQuery("<ul>");
         makeItem = function(elmt) {
             Exhibit.jQuery("<li>")
@@ -57,13 +70,14 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
         for (i = 0; i < arrayOfItemIDs.length; i++) {
             uiContext.format(arrayOfItemIDs[i], "item", makeItem);
         }
+
         Exhibit.jQuery(bubbleElmt).append(ul);
     } else {
         itemLensDiv = Exhibit.jQuery("<div>").get(0);
         itemLens = uiContext.getLensRegistry().createLens(arrayOfItemIDs[0], itemLensDiv, uiContext);
         Exhibit.jQuery(bubbleElmt).append(itemLensDiv);
     }
-    
+
     return Exhibit.jQuery(bubbleElmt).get(0);
 };
 
@@ -78,11 +92,11 @@ Exhibit.ViewUtilities.fillBubbleWithItems = function(bubbleElmt, arrayOfItemIDs,
  */
 Exhibit.ViewUtilities.constructPlottingViewDom = function(
     div,
-    uiContext, 
+    uiContext,
     showSummary,
-    resizableDivWidgetSettings, 
+    resizableDivWidgetSettings,
     legendWidgetSettings
-) { 
+) {
     var dom = Exhibit.jQuery.simileDOM("string",
         div,
         '<div class="exhibit-views-header">' +
@@ -93,25 +107,25 @@ Exhibit.ViewUtilities.constructPlottingViewDom = function(
         '<div id="legendDiv"></div>',
         {}
     );
-    
+
     if (showSummary) {
         dom.collectionSummaryWidget = Exhibit.CollectionSummaryWidget.create(
-            {}, 
-            dom.collectionSummaryDiv, 
+            {},
+            dom.collectionSummaryDiv,
             uiContext
         );
     }
-    
+
     dom.resizableDivWidget = Exhibit.ResizableDivWidget.create(
         resizableDivWidgetSettings,
-        dom.resizableDiv, 
+        dom.resizableDiv,
         uiContext
     );
     dom.plotContainer = dom.resizableDivWidget.getContentDiv();
-    
+
     dom.legendWidget = Exhibit.LegendWidget.create(
         legendWidgetSettings,
-        dom.legendDiv, 
+        dom.legendDiv,
         uiContext
     );
 
@@ -121,7 +135,7 @@ Exhibit.ViewUtilities.constructPlottingViewDom = function(
             uiContext
         );
     }
-    
+
     dom.setUnplottableMessage = function(totalCount, unplottableItems) {
         Exhibit.ViewUtilities._setUnplottableMessage(dom, totalCount, unplottableItems, uiContext);
     };
@@ -150,7 +164,7 @@ Exhibit.ViewUtilities._setUnplottableMessage = function(dom, totalCount, unplott
         Exhibit.jQuery(div).hide();
     } else {
         Exhibit.jQuery(div).empty();
-    
+
         dom = Exhibit.jQuery.simileDOM("string",
             div,
             Exhibit.ViewUtilities.unplottableMessageFormatter(totalCount, unplottableItems),
