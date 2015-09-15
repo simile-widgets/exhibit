@@ -248,7 +248,9 @@ Exhibit.MapView._configure = function(view, configuration) {
         null;
 
     view._markerLabelExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabel);
-    view._markerLabelPointExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabelPoint);
+    if ( view._settings.markerLabelPoint != null) {
+        view._markerLabelPointExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabelPoint);
+    }
 };
 
 /**
