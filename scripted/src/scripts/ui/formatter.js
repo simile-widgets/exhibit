@@ -557,7 +557,12 @@ Exhibit.Formatter._DateFormatter.prototype.format = function(value, appender) {
  */
 Exhibit.Formatter._DateFormatter.prototype.formatText = function(value) {
     var date, text, segments, i, segment;
-    date = (value instanceof Date) ? value : Exhibit.DateTime.parseIso8601DateTime(value);
+    if (value instanceof Date)
+	date = value;
+    else if (typeof value === "number")
+	date = new Date(value);
+    else
+	date = Exhibit.DateTime.parseIso8601DateTime(value);
     if (typeof date === "undefined" || date === null) {
         return value;
     }

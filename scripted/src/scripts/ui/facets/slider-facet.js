@@ -31,6 +31,7 @@ Exhibit.SliderFacet._settingSpecs = {
     "horizontal":       { "type": "boolean", "defaultValue": true },
     "showMissing":      { "type": "boolean", "defaultValue": true},
     "inputText":        { type: "boolean", defaultValue: true },
+    "displayFormat":    { type: "text", defaultValue: "none" },
     "selection":        { "type": "float", "dimensions": 2}
 };
 
