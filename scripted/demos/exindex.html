@@ -52,13 +52,15 @@
         e.g. <a href="presidents/presidents.html?exhibit-dev=true">"presidents/presidents.html?exhibit-dev=true"</a>.</p>
 
       <div class="column" style="width: 200; float: left">
-        <div data-ex-role="facet" data-ex-expression=".Views"></div>
+        <div data-ex-role="facet" data-ex-expression=".Views"
+        data-ex-scroll="false"></div>
         <div data-ex-role="facet" data-ex-expression=".Facets"
-        data-ex-missing-label="none"></div>
+        data-ex-missing-label="none" data-ex-scroll="false"></div>
       </div>
 
       <div class="column" style="width: 200; float:right">
-        <div data-ex-role="facet" data-ex-expression=".Data"></div>
+        <div data-ex-role="facet" data-ex-expression=".Data"
+        data-ex-scroll="false"></div>
         <div data-ex-role="facet" data-ex-facet-label="Other Features"
              data-ex-expression=".Other" data-ex-show-missing="false"
              data-ex-scroll="false"></div>
@@ -132,7 +134,7 @@
         <td>Tile</td><td>List</td><td>json</td><td></td>
         <td>Test of Large-Data-Set Loading and Faceting performance</td></tr>
 
-      <tr><td>CSV</td><td>italian-soccer/italian-soccer.html</td>
+      <tr><td>Italian Soccer</td><td>italian-soccer/italian-soccer.html</td>
         <td>Map;Thumbnail;Tabular</td><td>List</td><td>TSV/CSV</td><td></td>
         <td>Demonstration of csv/tsv data loading (plus <a href="csv/tutorial.html">Tutorial</a>)</td></tr>
 
@@ -161,10 +163,25 @@
 
       <tr><td>Election 2008</td><td>polymap/election08.html</td>
         <td>Map</td>
-        <td>Color Coder</td>
+        <td>List</td>
+        <td>json</td>
+        <td>Color Coder;Polymap</td>
+        <td>A map of the 2008 election demonstrating polygonal
+        &ldquo;markers&rdquo; that can be color coded.</td>
+
+      <tr><td>Mushrooms</td><td>shrooms/shrooms.html</td>
+        <td>Thumbnail</td>
+        <td>Image;Text Search</td>
         <td>json</td>
         <td></td>
-        <td>A basic color-coded map of the 2008 election.</td>
+        <td>A demonstration of the image facet.</td>
+
+      <tr><td>Slider</td><td>shrooms/shrooms.html</td>
+        <td>List</td>
+        <td>Slider</td>
+        <td>json</td>
+        <td></td>
+        <td>A demonstration of the slider facet.</td>
 
     </table>
   </body>
