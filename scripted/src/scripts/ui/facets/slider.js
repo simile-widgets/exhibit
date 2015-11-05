@@ -322,13 +322,13 @@ Exhibit.SliderFacet.slider.prototype.updateHistogram = function(data) {
             histogram.appendChild(bar);
             bar.style.width = width+'px';
             bar.style.height = height+'px';
-            bar.style.display = height? '' : 'none'; //IE, even with font-size:0, 
-                                                     //will still render divs with height:0
-                                                     //as several pixels tall
             bar.style.position = 'absolute';
             bar.style.top = (maxHeight-height)+'px';
             bar.style.left = i*width+'px';
-            
+
+            bar.style.display = height? '' : 'none'; //IE, even with font-size:0, 
+                                                     //will still render divs with height:0
+                                                     //as several pixels tall
         }
     } else {                                   // vertical (height and width are essentially flipped)
         width = histogram.offsetHeight/n;  // width of each bar
@@ -338,16 +338,15 @@ Exhibit.SliderFacet.slider.prototype.updateHistogram = function(data) {
         histogram.innerHTML = ''; //clear histogram
         
         for (var i=0; i<n; i++){ // create new bars
-            height = Math.round(data[i]*ratio);
+            height = Math.ceil(data[i]*ratio);
             
             bar = document.createElement('div');
-            bar.style.height = width;
-            bar.style.width = height;
-            bar.style.position = 'absolute';
-            bar.style.left = 0;
-            bar.style.top = i*width;
-            
             histogram.appendChild(bar);
+            bar.style.height = width+'px';
+            bar.style.width = height+'px';
+            bar.style.position = 'absolute';
+            bar.style.left = '0px';
+            bar.style.top = i*width+'px';
         }
     }
 
