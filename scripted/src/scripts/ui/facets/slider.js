@@ -47,22 +47,18 @@ Exhibit.SliderFacet.slider = function(div, facet, precision) {
     }
 
     if (this._facet._settings.height) {
-        this._dom.bar.css("height", this._facet._settings.height+'px');
+        this._dom.bar.css("height", this._facet._settings.height);
     }
     if (this._facet._settings.width) {
-        this._dom.bar.css("width", this._facet._settings.width+'px');
+        this._dom.bar.css("width", this._facet._settings.width);
     }
         
     if (histogram) {
-        this._dom.histogram[0].style.height = this._dom.bar[0].offsetHeight+'px';
-        this._dom.histogram[0].style.width = this._dom.bar[0].offsetWidth+'px';
+        this._dom.histogram.css({height: "100%", width: "100%"});
     }
 
-    if (horizontal) {
-        this._scaleFactor = (this._maxRange.max - this._maxRange.min)/this._dom.bar[0].offsetWidth;
-    } else {
-        this._scaleFactor = (this._maxRange.max - this._maxRange.min)/this._dom.bar[0].offsetHeight;
-    }
+    this._scaleFactor = (this._maxRange.max - this._maxRange.min) /
+        this._dom.bar[0][horizontal? "offsetWidth" : "offsetHeight"];
 
     // init sliders
     this._slider1 = new Exhibit.SliderFacet.slider.slider(this._dom.slider1[0], this);
