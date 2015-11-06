@@ -38,31 +38,27 @@ Exhibit.SliderFacet.slider = function(div, facet, precision) {
                            width: '150px'});
     }
     else if (!horizontal && histogram) {      // vertical and histogram
-        this._dom.bar.css({height: '150px',
+        this._dom.bar.css({left: '14px', height: '150px',
                            width: '14px'});
     }
     else {                                    // vertical and no histogram
-        this._dom.bar.css({height: '150px',
+        this._dom.bar.css({left: '14px', height: '150px',
                            width: '1px'});
     }
 
     if (this._facet._settings.height) {
-        this._dom.bar.css("height", this._facet._settings.height+'px');
+        this._dom.bar.css("height", this._facet._settings.height);
     }
     if (this._facet._settings.width) {
-        this._dom.bar.css("width", this._facet._settings.width+'px');
+        this._dom.bar.css("width", this._facet._settings.width);
     }
         
     if (histogram) {
-        this._dom.histogram[0].style.height = this._dom.bar[0].offsetHeight+'px';
-        this._dom.histogram[0].style.width = this._dom.bar[0].offsetWidth+'px';
+        this._dom.histogram.css({height: "100%", width: "100%"});
     }
 
-    if (horizontal) {
-        this._scaleFactor = (this._maxRange.max - this._maxRange.min)/this._dom.bar[0].offsetWidth;
-    } else {
-        this._scaleFactor = (this._maxRange.max - this._maxRange.min)/this._dom.bar[0].offsetHeight;
-    }
+    this._scaleFactor = (this._maxRange.max - this._maxRange.min) /
+        this._dom.bar[0][horizontal? "offsetWidth" : "offsetHeight"];
 
     // init sliders
     this._slider1 = new Exhibit.SliderFacet.slider.slider(this._dom.slider1[0], this);
@@ -98,12 +94,8 @@ Exhibit.SliderFacet.slider.prototype._setSlider = function(slider, value) {
 
     slider.value = value;
     
-    if (this._horizontal) {
-        slider.div.style.left = ((value-this._maxRange.min)/this._scaleFactor-slider.offset) + 'px';
-    } else {
-        slider.div.style.top = ((value-this._maxRange.min)/this._scaleFactor-slider.offset) + 'px';
-    }
-
+    slider.div.style[this._horizontal ? "left" : "top"] =
+            ((value-this._maxRange.min)/this._scaleFactor-slider.offset) + 'px';
     this._setDisplays(slider);
 };
 
@@ -176,8 +168,12 @@ Exhibit.SliderFacet.slider.slider = function(div, self) { // individual slider h
         this.max = barEl.offsetHeight - this.offset; //slider's middle can reach right edge of bar
     }
 
-    if (self._facet._settings.histogram) {
-        this.div.style.top = (barEl.offsetHeight-4)+'px';
+    if (self._horizontal) {
+        if (self._facet._settings.histogram) {
+            this.div.style.top = (barEl.offsetHeight-4)+'px';
+        }
+    } else {
+        this.div.style.left = '-16px';
     }
 };
 
@@ -322,13 +318,13 @@ Exhibit.SliderFacet.slider.prototype.updateHistogram = function(data) {
             histogram.appendChild(bar);
             bar.style.width = width+'px';
             bar.style.height = height+'px';
-            bar.style.display = height? '' : 'none'; //IE, even with font-size:0, 
-                                                     //will still render divs with height:0
-                                                     //as several pixels tall
             bar.style.position = 'absolute';
             bar.style.top = (maxHeight-height)+'px';
             bar.style.left = i*width+'px';
-            
+
+            bar.style.display = height? '' : 'none'; //IE, even with font-size:0, 
+                                                     //will still render divs with height:0
+                                                     //as several pixels tall
         }
     } else {                                   // vertical (height and width are essentially flipped)
         width = histogram.offsetHeight/n;  // width of each bar
@@ -338,16 +334,15 @@ Exhibit.SliderFacet.slider.prototype.updateHistogram = function(data) {
         histogram.innerHTML = ''; //clear histogram
         
         for (var i=0; i<n; i++){ // create new bars
-            height = Math.round(data[i]*ratio);
+            height = Math.ceil(data[i]*ratio);
             
             bar = document.createElement('div');
-            bar.style.height = width;
-            bar.style.width = height;
-            bar.style.position = 'absolute';
-            bar.style.left = 0;
-            bar.style.top = i*width;
-            
             histogram.appendChild(bar);
+            bar.style.height = width+'px';
+            bar.style.width = height+'px';
+            bar.style.position = 'absolute';
+            bar.style.left = '0px';
+            bar.style.top = i*width+'px';
         }
     }
 
