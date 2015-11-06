@@ -38,11 +38,11 @@ Exhibit.SliderFacet.slider = function(div, facet, precision) {
                            width: '150px'});
     }
     else if (!horizontal && histogram) {      // vertical and histogram
-        this._dom.bar.css({height: '150px',
+        this._dom.bar.css({left: '14px', height: '150px',
                            width: '14px'});
     }
     else {                                    // vertical and no histogram
-        this._dom.bar.css({height: '150px',
+        this._dom.bar.css({left: '14px', height: '150px',
                            width: '1px'});
     }
 
@@ -94,12 +94,8 @@ Exhibit.SliderFacet.slider.prototype._setSlider = function(slider, value) {
 
     slider.value = value;
     
-    if (this._horizontal) {
-        slider.div.style.left = ((value-this._maxRange.min)/this._scaleFactor-slider.offset) + 'px';
-    } else {
-        slider.div.style.top = ((value-this._maxRange.min)/this._scaleFactor-slider.offset) + 'px';
-    }
-
+    slider.div.style[this._horizontal ? "left" : "top"] =
+            ((value-this._maxRange.min)/this._scaleFactor-slider.offset) + 'px';
     this._setDisplays(slider);
 };
 
@@ -172,8 +168,12 @@ Exhibit.SliderFacet.slider.slider = function(div, self) { // individual slider h
         this.max = barEl.offsetHeight - this.offset; //slider's middle can reach right edge of bar
     }
 
-    if (self._facet._settings.histogram) {
-        this.div.style.top = (barEl.offsetHeight-4)+'px';
+    if (self._horizontal) {
+        if (self._facet._settings.histogram) {
+            this.div.style.top = (barEl.offsetHeight-4)+'px';
+        }
+    } else {
+        this.div.style.left = '-16px';
     }
 };
 
