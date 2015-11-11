@@ -129,6 +129,8 @@ Exhibit.OrderedViewFrame.prototype._internalValidate = function() {
     if (this._possibleOrders !== null && this._possibleOrders.length === 0) {
         this._possibleOrders = null;
     }
+    //pagination is incompatible with grouping
+    //because groups may span a page, leading to confusing header counts
     if (this._settings.paginate) {
         this._settings.grouped = false;
     }
@@ -285,8 +287,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
             currentSize, 
             this._settings.abbreviatedCount, 
             this._settings.showAll, 
-            (!(someGroupsOccur && this._settings.grouped)
-             && !this._settings.paginate)
+            !this._settings.paginate
         );
     }
 };
@@ -862,7 +863,7 @@ Exhibit.OrderedViewFrame.prototype._removeOrder = function(index) {
 Exhibit.OrderedViewFrame.prototype._setShowAll = function(showAll) {
     this.parentHistoryAction(
         this._historyKey,
-        this.makeState(null, showAll),
+        this.makeState(null, showAll, null, null, null),
         Exhibit._(
             showAll ?
                 "%orderedViewFrame.showAllActionTitle" :
@@ -879,7 +880,7 @@ Exhibit.OrderedViewFrame.prototype._toggleGroup = function() {
 
     this.parentHistoryAction(
         this._historyKey,
-        this.makeState(null, !oldGrouped ? true : null, null, !oldGrouped),
+        this.makeState(null, null, null, !oldGrouped),
         Exhibit._(
             oldGrouped ?
                 "%orderedViewFrame.ungroupAsSortedActionTitle" :
