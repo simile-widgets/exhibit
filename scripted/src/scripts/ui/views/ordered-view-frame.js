@@ -233,7 +233,7 @@ Exhibit.OrderedViewFrame.prototype.initializeUI = function() {
  *
  */
 Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
-    var self, collection, database, i, originalSize, currentSize, hasSomeGrouping, currentSet, orderElmts, buildOrderElmt, orders;
+    var self, collection, database, i, originalSize, currentSize, someGroupsOccur, currentSet, orderElmts, buildOrderElmt, orders;
     self = this;
     collection = this._uiContext.getCollection();
     database = this._uiContext.getDatabase();
@@ -241,11 +241,11 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
     originalSize = collection.countAllItems();
     currentSize = collection.countRestrictedItems();
     
-    hasSomeGrouping = false;
+    someGroupsOccur = false;
     if (currentSize > 0) {
         currentSet = collection.getRestrictedItems();
         
-        hasSomeGrouping = this._internalReconstruct(currentSet);
+        someGroupsOccur = this._internalReconstruct(currentSet);
         
         /*
          *  Build sort controls
@@ -285,7 +285,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
             currentSize, 
             this._settings.abbreviatedCount, 
             this._settings.showAll, 
-            (!(hasSomeGrouping && this._settings.grouped)
+            (!(someGroupsOccur && this._settings.grouped)
              && !this._settings.paginate)
         );
     }
@@ -296,7 +296,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
  * @returns {Boolean}
  */
 Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
-    var self, settings, collection, caches, database, orders, itemIndex, hasSomeGrouping, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, expr, i, sortTop;
+    var self, settings, collection, caches, database, orders, itemIndex, someGroupsOccur, createItem, createGroup, processLevel, processNonNumericLevel, processNumericLevel, totalCount, pageCount, fromIndex, toIndex, expr, i, sortTop;
     self = this;
     settings = this._settings;
     database = this._uiContext.getDatabase();
@@ -305,15 +305,15 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     caches = this._caches;
     itemIndex = 0;
     
-    hasSomeGrouping = false;
+    someGroupsOccur = false;
     createItem = function(itemID) {
-        if ((itemIndex >= fromIndex && itemIndex < toIndex) || (hasSomeGrouping && settings.grouped)) {
+        if ((itemIndex >= fromIndex && itemIndex < toIndex) || (someGroupsOccur && settings.grouped)) {
             self.onNewItem(itemID, itemIndex);
         }
         itemIndex++;
     };
     createGroup = function(label, valueType, index) {
-        if ((itemIndex >= fromIndex && itemIndex < toIndex) || (hasSomeGrouping && settings.grouped)) {
+        if ((itemIndex >= fromIndex && itemIndex < toIndex) || (someGroupsOccur && settings.grouped)) {
             self.onNewGroup(label, valueType, index);
         }
     };
@@ -372,7 +372,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     processLevel = function(items, index) {
         var order, values, valueCounts, valueType
         , expr
-        , property, keys, grouped, k, key, keyItems, missingCount;
+        , property, keys, levelGroupsOccur, k, key, keyItems, missingCount;
 
         order = orders[index];
         expr = order.forward ? 
@@ -400,7 +400,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             processNumericLevel(items, index, values, valueType);
         
         /** all-grouping
-        grouped = true;
+        levelGroupsOccur = true;
         */
         // The idea here appears to be to avoid considering a set of
         // one item a group; but this ends up producing very confusing
@@ -412,11 +412,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         // when multiple orderings are in play.
 
         // mono-grouping
-        grouped = items.size() > keys.length + 
-            ((missingCount > 0) ? 1 : 0);
+        levelGroupsOccur = items.size() > 
+            keys.length + ((missingCount > 0) ? 1 : 0);
 
-        if (grouped) {
-            hasSomeGrouping = true;
+        if (levelGroupsOccur) {
+            someGroupsOccur = true;
         }
         // end mono-grouping
 
@@ -424,7 +424,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             key = keys[k];
             keyItems = keys.retrieveItems(key);
             if (keyItems.size() > 0) {
-                if (grouped && settings.grouped) {
+                if (levelGroupsOccur && settings.grouped) {
                     createGroup(key.display, valueType, index);
                 }
                 if (keyItems.size() > 1 && index < orders.length - 1) {
@@ -438,7 +438,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         
         if ((itemIndex < toIndex) && (missingCount > 0)) {
             items = caches[expr].getItemsMissingValue(items);
-            if (grouped && settings.grouped) {
+            if (levelGroupsOccur && settings.grouped) {
                 createGroup(Exhibit._("%general.missingSortKey"),
                             valueType, index);
             }
@@ -623,7 +623,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     
     processLevel(allItems, 0);
     
-    return hasSomeGrouping;
+    return someGroupsOccur;
 };
 
 /**
