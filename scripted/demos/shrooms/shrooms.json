@@ -168,7 +168,7 @@
 			"uri" :             "http://dbpedia.org/resource/Pluteus_cervinus",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "salmon",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/c/c1/Pluteus_cervinus_spores.jpg/250px-Pluteus_cervinus_spores.jpg",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/commons/f/f2/Pluteus_cervinus%2C_Deer_Shield%2C_UK.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        [
@@ -188,7 +188,7 @@
 				"blackish-brown",
 				"purple"
 			],
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Psilocybe_caerulipes_range_map.jpg/240px-Psilocybe_caerulipes_range_map.jpg",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/en/a/a2/Psilocybe_Caerulipes_in_woodland_.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        [
@@ -205,7 +205,7 @@
 			"uri" :             "http://dbpedia.org/resource/Giant_puffball",
 			"hymeniumtype" :    "gleba",
 			"sporeprintcolor" : "brown",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/2/2f/Giant_Puffball.jpg/200px-Giant_Puffball.jpg",
+			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Giant_Puffball.jpg/200px-Giant_Puffball.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "mycorrhizal",
 			"capshape" :        "no",
@@ -488,7 +488,7 @@
 				"blackish-brown",
 				"purple"
 			],
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/1/17/Psilocybe_cyanescens_range-map.png/240px-Psilocybe_cyanescens_range-map.png",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/commons/b/b2/2012-12-05_Psilocybe_cyanescens_Wakef_290262.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        "flat",
@@ -641,7 +641,7 @@
 			"uri" :             "http://dbpedia.org/resource/Gymnopilus_sapineus",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "reddish-brown",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Gymnopilus.sapineus.ddrex.jpg/250px-Gymnopilus.sapineus.ddrex.jpg",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/en/3/3b/Gymnopilus.sapineus.ddrex.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        "convex",
@@ -684,7 +684,7 @@
 			"uri" :             "http://dbpedia.org/resource/Gymnopilus_purpuratus",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "orange",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Gymnopilus.australian.02.jpg/250px-Gymnopilus.australian.02.jpg",
+			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Gymnopilus.australian.02.jpg/250px-Gymnopilus.australian.02.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        "convex",
@@ -769,7 +769,7 @@
 			"uri" :             "http://dbpedia.org/resource/Gymnopilus_luteofolius",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "reddish-brown",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/b/b2/Gymnopilus_luteofolius.jpg/250px-Gymnopilus_luteofolius.jpg",
+			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Gymnopilus_luteofolius.jpg/250px-Gymnopilus_luteofolius.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        "convex",
@@ -806,7 +806,7 @@
 			"uri" :             "http://dbpedia.org/resource/Dermocybe_austroveneta",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "brown",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Dermocybe_austroveneta.jpg/200px-Dermocybe_austroveneta.jpg",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/commons/2/2c/Cortinarius_austrovenetus_45928.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "mycorrhizal",
 			"capshape" :        "convex",
@@ -838,7 +838,7 @@
 			"uri" :             "http://dbpedia.org/resource/Psilocybe_australiana",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "purple brown",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/5/51/Paustraliana2.jpg/200px-Paustraliana2.jpg",
+			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Paustraliana2.jpg/200px-Paustraliana2.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        [
@@ -921,7 +921,7 @@
 				"brown",
 				"reddish brown"
 			],
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Conocybe_filaris.jpg/260px-Conocybe_filaris.jpg",
+			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Conocybe_filaris.jpg/260px-Conocybe_filaris.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        [
@@ -938,7 +938,7 @@
 			"uri" :             "http://dbpedia.org/resource/Psilocybe_cubensis",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "purple",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Psilocybe-cubensis-range-map.png/300px-Psilocybe-cubensis-range-map.png",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/commons/e/e7/Cubensis.natural.habitat-2.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        [
@@ -979,7 +979,7 @@
 			"uri" :             "http://dbpedia.org/resource/Psilocybe_atlantis",
 			"hymeniumtype" :    "gills",
 			"sporeprintcolor" : "purple brown",
-			"depiction" :       "http://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Psilocybe_atlantis_range.png/100px-Psilocybe_atlantis_range.png",
+			"depiction" :       "https://upload.wikimedia.org/wikipedia/commons/a/a4/Psilocybe.atlantis.one.jpg",
 			"type" :            "Mushroom",
 			"ecologicaltype" :  "saprotrophic",
 			"capshape" :        [
