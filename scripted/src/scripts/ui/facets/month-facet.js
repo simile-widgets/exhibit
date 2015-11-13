@@ -448,10 +448,8 @@ Exhibit.MonthFacet.prototype.renderIterator = function() {
         self._goNext();
         self._notifyCollection();
     };
-    $imageURL = "HEAD/scripts/ui/facets/images/go-previous.png";
-    $prevLink = $('<img />', {alt: "Previous", src: $imageURL});
-    $imageURL = "HEAD/scripts/ui/facets/images/go-next.png";
-    $nextLink = $('<img />', {alt: "Next", src: $imageURL});
+    $prevLink = $('<span />', {alt: "Previous", "class": "timegrid-previous"});
+    $nextLink = $('<span />', {alt: "Next", "class": "timegrid-next"});
 
     $nextLink.bind("click", function (){
         makeNextCallback();
