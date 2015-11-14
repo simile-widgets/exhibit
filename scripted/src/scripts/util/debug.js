@@ -55,6 +55,9 @@ Exhibit.Debug.warn = function(msg) {
         typeof window.console["warn"] === "function") {
         f = function(msg2) {
             console.warn(msg2);
+            if (msg2.stack) {//say more
+                console.warn(msg2.stack)
+            }
         };
     } else {
         f = function(msg2) {

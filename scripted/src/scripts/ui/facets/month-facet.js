@@ -56,6 +56,7 @@ Exhibit.MonthFacet = function(containerElmt, uiContext, configElmt, timegridFace
 
 Exhibit.MonthFacet.prototype.initializeUI = function(dom, settings, containerElmt, uiContext) {
     // Using layouts and other concurrent week/month abilities
+    var $=Exhibit.jQuery;
     this._layoutClass = this._layoutClass || new Exhibit.TimegridFacet.Layout(containerElmt, uiContext);
     this._eventSource = this._eventSource || new Exhibit.TimegridFacet.EventSource();
     Exhibit.jQuery.extend(this, this._layoutClass, this._eventSource);
@@ -166,6 +167,7 @@ Exhibit.MonthFacet.prototype._computeDimensions = function() {
 Exhibit.MonthFacet.prototype.renderEvents = function(doc) {
     var eventContainer = doc.createElement("div");
     var labelContainer = doc.createElement("div");
+    var $=Exhibit.jQuery;
     // Events
     $(eventContainer).addClass("timegrid-events");
     // Dates in the month
@@ -190,6 +192,7 @@ Exhibit.MonthFacet.prototype.renderEvents = function(doc) {
 
 // Render the list of events from the feed per day
 Exhibit.MonthFacet.prototype._renderEventList = function(evts, x, y, n, m) {
+    var $=Exhibit.jQuery;
     var jediv = $("<div></div>").addClass("timegrid-month-cell");
     $(jediv).attr("classid", y*7 + x);
     var map = Array.prototype.map;
@@ -275,6 +278,7 @@ Exhibit.MonthFacet.prototype._renderEventList = function(evts, x, y, n, m) {
 };
 
 Exhibit.MonthFacet.prototype._renderMonthLabels = function() {
+    var $=Exhibit.jQuery;
     var self = this;
     // Place the month label on the calendar and centered
     var monthString = this._monthStarts[0].date.getMonthName();
@@ -436,6 +440,7 @@ Exhibit.MonthFacet.prototype.applyRestrictions = function(restrictions) {
  * Renders the go back and go forward buttons
  */
 Exhibit.MonthFacet.prototype.renderIterator = function() {
+    var $=Exhibit.jQuery;
     this._div = $('<div></div>').addClass('timegrid-iterator');
     $(this._div).css("margin-top", this._tabHeight || 18 + "px");
 
@@ -591,6 +596,7 @@ Exhibit.MonthFacet.prototype._computeFacet = function(items) {
  on calendar
  */
 Exhibit.MonthFacet.prototype.renderSwitchTab = function(container) {
+    var $=Exhibit.jQuery;
     if ($(container).find(".timegrid-switch-tab").length == 0) {
         var self = this;
         var tabDiv = $('<div></div>').addClass('timegrid-switch-tab');
@@ -640,6 +646,7 @@ Exhibit.MonthFacet.prototype.renderSwitchTab = function(container) {
  and vice versa.
  */
 Exhibit.MonthFacet.prototype.switchToWeek = function(view, container) {
+    var $=Exhibit.jQuery;
     this._valueSet = new Exhibit.Set();
     this._notifyCollection();
 
@@ -654,8 +661,9 @@ Exhibit.MonthFacet.prototype.switchToWeek = function(view, container) {
  * @param {Array} entries
  */
 Exhibit.MonthFacet.prototype._constructBody = function(entries) {
-    this._events = [];
+    var $=Exhibit.jQuery;
     var containerDiv, entry, i, labels, days, starts, ends, colors, j, k, day, dayArray, formats;
+    this._events = [];
     containerDiv = this._dom.valuesContainer;
     Exhibit.jQuery(containerDiv).empty();
 

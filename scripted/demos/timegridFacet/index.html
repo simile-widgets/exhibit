@@ -10,10 +10,7 @@
     <title>Calendar Facet</title>
 
 
-    <!-- Custom CSS -->
-    <link href="css/scrolling-nav.css" rel="stylesheet" type="text/css">
 
-    <script src="../api/lib/jquery-1.11.3.min.js"></script>
     <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/exhibit-api.js -->
     <script src="../api/exhibit-api.js"></script>
 
@@ -22,50 +19,9 @@
 </head>
 
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<body>
+                    <div data-ex-role="exhibit-collection" data-ex-item-types="Event"></div>
 
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#page-top">Timegrid Facet</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
-                    <li class="page-scroll">
-                        <a href="#about">About and Sources</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <section id="intro" class="intro-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 style="color:#800000;">Weekly Calendar Facet</h1>
-                    <h2 style>Search for a Event:</h2>
-                    <div class="text_search" data-ex-role="facet" data-ex-facet-class="TextSearch" data-ex-expressions="value, .label, .description, .startDate, .endDate .startTime, .endTime" style="width:50%; margin-left:25%"></div></br></br>
-                    <br>
-                    <div data-ex-role="exhibit-view"
-			    data-ex-orders=".label"
-			    data-ex-possible-orders=".courseNumber, .label,  .semester, .offering, .level, .category, .units, .total-units"
-			    data-ex-show-all="false"
-			    data-ex-grouped="false"
-                            style="float: right; display:inline-block"></div>
                     <div data-ex-role="exhibit-lens" class="event-lens" data-ex-item-types="Event">
                         <div class="event-title" data-ex-classid-content = ".color" style="background-color: #B0E2FF">
                             <span data-ex-content=".label" class="event-name"></span>
@@ -78,10 +34,27 @@
                             <div><b>Displayed:</b> <span data-ex-content=".display"></span></div>
                         </div>
                     </div>
-		    <div data-ex-role="exhibit-facet" data-ex-facet-class="Timegrid" id='timegrid-facet' data-ex-mini="false" data-ex-daystart="8" data-ex-dayend="22" data-ex-startdate = "08/1/2014" data-ex-gridwidth="600" data-ex-gridheight="600" data-ex-default-facet="week"></div>
-                    <div data-ex-role="exhibit-collection" data-ex-item-types="Event"></div>
-            </div>
-        </div>
+
+    <section id="intro" class="intro-section">
+                <div>
+                    <h1>Weekly Calendar Facet</h1>
+                    <h2 style="width:50%; margin-left:25%">Search for an Event:</h2>
+                    <div class="text_search" data-ex-role="facet" data-ex-facet-class="TextSearch" data-ex-expressions="value, .label, .description, .startDate, .endDate .startTime, .endTime" style="width:50%; margin-left:25%"></div>
+
+                    <div data-ex-role="exhibit-view"
+			    data-ex-orders=".label"
+			    data-ex-possible-orders=".courseNumber, .label,  .semester, .offering, .level, .category, .units, .total-units"
+			    data-ex-show-all="false"
+			    data-ex-grouped="false"
+                            style="width:45%;display:inline-block;vertical-align:top"></div>
+		    <div data-ex-role="exhibit-facet"
+		    data-ex-facet-class="Timegrid" id='timegrid-facet'
+		    data-ex-mini="false" data-ex-daystart="8"
+		    data-ex-dayend="22" data-ex-startdate =
+		    "08/1/2014" data-ex-gridwidth="600"
+		    data-ex-gridheight="600"
+		    data-ex-default-facet="week"
+		    style="width:45%;display:inline-block;vertical-align:top"></div> 
     </section>
 
     <section id="about" class="about-section">
@@ -126,12 +99,7 @@
         </div>
     </section>
 
-    <!-- Core JavaScript Files -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.easing.min.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="js/scrolling-nav.js"></script>
 </body>
 
 </html>

@@ -152,6 +152,7 @@ Exhibit.WeekFacet.prototype._computeEndTime = function(date) {
  *  Makes the week interface
  */
 Exhibit.WeekFacet.prototype.initializeUI = function(dom, settings, containerElmt, uiContext) {
+    var $=Exhibit.jQuery;
     this._eventSource = this._eventSource || new Exhibit.TimegridFacet.EventSource();
     this._layoutClass = this._layoutClass || new Exhibit.TimegridFacet.Layout(containerElmt, uiContext);
     Exhibit.jQuery.extend(this, this._layoutClass, this._eventSource);
@@ -329,6 +330,7 @@ Exhibit.WeekFacet.prototype._computeFacet = function(items) {
  on calendar
  */
 Exhibit.WeekFacet.prototype.renderSwitchTab = function(container) {
+    var $=Exhibit.jQuery;
     if ($(container).find(".timegrid-switch-tab").length == 0) {
         var self = this;
         var tabDiv = $('<div></div>').addClass('timegrid-switch-tab');
@@ -378,6 +380,7 @@ Exhibit.WeekFacet.prototype.renderSwitchTab = function(container) {
  and vice versa.
  */
 Exhibit.WeekFacet.prototype.switchToMonth = function(view, container) {
+    var $=Exhibit.jQuery;
     this._valueSet = new Exhibit.Set();
     this._notifyCollection();
 
@@ -392,10 +395,11 @@ Exhibit.WeekFacet.prototype.switchToMonth = function(view, container) {
  * @param {Array} entries
  */
 Exhibit.WeekFacet.prototype._constructBody = function(entries) {
-    this._events = [];
     var containerDiv, entry, i, labels, days, starts, ends, colors, dayMap, j, k, day, dayArray, formats;
+    var $=Exhibit.jQuery;
+    this._events = [];
     containerDiv = this._dom.valuesContainer;
-    Exhibit.jQuery(containerDiv).empty();
+    $(containerDiv).empty();
 
     $(containerDiv).addClass('week-default');
 
@@ -520,7 +524,7 @@ Exhibit.WeekFacet.prototype.applyRestrictions = function(restrictions) {
 
 Exhibit.WeekFacet.prototype.renderEvents = function(doc) {
     var eventContainer = doc.createElement("div");
-    $(eventContainer).addClass("timegrid-events");
+    var $=Exhibit.jQuery;
     var currentEvents = {};
     var currentCount = 0;
     if (this._endpoints) {
@@ -564,6 +568,7 @@ Exhibit.WeekFacet.prototype.renderEvents = function(doc) {
 };
 
 Exhibit.WeekFacet.prototype._renderEvent = function(evt, x, y) {
+    var $=Exhibit.jQuery;
     var ediv = document.createElement('div');
     var tediv = document.createElement('div');
 
@@ -877,7 +882,6 @@ Exhibit.WeekFacet.prototype.stateDiffers = function(state) {
  * Renders the go back and go forward buttons
  */
 Exhibit.WeekFacet.prototype.renderIterator = function() {
-    this._div = $('<div></div>').addClass('timegrid-iterator');
 
     var self = this;
     var makePrevCallback = function() {
@@ -888,6 +892,8 @@ Exhibit.WeekFacet.prototype.renderIterator = function() {
         self._goNext();
         self._notifyCollection();
     };
+    var $=Exhibit.jQuery;
+    this._div = $('<div></div>').addClass('timegrid-iterator');
     $prevLink = $('<span />', {alt: "Previous", "class": "timegrid-previous"});
     $nextLink = $('<span />', {alt: "Next", "class": "timegrid-next"});
 

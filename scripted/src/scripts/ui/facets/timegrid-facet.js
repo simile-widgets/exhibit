@@ -233,6 +233,7 @@ Exhibit.TimegridFacet.EventSource.EventPrototype = function(dayArray, startTime,
         text, description, image, link, icon, color, textColor, dateFormat, display) {
     var id = "e" + Math.floor(Math.random() * 1000000);
     var days = new DStructs.Array(); days.addAll(dayArray);
+    var $=Exhibit.jQuery;
 
     this.getDays = function() { return days; };
     this.getStartTime = function() { return startTime; };
@@ -468,6 +469,8 @@ Exhibit.TimegridFacet.Layout.prototype.renderGridlines = function() {
     };
     
     var self = this;
+
+    var $=Exhibit.jQuery;
     
     var onSelect = function(evt) {
         var time, i, entry, background, displayed, events;
@@ -706,7 +709,7 @@ Exhibit.TimegridFacet.Layout.prototype.renderXLabels = function() {
         label.innerHTML = labels[i];
         label.style.width = this._xCellWidth + 'px';
         label.style.left = (i * this._xCellWidth) + 'px';
-        $(label).css("border-right", "1px solid #a7a37e");
+        Exhibit.jQuery(label).css("border-right", "1px solid #a7a37e");
         xLabelsDiv.appendChild(label);
     }
     
@@ -756,6 +759,8 @@ Exhibit.TimegridFacet.Layout.prototype.renderYLabels = function() {
  * Renders the grid
  */
 Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
+    var $=Exhibit.jQuery;
+    
     container = $(container);
     if (this._mini) {
         this._scrollwidth = 0;
@@ -829,6 +834,7 @@ Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
 };
 
 Exhibit.TimegridFacet.Layout.prototype.getPrettyBox = function(container) {
+    var $=Exhibit.jQuery;
     var checkOldIE = function() {
         "use strict";
 
@@ -883,6 +889,7 @@ Exhibit.TimegridFacet.EventSource.Event = function(
         start, end, latestStart, earliestEnd, instant,
         text, description, image, link,
         icon, color, textColor, display) {
+    var $=Exhibit.jQuery;
 
     this._id = "e" + Math.floor(Math.random() * 1000000);
 
@@ -1076,7 +1083,7 @@ Exhibit.TimegridFacet.Layout.prototype.intervaltoString = function() {
 
 Exhibit.TimegridFacet.Layout.prototype.setLayouts = function(layouts) {
     this._layouts = layouts;
-    this._titles = $.map(this._layouts, function(l) { return l.title; });
+    this._titles = Exhibit.jQuery.map(this._layouts, function(l) { return l.title; });
     //this._tabSet.setLayouts(this._titles, this._layouts);
 };
 
