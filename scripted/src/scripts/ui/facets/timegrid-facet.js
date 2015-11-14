@@ -15,7 +15,7 @@ Exhibit.TimegridFacet = function (containerElmt, uiContext, configElmt) {
     this._uiContext = uiContext;
     this._tabHeight = 18;
     this._configElmt = configElmt;
-    
+    this._accessors= {};
     this.addSettingSpecs(Exhibit.TimegridFacet._settingSpecs);
 }
 
@@ -35,6 +35,18 @@ Exhibit.TimegridFacet._settingSpecs = {
     "mini":             { "type": "boolean", "defaultValue": false },
     "defaultFacet":     { "type": "text"}
 };
+
+Exhibit.TimegridFacet._accessorSpecs = [
+    {accessorName: "getStartTime", attributeName: "startTime", type: "text"},
+    {accessorName: "getEndTime",   attributeName: "endTime",   type: "text"},
+    {accessorName: "getLabel",     attributeName: "label",     type: "text"},
+    {accessorName: "getRecurring", attributeName: "recurring", type: "text"},
+    {accessorName: "getStartDate", attributeName: "startDate", type: "text"},
+    {accessorName: "getEndDate",   attributeName: "endDate",   type: "text"},
+    {accessorName: "getDisplay",   attributeName: "display",   type: "text"},
+    {accessorName: "getColor",     attributeName: "color",     type: "text"}
+];
+
 
 /**
  * @param {Exhibit.TimegridFacet} facet
@@ -112,6 +124,8 @@ Exhibit.TimegridFacet.createFromDOM = function(configElmt, containerElmt, uiCont
     );
 
     Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
+
+    Exhibit.SettingsUtilities.createAccessorsFromDOM(configElmt, Exhibit.TimegridFacet._accessorSpecs, facet._accessors);
 
     facet.setExpression(Exhibit.ExpressionParser.parse("selected"));
     facet.setExpressionString("selected");

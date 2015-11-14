@@ -516,24 +516,52 @@ Exhibit.MonthFacet.prototype.update = function (items) {
  @param items collection items
 */
 Exhibit.MonthFacet.prototype._computeFacet = function(items) {
-    var entries, i, item, label, event, allItemsList, days, j, label, day, obj;
+    var entries, i, item, label, event, allItemsList, days, j, label,
+    day, obj, accessors, database, setIf;
+
     entries = [];
     this._timeMap = {};
+
+    accessors = this._timegridFacet._accessors;
+    database = this._database;
+    setIf = function(accessor, field) {
+        if ((typeof(accessor) !== "undefined") && accessor !== null) {
+            (accessor)(item, database, function (v) {
+                if (v!=null) {
+                    event[field]=v;
+                }
+            })
+        }
+    };
     
     this._possibleDays = {};
     allItemsList = items.toArray();
     for (i in allItemsList) {
         item = allItemsList[i];
-        var obj = this._database.getObject(item, "startTime");
+        if (typeof(accessors.getStartTime) !== "undefined") {
+            accessors.getStartTime(item, database, function(v) {
+                if (v !== null) {
+                    obj=v;
+                }
+            });
+        }
         if (!this._timeMap[item] && obj) {
             event = {};
-            event.label = this._database.getObject(item, "label");
-            event.days = this._database.getObject(item, "recurring");
-            event.startDate = this._database.getObject(item, "startDate") || new Date().toDateString();
-            event.endDate = this._database.getObject(item, "endDate") || new Date().setFullYear(new Date().getFullYear() + 1).toDateString();
-            event.startTime = this._database.getObject(item, "startTime");
-            event.endTime = this._database.getObject(item, "endTime");
-            event.color = this._database.getObject(item, "color") || "#104E8B";
+            setIf(accessors.getLabel, "label");
+            setIf(accessors.getRecurring, "days");
+            setIf(accessors.getStartDate, "startDate");
+            setIf(accessors.getEndDate, "endDate");
+            setIf(accessors.getStartTime, "startTime");
+            setIf(accessors.getEndTime,   "endTime");
+            setIf(accessors.getColor, "color");
+            setIf(accessors.getDisplay, "display");
+            event.startDate = event.startDate || new Date().toDateString();
+            if (! event.endDate) {
+                event.endDate = new Date();
+                event.endDate.setFullYear(new Date().getFullYear+1);
+                event.endDate=event.endData.toString();
+            }
+            event.color = event.color || "#104E8B";
             
             if (event.startDate.indexOf("T") > -1) {
                 startTime = event.startDate.split("T");
