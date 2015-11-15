@@ -1,5 +1,5 @@
 /**
- @fileOverview A facet for a customized Exhibit month
+ @Fileoverview A facet for a customized Exhibit month
  @fileoverview
  This is where the monthly layout is defined.  The layout is designed to
  resemble the equivalent Google Calendar view.
@@ -71,15 +71,15 @@ Exhibit.MonthFacet.prototype.initializeUI = function(dom, settings, containerElm
 
     this._dom = dom;
     if ($(this._containerElmt).css("height")) {
-        this._gridheight = parseInt(returnNums($(this._containerElmt).css("height")));
+        this._gridHeight = parseInt(returnNums($(this._containerElmt).css("height")));
     }
     if ($(this._containerElmt).css("width")) {
-        this._gridwidth = parseInt(returnNums($(this._containerElmt).css("width")));
+        this._gridWidth = parseInt(returnNums($(this._containerElmt).css("width")));
     }
 
-    // Adjust gridheight and gridwidth based on passed in parameters
-    this._gridheight = this._settings.gridheight;
-    this._gridwidth = this._settings.gridwidth;
+    // Adjust gridHeight and gridWidth based on passed in parameters
+    this._gridHeight = this._settings.gridHeight;
+    this._gridWidth = this._settings.gridWidth;
 
     this._title = this._settings.title || this._title;
     if (this._settings.xCellWidth) {
@@ -96,14 +96,14 @@ Exhibit.MonthFacet.prototype.initializeUI = function(dom, settings, containerElm
 
 Exhibit.MonthFacet.prototype.initializeGrid = function() {
     // Start the calendar at the specified start/end date or current date if not specified
-    if (this._settings.enddate) {
-        this._endTime = this._endTime || Date.parseString(this._settings.enddate);
+    if (this._settings.displayEndDate) {
+        this._endTime = this._endTime || Date.parseString(this._settings.displayEndDate);
         this._endTime.setHours(0);
         this._startTime = this._computeStartTime(this._endTime);
     }
     
-    if (this._settings.startdate) {
-        this._startTime = this._startTime || Date.parseString(this._settings.startdate);
+    if (this._settings.displayStartDate) {
+        this._startTime = this._startTime || Date.parseString(this._settings.displayStartDate);
         this._startTime.setHours(0);
         this._endTime = this._computeEndTime(this._startTime);
     }
@@ -286,7 +286,7 @@ Exhibit.MonthFacet.prototype._renderMonthLabels = function() {
     mDiv.addClass('timegrid-month-label');
     mDiv.css('margin-top', this._yCellWidth * this._monthStarts[0].i + "px");
     var height = this._monthStarts[0].height * this._yCellWidth;
-    var fontSize = this._gridwidth / 1000;
+    var fontSize = this._gridWidth / 1000;
     mDiv.css("font-size", fontSize + "em");
     mDiv.height(height + "px");
     mDiv.children().css('line-height', height + "px");
@@ -559,7 +559,7 @@ Exhibit.MonthFacet.prototype._computeFacet = function(items) {
             if (! event.endDate) {
                 event.endDate = new Date();
                 event.endDate.setFullYear(new Date().getFullYear+1);
-                event.endDate=event.endData.toString();
+                event.endDate=event.endDate.toString();
             }
             event.color = event.color || "#104E8B";
             
@@ -642,7 +642,7 @@ Exhibit.MonthFacet.prototype.renderSwitchTab = function(container) {
         .addClass("timegrid-rounded")
         .css({
             "width": 100 + "px",
-            "margin-left": this._gridwidth + this._yLabelWidth - 100 + "px",
+            "margin-left": this._gridWidth + this._yLabelWidth - 100 + "px",
             "float": "left",
             "position": "relative"
         })

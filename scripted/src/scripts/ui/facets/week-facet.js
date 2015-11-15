@@ -70,14 +70,14 @@ Exhibit.WeekFacet = function(containerElmt, uiContext, configElmt, timegridFacet
  * Makes the week facet
  */
 Exhibit.WeekFacet.prototype.initializeGrid = function() {
-    if (this._settings.startdate) {
-        this._startTime = this._startTime || Date.parseString(this._settings.startdate);
+    if (this._settings.displayStartDate) {
+        this._startTime = this._startTime || Date.parseString(this._settings.displayStartDate);
         this._startTime.setHours(0);
         this._endTime = this._computeEndTime(this._startTime);
     }
 
-    if (this._settings.enddate) {
-        this._endTime = this._endTime || Date.parseString(this._settings.enddate);
+    if (this._settings.displayEndDate) {
+        this._endTime = this._endTime || Date.parseString(this._settings.displayEndDate);
         this._endTime.setHours(0);
         this._startTime = this._computeStartTime(this._endTime);
     }
@@ -167,18 +167,18 @@ Exhibit.WeekFacet.prototype.initializeUI = function(dom, settings, containerElmt
     this._dom = dom;
     this._settings = settings;
     if ($(this._containerElmt).css("height")) {
-        this._gridheight = parseInt(returnNums($(this._containerElmt).css("height")));
+        this._gridHeight = parseInt(returnNums($(this._containerElmt).css("height")));
     }
     if ($(this._containerElmt).css("width")) {
-        this._gridwidth = parseInt(returnNums($(this._containerElmt).css("width")));
+        this._gridWidth = parseInt(returnNums($(this._containerElmt).css("width")));
     }
 
-    this._gridheight = this._settings.gridheight;
-    this._gridwidth = this._settings.gridwidth;
+    this._gridHeight = this._settings.gridHeight;
+    this._gridWidth = this._settings.gridWidth;
 
     this._title = this._settings.title || this._title;
-    this._dayEnd = this._settings.dayend || 24;
-    this._dayStart = this._settings.daystart || 0;
+    this._dayEnd = this._settings.dayEnd || 24;
+    this._dayStart = this._settings.dayStart || 0;
     this._ySize  = this._dayEnd - this._dayStart;
     if (this._settings.xCellWidth) {
         this._xCellWidth = this._settings.xCellWidth;
@@ -253,7 +253,7 @@ Exhibit.WeekFacet.prototype._computeFacet = function(items) {
             if (! event.endDate) {
                 event.endDate = new Date();
                 event.endDate.setFullYear(new Date().getFullYear+1);
-                event.endDate=event.endData.toString();
+                event.endDate=event.endDate.toString();
             }
             event.color = event.color || "#104E8B";
             
@@ -375,7 +375,7 @@ Exhibit.WeekFacet.prototype.renderSwitchTab = function(container) {
         .addClass("timegrid-rounded")
         .css({
             "width": 100 + "px",
-            "margin-left": this._gridwidth + this._yLabelWidth - 100 + "px",
+            "margin-left": this._gridWidth + this._yLabelWidth - 100 + "px",
             "float": "left",
             "position": "relative"
         })

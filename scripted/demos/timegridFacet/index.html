@@ -7,19 +7,25 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Calendar Facet</title>
-
-
+    <title>SIMILE Widgets | Exhibit | Examples | Timegrid Facet</title>
 
     <!-- Replace the URL here with http://api.simile-widgets.org/exhibit/current/exhibit-api.js -->
     <script src="../api/exhibit-api.js"></script>
 
+   <link rel='stylesheet' href='http://www.simile-widgets.org/styles/common.css' type='text/css' />
+ 
     <link rel="exhibit/data" type="application/json" href="schema.js" />
     <link rel="exhibit/data" type="application/json" href="academic.js" />
 </head>
 
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 <body>
+    <ul id="path">
+      <li><a href="http://www.simile-widgets.org/">SIMILE Widgets</a></li>
+      <li><a href="http://www.simile-widgets.org/exhibit/">Exhibit</a></li>
+      <li><a href="..">Demos</a></li>
+      <li><span>Timegrid facet</span></li>
+    </ul>
                     <div data-ex-role="exhibit-collection" data-ex-item-types="Event"></div>
 
                     <div data-ex-role="exhibit-lens" class="event-lens" data-ex-item-types="Event">
@@ -37,7 +43,10 @@
 
     <section id="intro" class="intro-section">
                 <div>
-                    <h1>Weekly Calendar Facet</h1>
+                    <h1>Timegrid Facet (Weekly/Monthly)</h1>
+                    This view demonstrates the timegrid
+                    facet. Instructions about its use are below the example.
+                    
                     <h2 style="width:50%; margin-left:25%">Search for an Event:</h2>
                     <div class="text_search" data-ex-role="facet" data-ex-facet-class="TextSearch" data-ex-expressions="value, .label, .description, .startDate, .endDate .startTime, .endTime" style="width:50%; margin-left:25%"></div>
 
@@ -46,7 +55,7 @@
 			    data-ex-possible-orders=".courseNumber, .label,  .semester, .offering, .level, .category, .units, .total-units"
 			    data-ex-show-all="false"
 			    data-ex-grouped="false"
-                            style="width:45%;display:inline-block;vertical-align:top"></div>
+                            style="width:40%;margin-right:2%;display:inline-block;vertical-align:top"></div>
 		    <div data-ex-role="exhibit-facet"
 		    data-ex-facet-class="Timegrid" id='timegrid-facet'
                     data-ex-label=".label"
@@ -57,12 +66,13 @@
                     data-ex-color=".color"
                     data-ex-display=".display"
                     data-ex-recurring=".recurring"                
-		    data-ex-mini="false" data-ex-daystart="8"
-		    data-ex-dayend="22" data-ex-startdate =
-		    "08/1/2014" data-ex-gridwidth="600"
-		    data-ex-gridheight="600"
+		    data-ex-mini="false" data-ex-day-start="8"
+		    data-ex-day-end="22" 
+                    data-ex-display-start-date="08/1/2014" 
+                    data-ex-grid-width="600"
+		    data-ex-grid-height="600"
 		    data-ex-default-facet="week"
-		    style="width:45%;display:inline-block;vertical-align:top"></div> 
+		    style="width:45%;margin-left:2%;display:inline-block;vertical-align:top"></div> 
     </section>
 
     <section id="about" class="about-section">
@@ -74,28 +84,32 @@
                     <p>The week facet was developed as part of MIT's <a href = "http://www.simile-widgets.org/exhibit3/">Exhibit 3.0</a> framework. It allows you to display weekly events on a calendar as
                     well as show details about these events with the rest of Exhibit's functionality.</p>
                     <h2>How to Use</h2>
-                    <h4>To use the week facet, include this facet using <br /> <br /> <pre>data-ex-facet-class="Timegrid"</pre> <br /> <br /> You JSON file should include the following fields (in addition to the fields required by Exhibit): </h4><br />
+                    <h4>To use the week facet, include this facet
+                    using <br />
+                    <br /> <pre>data-ex-facet-class="Timegrid"</pre>
+                    <br /> <br /> You JSON file should include fields
+                    specifying expressions for the following attributes (in addition to the fields required by Exhibit): </h4><br />
                     <p><ol style="text-align: left">
-                        <li><b>startDate</b>: Date in which your activity starts. If it is a recurring event, then all dates within the startDate/endDate range may display the event. If your event is not recurring, make the startDate and endDate the same.</li>
-                        <li><b>endDate</b>: The ending date for your event.</li>
-                        <li><b>startTime</b>: The time your event starts.</li>
+                        <li><b>data-ex-startDate</b>: Date in which your activity starts. If it is a recurring event, then all dates within the startDate/endDate range may display the event. If your event is not recurring, make the startDate and endDate the same.</li>
+                        <li><b>data-ex-endDate</b>: The ending date for your event.</li>
+                        <li><b>data-ex-startTime</b>: The time your event starts.</li>
                         <li><b>endTime</b>: The time your event ends.</li>
-                        <li><b>display</b>: Whether the calendar will display your event. Enter either "true" or "false".</li>
-                        <li><b>label</b>: The label for your event. This will be displayed on the calendar within each box for each event.</li>
-                        <li><b>description</b>: Your event description.</li>
-                        <li><b>recurring</b>: If your event is recurring, list the days of the week it occurs on. Use "M", "T", "W", "R", "F", "S", and "Sn" for "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", and "Sunday", respectively.</li>
-			<li><b>color</b>: The background color of your event. Please enter a hex, rgb, or color name.</li>
+                        <li><b>data-ex-display</b>: Whether the calendar will display your event. Enter either "true" or "false".</li>
+                        <li><b>dta-ex-label</b>: The label for your event. This will be displayed on the calendar within each box for each event.</li>
+                        <li><b>data-ex-description</b>: Your event description.</li>
+                        <li><b>data-ex-recurring</b>: If your event is recurring, list the days of the week it occurs on. Use "M", "T", "W", "R", "F", "S", and "Sn" for "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", and "Sunday", respectively.</li>
+			<li><b>data-ex-color</b>: The background color of your event. Please enter a hex, rgb, or color name.</li>
 		    </ol></p><br />
                     <h4>You can set the following settings for your Timegrid Facet calendar:</h4><br />
                     <p><ol style="text-align: left">
-			<li><b>default-facet</b>: "week" or "month" -- the default view for the facet (what you see first).</li>
-                        <li><b>mini</b>: "true" or "false": whether you want the mini version of the calendar.</li>
-                        <li><b>daystart</b>: The first hour of the day that you want to display. For example, if you want your calendar to start at 1:00PM, write "1".</li>
-                        <li><b>dayend</b>: The last hour of the day you want to display.</li>
-                        <li><b>startdate</b>: The first day you want your calendar to display. For example, if you want your calendar to display a week starting with "07/20/2014" enter this into the field.</li>
-                        <li><b>enddate</b>: The last day you want your calendar to display. If you specify both "startDate" and "endDate", "startDate" takes precendence.</li>
-                        <li><b>gridwidth</b>: The width of your calendar.</li>
-                        <li><b>gridheight</b>: The height of your calendar.</li>
+			<li><b>data-ex-default-facet</b>: "week" or "month" -- the default view for the facet (what you see first).</li>
+                        <li><b>data-ex-mini</b>: "true" or "false": whether you want the mini version of the calendar.</li>
+                        <li><b>data-ex-day-start</b>: The first hour of the day that you want to display. For example, if you want your calendar to start at 1:00PM, write "1".</li>
+                        <li><b>data-ex-day-end</b>: The last hour of the day you want to display.</li>
+                        <li><b>data-ex-display-start-date</b>: The first day you want your calendar to display. For example, if you want your calendar to display a week starting with "07/20/2014" enter this into the field.</li>
+                        <li><b>data-ex-display-end-date</b>: The last day you want your calendar to display. If you specify both "startDate" and "endDate", "startDate" takes precendence.</li>
+                        <li><b>data-ex-grid-width</b>: The width of your calendar.</li>
+                        <li><b>data-ex-grid-height</b>: The height of your calendar.</li>
                     </ol>
                     </p>
                     <h2>Resources</h2>
