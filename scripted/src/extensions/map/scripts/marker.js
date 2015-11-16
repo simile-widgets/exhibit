@@ -164,7 +164,9 @@ Exhibit.MapExtension.Marker.makeMarker = function(shape, color, iconSize, iconUR
         // - add a callback that adds the image when available.
         image = new Image();
         // To use CORS would mean adding .attr("crossOrigin", "") here
-        Exhibit.jQuery(image).one("load error", function(evt) {
+        Exhibit.jQuery(image)
+       .attr("crossOrigin","")
+            .one("load error", function(evt) {
             var url, icon, key;
             if (evt.type !== "error") {
                 try {
