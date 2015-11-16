@@ -156,6 +156,13 @@
         <file name="scripts/ui/facets/hierarchical-facet.js"/>
         <file name="scripts/ui/facets/slider-facet.js"/>
         <file name="scripts/ui/facets/slider.js"/>
+        <file name="scripts/ui/facets/timegrid-facet.js"/>
+        <file name="scripts/ui/facets/week-facet.js"/>
+        <file name="scripts/ui/facets/month-facet.js"/>
+        <file name="scripts/ui/facets/dstructs.js"/>
+        <file name="scripts/ui/facets/util/date.js"/>
+        <file name="scripts/ui/facets/date-l10n.js"/>
+        <file name="scripts/ui/facets/util/jquery.prettybox.js"/>
       </filelist>
       <fileset dir="${src}/">
         <include name="scripts/ui/views/*.js"/>

@@ -182,3 +182,18 @@ div.simileAjax-bubble-close {
     background: url(../images/close-button.png) no-repeat;
 }
 
+div.timegrid-iterator > .timegrid-previous {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-image: url('../images/go-previous.png')
+}
+
+div.timegrid-iterator > .timegrid-next {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-image: url('../images/go-next.png')
+}

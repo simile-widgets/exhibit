@@ -15,7 +15,7 @@ Exhibit.TimegridFacet = function (containerElmt, uiContext, configElmt) {
     this._uiContext = uiContext;
     this._tabHeight = 18;
     this._configElmt = configElmt;
-    
+    this._accessors= {};
     this.addSettingSpecs(Exhibit.TimegridFacet._settingSpecs);
 }
 
@@ -24,17 +24,29 @@ Exhibit.TimegridFacet = function (containerElmt, uiContext, configElmt) {
  */
 Exhibit.TimegridFacet._settingSpecs = {
     "title":            { "type": "text" },
-    "daystart":         { "type": "int", "defaultValue": 8 },
-    "dayend":           { "type": "int", "defaultValue": 22 },
+    "dayStart":         { "type": "int", "defaultValue": 8 },
+    "dayEnd":           { "type": "int", "defaultValue": 22 },
     "xCellWidth":       { "type": "int" },
     "yCellWidth":       { "type": "int" },
-    "startdate":        { "type": "text"},
-    "enddate":          { "type": "text"},
-    "gridheight":       { "type": "int", "defaultValue": 250 },
-    "gridwidth":        { "type": "int", "defaultValue": 250 },
+    "displayStartDate":        { "type": "text"},
+    "displayEndDate":          { "type": "text"},
+    "gridHeight":       { "type": "int", "defaultValue": 250 },
+    "gridWidth":        { "type": "int", "defaultValue": 250 },
     "mini":             { "type": "boolean", "defaultValue": false },
     "defaultFacet":     { "type": "text"}
 };
+
+Exhibit.TimegridFacet._accessorSpecs = [
+    {accessorName: "getStartTime", attributeName: "startTime", type: "text"},
+    {accessorName: "getEndTime",   attributeName: "endTime",   type: "text"},
+    {accessorName: "getLabel",     attributeName: "label",     type: "text"},
+    {accessorName: "getRecurring", attributeName: "recurring", type: "text"},
+    {accessorName: "getStartDate", attributeName: "startDate", type: "text"},
+    {accessorName: "getEndDate",   attributeName: "endDate",   type: "text"},
+    {accessorName: "getDisplay",   attributeName: "display",   type: "text"},
+    {accessorName: "getColor",     attributeName: "color",     type: "text"}
+];
+
 
 /**
  * @param {Exhibit.TimegridFacet} facet
@@ -112,6 +124,8 @@ Exhibit.TimegridFacet.createFromDOM = function(configElmt, containerElmt, uiCont
     );
 
     Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, facet.getSettingSpecs(), facet._settings);
+
+    Exhibit.SettingsUtilities.createAccessorsFromDOM(configElmt, Exhibit.TimegridFacet._accessorSpecs, facet._accessors);
 
     facet.setExpression(Exhibit.ExpressionParser.parse("selected"));
     facet.setExpressionString("selected");
@@ -233,6 +247,7 @@ Exhibit.TimegridFacet.EventSource.EventPrototype = function(dayArray, startTime,
         text, description, image, link, icon, color, textColor, dateFormat, display) {
     var id = "e" + Math.floor(Math.random() * 1000000);
     var days = new DStructs.Array(); days.addAll(dayArray);
+    var $=Exhibit.jQuery;
 
     this.getDays = function() { return days; };
     this.getStartTime = function() { return startTime; };
@@ -414,21 +429,21 @@ Exhibit.TimegridFacet.Layout.prototype.uniqueEventsArray = function(array){
 }
     
 /**
- * Computes the grid dimensions (gridheight, gridwidth, ycell, xcell) for this
+ * Computes the grid dimensions (gridHeight, gridWidth, ycell, xcell) for this
  * layout.  This is relatively complex since any of the above values can be
  * either user-specified or computed.
  */
 Exhibit.TimegridFacet.Layout.prototype._computeCellSizes = function() {
     // Compute the cell sizes for the grid
     this._xCellWidth = Math.round(this._xCellWidth ||
-                 (this._gridwidth - 1) / this._xSize);
+                 (this._gridWidth - 1) / this._xSize);
     this._yCellWidth = Math.round(this._yCellWidth ||
-                 (this._gridheight - 1) / this._ySize);
+                 (this._gridHeight - 1) / this._ySize);
     if (this._yCellWidth) {
-        this._gridheight = this._yCellWidth * this._ySize + 1;
+        this._gridHeight = this._yCellWidth * this._ySize + 1;
     }
     if (this._xCellWidth) {
-        this._gridwidth = this._xCellWidth * this._xSize + 1;
+        this._gridWidth = this._xCellWidth * this._xSize + 1;
     }
 };
 
@@ -468,6 +483,8 @@ Exhibit.TimegridFacet.Layout.prototype.renderGridlines = function() {
     };
     
     var self = this;
+
+    var $=Exhibit.jQuery;
     
     var onSelect = function(evt) {
         var time, i, entry, background, displayed, events;
@@ -695,7 +712,7 @@ Exhibit.TimegridFacet.Layout.prototype.renderXLabels = function() {
     var xLabelsDiv = document.createElement("div");
     xLabelsDiv.className = 'timegrid-xlabels';
     xLabelsDiv.style.height = this._xLabelHeight + "px"
-    xLabelsDiv.style.width = this._gridwidth + "px";
+    xLabelsDiv.style.width = this._gridWidth + "px";
     xLabelsDiv.style.top = "0px";
     xLabelContainer.appendChild(xLabelsDiv);
 
@@ -706,7 +723,7 @@ Exhibit.TimegridFacet.Layout.prototype.renderXLabels = function() {
         label.innerHTML = labels[i];
         label.style.width = this._xCellWidth + 'px';
         label.style.left = (i * this._xCellWidth) + 'px';
-        $(label).css("border-right", "1px solid #a7a37e");
+        Exhibit.jQuery(label).css("border-right", "1px solid #a7a37e");
         xLabelsDiv.appendChild(label);
     }
     
@@ -733,7 +750,7 @@ Exhibit.TimegridFacet.Layout.prototype.renderYLabels = function() {
 
     var yLabelsDiv = document.createElement("div");
     yLabelsDiv.className = 'timegrid-ylabels';
-    yLabelsDiv.style.height = this._gridheight + "px";
+    yLabelsDiv.style.height = this._gridHeight + "px";
     yLabelsDiv.style.width = this._yLabelWidth + "px";
     yLabelsDiv.style.left = "0px";
     yLabelContainer.appendChild(yLabelsDiv);
@@ -756,6 +773,8 @@ Exhibit.TimegridFacet.Layout.prototype.renderYLabels = function() {
  * Renders the grid
  */
 Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
+    var $=Exhibit.jQuery;
+    
     container = $(container);
     if (this._mini) {
         this._scrollwidth = 0;
@@ -766,14 +785,14 @@ Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
     if (!this._height) {
         if (this._settings.defaultFacet == "month") {
             this._height = this._scrollwidth + this._xLabelHeight +
-                (this._gridheight || 250);
+                (this._gridHeight || 250);
         } else {
             this._height = this._scrollwidth + this._xLabelHeight +
-                (this._gridheight || 250) + this._tabHeight;   
+                (this._gridHeight || 250) + this._tabHeight;   
         }
     }
 
-    if (!(this._height && this._gridheight)) {
+    if (!(this._height && this._gridHeight)) {
         this._scrollwidth = 0;
     }
     if (container) {
@@ -789,7 +808,7 @@ Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
 
     $(container).height(this._height + "px");
 
-    this._width = this._gridwidth + this._yLabelWidth || $(container).width();
+    this._width = this._gridWidth + this._yLabelWidth || $(container).width();
     $(container).width(this._width + "px");
 
     $(container).css('position', 'relative');
@@ -801,10 +820,10 @@ Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
     var windowHeight = this._viewDiv.height() - gridWindowDiv.position().top - 2;
     var windowWidth = this._viewDiv.width() - gridWindowDiv.position().left - 2;
 
-    this._gridwidth = this._gridwidth || gridWindowDiv.width() - this._scrollwidth;
-    this._gridheight = this._gridheight || gridWindowDiv.height() - this._scrollwidth;
-    gridWindowDiv.height(this._gridheight).width(this._gridwidth);
-    gridDiv.height(this._gridheight + "px").width(this._gridwidth + "px");
+    this._gridWidth = this._gridWidth || gridWindowDiv.width() - this._scrollwidth;
+    this._gridHeight = this._gridHeight || gridWindowDiv.height() - this._scrollwidth;
+    gridWindowDiv.height(this._gridHeight).width(this._gridWidth);
+    gridDiv.height(this._gridHeight + "px").width(this._gridWidth + "px");
     this.computeCellSizes();
     this._gridDiv = gridDiv;
     gridDiv.append(this._defaultFacet.renderEvents(document));
@@ -829,6 +848,7 @@ Exhibit.TimegridFacet.Layout.prototype.render = function(container) {
 };
 
 Exhibit.TimegridFacet.Layout.prototype.getPrettyBox = function(container) {
+    var $=Exhibit.jQuery;
     var checkOldIE = function() {
         "use strict";
 
@@ -883,6 +903,7 @@ Exhibit.TimegridFacet.EventSource.Event = function(
         start, end, latestStart, earliestEnd, instant,
         text, description, image, link,
         icon, color, textColor, display) {
+    var $=Exhibit.jQuery;
 
     this._id = "e" + Math.floor(Math.random() * 1000000);
 
@@ -1076,7 +1097,7 @@ Exhibit.TimegridFacet.Layout.prototype.intervaltoString = function() {
 
 Exhibit.TimegridFacet.Layout.prototype.setLayouts = function(layouts) {
     this._layouts = layouts;
-    this._titles = $.map(this._layouts, function(l) { return l.title; });
+    this._titles = Exhibit.jQuery.map(this._layouts, function(l) { return l.title; });
     //this._tabSet.setLayouts(this._titles, this._layouts);
 };
 

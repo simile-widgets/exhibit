@@ -1,5 +1,5 @@
 /**
- @fileOverview A facet for a customized Exhibit month
+ @Fileoverview A facet for a customized Exhibit month
  @fileoverview
  This is where the monthly layout is defined.  The layout is designed to
  resemble the equivalent Google Calendar view.
@@ -56,6 +56,7 @@ Exhibit.MonthFacet = function(containerElmt, uiContext, configElmt, timegridFace
 
 Exhibit.MonthFacet.prototype.initializeUI = function(dom, settings, containerElmt, uiContext) {
     // Using layouts and other concurrent week/month abilities
+    var $=Exhibit.jQuery;
     this._layoutClass = this._layoutClass || new Exhibit.TimegridFacet.Layout(containerElmt, uiContext);
     this._eventSource = this._eventSource || new Exhibit.TimegridFacet.EventSource();
     Exhibit.jQuery.extend(this, this._layoutClass, this._eventSource);
@@ -70,15 +71,15 @@ Exhibit.MonthFacet.prototype.initializeUI = function(dom, settings, containerElm
 
     this._dom = dom;
     if ($(this._containerElmt).css("height")) {
-        this._gridheight = parseInt(returnNums($(this._containerElmt).css("height")));
+        this._gridHeight = parseInt(returnNums($(this._containerElmt).css("height")));
     }
     if ($(this._containerElmt).css("width")) {
-        this._gridwidth = parseInt(returnNums($(this._containerElmt).css("width")));
+        this._gridWidth = parseInt(returnNums($(this._containerElmt).css("width")));
     }
 
-    // Adjust gridheight and gridwidth based on passed in parameters
-    this._gridheight = this._settings.gridheight;
-    this._gridwidth = this._settings.gridwidth;
+    // Adjust gridHeight and gridWidth based on passed in parameters
+    this._gridHeight = this._settings.gridHeight;
+    this._gridWidth = this._settings.gridWidth;
 
     this._title = this._settings.title || this._title;
     if (this._settings.xCellWidth) {
@@ -95,14 +96,14 @@ Exhibit.MonthFacet.prototype.initializeUI = function(dom, settings, containerElm
 
 Exhibit.MonthFacet.prototype.initializeGrid = function() {
     // Start the calendar at the specified start/end date or current date if not specified
-    if (this._settings.enddate) {
-        this._endTime = this._endTime || Date.parseString(this._settings.enddate);
+    if (this._settings.displayEndDate) {
+        this._endTime = this._endTime || Date.parseString(this._settings.displayEndDate);
         this._endTime.setHours(0);
         this._startTime = this._computeStartTime(this._endTime);
     }
     
-    if (this._settings.startdate) {
-        this._startTime = this._startTime || Date.parseString(this._settings.startdate);
+    if (this._settings.displayStartDate) {
+        this._startTime = this._startTime || Date.parseString(this._settings.displayStartDate);
         this._startTime.setHours(0);
         this._endTime = this._computeEndTime(this._startTime);
     }
@@ -166,6 +167,7 @@ Exhibit.MonthFacet.prototype._computeDimensions = function() {
 Exhibit.MonthFacet.prototype.renderEvents = function(doc) {
     var eventContainer = doc.createElement("div");
     var labelContainer = doc.createElement("div");
+    var $=Exhibit.jQuery;
     // Events
     $(eventContainer).addClass("timegrid-events");
     // Dates in the month
@@ -190,6 +192,7 @@ Exhibit.MonthFacet.prototype.renderEvents = function(doc) {
 
 // Render the list of events from the feed per day
 Exhibit.MonthFacet.prototype._renderEventList = function(evts, x, y, n, m) {
+    var $=Exhibit.jQuery;
     var jediv = $("<div></div>").addClass("timegrid-month-cell");
     $(jediv).attr("classid", y*7 + x);
     var map = Array.prototype.map;
@@ -275,6 +278,7 @@ Exhibit.MonthFacet.prototype._renderEventList = function(evts, x, y, n, m) {
 };
 
 Exhibit.MonthFacet.prototype._renderMonthLabels = function() {
+    var $=Exhibit.jQuery;
     var self = this;
     // Place the month label on the calendar and centered
     var monthString = this._monthStarts[0].date.getMonthName();
@@ -282,7 +286,7 @@ Exhibit.MonthFacet.prototype._renderMonthLabels = function() {
     mDiv.addClass('timegrid-month-label');
     mDiv.css('margin-top', this._yCellWidth * this._monthStarts[0].i + "px");
     var height = this._monthStarts[0].height * this._yCellWidth;
-    var fontSize = this._gridwidth / 1000;
+    var fontSize = this._gridWidth / 1000;
     mDiv.css("font-size", fontSize + "em");
     mDiv.height(height + "px");
     mDiv.children().css('line-height', height + "px");
@@ -436,6 +440,7 @@ Exhibit.MonthFacet.prototype.applyRestrictions = function(restrictions) {
  * Renders the go back and go forward buttons
  */
 Exhibit.MonthFacet.prototype.renderIterator = function() {
+    var $=Exhibit.jQuery;
     this._div = $('<div></div>').addClass('timegrid-iterator');
     $(this._div).css("margin-top", this._tabHeight || 18 + "px");
 
@@ -448,10 +453,8 @@ Exhibit.MonthFacet.prototype.renderIterator = function() {
         self._goNext();
         self._notifyCollection();
     };
-    $imageURL = "HEAD/scripts/ui/facets/images/go-previous.png";
-    $prevLink = $('<img />', {alt: "Previous", src: $imageURL});
-    $imageURL = "HEAD/scripts/ui/facets/images/go-next.png";
-    $nextLink = $('<img />', {alt: "Next", src: $imageURL});
+    $prevLink = $('<span />', {alt: "Previous", "class": "timegrid-previous"});
+    $nextLink = $('<span />', {alt: "Next", "class": "timegrid-next"});
 
     $nextLink.bind("click", function (){
         makeNextCallback();
@@ -513,24 +516,52 @@ Exhibit.MonthFacet.prototype.update = function (items) {
  @param items collection items
 */
 Exhibit.MonthFacet.prototype._computeFacet = function(items) {
-    var entries, i, item, label, event, allItemsList, days, j, label, day, obj;
+    var entries, i, item, label, event, allItemsList, days, j, label,
+    day, obj, accessors, database, setIf;
+
     entries = [];
     this._timeMap = {};
+
+    accessors = this._timegridFacet._accessors;
+    database = this._database;
+    setIf = function(accessor, field) {
+        if ((typeof(accessor) !== "undefined") && accessor !== null) {
+            (accessor)(item, database, function (v) {
+                if (v!=null) {
+                    event[field]=v;
+                }
+            })
+        }
+    };
     
     this._possibleDays = {};
     allItemsList = items.toArray();
     for (i in allItemsList) {
         item = allItemsList[i];
-        var obj = this._database.getObject(item, "startTime");
+        if (typeof(accessors.getStartTime) !== "undefined") {
+            accessors.getStartTime(item, database, function(v) {
+                if (v !== null) {
+                    obj=v;
+                }
+            });
+        }
         if (!this._timeMap[item] && obj) {
             event = {};
-            event.label = this._database.getObject(item, "label");
-            event.days = this._database.getObject(item, "recurring");
-            event.startDate = this._database.getObject(item, "startDate") || new Date().toDateString();
-            event.endDate = this._database.getObject(item, "endDate") || new Date().setFullYear(new Date().getFullYear() + 1).toDateString();
-            event.startTime = this._database.getObject(item, "startTime");
-            event.endTime = this._database.getObject(item, "endTime");
-            event.color = this._database.getObject(item, "color") || "#104E8B";
+            setIf(accessors.getLabel, "label");
+            setIf(accessors.getRecurring, "days");
+            setIf(accessors.getStartDate, "startDate");
+            setIf(accessors.getEndDate, "endDate");
+            setIf(accessors.getStartTime, "startTime");
+            setIf(accessors.getEndTime,   "endTime");
+            setIf(accessors.getColor, "color");
+            setIf(accessors.getDisplay, "display");
+            event.startDate = event.startDate || new Date().toDateString();
+            if (! event.endDate) {
+                event.endDate = new Date();
+                event.endDate.setFullYear(new Date().getFullYear+1);
+                event.endDate=event.endDate.toString();
+            }
+            event.color = event.color || "#104E8B";
             
             if (event.startDate.indexOf("T") > -1) {
                 startTime = event.startDate.split("T");
@@ -593,6 +624,7 @@ Exhibit.MonthFacet.prototype._computeFacet = function(items) {
  on calendar
  */
 Exhibit.MonthFacet.prototype.renderSwitchTab = function(container) {
+    var $=Exhibit.jQuery;
     if ($(container).find(".timegrid-switch-tab").length == 0) {
         var self = this;
         var tabDiv = $('<div></div>').addClass('timegrid-switch-tab');
@@ -610,7 +642,7 @@ Exhibit.MonthFacet.prototype.renderSwitchTab = function(container) {
         .addClass("timegrid-rounded")
         .css({
             "width": 100 + "px",
-            "margin-left": this._gridwidth + this._yLabelWidth - 100 + "px",
+            "margin-left": this._gridWidth + this._yLabelWidth - 100 + "px",
             "float": "left",
             "position": "relative"
         })
@@ -642,6 +674,7 @@ Exhibit.MonthFacet.prototype.renderSwitchTab = function(container) {
  and vice versa.
  */
 Exhibit.MonthFacet.prototype.switchToWeek = function(view, container) {
+    var $=Exhibit.jQuery;
     this._valueSet = new Exhibit.Set();
     this._notifyCollection();
 
@@ -656,8 +689,9 @@ Exhibit.MonthFacet.prototype.switchToWeek = function(view, container) {
  * @param {Array} entries
  */
 Exhibit.MonthFacet.prototype._constructBody = function(entries) {
-    this._events = [];
+    var $=Exhibit.jQuery;
     var containerDiv, entry, i, labels, days, starts, ends, colors, j, k, day, dayArray, formats;
+    this._events = [];
     containerDiv = this._dom.valuesContainer;
     Exhibit.jQuery(containerDiv).empty();
 
