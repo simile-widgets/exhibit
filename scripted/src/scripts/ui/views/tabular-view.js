@@ -433,6 +433,10 @@ Exhibit.TabularView.prototype._reconstruct = function() {
         generatePagingControls = false;
         if (this._settings.paginate) {
             start = this._settings.page * this._settings.pageSize;
+            if (start >= items.length) {
+                this._settings.page = Math.floor(items.length / this._settings.pageSize);
+                start = this._settings.page * this._settings.pageSize;
+            }
             end = Math.min(start + this._settings.pageSize, items.length);
             
             generatePagingControls = (items.length > this._settings.pageSize) || (items.length > 0 && this._settings.alwaysShowPagingControls);
