@@ -24,8 +24,8 @@ Exhibit.CloudFacet.prototype = new Exhibit.EnumeratedFacet();
  */
 Exhibit.CloudFacet._settingSpecs = {
     "showMissing":      { "type": "boolean", "defaultValue": false},
-    "maxFontSize":      { "type": "number" },
-    "minFontSize":      { "type": "number" } 
+    "maxFontSize":      { "type": "int" },
+    "minFontSize":      { "type": "int" } 
 };
 
 /**
