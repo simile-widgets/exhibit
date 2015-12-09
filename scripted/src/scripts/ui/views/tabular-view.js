@@ -433,6 +433,9 @@ Exhibit.TabularView.prototype._reconstruct = function() {
         generatePagingControls = false;
         if (this._settings.paginate) {
             start = this._settings.page * this._settings.pageSize;
+            if (start > items.length) {
+                start = 0; //don't show an empty page
+            }
             end = Math.min(start + this._settings.pageSize, items.length);
             
             generatePagingControls = (items.length > this._settings.pageSize) || (items.length > 0 && this._settings.alwaysShowPagingControls);
@@ -660,17 +663,16 @@ Exhibit.TabularView.prototype._createSortFunction = function(items, expression, 
  * @param {Number} columnIndex
  */
 Exhibit.TabularView.prototype._doSort = function(columnIndex) {
-    var oldSortColumn, oldSortAscending;
-    oldSortColumn = this._settings.sortColumn;
-    oldSortAscending = this._settings.sortAscending;
-    this._settings.sortColumn = columnIndex;
-    this._settings.sortAscending = oldSortColumn === columnIndex ? !oldSortAscending : true;
-    this._settings.page = 0;
     
     Exhibit.History.pushComponentState(
         this,
         Exhibit.View._registryKey,
-        this.exportState(),
+        this.exportState({
+            sortColumn: columnIndex,
+            sortAscending: this._settings.sortColumn == columnIndex ?
+                ! this._settings.sortAscending : true,
+            page: 0
+        }),
         Exhibit._(this._settings.sortAscending ? "%TabularView.sortColumnAscending" : "%TabularView.sortColumnDescending", this._columns[columnIndex].label),
         true
     );
@@ -694,19 +696,32 @@ Exhibit.TabularView.prototype._gotoPage = function(page) {
 /**
  * @returns {Object}
  */
-Exhibit.TabularView.prototype.exportState = function() {
-    return {
-        "page": this._settings.page,
-        "sortColumn": this._settings.sortColumn,
-        "sortAscending": this._settings.sortAscending
-    };
+Exhibit.TabularView.prototype.exportState = function(change) {
+    var state = {}, settings=this._settings;
+    change = change || {};
+
+    state.page = change.hasOwnProperty("page") ? 
+        change.page : settings.page ;
+    state.sortColumn = change.hasOwnProperty("sortColumn") ? 
+        change.sortColumn : settings.sortColumn ;
+    state.sortAscending = change.hasOwnProperty("sortAscending") ? 
+        change.sortAscending : settings.sortAscending ;
+
+    return state;
 };
+
+Exhibit.TabularView.prototype.stateDiffers = function(state) {
+    return this._settings.page != state.page ||
+        this._settings.sortColumn != state.sortColumn ||
+        this._settings.sortAScending != state.sortAscending
+    ;
+}
 
 /**
  * @param {Object} state
  */
 Exhibit.TabularView.prototype.importState = function(state) {
-    if (this.getUIContext() !== null) {
+    if (this.getUIContext() !== null && this.stateDiffers(state)) {
         this._settings.page = state.page;
         this._settings.sortColumn = state.sortColumn;
         this._settings.sortAscending = state.sortAscending;
