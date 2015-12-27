@@ -1,33 +1,40 @@
 /*==================================================
  *  Exhibit.ImageFacet
+ * @fileOverview List facet functions and UI
+ * @author David Huynh
+ * @author <a href="mailto:karger@mit.edu">David Karger</a>
  *==================================================
  */
 
+/**
+ * @constructor
+ * @class
+ * @param {Element} containerElmt
+ * @param {Exhibit.UIContext} uiContext
+ */
 Exhibit.ImageFacet = function(containerElmt, uiContext) {
     Exhibit.EnumeratedFacet.call(this,"image",containerElmt,uiContext);
     this.addSettingSpecs(Exhibit.ImageFacet._settingSpecs);
-    this._div = containerElmt;
     this._colorCoder = null;
-    
-    this._expression = null;
-    this._valueSet = new Exhibit.Set();
-    this._selectMissing = false;
     
     this._settings = {};
     this._dom = null;
 };
 Exhibit.ImageFacet.prototype = new Exhibit.EnumeratedFacet();
 
+/**
+ * @constant
+ */
 Exhibit.ImageFacet._settingSpecs = {
-    "image":            { type: "text" },
-    "tooltip":          { type: "text" },
-    "thumbNail":        { type: "uri" },
-    "overlayCounts":    { type: "boolean", defaultValue: true },
     "scroll":           { type: "boolean", defaultValue: true },
+    "image":            { type: "text" },
     "height":           { type: "text" },
     "colorCoder":       { type: "text", defaultValue: null },
     "collapsible":      { type: "boolean", defaultValue: false },
-    "collapsed":        { type: "boolean", defaultValue: false }
+    "collapsed":        { type: "boolean", defaultValue: false },
+    "tooltip":          { type: "text" },
+    "thumbNail":        { type: "uri" },
+    "overlayCounts":    { type: "boolean", defaultValue: true }
 };
 
 
@@ -57,113 +64,98 @@ Exhibit.ImageFacet.create = function(configObj, containerElmt, uiContext) {
     return Exhibit.EnumeratedFacet.createFromObj(Exhibit.ImageFacet, configObj, containerElmt, uiContext);
 };
 
-
-Exhibit.ImageFacet.prototype._configure = function(configuration) {
-    var i, segment, property, selection, values, orderMap;
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.ImageFacet._settingSpecs, this._settings);
+/**
+ * @static
+ * @private
+ * @param {Exhibit.ImageFacet} facet
+ * @param {Object} configuration
+ */
+Exhibit.ImageFacet.prototype._configure = function(settings) {
+    var i, segment, property, selection, values;
     
-    if ("expression" in configuration) {
-        this._expression = Exhibit.ExpressionParser.parse(configuration.expression);
+    Exhibit.EnumeratedFacet.prototype._configure.call(this, settings);
+
+    if ("image" in settings) {
+        this._imageExpression = Exhibit.ExpressionParser.parse(settings.image);
     }
-    if ("image" in configuration) {
-        this._imageExpression = Exhibit.ExpressionParser.parse(configuration.image);
-    }
-    if ("tooltip" in configuration) {
-        this._tooltipExpression = Exhibit.ExpressionParser.parse(configuration.tooltip);
+    if ("tooltip" in settings) {
+        this._tooltipExpression = Exhibit.ExpressionParser.parse(settings.tooltip);
     }
 
-	if (!(this._imageExpression)) {
+    if (!(this._imageExpression)) {
         this._imageExpression = Exhibit.ExpressionParser.parse("value");
 	}
-	if (!(this._tooltipExpression)) {
+    if (!(this._tooltipExpression)) {
         this._tooltipExpression = Exhibit.ExpressionParser.parse("value");
 	}
-	
-    if ("selection" in configuration) {
-        selection = configuration.selection;
-        for (i = 0; i < selection.length; i++) {
-            this._valueSet.add(selection[i]);
-        }
-    }
-    if ("selectMissing" in configuration) {
-        this._selectMissing = configuration.selectMissing;
+
+    if ("colorCoder" in settings) {
+        this._colorCoder = this.getUIContext().getMain().getComponent(settings.colorCoder);
     }
     
-    if (!("facetLabel" in this._settings)) {
-        this._settings.facetLabel = "missing ex:facetLabel";
-        if (this._expression != null && this._expression.isPath()) {
-            segment = this._expression.getPath().getLastSegment();
-            property = this.getUIContext().getDatabase().getProperty(segment.property);
-            if (property != null) {
-                this._settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
-            }
-        }
+    if (settings.collapsed) {
+        settings.collapsible = true;
     }
-    if ("fixedOrder" in this._settings) {
-        values = this._settings.fixedOrder.split(";");
-        orderMap = {};
-        for (i = 0; i < values.length; i++) {
-            orderMap[values[i].trim()] = i;
-        }
-        
-        this._orderMap = orderMap;
-    }
-    
-    if ("colorCoder" in this._settings) {
-        this._colorCoder = this.getUIContext().getMain().getComponent(this._settings.colorCoder);
-    }
-    
-    if (this._settings.collapsed) {
-        this._settings.collapsible = true;
-    }
-    
-    this._cache = new Exhibit.FacetUtilities.Cache(
-        this.getUIContext().getDatabase(),
-        this.getUIContext().getCollection(),
-        this._expression
-    );
-}
+};
 
 Exhibit.ImageFacet.prototype.dispose = function() {
-    this._cache.dispose();
-    this._cache = null;
-    
-    this.getUIContext().getCollection().removeFacet(this);
-    this.getUIContext() = null;
     this._colorCoder = null;
-    
-    this._div.innerHTML = "";
-    this._div = null;
-    this._dom = null;
-    
-    this._expression = null;
-    this._valueSet = null;
-    this._settings = null;
     Exhibit.EnumeratedFacet.dispose.call(this);
 };
 
 
-Exhibit.ImageFacet.prototype.update = function(items) {
-    this._dom.valuesContainer.hide();
-    this._dom.valuesContainer.innerHTML = "";
-    this._constructBody(this._computeFacet(items));
-    this._dom.valuesContainer.show();
+/**
+ *
+ */
+Exhibit.ListFacet.prototype.onUncollapse = function() {
+    if (this._delayedUpdateItems !== null) {
+        this.update(this._delayedUpdateItems);
+        this._delayedUpdateItems = null;
+    }
 };
 
+/**
+ * @param {Exhibit.Set} items
+ */
+Exhibit.ImageFacet.prototype.update = function(items) {
+    if (Exhibit.FacetUtilities.isCollapsed(this)) {
+        this._delayedUpdateItems = items;
+        return;
+    }
+    Exhibit.jQuery(this._dom.valuesContainer)
+        .hide()
+        .empty();
+    this._constructBody(this._computeFacet(items));
+    Exhibit.jQuery(this._dom.valuesContainer).show();
+};
+
+/**
+ * Have to override computeFacet to insert images for each item
+ * todo: refactor to let any enumerated facet specify a function
+ * to generate the "representation" for each item in the facet
+ * some day, maybe even using a lens
+ */
 Exhibit.ImageFacet.prototype._computeFacet = function(items) {
     var database, r, entries, valueType, selection, labeler, i, entry, count, span;
     database = this.getUIContext().getDatabase();
     r = this._cache.getValueCountsFromItems(items);
-    entries = r.entries;
+    entries = [];
 
+    for (i=0; i < r.entries.length; i++) {
+        if ((r.entries[i].count >= this._settings.minimumCount) ||
+            (this._valueSet.countains(r.entries[i].value))) {
+            entries.push(r.entries[i]);
+        }
+    }
+    
     valueType = r.valueType;
     
     if (entries.length > 0) {
         selection = this._valueSet;
-        labeler = valueType == "item" ?
+        labeler = valueType === "item" ?
             function(v) { var l = database.getObject(v, "label"); 
-                          return l != null ? l : v; } :
-            function(v) { return v; }
+                          return l !== null ? l : v; } :
+            function(v) { return v; };
         
         for (i = 0; i < entries.length; i++) {
             entry = entries[i];
@@ -196,14 +188,15 @@ Exhibit.ImageFacet.prototype._computeFacet = function(items) {
     }
     */
     return entries;
-}
+};
 
 Exhibit.ImageFacet.prototype._initializeUI = function() {
     var self = this;
+
     this._dom = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetFrame" : "constructFlowingFacetFrame"](
-		this,
-        this._div,
-        this._settings.facetLabel,
+	this,
+        this.getContainer(),
+        this.getLabel(),
         function(elmt, evt, target) { self._clearSelections(); },
         this.getUIContext(),
         this._settings.collapsible,
@@ -215,14 +208,17 @@ Exhibit.ImageFacet.prototype._initializeUI = function() {
     }
 };
 
+/**
+ * @param {Array} entries
+ */
 Exhibit.ImageFacet.prototype._constructBody = function(entries) {
-    var wrapper, self = this;
+    var wrapper, self = this, facetHasSelection, constructValue;
     var shouldOverlayCounts = this._settings.overlayCounts;
-    var containerDiv = this._dom.valuesContainer;
+    var containerDiv = this._dom.valuesContainer, j;
     
     containerDiv.hide().empty();
-    var facetHasSelection = this._valueSet.size() > 0 || this._selectMissing;
-    var constructValue = function(entry) {
+    facetHasSelection = this._valueSet.size() > 0 || this._selectMissing;
+    constructValue = function(entry) {
         var onSelectOnly = function(evt) {
             self._filter(entry.value, entry.actionLabel, !(evt.ctrlKey || evt.metaKey));
             evt.preventDefault();
@@ -233,7 +229,7 @@ Exhibit.ImageFacet.prototype._constructBody = function(entries) {
             .wrap("<div>").parent()
             .addClass("wrapper");
 
-	if(shouldOverlayCounts == true) {
+	if(shouldOverlayCounts === true) {
 	    var countDiv = document.createElement("div");
 	    countDiv.className = "countDiv";
 	    var countBackground = document.createElement("div");
@@ -256,7 +252,7 @@ Exhibit.ImageFacet.prototype._constructBody = function(entries) {
             .appendTo(containerDiv);
     };
     
-    for (var j = 0; j < entries.length; j++) {
+    for (j = 0; j < entries.length; j++) {
         constructValue(entries[j]);
     }
     containerDiv.show();

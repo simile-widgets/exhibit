@@ -66,28 +66,9 @@ Exhibit.ListFacet.create = function(configObj, containerElmt, uiContext) {
  * @param {Object} configuration
  */
 Exhibit.ListFacet.prototype._configure = function(settings) {
-    var selection, i, segment, property, values, orderMap, formatter;
+    var selection, i, segment, property, values, formatter;
 
     Exhibit.EnumeratedFacet.prototype._configure.call(this, settings);
-    
-    if (typeof settings.facetLabel === "undefined") {
-        if (this.getExpression() !== null && this.getExpression().isPath()) {
-            segment = this.getExpression().getPath().getLastSegment();
-            property = this.getUIContext().getDatabase().getProperty(segment.property);
-            if (typeof property !== "undefined" && property !== null) {
-                settings.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
-            }
-        }
-    }
-    if (typeof settings.fixedOrder !== "undefined") {
-        values = settings.fixedOrder.split(";");
-        orderMap = {};
-        for (i = 0; i < values.length; i++) {
-            orderMap[values[i].trim()] = i;
-        }
-        
-        this._orderMap = orderMap;
-    }
     
     if (settings.colorCoder !== "undefined") {
         this._colorCoder = this.getUIContext().getMain().getComponent(settings.colorCoder);
@@ -172,7 +153,7 @@ Exhibit.ListFacet.prototype._constructBody = function(entries) {
     self = this;
     containerDiv = this._dom.valuesContainer;
     
-    Exhibit.jQuery(containerDiv).hide();
+    Exhibit.jQuery(containerDiv).hide().empty();
     
     constructFacetItemFunction = Exhibit.FacetUtilities[this._settings.scroll ? "constructFacetItem" : "constructFlowingFacetItem"];
     facetHasSelection = this._valueSet.size() > 0 || this._selectMissing;
