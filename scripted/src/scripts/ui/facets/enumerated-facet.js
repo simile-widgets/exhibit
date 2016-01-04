@@ -105,13 +105,32 @@ Exhibit.EnumeratedFacet.prototype.dispose = function () {
  * @param {Object} configuration
  */
 Exhibit.EnumeratedFacet.prototype._configure = function(configuration) {
-    var selection, i;
+    var selection, i, orderMap;
 
     this._settings = configuration;
     if (typeof configuration.expression !== "undefined") {
         this.setExpressionString(configuration.expression);
         this.setExpression(Exhibit.ExpressionParser.parse(configuration.expression));
     }
+    if (typeof configuration.facetLabel === "undefined") {
+        if (this.getExpression() !== null && this.getExpression().isPath()) {
+            segment = this.getExpression().getPath().getLastSegment();
+            property = this.getUIContext().getDatabase().getProperty(segment.property);
+            if (typeof property !== "undefined" && property !== null) {
+                configuration.facetLabel = segment.forward ? property.getLabel() : property.getReverseLabel();
+            }
+        }
+    }
+    if (typeof configuration.fixedOrder !== "undefined") {
+        values = this._settings.fixedOrder.split(";");
+        orderMap = {};
+        for (i = 0; i < values.length; i++) {
+            orderMap[values[i].trim()] = i;
+        }
+        
+        this._orderMap = orderMap;
+    }
+    
     if (typeof configuration.selection !== "undefined") {
         selection = configuration.selection;
         for (i = 0; i < selection.length; i++) {
