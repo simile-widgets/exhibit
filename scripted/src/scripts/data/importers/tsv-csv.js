@@ -114,6 +114,7 @@ Exhibit.Importer.TsvCsv._parseInternal = function(text, separator, expressionStr
 	    if (row[j].length>0) {
 		if (valueSeparator && (row[j].indexOf(valueSeparator) >= 0)) {
 		    row[j]=row[j].split(valueSeparator);
+		    row[j]=row[j].reduce((prev, cur) => { if ((cur = cur.trim()).length > 0){ prev.push(cur);} return prev;},[]);
 		}
 		item[propNames[j]]=row[j];
 	    }
