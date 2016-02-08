@@ -115,7 +115,7 @@ Exhibit.Localization.importLocale("es", {
     "%widget.collectionSummary.noResultsTemplate": "<span class=\"%1$s\">0</span> <span class=\"%2$s\" id=\"typesSpan\">resultados</span> (<span id=\"resetActionLink\"></span>)",
     "%widget.collectionSummary.filteredResultsTemplate": "<span class=\"%1$s\" id=\"resultDescription\"></span> filtered from <span id=\"originalCountSpan\">0</span> originally (<span id=\"resetActionLink\"></span>)",
     "%formatter.listSeparator": ", ",
-    "%formatter.listLastSeparator": ", y ",
+    "%formatter.listLastSeparator": " y ",
     "%formatter.listPairSeparator": " y ",
     "%formatter.textEllipsis": "...",
     "%formatter.booleanTrue": undefined,
