@@ -462,7 +462,7 @@ Exhibit.MapView.prototype._constructGMap = function(mapDiv) {
 
 	    if (typeof settings.scrollWheelZoom !== "undefined" &&
             !settings.scrollWheelZoom) {
-	        mapOptions.scrollWheel = false;
+	        mapOptions.scrollwheel = false;
         }
 
         switch (settings.type) {
