@@ -3,7 +3,7 @@ Juventus	http://www.juventus.com/	images/juve.png	Turin	Piedmont	"45.070, 7.687"
 Milan	http://www.acmilan.com	images/milan.png	Milan	Lombardy	"45.464, 9.188"	17	14	1901; 1906; 1907; 1950/51; 1954/55; 1956/57; 1958/59; 1961/62; 1967/68; 1978/79; 1987/88; 1991/92; 1992/93; 1993/94; 1995/96; 1998/99; 2003/04
 Inter	http://www.inter.it/aas/hp?L=en	images/inter.png	Milan	Lombardy	"45.463, 9.187"	17	13	1909/10; 1919/20; 1929/30; 1937/38; 1939/40; 1952/53; 1953/54; 1962/63; 1964/65; 1965/66; 1970/71; 1979/80; 1988/89; 2005/06; 2006/07; 2007/08; 2008/09
 Genoa	http://www.genoacfc.it/index.php	images/genoa.png	Genoa	Liguria	"44.4065, 8.9335"	9	4	1898; 1899; 1900; 1902; 1903; 1904; 1914/15; 1922/23; 1923/24
-Torino	http://www.torinofc.it/index.php	images/torino.png	Turin	Piedmont	"45.071, 7.686"	7	7	1927/28; 1942/43; 1945/46; 1946/47; 1947/48; 1948/49; 1975/76
+Torino	http://www.torinofc.it/index.php	images/torino.png	Turin	Piedmont	"45.071, 7.686"	7	7	1927/28; 1942/43; 1945/46; 1946/47;; ; 1947/48 ; 1948/49; 1975/76
 Bologna	http://www.bolognafc.it/	images/bologna.png	Bologna	Emilia Romagna	"44.4942191, 11.3464815"	7	4	1924/25; 1928/29; 1935/36; 1936/37; 1938/39; 1940/41; 1963/64
 Pro Vercelli	http://www.provercelli.it/	images/vercelli.png	Vercelli	Piedmont	"45.3210612, 8.4263931"	7	1	1908; 1909; 1910/11; 1911/12; 1912/13; 1920/21; 1921/22 (CCI)
 Roma	http://www.asroma.it/	images/roma.png	Rome	Lazio	"41.89, 12.48"	3	11	1941/42; 1982/83; 2000/01

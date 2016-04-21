@@ -45,7 +45,7 @@ Exhibit.Importer.TsvCsv._settingSpecs = {
     "valueSeparator": {"type": "text"},
     "hasColumnTitles": {"type": "boolean", 
                         "defaultValue": true}
-}
+};
 
 Exhibit.Importer.Tsv.parse = function(url, content, callback, link) {
     callback(Exhibit.Importer.TsvCsv.parse(content, link, url, "\t"));
@@ -59,7 +59,7 @@ Exhibit.Importer.TsvCsv.parse = function(content, link, url, separator) {
     var settings = {};
     var o = null;
 
-    if (typeof(link) == "string") {
+    if (typeof(link) === "string") {
         link = Exhibit.jQuery("<link>");
         link.attr("href",url);
     }
@@ -78,7 +78,7 @@ Exhibit.Importer.TsvCsv.parse = function(content, link, url, separator) {
 	Exhibit.Debug.exception(e, "Error parsing tsv/csv from " + url);
     }
     return o;
-}
+};
 
 Exhibit.Importer.TsvCsv._parseInternal = function(text, separator, expressionString, hasColumnTitles, valueSeparator) {
     // separator separates fields; 
@@ -87,6 +87,7 @@ Exhibit.Importer.TsvCsv._parseInternal = function(text, separator, expressionStr
     var exprs= null;
     var propNames = [];
     var properties = [];
+    var i,j;
 
     if (hasColumnTitles) {
         exprs = data.shift();
@@ -109,30 +110,34 @@ Exhibit.Importer.TsvCsv._parseInternal = function(text, separator, expressionStr
     for (i=0; i<data.length; i++) {
 	var row=data[i];
 	var item={};
-	var len=row.length < exprs.length ? row.length : exprs.length;
+	var len=Math.min(row.length,exprs.length);
 	for (j=0; j<len; j++) {
 	    if (row[j].length>0) {
 		if (valueSeparator && (row[j].indexOf(valueSeparator) >= 0)) {
-		    row[j]=row[j].split(valueSeparator);
+		    row[j]=row[j]
+                        .split(valueSeparator)
+                        .map(function(s) {return s.trim();})
+                        .filter(function(s) {return s.length;});
 		}
 		item[propNames[j]]=row[j];
 	    }
 	}
 	items.push(item);
     }
-    return {items: items, properties: properties}
-}
+    return {items: items, properties: properties};
+};
 
 
 Exhibit.Importer.TsvCsv.CsvToArray =function(text,separator){
-    var i;
+    var i, lines;
     if (text.indexOf('"') < 0) { 
 	//fast case: no quotes
-	var lines=text.split(/\r?\n/);
 	var items=[];
+	lines=text.split(/\r?\n/);
 	for (i=0; i<lines.length; i++) {
-	    if (lines[i].length > 0)
+	    if (lines[i].length > 0) {
 		items.push(lines[i].split(separator));
+            }
 	} 
 	return items;
     }
@@ -151,7 +156,7 @@ Exhibit.Importer.TsvCsv.CsvToArray =function(text,separator){
       a lookahead pattern at the end avoids including the newline in the match
     */
     text = text.replace(/\r\n/g,"\n"); //handle IE newline convention
-    var lines=text.match(/([^"\n]|("[^"]*"))+?(?=\n|$)/g);
+    lines=text.match(/([^"\n]|("[^"]*"))+?(?=\n|$)/g);
 
     /*it would be nice to use the same trick for splitting fields
       unfortunately, while empty lines can just be skipped over, 
@@ -180,14 +185,14 @@ Exhibit.Importer.TsvCsv.CsvToArray =function(text,separator){
 				      //bring back original quoted separator
 					  .replace(/\uFFFF/g,separator)
 				      //unescape quotes
-					  .replace(/""/,'"')
+					  .replace(/""/,'"');
 				  })
 			 .split('\uFFFF')
 			);
 	}
     }
 return records;
-}
+};
 
 
 Exhibit.Importer.TsvCsv._register = function() {
