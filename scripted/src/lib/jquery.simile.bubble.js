@@ -50,7 +50,7 @@
        
                 bubble = methods.createBubbleForPoint(pageX, pageY, width, height, orientation);
         
-                div.remove();
+                div.detach();
                 div.css("position", "static");
                 div.css("left", null);
                 div.css("top", null);
