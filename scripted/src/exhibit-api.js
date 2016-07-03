@@ -12,7 +12,7 @@ var Exhibit = {
      * The version number for Exhibit.
      * @constant
      */
-    version: "3.1.2-rc2",
+    version: "3.1.2-rc3",
 
     /**
      * The XML namespace for Exhibit.
@@ -82,7 +82,7 @@ var Exhibit = {
     Extension: {},
 
     _dependencies: {
-        "lib/jquery-1.11.3.min.js": "jQuery",
+        "lib/jquery-1.12.4.min.js": "jQuery",
         "lib/json2.js": "JSON",
         "lib/base64.js": "Base64",
         "lib/sprintf.js": "sprintf",
@@ -579,25 +579,27 @@ Exhibit.load = function() {
     Exhibit.loader = $LAB.setOptions({"AlwaysPreserveOrder": true});
 
     for (i in Exhibit._dependencies) {
-        if (typeof Exhibit._dependencies[i] === "undefined") {
-            Exhibit.includeJavascriptFile(Exhibit.urlPrefix, i);
-        } else if (Exhibit._dependencies.hasOwnProperty(i)) {
-            dep = Exhibit._dependencies[i].split(".");
-            if (dep.length === 1) {
-                if (!Object.prototype.hasOwnProperty.call(window, dep[0])) {
-                    Exhibit.includeJavascriptFile(Exhibit.urlPrefix, i);
-                }
+        if (Exhibit._dependencies.hasOwnProperty(i)) {
+            if (typeof Exhibit._dependencies[i] === "undefined") {
+                Exhibit.includeJavascriptFile(Exhibit.urlPrefix, i);
             } else {
-                for (j = 0; j < dep.length; j++) {
-                    o = window;
-                    for (k = 0; k < j; k++) {
-                        o = o[dep[k]];
+                dep = Exhibit._dependencies[i].split(".");
+                if (dep.length === 1) {
+                    if (!Object.prototype.hasOwnProperty.call(window, dep[0])) {
+                        Exhibit.includeJavascriptFile(Exhibit.urlPrefix, i);
                     }
-                    if (!o.hasOwnProperty(dep[j])) {
-                        if (j === dep.length - 1) {
-                            Exhibit.includeJavascriptFile(Exhibit.urlPrefix, i);
-                        } else {
-                            break;
+                } else {
+                    for (j = 0; j < dep.length; j++) {
+                        o = window;
+                        for (k = 0; k < j; k++) {
+                            o = o[dep[k]];
+                        }
+                        if (!o.hasOwnProperty(dep[j])) {
+                            if (j === dep.length - 1) {
+                                Exhibit.includeJavascriptFile(Exhibit.urlPrefix, i);
+                            } else {
+                                break;
+                            }
                         }
                     }
                 }
