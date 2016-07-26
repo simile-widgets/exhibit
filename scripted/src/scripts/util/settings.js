@@ -361,7 +361,7 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
  * @returns {Function}
  */
 Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
-    var value, bindingType, expression, parser;
+    var value, bindingType, expressions, expression, parser, accessors;
 
     value = f(spec.attributeName);
 
@@ -531,7 +531,7 @@ Exhibit.SettingsUtilities._evaluateBindings = function(value, database, visitor,
     var f, maxIndex;
     maxIndex = bindings.length - 1;
     f = function(tuple, index) {
-        var binding, visited, recurse, bindingName;
+        var binding, visited, recurse, bindingName, i, individual_accessor;
         binding = bindings[index];
         visited = false;
         recurse = (index === maxIndex) ?
@@ -550,6 +550,18 @@ Exhibit.SettingsUtilities._evaluateBindings = function(value, database, visitor,
                 function(tuple2) { visited = true; tuple = tuple2; recurse(); }, 
                 tuple
             );
+        } else if (Array.isArray(binding.accessor)) {
+            // dimension > 1, binding.accessor is an array of functions
+            bindingName = binding.bindingName;
+            tuple[bindingName] = [];
+            for (i = 0; i < binding.accessor.length; i++) {
+                individual_accessor = binding.accessor[i];
+                individual_accessor(
+                    value, 
+                    database, 
+                    function(v) { visited = true; tuple[bindingName].push(v); recurse(); }
+                );
+            }
         } else {
             bindingName = binding.bindingName;
             binding.accessor(
