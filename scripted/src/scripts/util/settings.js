@@ -363,11 +363,7 @@ Exhibit.SettingsUtilities._createTupleAccessor = function(f, spec) {
 Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
     var value, bindingType, expression, parser;
 
-    if (typeof spec.attributeName == 'function'){
-            value = spec.attributeName();
-    } else{
-        value = f(spec.attributeName);
-    }
+    value = f(spec.attributeName);
 
     if (typeof value === "undefined" || value === null) {
         return null;
@@ -387,7 +383,38 @@ Exhibit.SettingsUtilities._createElementalAccessor = function(f, spec) {
     }
 
     try {
+        // for accessors with dimension > 1, return array of functions
+        if (typeof spec["dimensions"] !== "undefined" && spec["dimensions"] !== 1) { 
+            expressions = Exhibit.ExpressionParser.parseSeveral(value);
+            parser = Exhibit.SettingsUtilities._typeToParser(bindingType);
+            
+            // if expressions requested, return arry of expressions
+            if (typeof spec["expressions"] !== "undefined" && spec["expressions"]) {
+                return expressions
+            }
+
+            accessors = []
+            for (i = 0; i < expressions.length; i++) {
+                expression = expressions[i];
+                function generateAccessor(expression) {
+                    accessors.push(
+                        function(itemID, database, visitor) {
+                            expression.evaluateOnItem(itemID, database).values.visit(
+                                function(v) { return parser(v, visitor); }
+                        )}
+                    )
+                } 
+                generateAccessor(expression);
+            }
+            return accessors;
+
+
+        }
         expression = Exhibit.ExpressionParser.parse(value);
+        // if expressions requested, return expression directly
+        if (typeof spec["expressions"] !== "undefined" && spec["expressions"]) {
+            return expression
+        }
         parser = Exhibit.SettingsUtilities._typeToParser(bindingType);
         return function(itemID, database, visitor) {
             expression.evaluateOnItem(itemID, database).values.visit(
