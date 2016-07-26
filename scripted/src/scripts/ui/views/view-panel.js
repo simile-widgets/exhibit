@@ -588,5 +588,5 @@ Exhibit.ViewPanel.prototype.stateDiffers = function(state) {
     return state.viewIndex !== this._viewIndex;
 };
 
-Exhibit.jQuery(document).one("registerComponents.exhibit",
+Exhibit.jQuery(document).on("registerComponents.exhibit",
                 Exhibit.ViewPanel._registerComponent);

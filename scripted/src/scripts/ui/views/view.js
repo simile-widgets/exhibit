@@ -310,7 +310,7 @@ Exhibit.View.addViewState = function(id, state) {
     }
 };
 
-Exhibit.jQuery(document).one(
+Exhibit.jQuery(document).on(
     "registerComponents.exhibit",
     Exhibit.View.registerComponent
 );
