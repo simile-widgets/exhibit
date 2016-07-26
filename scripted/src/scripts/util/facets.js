@@ -90,7 +90,7 @@ Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
  */
 Exhibit.FacetUtilities.isCollapsed = function(facet) {
     var el = facet._dom.frameDiv;
-    return !Exhibit.jQuery(el).is(":visible");
+    return !Exhibit.jQuery(el).is(":visible") && Exhibit.jQuery(el).attr("ex-collapsible");
 };
 
 /**
