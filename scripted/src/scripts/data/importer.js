@@ -199,9 +199,9 @@ Exhibit.Importer.prototype._loadURL = function(url, database, callback) {
             var msg, fragment;
             // if url is same as current page, fetch current dom
             // currently used by autodocumentation generator to store user uploaded data in html fragment
-            if ($(location).attr('href') === url) {
+            if (Exhibit.jQuery(location).attr('href') === url) {
                 console.log('changed data to current dom object');
-                data = $('html');
+                data = Exhibit.jQuery('html');
             }
             fragment = Exhibit.jQuery(data).find(fragmentId)
                           .addBack()
