@@ -18,11 +18,17 @@ Exhibit.TabularView = function(containerElmt, uiContext) {
         uiContext
     ));
     this.addSettingSpecs(Exhibit.TabularView._settingSpecs);
-    Exhibit.jQuery.extend(this._settings, { rowStyler: null, tableStyler: null, indexMap: {} });
+    Exhibit.jQuery.extend(this._settings, {indexMap: {} });
 
     this._columns = [];
     this._rowTemplate = null;
     this._dom = null;
+
+    this._accessors = {
+        getProxy : function(itemID, database, visitor) {
+            visitor(itemID);
+        },
+    };
 
     this._onItemsChanged = function(evt) {
         view._settings.page = 0;
@@ -52,8 +58,23 @@ Exhibit.TabularView._settingSpecs = {
     "pageWindow":           { type: "int",     defaultValue: 2 },
     "page":                 { type: "int",     defaultValue: 0 },
     "alwaysShowPagingControls": { type: "boolean", defaultValue: false },
-    "pagingControlLocations":   { type: "enum",    defaultValue: "topbottom", choices: [ "top", "bottom", "topbottom" ] }
+    "pagingControlLocations":   { type: "enum",    defaultValue: "topbottom", choices: [ "top", "bottom", "topbottom" ] },
+    "rowStyler":            {type: "function", defaultValue: undefined},
+    "tableStyler":          {type: "function", defaultValue: undefined},
+    "columnLabels":         {type: "text", dimensions: "*", description: "comma separated list of labels used for the column headers, e.g., 'Name, Position'"},
+    "columnFormats":        {type: "text", description: "comma separated list of format expressions, e.g., 'list, image, date { mode: short }'"}
 };
+
+Exhibit.TabularView._accessorSpecs = [{
+    accessorName : "getProxy",
+    attributeName : "proxy"
+}, {
+    accessorName : "getColumns",
+    attributeName : "columns",
+    type: "text",
+    expressions: true,
+    dimensions: "*"
+}];
 
 /**
  * @param {Object} configuration
@@ -81,7 +102,7 @@ Exhibit.TabularView.create = function(configuration, containerElmt, uiContext) {
  * @returns {Exhibit.TabularView}
  */
 Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContext) {
-    var configuration, view, expressions, labels, s, i, expression, formats, index, startPosition, column, o, tables, f;
+    var configuration, view;
     configuration = Exhibit.getConfigurationFromDOM(configElmt);
     
     uiContext = Exhibit.UIContext.createFromDOM(configElmt, uiContext);
@@ -93,28 +114,42 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
     );
     
     Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, view.getSettingSpecs(), view._settings);
-    
+    Exhibit.SettingsUtilities.createAccessorsFromDOM(configElmt, Exhibit.TabularView._accessorSpecs, view._accessors);
+        
+    Exhibit.TabularView._configure(view, configuration);
+    view._internalValidate();
+
+    view._initializeUI();
+    return view;
+};
+
+/**
+ * @param {Exhibit.TabularView} view
+ * @param {Object} configuration
+ */
+Exhibit.TabularView._configure = function(view, configuration) {
+    var labels, expressions, i, expression, formats, index, startPosition, column, o, s, rowStyler, f, tableStyler;
+    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.TabularView._settingSpecs, view._settings);
+    Exhibit.SettingsUtilities.createAccessors(configuration, Exhibit.TabularView._accessorSpecs, view._accessors);
+
     try {
-        expressions = [];
-        labels = Exhibit.getAttribute(configElmt, "columnLabels", ",") || [];
-        
-        s = Exhibit.getAttribute(configElmt, "columns");
-        if (typeof s !== "undefined" && s !== null && s.length > 0) {
-            expressions = Exhibit.ExpressionParser.parseSeveral(s);
+        labels = view._settings.columnLabels || [];
+
+        expressions = view._accessors.getColumns;
+        if (Array.isArray(expressions)) {
+            for (i = 0; i < expressions.length; i++) {
+                expression = expressions[i];
+                view._columns.push({
+                    expression: expression,
+                    uiContext:  Exhibit.UIContext.create({}, view.getUIContext(), true),
+                    styler:     null,
+                    label:      i < labels.length ? labels[i] : null,
+                    format:     "list"
+                });
+            }
         }
         
-        for (i = 0; i < expressions.length; i++) {
-            expression = expressions[i];
-            view._columns.push({
-                expression: expression,
-                uiContext:  Exhibit.UIContext.create({}, view.getUIContext(), true),
-                styler:     null,
-                label:      i < labels.length ? labels[i] : null,
-                format:     "list"
-            });
-        }
-        
-        formats = Exhibit.getAttribute(configElmt, "columnFormats");
+        formats = view._settings.formats
         if (typeof formats !== "undefined" && formats !== null && formats.length > 0) {
             index = 0;
             startPosition = 0;
@@ -135,87 +170,24 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
                 index++;
             }
         }
-        
-        tables = Exhibit.jQuery("table", configElmt);
-        if (tables.length > 0 && Exhibit.jQuery("table:eq(0) tr", configElmt).length > 0) {
-            view._rowTemplate = Exhibit.Lens.compileTemplate(Exhibit.jQuery("table:eq(0) tr:eq(0)", configElmt).get(0), false, uiContext);
-        }
     } catch (e) {
         Exhibit.Debug.exception(e, Exhibit._("%TabularView.error.configuration"));
     }
     
-    s = Exhibit.getAttribute(configElmt, "rowStyler");
-    if (typeof s !== "undefined" && s !== null && s.length > 0) {
-        f = eval(s);
+    rowStyler = view._settings.rowStyler
+    if (typeof rowStylerow !== "undefined" && s !== null && rowStyler.length > 0) {
+        f = eval(rowStyler);
         if (typeof f === "function") {
             view._settings.rowStyler = f;
         }
     }
-    s = Exhibit.getAttribute(configElmt, "tableStyler");
-    if (typeof s !== "undefined" && s !== null && s.length > 0) {
-        f = eval(s);
+
+    tableStyler = view._settings.tableStyler;
+    if (typeof tableStyler !== "undefined" && s !== null && tableStyler.length > 0) {
+        f = eval(tableStyler);
         if (typeof f === "function") {
             view._settings.tableStyler = f;
         }
-    }
-        
-    Exhibit.TabularView._configure(view, configuration);
-    view._internalValidate();
-
-    view._initializeUI();
-    return view;
-};
-
-/**
- * @param {Exhibit.TabularView} view
- * @param {Object} configuration
- */
-Exhibit.TabularView._configure = function(view, configuration) {
-    var columns, i, column, expr, styler, label, format, expression, path;
-    Exhibit.SettingsUtilities.collectSettings(configuration, Exhibit.TabularView._settingSpecs, view._settings);
-    
-    if (typeof configuration.columns !== "undefined") {
-        columns = configuration.columns;
-        for (i = 0; i < columns.length; i++) {
-            column = columns[i];
-            styler = null;
-            label = null;
-            format = null;
-            
-            if (typeof column === "string") {
-                expr = column;
-            } else {
-                expr = column.expression;
-                styler = column.styler;
-                label = column.label;
-                format = column.format;
-            }
-            
-            expression = Exhibit.ExpressionParser.parse(expr);
-            if (expression.isPath()) {
-                path = expression.getPath();
-                if (typeof format !== "undefined" && format !== null && format.length > 0) {
-                    format = Exhibit.FormatParser.parse(view.getUIContext(), format, 0);
-                } else {
-                    format = "list";
-                }
-                
-                view._columns.push({
-                    expression: expression,
-                    styler:     styler,
-                    label:      label,
-                    format:     format,
-                    uiContext:  view.getUIContext()
-                });
-            }
-        }
-    }
-    
-    if (typeof configuration.rowStyler !== "undefined") {
-        view._settings.rowStyler = configuration.rowStyler;
-    }
-    if (typeof configuration.tableStyler !== "undefined") {
-        view._settings.tableStyler = configuration.tableStyler;
     }
 };
 
@@ -232,6 +204,7 @@ Exhibit.TabularView.prototype._internalValidate = function() {
             if (propertyID !== "uri") {
                 this._columns.push(
                     {   expression: Exhibit.ExpressionParser.parse("." + propertyID),
+                        uiContext:  Exhibit.UIContext.create({}, this.getUIContext(), true),
                         styler:     null,
                         label:      database.getProperty(propertyID).getLabel(),
                         format:     "list"
@@ -341,7 +314,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
          */
         table = Exhibit.jQuery("<table><thead></thead><tbody></tbody></table>");
         table.attr("class", "exhibit-tabularView-body");
-        if (this._settings.tableStyler !== null) {
+        if (this._settings.tableStyler !== undefined) {
             this._settings.tableStyler(table.get(0), database);
         } else {
             table.attr("cellSpacing", this._settings.cellSpacing)
@@ -385,7 +358,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
                 item = items[i];
                 tr = Exhibit.Lens.constructFromLensTemplate(item.id, self._rowTemplate, table, self.getUIContext());
                 
-                if (self._settings.rowStyler !== null) {
+                if (self._settings.rowStyler !== undefined) {
                     self._settings.rowStyler(item.id, database, tr, i);
                 }
             };
@@ -425,7 +398,7 @@ Exhibit.TabularView.prototype._reconstruct = function() {
                     }
                 }
                 
-                if (self._settings.rowStyler !== null) {
+                if (self._settings.rowStyler !== undefined) {
                     self._settings.rowStyler(item.id, database, tr.get(0), i);
                 }
             };
