@@ -7,9 +7,10 @@
 <project name="exhibit3" basedir=".">
 
   <property name="tools" value="tools"/>
+  <property name="devlib" value="lib"/>
   <property name="src" value="src"/>
+  <property name="lib" value="${src}/lib"/>
   <property name="tests" value="tests"/>
-  <property name="lib" value="lib"/>
   <property name="build" value="build"/>
   <property name="docs" value="${build}/docs"/>
   <property name="demos" value="${build}/demos"/>
@@ -44,7 +45,7 @@
 
   <condition property="jscoverage.report.exists">
     <resourceexists>
-      <file file="${lib}/jscoverage-report.js"/>
+      <file file="${devlib}/jscoverage-report.js"/>
     </resourceexists>
   </condition>
   -->
@@ -102,6 +103,15 @@
     <mkdir dir="${bundleStyle}"/>
 
     <concat destfile="${bundle}/exhibit-scripted-bundle.js" force="no">
+      <filelist dir="${lib}">
+        <file name="json2.js"/>
+        <file name="base64.js"/>
+        <file name="sprintf.js"/>
+        <file name="jquery.history.js"/>
+        <file name="jquery.history.shim.js"/>
+        <file name="jquery.simile.dom.js"/>
+        <file name="jquery.simile.bubble.js"/>
+      </filelist>
       <filelist dir="${src}/">
         <file name="scripts/exhibit.js"/>
         <file name="scripts/bc/bc.js"/>
@@ -318,12 +328,12 @@
       <fileset dir="${tests}"/>
     </copy>
     <copy todir="${instrument}/lib">
-      <fileset dir="${lib}"/>
+      <fileset dir="${devlib}"/>
     </copy>
     <java
        classpath="${tools}/rhino/js.jar"
        classname="org.mozilla.javascript.tools.shell.Main">
-      <arg line="-opt -1 ${lib}/coverage-runner.js ${jscoverage.port}"/>
+      <arg line="-opt -1 ${devlib}/coverage-runner.js ${jscoverage.port}"/>
     </java>
     <exec dir="." executable="${jscoverage.dir}/jscoverage-server">
       <arg line="--port=${jscoverage.port} --shutdown"/>
@@ -364,7 +374,7 @@
     <java
        classpath="${tools}/rhino/js.jar"
        classname="org.mozilla.javascript.tools.shell.Main">
-      <arg line="-opt -1 ${lib}/test-runner.js ${modules}"/>
+      <arg line="-opt -1 ${devlib}/test-runner.js ${modules}"/>
     </java>
   </target>
 

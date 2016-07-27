@@ -82,18 +82,8 @@ var Exhibit = {
     Extension: {},
 
     _dependencies: {
-        "lib/jquery-1.12.4.min.js": "jQuery",
-        "lib/json2.js": "JSON",
-        "lib/base64.js": "Base64",
-        "lib/sprintf.js": "sprintf",
-        // History fails to load correctly in Safari through this mechanism
-        "lib/jquery.history.js": undefined, // "History.init",
-        "lib/jquery.history.shim.js": undefined, //always load?
-        // SIMILE jQuery plugins fail to load under nonconflicting
-        // circumstances because jQuery hasn't been made available yet
-        "lib/jquery.simile.dom.js": undefined, // "jQuery.simileDOM",
-        "lib/jquery.simile.bubble.js": undefined, // "jQuery.simileBubble",
-        "lib/es5-shim.js": undefined
+        "lib/es5-shim.js": undefined,
+        "lib/jquery-1.12.4.min.js": "jQuery"
     },
 
     /**
@@ -115,6 +105,13 @@ var Exhibit = {
      * Scripts Exhibit will load.
      */
     scripts: [
+        "lib/json2.js",
+        "lib/base64.js",
+        "lib/sprintf.js",
+        "lib/jquery.history.js",
+        "lib/jquery.history.shim.js",
+        "lib/jquery.simile.dom.js",
+        "lib/jquery.simile.bubble.js",
         "scripts/exhibit.js",
         "scripts/bc/bc.js",
         "scripts/bc/attributes.js",
