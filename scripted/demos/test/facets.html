@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<script
+		src="https://code.jquery.com/jquery-1.12.4.min.js"
+		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+		crossorigin="anonymous"></script>
+
+	<script
+		src="../../api/exhibit-api.js"
+		type="text/javascript"></script>
+<!-- 	<link
+		rel="exhibit-extension"
+		href="http://api.simile-widgets.org/exhibit/3.1.2rc2/extensions/time/time-extension.js"/> -->
+
+	<link
+		href="senate-committees.js"
+		type="application/json"
+		rel="exhibit-data" />
+	<link
+		href="senate-bills.js"
+		type="application/json"
+		rel="exhibit-data" />
+
+	<style type="text/css">
+		td {
+			min-width: 200px;
+			vertical-align: top;
+		}
+	</style>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#toggle-facets').click(function(){
+				$('#facet-list').toggle();
+			});
+		});
+	</script>
+</head>
+<body>
+	<div data-ex-role="collection" data-ex-item-types="Senator"></div>
+	<table>
+		<tr>
+			<td>
+				<button id="toggle-facets">Toggle facets</button>
+				<h2>Hidden facets</h2>
+				<div id="facet-list" style="display:none;">
+					Normal facet
+					<div data-ex-role="facet"
+					     data-ex-expression=".party"></div>
+					Collapsible facet, starts out uncollapsed
+					<div data-ex-role="facet"
+						     data-ex-expression=".party"
+						     data-ex-collapsible="true"
+						     ></div>
+					Collapsible facet, starts out collapsed	 
+					<div data-ex-role="facet"
+						     data-ex-expression=".party"
+						     data-ex-collapsible="true"
+						     data-ex-collapsed="true"></div>
+				</div>
+				<div style="background-color: #fdd;">
+					<br/>
+					<h2>Visible facets</h2>
+					Normal facet
+					<div data-ex-role="facet"
+					     data-ex-expression=".party"></div>
+					Collapsible facet, starts out uncollapsed
+					<div data-ex-role="facet"
+						     data-ex-expression=".party"
+						     data-ex-collapsible="true"
+						     ></div>
+					Collapsible facet, starts out collapsed	 
+					<div data-ex-role="facet"
+						     data-ex-expression=".party"
+						     data-ex-collapsible="true"
+						     data-ex-collapsed="true"></div>
+				</div>
+			</td>
+			<td>
+				<div data-ex-role="viewPanel">
+					<div data-ex-role="view"
+					     data-ex-view-class="Tabular"
+					     data-ex-columns=".label, .party, .state"
+					     data-ex-columns="name, party, state"></div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
+
