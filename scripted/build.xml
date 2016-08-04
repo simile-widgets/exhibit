@@ -53,19 +53,19 @@
   <taskdef
      name="yui-compressor"
      classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask"
-     classpath="${tools}/yuicompressor-ant/yui-compressor-ant-task.jar;${tools}/yuicompressor/yuicompressor.jar"
+     classpath="${tools}/yuicompressor-ant/yui-compressor-ant-task-0.5.jar;${tools}/yuicompressor/yuicompressor-2.4.6.jar"
      />
 
   <taskdef
      name="jsdoctoolkit"
      classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"
-     classpath="${tools}/jsdoc-toolkit-ant/jsdoc-toolkit-ant-task.jar;${tools}/rhino/js.jar"
+     classpath="${tools}/jsdoc-toolkit-ant/jsdoc-toolkit-ant-task-1.1.2.jar;${tools}/rhino/js.jar"
      />
 
   <taskdef
      name="jslint"
      classname="com.googlecode.jslint4java.ant.JSLintTask"
-     classpath="${tools}/jslint4java/jslint4java.jar"
+     classpath="${tools}/jslint4java/jslint4java-2.0.1.jar"
      />
 
 
