@@ -562,14 +562,16 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
             this._eventSource.addMany(events);
         }
 
-        band = this._timeline.getBand(0);
-        centerDate = band.getCenterVisibleDate();
-        earliest = this._eventSource.getEarliestDate();
-        latest = this._eventSource.getLatestDate();
-        if (typeof earliest !== "undefined" && earliest !== null && centerDate < earliest) {
-            band.scrollToCenter(earliest);
-        } else if (typeof latest !== "undefined" && latest !== null && centerDate > latest) {
-            band.scrollToCenter(latest);
+        if (plottableSize > 0) {
+            band = this._timeline.getBand(0);
+            centerDate = band.getCenterVisibleDate();
+            earliest = this._eventSource.getEarliestDate();
+            latest = this._eventSource.getLatestDate();
+            if (typeof earliest !== "undefined" && earliest !== null && centerDate < earliest) {
+                band.scrollToCenter(earliest);
+            } else if (typeof latest !== "undefined" && latest !== null && centerDate > latest) {
+                band.scrollToCenter(latest);
+            }
         }
     }
     this._dom.setUnplottableMessage(currentSize, unplottableItems);

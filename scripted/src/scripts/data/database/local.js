@@ -10,7 +10,7 @@
 Exhibit.Database._LocalImpl = function() {
     this._types = {};
     this._properties = {};
-    this._propertyArray = {};
+    this._propertyArray = null;
     
     this._spo = {};
     this._ops = {};

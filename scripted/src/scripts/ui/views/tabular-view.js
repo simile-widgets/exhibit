@@ -115,6 +115,12 @@ Exhibit.TabularView.createFromDOM = function(configElmt, containerElmt, uiContex
     
     Exhibit.SettingsUtilities.collectSettingsFromDOM(configElmt, view.getSettingSpecs(), view._settings);
     Exhibit.SettingsUtilities.createAccessorsFromDOM(configElmt, Exhibit.TabularView._accessorSpecs, view._accessors);
+
+    // custom tabular row templating
+    tables = Exhibit.jQuery("table", configElmt);
+    if (tables.length > 0 && Exhibit.jQuery("table:eq(0) tr", configElmt).length > 0) {
+        view._rowTemplate = Exhibit.Lens.compileTemplate(Exhibit.jQuery("table:eq(0) tr:eq(0)", configElmt).get(0), false, uiContext);
+    }
         
     Exhibit.TabularView._configure(view, configuration);
     view._internalValidate();
