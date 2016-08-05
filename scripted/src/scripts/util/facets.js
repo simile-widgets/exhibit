@@ -53,10 +53,11 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
         Exhibit.jQuery(dom.collapseImg).add(Exhibit.jQuery(dom.title))
             .bind("click", function(evt) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
+            Exhibit.jQuery(dom.frameDiv).data("isCollapsed", false)
         });
         
         if (collapsed) {
-            Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
+            Exhibit.FacetUtilities.hideCollapse(dom, forFacet);
         }
     }
     
@@ -73,14 +74,28 @@ Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
     if (Exhibit.jQuery(el).is(":visible")) {
         Exhibit.jQuery(el).hide();
         Exhibit.jQuery(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/expand.png");
+        Exhibit.jQuery(el).data("isCollapsed", true)
     } else {
         Exhibit.jQuery(el).show();
+        Exhibit.jQuery(el).data("isCollapsed", false)
         Exhibit.jQuery(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/collapse.png");
-		// Try to call onUncollapse but don't sweat it if it isn't there.
-		if (typeof facet.onUncollapse === 'function') {
-			facet.onUncollapse();			
-		}
+        // Try to call onUncollapse but don't sweat it if it isn't there.
+        if (typeof facet.onUncollapse === 'function') {
+            facet.onUncollapse();           
+        }
     }
+};
+
+/**
+ * @static
+ * @param {Object} dom
+ * @param {Exhibit.Facet} facet
+ */
+Exhibit.FacetUtilities.hideCollapse = function(dom, facet) {
+    var el = dom.frameDiv;
+    Exhibit.jQuery(el).hide();
+    Exhibit.jQuery(el).data("isCollapsed", true)
+    Exhibit.jQuery(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/expand.png");
 };
 
 /**
@@ -90,7 +105,7 @@ Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
  */
 Exhibit.FacetUtilities.isCollapsed = function(facet) {
     var el = facet._dom.frameDiv;
-    return !Exhibit.jQuery(el).is(":visible") && Exhibit.jQuery(el).attr("ex-collapsible"); //fixes visibility / collapsibility issue
+    return Exhibit.jQuery(el).data("isCollapsed")
 };
 
 /**
