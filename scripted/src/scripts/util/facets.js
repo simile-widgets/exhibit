@@ -53,7 +53,7 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
         Exhibit.jQuery(dom.collapseImg).add(Exhibit.jQuery(dom.title))
             .bind("click", function(evt) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
-            Exhibit.jQuery(dom.frameDiv).data("isCollapsed", false)
+            forFacet._collapsed = false;
         });
         
         if (collapsed) {
@@ -74,10 +74,10 @@ Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
     if (Exhibit.jQuery(el).is(":visible")) {
         Exhibit.jQuery(el).hide();
         Exhibit.jQuery(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/expand.png");
-        Exhibit.jQuery(el).data("isCollapsed", true)
+        facet._collapsed = true;
     } else {
         Exhibit.jQuery(el).show();
-        Exhibit.jQuery(el).data("isCollapsed", false)
+        facet._collapsed = false;
         Exhibit.jQuery(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/collapse.png");
         // Try to call onUncollapse but don't sweat it if it isn't there.
         if (typeof facet.onUncollapse === 'function') {
@@ -94,7 +94,7 @@ Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
 Exhibit.FacetUtilities.hideCollapse = function(dom, facet) {
     var el = dom.frameDiv;
     Exhibit.jQuery(el).hide();
-    Exhibit.jQuery(el).data("isCollapsed", true)
+    facet._collapsed = true;
     Exhibit.jQuery(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/expand.png");
 };
 
@@ -104,8 +104,7 @@ Exhibit.FacetUtilities.hideCollapse = function(dom, facet) {
  * @returns {Boolean}
  */
 Exhibit.FacetUtilities.isCollapsed = function(facet) {
-    var el = facet._dom.frameDiv;
-    return Exhibit.jQuery(el).data("isCollapsed")
+    return facet._collapsed;
 };
 
 /**
