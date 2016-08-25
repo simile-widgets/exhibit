@@ -65,6 +65,11 @@ Exhibit.Facet = function (key, div, uiContext) {
 
     /**
      * @public
+     */
+    this._collapsed = false;
+
+    /**
+     * @public
      * @returns {String}
      */
     this.getLabel = function () {
