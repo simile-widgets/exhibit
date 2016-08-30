@@ -268,6 +268,9 @@ Exhibit._Impl = function(database) {
     this._uiContext = Exhibit.UIContext.createRootContext({}, this);
     this._registry = new Exhibit.Registry();
     Exhibit.jQuery(document).trigger("registerComponents.exhibit", this._registry);
+    // keep track of loaded extensions
+    this._extensionRegistry = [];
+    Exhibit.jQuery(document).trigger("registerExtensions.exhibit", {'extensionRegistry': this._extensionRegistry});
     this._collectionMap = {};
 };
 
@@ -292,7 +295,7 @@ Exhibit._Impl.prototype.dispose = function() {
     this._collectionMap = null;
     this._uiContext = null;
     this._database = null;
-    this._registry.dispose();
+    // this._registry.dispose();
     this._registry = null;
 };
 
