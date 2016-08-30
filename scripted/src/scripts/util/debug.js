@@ -33,12 +33,14 @@ Exhibit.Debug.log = function(msg) {
         typeof window.console["log"] === "function") {
         f = function(msg2) {
             console.log(msg2);
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
         };
     } else {
         f = function(msg2) {
             if (!Exhibit.Debug.silent) {
                 alert(msg2);
             }
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
         };
     }
     Exhibit.Debug.log = f;
@@ -58,12 +60,14 @@ Exhibit.Debug.warn = function(msg) {
             if (msg2.stack) {//say more
                 console.warn(msg2.stack)
             }
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
         };
     } else {
         f = function(msg2) {
             if (!Exhibit.Debug.silent) {
                 alert(msg2);
             }
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
         };
     }
     Exhibit.Debug.warn = f;
@@ -79,6 +83,7 @@ Exhibit.Debug.exception = function(e, msg) {
     var f, params = Exhibit.parseURLParameters();
     if (params.errors === "throw" || Exhibit.params.errors === "throw") {
         f = function(e2, msg2) {
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
             throw(e2);
         };
     } else if (typeof window["console"] !== "undefined" &&
@@ -89,6 +94,7 @@ Exhibit.Debug.exception = function(e, msg) {
             } else {
                 console.error(e2);
             }
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
             throw(e2); // do not hide from browser's native debugging features
         };
     } else {
@@ -96,6 +102,7 @@ Exhibit.Debug.exception = function(e, msg) {
             if (!Exhibit.Debug.silent) {
                 alert("Caught exception: " + msg2 + "\n\nDetails: " + (typeof e2["description"] !== "undefined" ? e2.description : e2));
             }
+            Exhibit.jQuery(document).trigger("debugMessage.exhibit", msg2);
             throw(e2); // do not hide from browser's native debugging features
         };
     }
