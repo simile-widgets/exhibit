@@ -102,20 +102,20 @@ Exhibit.onjQueryLoaded(function() {
         if (Exhibit.MapExtension.params.service === "google2" &&
                    typeof GMap2 === "undefined") {
             if (typeof Exhibit.params.gmapKey !== "undefined") {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.params.gmapKey);
+                scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.params.gmapKey);
             } else if (typeof Exhibit.MapExtension.params.gmapKey !== "undefined") {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.MapExtension.params.gmapKey);
+                scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.MapExtension.params.gmapKey);
             } else {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2");
+                scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2");
             }
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("google-maps-v2-view.js");
             }
         } else {
             // if author is referring to an unknown service, default to google
-	        if (typeof google === "undefined" ||
+            if (typeof google === "undefined" ||
                 (typeof google !== "undefined" && typeof google.map === "undefined")) {
-	            scriptURLs.push(proto + "//maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.gmapCallback");
+                scriptURLs.push(proto + "//maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.gmapCallback");
                 if (!Exhibit.MapExtension.params.bundle) {
                     javascriptFiles.push("map-view.js");
                 }
@@ -157,7 +157,37 @@ Exhibit.onjQueryLoaded(function() {
         Exhibit.includeCssFiles(document, null, cssURLs);
         Exhibit.includeJavascriptFiles(null, scriptURLs);
 
-    };
+        Exhibit.MapExtension._extensionSpecs = {
+            viewSpecs: {
+                "MapView": {}
+            },
+            documentation: ' \
+            <div> \
+                <p>To add this view to your exhibit, you must include the \
+                    map extension for Exhibit (in addition to the Exhibit API): \
+                </p> \
+                <div class="border"> \
+                    <pre> &lt;link rel="exhibit-extension" href=<a href="http://api.simile-widgets.org/exhibit/current/extensions/map/map-extension.js">"http://api.simile-widgets.org/exhibit/current/extensions/map/map-extension.js"</a>/&gt; \
+                    </pre>       \
+                </div> \
+            </div>'
+        }
 
+        /**
+         * @static
+         * @public
+         * @param {jQuery.Event} evt
+         * @param {extensionRegistry: []} reg
+         */
+        Exhibit.MapExtension.registerExtension = function(evt, reg) {
+            if ($.inArray('MapExtension', reg.extensionRegistry) < 0) {
+                reg.extensionRegistry.push('MapExtension');
+            }
+        };
+
+        $(document).on("registerExtensions.exhibit", Exhibit.MapExtension.registerExtension);
+
+    };
+ 
     Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);
 });

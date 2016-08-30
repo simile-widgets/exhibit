@@ -130,6 +130,35 @@ Exhibit.onjQueryLoaded(function() {
             }
         };
         finishedLoading();
+
+        Exhibit.TimeExtension._extensionSpecs = {
+            viewSpecs: {
+                "TimelineView": {}
+            },
+            documentation: ' \
+            <div> \
+                <p>To add this view to your exhibit, you must include the \
+                    time extension for Exhibit (in addition to the Exhibit API): \
+                </p> \
+                <div class="border"> \
+                    <pre> &lt;link rel="exhibit-extension" href=<a href="http://api.simile-widgets.org/exhibit/current/extensions/time/time-extension.js">"http://api.simile-widgets.org/exhibit/current/extensions/time/time-extension.js"</a>/&gt; \
+                    </pre>       \
+                </div> \
+            </div>'
+        }
+
+        /**     
+         * @static      
+         * @public      
+         * @param {jQuery.Event} evt        
+         * @param {extensionRegistry: []} reg       
+         */     
+        Exhibit.TimeExtension.registerExtension = function(evt, reg) {      
+            if (Exhibit.jQuery.inArray('TimeExtension', reg.extensionRegistry) < 0) {        
+                reg.extensionRegistry.push('TimeExtension');        
+            }       
+        };      
+        Exhibit.jQuery(document).on("registerExtensions.exhibit", Exhibit.TimeExtension.registerExtension); 
     };
 
     Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);

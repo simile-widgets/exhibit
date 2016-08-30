@@ -240,8 +240,35 @@ var Exhibit = {
     /**
      * @constant An Exhibit.Registry of static components.
      */
-    registry: null
+    registry: null,
+
+    /**     
+     * @namespace for official Exhibit documentation.       
+     */     
+    Documentation: {}
 };
+
+// Extension Specification for Exhibit core     
+Exhibit._extensionSpecs = {     
+    viewSpecs: {        
+        "TabularView": {dependencies: []},      
+        "ThumbnailView": { dependencies: ["OrderedViewFrame"]},     
+        "TileView": { dependencies: ["OrderedViewFrame"]}       
+    },      
+    facetSpecs: {       
+        "AlphaRangeFacet" : { dependencies: []},        
+        "CloudFacet": { dependencies: ["EnumeratedFacet"]},     
+        "HierarchicalFacet": { dependencies: []},       
+        "ImageFacet": { dependencies: ["EnumeratedFacet"]},      
+        "ListFacet": { dependencies: ["EnumeratedFacet"]},      
+        "MonthFacet": { dependencies: []},      
+        "NumericRangeFacet": { dependencies: []},       
+        "SliderFacet": { dependencies: []},     
+        "TextSearchFacet": { dependencies: []},     
+        "TimegridFacet": { dependencies: []},       
+        "WeekFacet": { dependencies: []}        
+    }       
+}
 
 /*! LAB.js (LABjs :: Loading And Blocking JavaScript)
     v2.0.3 (c) Kyle Simpson
