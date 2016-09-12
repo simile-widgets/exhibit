@@ -99,23 +99,25 @@ Exhibit.onjQueryLoaded(function() {
         
         scriptURLs = [];
         cssURLs = [];
+        var APIKey = Exhibit.jQuery('link[rel=exhibit-extension][data-ex-apikey]').data("ex-apikey") ? Exhibit.jQuery('link[rel=exhibit-extension][data-ex-apikey]').data("ex-apikey") : Exhibit.jQuery('link[rel=exhibit-extension][data-apikey]').data("apikey");
+        var keyString = APIKey ? "key=" + APIKey + "&" : "";
         if (Exhibit.MapExtension.params.service === "google2" &&
                    typeof GMap2 === "undefined") {
             if (typeof Exhibit.params.gmapKey !== "undefined") {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.params.gmapKey);
+                scriptURLs.push(proto + "//maps.google.com/maps?" + keyString + "callback=Exhibit.MapExtension.gmapCallback&async=2" + Exhibit.params.gmapKey);
             } else if (typeof Exhibit.MapExtension.params.gmapKey !== "undefined") {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2&key=" + Exhibit.MapExtension.params.gmapKey);
+                scriptURLs.push(proto + "//maps.google.com/maps?" + keyString + "callback=Exhibit.MapExtension.gmapCallback&async=2" + Exhibit.MapExtension.params.gmapKey);
             } else {
-	            scriptURLs.push(proto + "//maps.google.com/maps?file=api&v=2&sensor=false&callback=Exhibit.MapExtension.gmapCallback&async=2");
+                scriptURLs.push(proto + "//maps.google.com/maps?" + keyString + "callback=Exhibit.MapExtension.gmapCallback&async=2");
             }
             if (!Exhibit.MapExtension.params.bundle) {
                 javascriptFiles.push("google-maps-v2-view.js");
             }
         } else {
             // if author is referring to an unknown service, default to google
-	        if (typeof google === "undefined" ||
+            if (typeof google === "undefined" ||
                 (typeof google !== "undefined" && typeof google.map === "undefined")) {
-	            scriptURLs.push(proto + "//maps.googleapis.com/maps/api/js?sensor=false&callback=Exhibit.MapExtension.gmapCallback");
+                scriptURLs.push(proto + "//maps.googleapis.com/maps/api/js?" + keyString + "callback=Exhibit.MapExtension.gmapCallback");
                 if (!Exhibit.MapExtension.params.bundle) {
                     javascriptFiles.push("map-view.js");
                 }
