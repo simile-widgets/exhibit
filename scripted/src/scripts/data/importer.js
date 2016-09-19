@@ -168,7 +168,7 @@ Exhibit.Importer.prototype.load = function(link, database, callback) {
 
     Exhibit.UI.showBusyIndicator();
     Exhibit.UI.busyMessage('fetching');
-    resolver(url, database, postLoad, link);
+    resolver.call(this,url, database, postLoad, link);
 };
 
 /**

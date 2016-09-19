@@ -533,7 +533,7 @@ Exhibit.load = function() {
     linkElmts = document.getElementsByTagName("link");
     for (i = 0; i < linkElmts.length; i++) {
         link = linkElmts[i];
-        if (link.rel.search(/\b(exhibit\/babel-translator|exhibit-babel)\b/) > 0) {
+        if (link.rel.search(/\b(exhibit\/babel-translator|exhibit-babel)\b/) >= 0) {
             Exhibit.babelPrefix = link.href.replace(/\/translator\/$/, "");
         }
     }
