@@ -626,7 +626,7 @@
             "type": "President",
             "presidency": 44,
             "index": 43,
-            "term": [ 56 ],
+            "term": [ 56, 57 ],
             "dieInOffice": "no",
             "imageURL": "//upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Official_portrait_of_Barack_Obama.jpg/100px-Official_portrait_of_Barack_Obama.jpg",
             "url": "//en.wikipedia.org/wiki/Barack_Obama",
@@ -634,7 +634,21 @@
             "birth": "1961-08-04",
             "birthPlace": "Honolulu, Hawaii, USA",
             "religion": [ "Christian" ]
-        },        
+        },
+        {   "label": "Donald Trump",
+            "type": "President",
+            "presidency": 45,
+            "index": 44,
+            "term": [ 58 ],
+            "dieInOffice": "no",
+            "imageURL": "//upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/100px-Donald_Trump_official_portrait.jpg",
+            "url": "//en.wikipedia.org/wiki/Donald_Trump",
+            "party": "Republican",
+            "birth": "1946-06-14",
+            "birthPlace": "New York City, New York, USA",
+            "religion": [ "Presbyterian" ]
+        },
+
         {   "label": "1",
             "type": "Presidency",
             "index": 1,
@@ -896,9 +910,15 @@
         {   "label": "44",
             "type": "Presidency",
             "index": 44,
-            "inDate": "2009-01-20"
+            "inDate": "2009-01-20",
+            "outDate": "2017-01-20"
         },
-        
+        {   "label": "45",
+            "type": "Presidency",
+            "index": 45,
+            "inDate": "2017-01-20"
+        },
+
         {   "id": "George Washington",
             "birthLatLng": "38.1556,-76.8321"
         },
@@ -1028,7 +1048,10 @@
         {   "id": "Barack Obama",
             "birthLatLng": "21.3069,-157.8583"
         },
-            
+        {   "id": "Donald Trump",
+            "birthLatLng": "40.7000,-73.8163"
+        },
+
         {   "id": "George Washington",
             "deathLatLng": "38.707778,-77.086389"
         },
