@@ -10,6 +10,7 @@
 Exhibit.Registry = function(isStatic) {
     this._registry = {};
     this._idCache = {};
+    this._idCount = {};
     this._components = [];
     this._isStatic = (typeof isStatic !== "undefined" && isStatic !== null) ?
         isStatic :
@@ -49,15 +50,12 @@ Exhibit.Registry.prototype.hasRegistry = function(component) {
  * @returns {Number}
  */
 Exhibit.Registry.prototype.generateIdentifier = function(component) {
-    var branch, key, size;
-    size = 0;
-    branch = this._registry[component];
-    if (typeof branch !== "undefined") {
-        for (key in branch) {
-            if (branch.hasOwnProperty(key)) {
-                size++;
-            }
+    var size;
+    if (typeof this._registry[component] !== "undefined") {
+        if (typeof this._idCount[component] == "undefined") {
+            this._idCount[component] = 0;
         }
+        size = this._idCount[component]++;
     } else {
         throw new Error(Exhibit._("%registry.error.noSuchRegistry", component));
     }
