@@ -159,6 +159,36 @@ Exhibit.onjQueryLoaded(function() {
         Exhibit.includeCssFiles(document, null, cssURLs);
         Exhibit.includeJavascriptFiles(null, scriptURLs);
 
+        Exhibit.MapExtension._extensionSpecs = {
+            viewSpecs: {
+                "MapView": {}
+            },
+            documentation: ' \
+            <div> \
+                <p>To add this view to your exhibit, you must include the \
+                    map extension for Exhibit (in addition to the Exhibit API): \
+                </p> \
+                <div class="border"> \
+                    <pre> &lt;link rel="exhibit-extension" href=<a href="http://api.simile-widgets.org/exhibit/current/extensions/map/map-extension.js">"http://api.simile-widgets.org/exhibit/current/extensions/map/map-extension.js"</a>/&gt; \
+                    </pre>       \
+                </div> \
+            </div>'
+        }
+
+        /**
+         * @static
+         * @public
+         * @param {jQuery.Event} evt
+         * @param {extensionRegistry: []} reg
+         */
+        Exhibit.MapExtension.registerExtension = function(evt, reg) {
+            if ($.inArray('MapExtension', reg.extensionRegistry) < 0) {
+                reg.extensionRegistry.push('MapExtension');
+            }
+        };
+
+        $(document).on("registerExtensions.exhibit", Exhibit.MapExtension.registerExtension);
+
     };
 
     Exhibit.jQuery(document).one("loadExtensions.exhibit", loader);
