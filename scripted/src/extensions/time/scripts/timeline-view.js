@@ -61,20 +61,20 @@ Exhibit.TimelineView._intervalChoices = [
  * @constant
  */
 Exhibit.TimelineView._settingSpecs = {
-    "topBandHeight":           { "type": "int",        "defaultValue": 75 },
-    "topBandUnit":             { "type": "enum",       "choices": Exhibit.TimelineView._intervalChoices },
-    "topBandPixelsPerUnit":    { "type": "int",        "defaultValue": 200 },
-    "bottomBandHeight":        { "type": "int",        "defaultValue": 25 },
-    "bottomBandUnit":          { "type": "enum",       "choices": Exhibit.TimelineView._intervalChoices },
-    "bottomBandPixelsPerUnit": { "type": "int",        "defaultValue": 200 },
-    "timelineHeight":          { "type": "int",        "defaultValue": 400 },
-    "timelineConstructor":     { "type": "function",   "defaultValue": null },
-    "colorCoder":              { "type": "text",       "defaultValue": null },
-    "iconCoder":               { "type": "text",       "defaultValue": null },
-    "selectCoordinator":       { "type": "text",       "defaultValue": null },
-    "showHeader":              { "type": "boolean",    "defaultValue": true },
-    "showSummary":             { "type": "boolean",    "defaultValue": true },
-    "showFooter":              { "type": "boolean",    "defaultValue": true }
+    "topBandHeight":           { "type": "int",        "defaultValue": 75, description: "percent of the height that the top band takes up", importance: 1},
+    "topBandUnit":             { "type": "enum",       "choices": Exhibit.TimelineView._intervalChoices, description: "unit of the top band", importance: 1},
+    "topBandPixelsPerUnit":    { "type": "int",        "defaultValue": 200, description: "width of each interval in the top band in pixels", importance:1},
+    "bottomBandHeight":        { "type": "int",        "defaultValue": 25, description: "percent of the height that the bottom band takes up", importance: 1},
+    "bottomBandUnit":          { "type": "enum",       "choices": Exhibit.TimelineView._intervalChoices, description: "unit of the bottom band", importance: 1},
+    "bottomBandPixelsPerUnit": { "type": "int",        "defaultValue": 200, description: "width of each interval in the bottom band in pixels", importance: 1},
+    "timelineHeight":          { "type": "int",        "defaultValue": 400, description: "height of timeline in pixels", importance: 1},
+    "timelineConstructor":     { "type": "function",   "defaultValue": null, description: "custom constructor for the timeline", importance: 1},
+    "colorCoder":              { "type": "text",       "defaultValue": null, description: "id of color coder", importance: 1},
+    "iconCoder":               { "type": "text",       "defaultValue": null, description: "id of icon coder", importance: 1},
+    "selectCoordinator":       { "type": "text",       "defaultValue": null, description: "id of coordinator", importance: 1},
+    "showHeader":              { "type": "boolean",    "defaultValue": true, description: "show header of view", importance: 2},
+    "showSummary":             { "type": "boolean",    "defaultValue": true, description: "show summary information of the view", importance: 2},
+    "showFooter":              { "type": "boolean",    "defaultValue": true, description: "show footer of the view", importance: 2}
 };
 
 /**
@@ -82,7 +82,8 @@ Exhibit.TimelineView._settingSpecs = {
  */
 Exhibit.TimelineView._accessorSpecs = [
     {   "accessorName":   "getProxy",
-        "attributeName":  "proxy"
+        "attributeName":  "proxy",
+        importance: 1
     },
     {   "accessorName": "getDuration",
         "bindings": [
@@ -95,23 +96,33 @@ Exhibit.TimelineView._accessorSpecs = [
                 "bindingName":    "end",
                 "optional":       true
             }
-        ]
+        ],
+        required: true,
+        description: "start: property used for the start date \nend: property used for the end date",
+        importance: 10
     },
     {   "accessorName":   "getColorKey",
         "attributeName":  "marker", // backward compatibility
-        "type":           "text"
+        "type":           "text",
+        "description": "property used by the color coder (backward compatibility)",
+        importance: 1
     },
     {   "accessorName":   "getColorKey",
         "attributeName":  "colorKey",
-        "type":           "text"
+        "type":           "text",
+        "description": "property used by the color coder",
+        importance: 1
     },
     {   "accessorName":   "getIconKey",
         "attributeName":  "iconKey",
-        "type":           "text"
+        "type":           "text",
+        "description": "property used by the icon coder",
+        importance: 1
     },
     {   "accessorName":   "getEventLabel",
         "attributeName":  "eventLabel",
-        "type":           "text"
+        "type":           "text",
+        importance: 3
     },
     // hoverText is deprecated in Timeline, does not work at all with an event.
     // It will still work here as an attribute name, but it will be overridden
@@ -119,12 +130,14 @@ Exhibit.TimelineView._accessorSpecs = [
     {
         "accessorName":   "getHoverText",
         "attributeName":  "hoverText",
-        "type":           "text"
+        "type":           "text",
+        importance: 3
     },
     {
         "accessorName":   "getCaption",
         "attributeName":  "caption",
-        "type":           "text"
+        "type":           "text",
+        importance: 3
     }
 ];    
 
@@ -281,7 +294,6 @@ Exhibit.TimelineView.prototype._initializeUI = function() {
 Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
     var settings, timelineDiv, theme, topIntervalUnit, bottomIntervalUnit, earliest, latest, totalDuration, totalEventCount, totalDensity, intervalDuration, eventsPerPixel, bandInfos, self, listener, i;
     settings = this._settings;
-    
     if (this._timeline !== null) {
         this._timeline.dispose();
     }
@@ -374,7 +386,6 @@ Exhibit.TimelineView.prototype._reconstructTimeline = function(newEvents) {
         ];
         bandInfos[1].syncWith = 0;
         bandInfos[1].highlight = true;
-
         this._timeline = Timeline.create(timelineDiv, bandInfos, Timeline.HORIZONTAL);
     }
     
@@ -553,7 +564,7 @@ Exhibit.TimelineView.prototype._reconstruct = function() {
                 legendWidget.addEntry(iconCoder.getMissingIcon(), iconCoder.getMissingLabel(), 'icon');
             }
         }
-        
+
         plottableSize = currentSize - unplottableItems.length;
         if (plottableSize > this._largestSize) {
             this._largestSize = plottableSize;

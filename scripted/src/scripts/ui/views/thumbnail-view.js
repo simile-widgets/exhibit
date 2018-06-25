@@ -54,7 +54,7 @@ Exhibit.ThumbnailView = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.ThumbnailView._settingSpecs = {
-    "columnCount":          { type: "int", defaultValue: -1 }
+    "columnCount":          { type: "int", defaultValue: -1 , description: "number of columns used to display items", importance: 5}
 };
 
 /**

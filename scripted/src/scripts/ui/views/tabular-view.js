@@ -47,33 +47,36 @@ Exhibit.TabularView = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.TabularView._settingSpecs = {
-    "sortAscending":        { type: "boolean", defaultValue: true },
-    "sortColumn":           { type: "int",     defaultValue: 0 },
-    "showSummary":          { type: "boolean", defaultValue: true },
-    "border":               { type: "int",     defaultValue: 1 },
-    "cellPadding":          { type: "int",     defaultValue: 5 },
-    "cellSpacing":          { type: "int",     defaultValue: 3 },
-    "paginate":             { type: "boolean", defaultValue: false },
-    "pageSize":             { type: "int",     defaultValue: 20 },
-    "pageWindow":           { type: "int",     defaultValue: 2 },
-    "page":                 { type: "int",     defaultValue: 0 },
-    "alwaysShowPagingControls": { type: "boolean", defaultValue: false },
-    "pagingControlLocations":   { type: "enum",    defaultValue: "topbottom", choices: [ "top", "bottom", "topbottom" ] },
-    "rowStyler":            {type: "function", defaultValue: undefined},
-    "tableStyler":          {type: "function", defaultValue: undefined},
-    "columnLabels":         {type: "text", dimensions: "*", description: "comma separated list of labels used for the column headers, e.g., 'Name, Position'"},
-    "columnFormats":        {type: "text", description: "comma separated list of format expressions, e.g., 'list, image, date { mode: short }'"}
+    "sortAscending":        { type: "boolean", defaultValue: true, description: "sort items in ascending or descending order", importance: 5},
+    "sortColumn":           { type: "int",     defaultValue: 0, description: "zero-based index of column to sort", importance: 5},
+    "showSummary":          { type: "boolean", defaultValue: true, description: "show summary", importance: 2},
+    "border":               { type: "text",     defaultValue: "1", description: "styling for the border of a &lt;table&gt; element", importance: 2},
+    "cellPadding":          { type: "int",     defaultValue: 5, description: "cell padding of a &lt;table&gt; element", importance: 2},
+    "cellSpacing":          { type: "int",     defaultValue: 3, description: "cell spacing of a &lt;table&gt; element", importance: 2},
+    "paginate":             { type: "boolean", defaultValue: false, description: "split items (rows) among multiple pages", importance: 2.9},
+    "pageSize":             { type: "int",     defaultValue: 20, description: "number of items (rows) displayed per page", importance: 2.8},
+    "pageWindow":           { type: "int",     defaultValue: 2, description: "window size of available paging controls", importance: 2.6},
+    "page":                 { type: "int",     defaultValue: 0, description: "zero-based index of starting page", importance: 2.7},
+    "alwaysShowPagingControls": { type: "boolean", defaultValue: false, description: "always show paging controls", importance: 2.4},
+    "pagingControlLocations":   { type: "enum",    defaultValue: "topbottom", choices: [ "top", "bottom", "topbottom" ], description: "location of paging controls", importance: 2.5},
+    "rowStyler":            {type: "function", defaultValue: undefined, description: "function that takes 3 arguments (item, database, tr) and is called to style each row", importance: 2},
+    "tableStyler":          {type: "function", defaultValue: undefined, description: "function that takes 2 arguments (table, database) and is called to style the table", importance: 2},
+    "columnLabels":         {type: "text", dimensions: "*", description: "comma separated list of labels used for the column headers, e.g., 'Name, Position'", importance: 8},
+    "columnFormats":        {type: "text", description: "comma separated list of format expressions, e.g., 'list, image, date { mode: short }'", importance: 7}
 };
 
 Exhibit.TabularView._accessorSpecs = [{
     accessorName : "getProxy",
-    attributeName : "proxy"
+    attributeName : "proxy",
+    importance: 1
 }, {
     accessorName : "getColumns",
     attributeName : "columns",
     type: "text",
     expressions: true,
-    dimensions: "*"
+    dimensions: "*",
+    description: "comma separated list of one or more properties",
+    importance: 10
 }];
 
 /**
@@ -383,7 +386,6 @@ Exhibit.TabularView.prototype._reconstruct = function() {
                     column = self._columns[c];
                     td = Exhibit.jQuery("<td>");
                     tr.append(td);
-                    
                     results = column.expression.evaluate(
                         { "value" : item.id }, 
                         { "value" : "item" }, 

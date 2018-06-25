@@ -59,52 +59,52 @@ Exhibit.MapView = function(containerElmt, uiContext) {
  * @constant
  */
 Exhibit.MapView._settingSpecs = {
-    "latlngOrder":      { "type": "enum",     "defaultValue": "latlng", "choices": [ "latlng", "lnglat" ] },
-    "latlngPairSeparator": { "type": "text",  "defaultValue": ";"   },
-    "center":           { "type": "float",    "defaultValue": [0.0,0.0],   "dimensions": 2 },
-    "zoom":             { "type": "float",    "defaultValue": 2         },
-    "maxAutoZoom":      { "type": "int",      "defaultValue": Infinity  },
-    "autoposition":     { "type": "boolean",  "defaultValue": false     },
-    "scrollWheelZoom":  { "type": "boolean",  "defaultValue": true      },
-    "size":             { "type": "text",     "defaultValue": "small"   },
-    "scaleControl":     { "type": "boolean",  "defaultValue": true      },
-    "overviewControl":  { "type": "boolean",  "defaultValue": false     },
-    "type":             { "type": "enum",     "defaultValue": "normal", "choices": [ "normal", "satellite", "hybrid", "terrain" ] },
-    "bubbleTip":        { "type": "enum",     "defaultValue": "top",    "choices": [ "top", "bottom" ] },
-    "mapHeight":        { "type": "int",      "defaultValue": 400       },
-    "mapConstructor":   { "type": "function", "defaultValue": null      },
-    "markerLabel":      { "type": "text",     "defaultValue": ".label"  },
-    "color":            { "type": "text",     "defaultValue": "#FF9000" },
-    "colorCoder":       { "type": "text",     "defaultValue": null      },
-    "sizeCoder":        { "type": "text",     "defaultValue": null      },
-    "iconCoder":        { "type": "text",     "defaultValue": null      },
-    "selectCoordinator":  { "type": "text",   "defaultValue": null      },
+    "latlngOrder":      { "type": "enum",     "defaultValue": "latlng", "choices": [ "latlng", "lnglat" ], "description": "whether data is provided in the form of (latitude, longitude) or the reverse", importance: 6},
+    "latlngPairSeparator": { "type": "text",  "defaultValue": ";", "description": "character used to separate location pairs in a line or polygon", importance: 3},
+    "center":           { "type": "float",    "defaultValue": [0.0,0.0],   "dimensions": 2, "description": "latitue and longitude of point where map centers at the beginning", importance: 7},
+    "zoom":             { "type": "float",    "defaultValue": 2, "description": "zoom level", importance: 5},
+    "maxAutoZoom":      { "type": "int",      "defaultValue": Infinity, importance: 1},
+    "autoposition":     { "type": "boolean",  "defaultValue": false, importance: 4},
+    "scrollWheelZoom":  { "type": "boolean",  "defaultValue": true, importance: 1},
+    "size":             { "type": "text",     "defaultValue": "small", "description": "size of map controls", importance: 1},
+    "scaleControl":     { "type": "boolean",  "defaultValue": true, "description": "show map scale control", importance: 1},
+    "overviewControl":  { "type": "boolean",  "defaultValue": false, "description": "show map overview control", importance: 1},
+    "type":             { "type": "enum",     "defaultValue": "normal", "choices": [ "normal", "satellite", "hybrid", "terrain" ], "description": "type of map", importance: 6},
+    "bubbleTip":        { "type": "enum",     "defaultValue": "top",    "choices": [ "top", "bottom" ], "description": "whether map bubble points at the top or at the bottom of map markers", importance: 3},
+    "mapHeight":        { "type": "int",      "defaultValue": 400, "description": "height of map in pixels", importance: 2},
+    "mapConstructor":   { "type": "function", "defaultValue": null, "description": "custom map constructor", importance: 1},
+    "markerLabel":      { "type": "text",     "defaultValue": ".label", importance: 1},
+    "color":            { "type": "text",     "defaultValue": "#FF9000", importance: 1},
+    "colorCoder":       { "type": "text",     "defaultValue": null, "description": "id of color coder", importance: 1},
+    "sizeCoder":        { "type": "text",     "defaultValue": null, "description": "id of size coder", importance: 1},
+    "iconCoder":        { "type": "text",     "defaultValue": null, "description": "id of icon coder", importance: 1},
+    "selectCoordinator":  { "type": "text",   "defaultValue": null, "description": "id of coordinator", importance: 1},
 
-    "iconSize":         { "type": "int",      "defaultValue": 0         },
-    "iconFit":          { "type": "text",     "defaultValue": "smaller" },
-    "iconScale":        { "type": "float",    "defaultValue": 1         },
-    "iconOffsetX":      { "type": "float",    "defaultValue": 0         },
-    "iconOffsetY":      { "type": "float",    "defaultValue": 0         },
-    "shape":            { "type": "text",     "defaultValue": "circle"  },
-    "shapeWidth":       { "type": "int",      "defaultValue": 24        },
-    "shapeHeight":      { "type": "int",      "defaultValue": 24        },
-    "shapeAlpha":       { "type": "float",    "defaultValue": 0.7       },
-    "pin":              { "type": "boolean",  "defaultValue": true      },
-    "pinHeight":        { "type": "int",      "defaultValue": 6         },
-    "pinWidth":         { "type": "int",      "defaultValue": 6         },
-    "borderOpacity":    { "type": "float",    "defaultValue": 0.5       },
-    "borderWidth":      { "type": "int",      "defaultValue": 1         },
-    "borderColor":      { "type": "text",     "defaultValue": null      },
-    "opacity":          { "type": "float",    "defaultValue": 0.7       },
-    "sizeLegendLabel":  { "type": "text",     "defaultValue": null      },
-    "colorLegendLabel": { "type": "text",     "defaultValue": null      },
-    "iconLegendLabel":  { "type": "text",     "defaultValue": null      },
-    "markerScale":      { "type": "text",     "defaultValue": null      },
-    "markerFontFamily": { "type": "text",     "defaultValue": "12pt sans-serif" },
-    "markerFontColor":  { "type": "text",     "defaultValue": "black"   },
-    "showHeader":       { "type": "boolean",  "defaultValue": true      },
-    "showSummary":      { "type": "boolean",  "defaultValue": true      },
-    "showFooter":       { "type": "boolean",  "defaultValue": true      }
+    "iconSize":         { "type": "int",      "defaultValue": 0, "description": "size of icon", importance: 1},
+    "iconFit":          { "type": "text",     "defaultValue": "smaller", "description": "how to fit icon images into map markers", importance: 1},
+    "iconScale":        { "type": "float",    "defaultValue": 1, "description": "scaling adjustment to icon images after fitting them", importance: 1},
+    "iconOffsetX":      { "type": "float",    "defaultValue": 0, "description": "translational adjustment to icon images in pixels", importance: 1},
+    "iconOffsetY":      { "type": "float",    "defaultValue": 0, "description": "translational adjustment to icon images in pixels", importance: 1},
+    "shape":            { "type": "text",     "defaultValue": "circle", "description": "shape of map markers", importance: 1},
+    "shapeWidth":       { "type": "int",      "defaultValue": 24, "description": "width of shape of map markers in pixels", importance: 1},
+    "shapeHeight":      { "type": "int",      "defaultValue": 24, "description": "height of shape of map markers in pixels", importance: 1},
+    "shapeAlpha":       { "type": "float",    "defaultValue": 0.7, "description": "alpha of shape of map markers", importance: 1},
+    "pin":              { "type": "boolean",  "defaultValue": true, "description": "whether map markers have pins", importance: 3},
+    "pinHeight":        { "type": "int",      "defaultValue": 6, "description": "height of pins of map markers in pixels", importance: 1},
+    "pinWidth":         { "type": "int",      "defaultValue": 6, "description": "width of pins of map markers in pixels", importance: 1},
+    "borderOpacity":    { "type": "float",    "defaultValue": 0.5, "description": "when drawing polygons or polylines, the default opacity of the border or line", importance: 1},
+    "borderWidth":      { "type": "int",      "defaultValue": 1, "description": "when drawing polygons or polylines, the default width of the border or line", importance: 1},
+    "borderColor":      { "type": "text",     "defaultValue": null, "description": "when drawing polygons or polylines, the default color of the border or line", importance: 1},
+    "opacity":          { "type": "float",    "defaultValue": 0.7, "description": "when drawing polygons, the default opacity of the polygon fill", importance: 1},
+    "sizeLegendLabel":  { "type": "text",     "defaultValue": null, importance: 1},
+    "colorLegendLabel": { "type": "text",     "defaultValue": null, importance: 1},
+    "iconLegendLabel":  { "type": "text",     "defaultValue": null, importance: 1},
+    "markerScale":      { "type": "text",     "defaultValue": null, importance: 1},
+    "markerFontFamily": { "type": "text",     "defaultValue": "12pt sans-serif", "description": "font of the markers", importance: 1},
+    "markerFontColor":  { "type": "text",     "defaultValue": "black", "description": "font color of the markers", importance: 1},
+    "showHeader":       { "type": "boolean",  "defaultValue": true, "description": "show header of the view", importance: 1},
+    "showSummary":      { "type": "boolean",  "defaultValue": true, "description": "show summary information of the view", importance: 1},
+    "showFooter":       { "type": "boolean",  "defaultValue": true, "description": "show footer of the view", importance: 1}
 };
 
 /**
@@ -112,7 +112,8 @@ Exhibit.MapView._settingSpecs = {
  */
 Exhibit.MapView._accessorSpecs = [
     {   "accessorName":   "getProxy",
-        "attributeName":  "proxy"
+        "attributeName":  "proxy",
+        importance: 1
     },
     {   "accessorName": "getLatlng",
         "alternatives": [
@@ -134,35 +135,45 @@ Exhibit.MapView._accessorSpecs = [
                     }
                 ]
             }
-        ]
+        ],
+        required: true,
+        importance: 10,
+        description: "properties for the latitudes and longitudes of the locations"
     },
     {   "accessorName":   "getPolygon",
         "attributeName":  "polygon",
-        "type":           "text"
+        "type":           "text",
+        importance: 1
     },
     {   "accessorName":   "getPolyline",
         "attributeName":  "polyline",
-        "type":           "text"
+        "type":           "text",
+        importance: 1
     },
     {   "accessorName":   "getColorKey",
         "attributeName":  "marker", // backward compatibility
-        "type":           "text"
+        "type":           "text",
+        importance: 1
     },
     {   "accessorName":   "getColorKey",
         "attributeName":  "colorKey",
-        "type":           "text"
+        "type":           "text",
+        importance: 1
     },
     {   "accessorName":   "getSizeKey",
         "attributeName":  "sizeKey",
-        "type":           "text"
+        "type":           "text",
+        importance: 1
     },
     {   "accessorName":   "getIconKey",
         "attributeName":  "iconKey",
-        "type":           "text"
+        "type":           "text",
+        importance: 1
     },
     {   "accessorName":   "getIcon",
         "attributeName":  "icon",
-        "type":           "url"
+        "type":           "url",
+        importance: 1
     }
 ];
 
@@ -406,7 +417,7 @@ Exhibit.MapView.prototype._initializeUI = function() {
         this._settings.showSummary && this._settings.showHeader,
         {
             "onResize": function() {
-	            google.maps.event.trigger(self._map, "resize");
+                google.maps.event.trigger(self._map, "resize");
             }
         },
         legendWidgetSettings
@@ -433,36 +444,36 @@ Exhibit.MapView.prototype._constructGMap = function(mapDiv) {
         settings.mapConstructor !== null) {
         return settings.mapConstructor(mapDiv);
     } else {
-	    mapOptions = {
-	        "center": new google.maps.LatLng(
+        mapOptions = {
+            "center": new google.maps.LatLng(
                 settings.center[0],
                 settings.center[1]
             ),
-	        "zoom": settings.zoom,
-	        "panControl": true,
-	        "zoomControl": {
+            "zoom": settings.zoom,
+            "panControl": true,
+            "zoomControl": {
                 "style": google.maps.ZoomControlStyle.DEFAULT
             },
-	        "mapTypeId": google.maps.MapTypeId.ROADMAP
-	    };
+            "mapTypeId": google.maps.MapTypeId.ROADMAP
+        };
 
-	    if (settings.size === "small") {
-	        mapOptions.zoomControl.style = google.maps.ZoomControlStyle.SMALL;
-	    } else if (settings.size === "large") {
-	        mapOptions.zoomControl.style = google.maps.ZoomControlStyle.LARGE;
+        if (settings.size === "small") {
+            mapOptions.zoomControl.style = google.maps.ZoomControlStyle.SMALL;
+        } else if (settings.size === "large") {
+            mapOptions.zoomControl.style = google.maps.ZoomControlStyle.LARGE;
         }
 
-	    if (typeof settings.overviewControl !== "undefined") {
-	        mapOptions.overviewControl = settings.overviewControl;
+        if (typeof settings.overviewControl !== "undefined") {
+            mapOptions.overviewControl = settings.overviewControl;
         }
 
-	    if (typeof settings.scaleControl !== "undefined") {
-	        mapOptions.scaleControl = settings.scaleControl;
+        if (typeof settings.scaleControl !== "undefined") {
+            mapOptions.scaleControl = settings.scaleControl;
         }
 
-	    if (typeof settings.scrollWheelZoom !== "undefined" &&
+        if (typeof settings.scrollWheelZoom !== "undefined" &&
             !settings.scrollWheelZoom) {
-	        mapOptions.scrollwheel = false;
+            mapOptions.scrollwheel = false;
         }
 
         switch (settings.type) {
@@ -534,11 +545,11 @@ Exhibit.MapView.prototype._createIconMarkerGenerator = function() {
 Exhibit.MapView.prototype._clearOverlays = function() {
     var i;
     if (typeof this._infoWindow !== "undefined" && this._infoWindow !== null) {
-	    this._infoWindow.setMap(null);
+        this._infoWindow.setMap(null);
     }
 
     for (i = 0; i < this._overlays.length; i++) {
-	    this._overlays[i].setMap(null);
+        this._overlays[i].setMap(null);
     }
 
     this._overlays = [];
@@ -553,7 +564,7 @@ Exhibit.MapView.prototype._reconstruct = function() {
     this._clearOverlays();
 
     if (typeof this._dom.legendWidget !== "undefined" && this._dom.legendWidget !== null) {
-	    this._dom.legendWidget.clear();
+        this._dom.legendWidget.clear();
     }
 
     if (typeof this._dom.legendGradientWidget !== "undefined" && this._dom.legendWidgetGradient !== null) {
@@ -632,8 +643,8 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
 
         if (hasPoints) {
             self._getLatlng(itemID, database, function(v) {
-		        if (v !== null && typeof v.lat !== "undefined" && v.lat !== null && typeof v.lng !== "undefined" && v.lng !== null) {
-		            latlngs.push(v);
+                if (v !== null && typeof v.lat !== "undefined" && v.lat !== null && typeof v.lng !== "undefined" && v.lng !== null) {
+                    latlngs.push(v);
                 }
             });
         }
@@ -759,11 +770,11 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
             icon = self._iconCoder.translateSet(locationData.iconKeys, iconCodingFlags);
         }
 
-	point = new google.maps.LatLng(locationData.latlng.lat, locationData.latlng.lng);
+    point = new google.maps.LatLng(locationData.latlng.lat, locationData.latlng.lng);
         bounds.extend(point);
 
         marker = self._makeMarker(
-	        point,
+            point,
             shape,
             color,
             iconSize,
@@ -773,13 +784,13 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
         );
 
         google.maps.event.addListener(marker, "click", function() {
-	        self._showInfoWindow(locationData.items, null, marker)
+            self._showInfoWindow(locationData.items, null, marker)
             if (self._selectListener !== null) {
                 self._selectListener.fire({ "itemIDs": locationData.items });
             }
         });
         marker.setMap(self._map);
-	    self._overlays.push(marker);
+        self._overlays.push(marker);
 
         for (x = 0; x < locationData.items.length; x++) {
             self._itemIDToMarker[locationData.items[x]] = marker;
@@ -787,11 +798,11 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
     };
 
     try {
-	    for (latlngKey in locationToData) {
+        for (latlngKey in locationToData) {
             if (locationToData.hasOwnProperty(latlngKey)) {
-	            addMarkerAtLocation(locationToData[latlngKey]);
+                addMarkerAtLocation(locationToData[latlngKey]);
             }
-	    }
+        }
     } catch (e) {
         Exhibit.Debug.exception(e);
     }
@@ -904,7 +915,7 @@ Exhibit.MapView.prototype._rePlotItems = function(unplottableItems) {
                                     self._map.setZoom(settings.maxAutoZoom);
                                 }
                             });
-	self._map.fitBounds(bounds);
+    self._map.fitBounds(bounds);
     }
 
     this._shown = true; //don't reposition map again
@@ -926,14 +937,14 @@ Exhibit.MapView.prototype._plotPolygon = function(itemID, polygonString, color, 
         settings = this._settings;
         borderColor = (typeof settings.borderColor !== "undefined" && settings.borderColor !== null) ? settings.borderColor : color;
 
-	    polygon = new google.maps.Polygon({
-	        "paths": coords,
-	        "strokeColor": borderColor,
-	        "strokeWeight": settings.borderWidth,
-	        "strokeOpacity": settings.borderOpacity,
-	        "fillColor": color,
-	        "fillOpacity": settings.opacity
-	    });
+        polygon = new google.maps.Polygon({
+            "paths": coords,
+            "strokeColor": borderColor,
+            "strokeWeight": settings.borderWidth,
+            "strokeOpacity": settings.borderOpacity,
+            "fillColor": color,
+            "fillOpacity": settings.opacity
+        });
 
         return this._addPolygonOrPolyline(itemID, polygon);
     }
@@ -955,12 +966,12 @@ Exhibit.MapView.prototype._plotPolyline = function(itemID, polylineString, color
     if (coords.length > 1) {
         settings = this._settings;
         borderColor = (typeof settings.borderColor !== "undefined" && settings.borderColor !== null) ? settings.borderColor : color;
-	    polyline = new google.maps.Polyline({
-	        "path": coords,
-	        "strokeColor": borderColor,
-	        "strokeWeight": settings.borderWidth,
-	        "strokeOpacity": settings.borderOpacity
-	    });
+        polyline = new google.maps.Polyline({
+            "path": coords,
+            "strokeColor": borderColor,
+            "strokeWeight": settings.borderWidth,
+            "strokeOpacity": settings.borderOpacity
+        });
 
         return this._addPolygonOrPolyline(itemID, polyline);
     }
@@ -980,7 +991,7 @@ Exhibit.MapView.prototype._addPolygonOrPolyline = function(itemID, poly) {
 
     self = this;
     onclick = function(evt) {
-	    self._showInfoWindow([itemID], evt.latLng);
+        self._showInfoWindow([itemID], evt.latLng);
 
         if (self._selectListener !== null) {
             self._selectListener.fire({ "itemIDs": [itemID] });
@@ -1020,7 +1031,7 @@ Exhibit.MapView.prototype._select = function(selection) {
     itemID = selection.itemIDs[0];
     marker = this._itemIDToMarker[itemID];
     if (typeof marker !== "undefined" && marker !== null) {
-	    this._showInfoWindow([itemID], null, marker);
+        this._showInfoWindow([itemID], null, marker);
     }
 };
 
@@ -1033,7 +1044,7 @@ Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
     var content, win, markerSize, winAnchor;
 
     if (typeof this._infoWindow !== "undefined" && this._infoWindow !== null) {
-	    this._infoWindow.setMap(null);
+        this._infoWindow.setMap(null);
     }
 
     content = this._createInfoWindow(items);
@@ -1050,7 +1061,7 @@ Exhibit.MapView.prototype._showInfoWindow = function(items, pos, marker) {
         (this._settings.bubbleTip === "bottom") ? markerSize.height : 0
     );
     win = new google.maps.InfoWindow({
-	    "content": content,
+        "content": content,
         "pixelOffset": winAnchor
     });
 
@@ -1089,23 +1100,23 @@ Exhibit.MapView.markerToMap = function(marker, position) {
     icon = marker.getIcon();
     shadow = marker.getShadow();
     return new google.maps.Marker({
-	    "icon": new google.maps.MarkerImage(
+        "icon": new google.maps.MarkerImage(
             icon.url,
             new google.maps.Size(icon.size[0], icon.size[1]),
             null,
             new google.maps.Point(icon.anchor[0], icon.anchor[1]),
             null
         ),
-	    "shadow": new google.maps.MarkerImage(
+        "shadow": new google.maps.MarkerImage(
             shadow.url,
             new google.maps.Size(shadow.size[0], shadow.size[1]),
             null,
             new google.maps.Point(shadow.anchor[0], shadow.anchor[1]),
             null
         ),
-	    "shape": marker.getShape(),
-	    "position": position
-	});
+        "shape": marker.getShape(),
+        "position": position
+    });
 };
 
 /**
@@ -1148,11 +1159,11 @@ Exhibit.MapView.prototype._makeMarker = function(position, shape, color, iconSiz
     // settings refer to the same location in memory.  Also, it's a bit unclear
     // under what circumstances it would ever be different.
     if (typeof cached !== "undefined" && (cached.settings === settings)) {
-	    gmarker = Exhibit.MapView.markerToMap(cached, position);
+        gmarker = Exhibit.MapView.markerToMap(cached, position);
     } else {
         marker = Exhibit.MapExtension.Marker.makeMarker(shape, color, iconSize, iconURL, label, settings, this);
         gmarker = Exhibit.MapView.markerToMap(marker, position);
-	    this._markerCache[key] = gmarker;
+        this._markerCache[key] = gmarker;
     }
     return gmarker;
 };
