@@ -2,6 +2,7 @@ Exhibit.jQuery(document).bind("registerLocales.exhibit", function() {
     Exhibit.jQuery(document).trigger("beforeLocalesRegistered.exhibit");
     new Exhibit.Locale("default", Exhibit.urlPrefix + "locales/en/locale.js");
     new Exhibit.Locale("en", Exhibit.urlPrefix + "locales/en/locale.js");
+    new Exhibit.Locale("el", Exhibit.urlPrefix + "locales/el/locale.js");
     new Exhibit.Locale("de", Exhibit.urlPrefix + "locales/de/locale.js");
     new Exhibit.Locale("es", Exhibit.urlPrefix + "locales/es/locale.js");
     new Exhibit.Locale("fr", Exhibit.urlPrefix + "locales/fr/locale.js");
