@@ -1,11 +1,17 @@
-div.exhibit-thumbnailView-group {
+div.exhibit-collectionView-group {
     clear: both;
 }
 
-div.exhibit-thumbnailView-body {
+ol.exhibit-thumbnailView-body {
+	list-style: none;
 }
 
-div.exhibit-thumbnailView-itemContainer {
+li.exhibit-thumbnailView-itemContainer {
     float:      left;
     display:    inline;
 }
+
+
+
+
+
