@@ -28,21 +28,21 @@ Exhibit.OrderedViewFrame = function(uiContext) {
  * @constant
  */
 Exhibit.OrderedViewFrame._settingSpecs = {
-    "showAll":                  { type: "boolean", defaultValue: false },
-    "grouped":                  { type: "boolean", defaultValue: true },
-    "showDuplicates":           { type: "boolean", defaultValue: false },
-    "abbreviatedCount":         { type: "int",     defaultValue: 10 },
-    "showHeader":               { type: "boolean", defaultValue: true },
-    "showSummary":              { type: "boolean", defaultValue: true },
-    "showControls":             { type: "boolean", defaultValue: true },
-    "showFooter":               { type: "boolean", defaultValue: true },
-    "paginate":                 { type: "boolean", defaultValue: false },
-    "pageSize":                 { type: "int",     defaultValue: 20 },
-    "pageWindow":               { type: "int",     defaultValue: 2 },
-    "page":                     { type: "int",     defaultValue: 0 },
-    "alwaysShowPagingControls": { type: "boolean", defaultValue: false },
+    "showAll":                  { type: "boolean", defaultValue: false, description: "show all items", importance: 3},
+    "grouped":                  { type: "boolean", defaultValue: true, description: "show items in group if they are equal in current sorting order", importance: 1},
+    "showDuplicates":           { type: "boolean", defaultValue: false, description: "show duplicates of items", importance: 3},
+    "abbreviatedCount":         { type: "int",     defaultValue: 10, description: "number of items to show if showAll is false", importance: 3},
+    "showHeader":               { type: "boolean", defaultValue: true, description: "show header of view", importance: 2},
+    "showSummary":              { type: "boolean", defaultValue: true, description: "show summary information of the view", importance: 2},
+    "showControls":             { type: "boolean", defaultValue: true, description: "show controls for sorting", importance: 2},
+    "showFooter":               { type: "boolean", defaultValue: true, description: "show footer of the view", importance: 2},
+    "paginate":                 { type: "boolean", defaultValue: false, description: "split items among multiple pages", importance: 2.9},
+    "pageSize":                 { type: "int",     defaultValue: 20, description: "number of items displayed per page", importance: 2.8},
+    "pageWindow":               { type: "int",     defaultValue: 2, description: "window size of available paging controls", importance: 2.6},
+    "page":                     { type: "int",     defaultValue: 0, description: "zero-based index of starting page", importance: 2.7},
+    "alwaysShowPagingControls": { type: "boolean", defaultValue: false, description: "always show paging controls", importance: 2.4},
     "pagingControlLocations":   { type: "enum",    defaultValue: "topbottom",
-                                  choices: [ "top", "bottom", "topbottom" ] }
+                                  choices: [ "top", "bottom", "topbottom" ], description: "location of paging controls", importance: 2.5}
 };
 
 /**
