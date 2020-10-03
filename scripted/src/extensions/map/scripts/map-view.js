@@ -40,6 +40,7 @@ Exhibit.MapView = function(containerElmt, uiContext) {
     this._selectListener = null;
     this._itemIDToMarker = {};
     this._markerLabelExpression = null;
+    this._markerLabelPointExpression = null;
     this._markerCache = {};
 
     this._shown = false;
@@ -74,6 +75,7 @@ Exhibit.MapView._settingSpecs = {
     "mapHeight":        { "type": "int",      "defaultValue": 400       },
     "mapConstructor":   { "type": "function", "defaultValue": null      },
     "markerLabel":      { "type": "text",     "defaultValue": ".label"  },
+    "markerLabelPoint":      { "type": "text",     "defaultValue": null },
     "color":            { "type": "text",     "defaultValue": "#FF9000" },
     "colorCoder":       { "type": "text",     "defaultValue": null      },
     "sizeCoder":        { "type": "text",     "defaultValue": null      },
@@ -246,6 +248,9 @@ Exhibit.MapView._configure = function(view, configuration) {
         null;
 
     view._markerLabelExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabel);
+    if ( view._settings.markerLabelPoint != null) {
+        view._markerLabelPointExpression = Exhibit.ExpressionParser.parse(view._settings.markerLabelPoint);
+    }
 };
 
 /**
@@ -1072,7 +1077,8 @@ Exhibit.MapView.prototype._createInfoWindow = function(items) {
         null,
         items,
         this._markerLabelExpression,
-        this.getUIContext()
+        this.getUIContext(),
+        this._markerLabelPointExpression
     );
 };
 
